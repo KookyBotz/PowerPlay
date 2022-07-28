@@ -15,7 +15,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.function.DoubleSupplier;
 
-
 @Config
 public class ArmSubsystem extends SubsystemBase {
     public final DcMotorEx arm;

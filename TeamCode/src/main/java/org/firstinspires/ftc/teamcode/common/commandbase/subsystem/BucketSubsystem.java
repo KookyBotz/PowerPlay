@@ -36,6 +36,6 @@ public class BucketSubsystem extends SubsystemBase {
     }
 
     public void dump() {
-        dump.setPosition(dump);
+        dump.setPosition(dump_position);
     }
 }
