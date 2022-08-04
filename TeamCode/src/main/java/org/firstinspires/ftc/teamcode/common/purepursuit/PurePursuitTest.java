@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitController;
+import org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitPath;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.TwoWheelOdo;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
@@ -17,12 +18,7 @@ import java.util.function.DoubleSupplier;
 
 @TeleOp
 @Config
-public class LocalizerTest extends LinearOpMode {
-
-    public static double coordX = 20;
-    public static double coordY = 20;
-    public static double coordHeading = 1;
-
+public class PurePursuitTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         RobotPP robot = new RobotPP(hardwareMap);
@@ -32,31 +28,19 @@ public class LocalizerTest extends LinearOpMode {
 
         Localizer localizer = new TwoWheelOdo(horizontalPos, lateralPos, imuAngle);
 
-        Pose targetPose = new Pose(coordX, coordY, coordHeading);
         waitForStart();
 
         long time = System.currentTimeMillis();
 
+        PurePursuitPath path = new PurePursuitPath(robot.drivetrain, localizer,
+                new Waypoint(new Pose(0, 0, 0), 10),
+                new Waypoint(new Pose(20, 0, 0), 10),
+                new Waypoint(new Pose(20, 20, 0), 10));
+
         while (opModeIsActive()) {
-            targetPose.x = coordX;
-            targetPose.y = coordY;
-            targetPose.heading = coordHeading;
             localizer.periodic();
-//            robot.drivetrain.set(
-//                    new Pose(
-//                            -gamepad1.left_stick_y,
-//                            gamepad1.left_stick_x,
-//                            gamepad1.right_stick_x
-//                    )
-//            );
 
-            Pose powers = PurePursuitController.goToPosition(
-                    localizer.getPos(), targetPose, new Pose(pCoefficientX, pCoefficientY, pCoefficientH)
-            );
-
-            telemetry.addData("powers", powers);
-
-            robot.drivetrain.set(powers);
+            path.update();
 
             long currTime = System.currentTimeMillis();
             telemetry.addData("hz", 1000 / (currTime - time));

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.purepursuit;
+package org.firstinspires.ftc.teamcode.common.purepursuit.geometry;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
@@ -21,13 +21,9 @@ public class Pose extends Point {
         return new Pose(this.x / other.x, this.y / other.y, this.heading / other.heading);
     }
 
-    public double radius(){
-        return Math.hypot(x, y);
-    }
 
-    public double atan(){
-        return Math.atan2(x, y);
-    }
+
+
 
     @Override
     public String toString() {

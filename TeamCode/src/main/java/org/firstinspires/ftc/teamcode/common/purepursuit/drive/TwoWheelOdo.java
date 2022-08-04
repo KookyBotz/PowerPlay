@@ -1,16 +1,12 @@
-package org.firstinspires.ftc.teamcode.common.purepursuit;
+package org.firstinspires.ftc.teamcode.common.purepursuit.drive;
 
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.TwoTrackingWheelLocalizer;
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.common.purepursuit.Encoder;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
 import java.util.Arrays;
 import java.util.List;
