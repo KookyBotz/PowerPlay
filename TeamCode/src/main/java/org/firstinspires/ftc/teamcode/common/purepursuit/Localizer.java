@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.common.purepursuit;
 
 public interface Localizer {
 
-    void update();
+    void periodic();
 
     Pose getPos();
 }
