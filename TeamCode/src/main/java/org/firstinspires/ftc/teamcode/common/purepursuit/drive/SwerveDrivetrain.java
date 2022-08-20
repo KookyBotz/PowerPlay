@@ -42,12 +42,13 @@ public class SwerveDrivetrain implements Drivetrain {
         double[] ws = new double[]{hypot(b, c), hypot(b, d), hypot(a, d), hypot(a, c)};
         double[] wa = new double[]{atan2(b, c), atan2(b, d), atan2(a, d), atan2(a, c)};
 
-        double max = Math.min(MathUtils.max(ws), 1);
+        double max = MathUtils.max(ws);
         //todo integrate motor flipping here
 
         for(int i = 0; i < 4; i++){
             SwerveModule m = modules[i];
-            m.setMotorPower(ws[i]/max);
+            if(max > 1) ws[i] /= max;
+            m.setMotorPower(ws[i]);
             m.setTargetRotation(MathUtils.norm(wa[i]));
 
         }
