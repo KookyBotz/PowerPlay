@@ -45,12 +45,17 @@ public class SwerveDrivetrain implements Drivetrain {
         double max = MathUtils.max(ws);
         //todo integrate motor flipping here
 
-        for(int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             SwerveModule m = modules[i];
-            if(max > 1) ws[i] /= max;
+            if (max > 1) ws[i] /= max;
             m.setMotorPower(ws[i]);
             m.setTargetRotation(MathUtils.norm(wa[i]));
 
         }
     }
+
+    public void updateModules() {
+        for(SwerveModule m : modules) m.update();
+    }
+
 }

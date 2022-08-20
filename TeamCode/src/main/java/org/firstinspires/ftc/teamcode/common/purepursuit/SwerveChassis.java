@@ -23,9 +23,5 @@ public class SwerveChassis {
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
 
-
-        for(LynxModule hub: hardwareMap.getAll(LynxModule.class)){
-            hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
-        }
     }
 }

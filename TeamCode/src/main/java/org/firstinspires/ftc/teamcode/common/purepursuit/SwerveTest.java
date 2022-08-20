@@ -47,6 +47,7 @@ public class SwerveTest extends LinearOpMode {
             targetPose.y = coordY;
             targetPose.heading = coordHeading;
             localizer.periodic();
+            robot.drivetrain.updateModules();
 //            robot.drivetrain.set(
 //                    new Pose(
 //                            -gamepad1.left_stick_y,
