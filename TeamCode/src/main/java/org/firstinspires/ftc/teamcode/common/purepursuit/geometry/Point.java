@@ -7,9 +7,20 @@ public class Point {
         this.x = x;
         this.y = y;
     }
+    public Point(){
+        this(0, 0);
+    }
 
     public Point subtract(Point other) {
         return new Point(x - other.x, y - other.y);
+    }
+
+    public Point add(Point other) {
+        return new Point(x + other.x, y + other.y);
+    }
+
+    public Point divide(double div){
+        return new Point(x / div, y / div);
     }
 
     public double distanceTo(Point other) {
@@ -22,5 +33,9 @@ public class Point {
 
     public double radius() {
         return Math.hypot(x, y);
+    }
+
+    public static Point polar(double r, double a){
+        return new Point(Math.cos(a)*r, Math.sin(a)*r);
     }
 }

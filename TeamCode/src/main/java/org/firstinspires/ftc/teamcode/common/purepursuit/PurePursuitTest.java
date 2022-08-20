@@ -1,14 +1,9 @@
 package org.firstinspires.ftc.teamcode.common.purepursuit;
 
-import static org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitConfig.pCoefficientH;
-import static org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitConfig.pCoefficientX;
-import static org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitConfig.pCoefficientY;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitController;
 import org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitPath;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.TwoWheelOdo;
@@ -21,7 +16,7 @@ import java.util.function.DoubleSupplier;
 public class PurePursuitTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        RobotPP robot = new RobotPP(hardwareMap);
+        MecanumChassis robot = new MecanumChassis(hardwareMap);
         DoubleSupplier horizontalPos = () -> robot.horizontalEncoder.getCurrentPosition(),
                 lateralPos = () -> robot.lateralEncoder.getCurrentPosition(),
                 imuAngle = () -> -robot.imu.getAngularOrientation().firstAngle;

@@ -34,6 +34,7 @@ import java.util.function.DoubleSupplier;
  *
  */
 @Config
+//BRUH JUST DONT USE ROADRUNNER
 public class TwoWheelOdo extends TwoTrackingWheelLocalizer implements Localizer {
     public static double TICKS_PER_REV = 8192;
     public static double WHEEL_RADIUS = 0.689; // in

@@ -12,6 +12,13 @@ public class Pose extends Point {
         super(x, y);
         this.heading = heading;
     }
+    public Pose(Point p, double heading) {
+        super(p.x, p.y);
+        this.heading = heading;
+    }
+    public Pose(){
+        this(0, 0, 0);
+    }
 
     public Pose subtract(Pose other) {
         return new Pose(this.x - other.x, this.y - other.y, AngleUnit.normalizeRadians(this.heading - other.heading));

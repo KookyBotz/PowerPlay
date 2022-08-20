@@ -9,13 +9,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.MecanumDrivetrain;
 
-public class RobotPP {
+public class MecanumChassis {
     public final DcMotorEx fl, bl, fr, br;
     public Encoder horizontalEncoder,  lateralEncoder;
     public final BNO055IMU imu;
     public MecanumDrivetrain drivetrain;
 
-    public RobotPP(HardwareMap hardwareMap) {
+    public MecanumChassis(HardwareMap hardwareMap) {
         fl = hardwareMap.get(DcMotorEx.class, "fl");
         bl = hardwareMap.get(DcMotorEx.class, "bl");
         fr = hardwareMap.get(DcMotorEx.class, "fr");
