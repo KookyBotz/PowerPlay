@@ -38,4 +38,10 @@ public class Point {
     public static Point polar(double r, double a){
         return new Point(Math.cos(a)*r, Math.sin(a)*r);
     }
+
+    public Point rotate(double amount){
+        return Point.polar(radius(), atan()+amount);
+    }
+    
+    
 }

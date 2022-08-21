@@ -13,8 +13,7 @@ public class Pose extends Point {
         this.heading = heading;
     }
     public Pose(Point p, double heading) {
-        super(p.x, p.y);
-        this.heading = heading;
+        this(p.x, p.y, heading);
     }
     public Pose(){
         this(0, 0, 0);
@@ -27,6 +26,7 @@ public class Pose extends Point {
     public Pose divide(Pose other) {
         return new Pose(this.x / other.x, this.y / other.y, this.heading / other.heading);
     }
+
 
 
 

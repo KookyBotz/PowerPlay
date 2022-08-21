@@ -4,6 +4,7 @@ import static java.lang.Math.atan2;
 import static java.lang.Math.hypot;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MathUtils;
@@ -28,6 +29,7 @@ public class SwerveDrivetrain implements Drivetrain {
         rightFrontModule = new SwerveModule(hardwareMap, "rightFrontMotor", "rightFrontServo", "rightFrontEncoder");
 
         modules = new SwerveModule[]{rightFrontModule, leftFrontModule, leftRearModule, rightRearModule};
+        for(SwerveModule m : modules) m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         R = hypot(TRACK_WIDTH, WHEEL_BASE);
     }
 
@@ -44,7 +46,7 @@ public class SwerveDrivetrain implements Drivetrain {
 
         double max = MathUtils.max(ws);
         //todo integrate motor flipping here
-
+        System.out.println(max);
         for (int i = 0; i < 4; i++) {
             SwerveModule m = modules[i];
             if (max > 1) ws[i] /= max;

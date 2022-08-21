@@ -341,7 +341,7 @@ public class FtcRobotControllerActivity extends Activity
 
     BlocksOpMode.setActivityAndWebView(this, (WebView) findViewById(R.id.webViewBlocksRuntime));
 
-    ExternalLibraries.getInstance().onCreate();
+      ExternalLibraries.getInstance().onCreate();
     onBotJavaHelper = new OnBotJavaHelperImpl();
 
     /*

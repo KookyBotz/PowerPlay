@@ -61,10 +61,8 @@ public class SwerveModule {
 
         servo = s;
         ((CRServoImplEx) servo).setPwmRange(new PwmControl.PwmRange(1000, 2000));
-        servo.setDirection(DcMotorSimple.Direction.REVERSE);
 
         encoder = e;
-        e.setInverted(true);
         rotationController = new PIDFController(MODULE_PID.p, MODULE_PID.i, MODULE_PID.d, MODULE_PID.f);
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
@@ -82,7 +80,7 @@ public class SwerveModule {
         else if (target - current > Math.PI) current += (2 * Math.PI);
         double power = Range.clip(rotationController.calculate(current), -MAX_SERVO, MAX_SERVO);
         if(Double.isNaN(power)) power = 0;
-        servo.setPower(Math.abs(rotationController.getPositionError()) > ALLOWED_BB_ERROR ? power : 0);
+        servo.setPower(Math.abs(rotationController.getPositionError()) > ALLOWED_BB_ERROR ? power+K_STATIC*Math.signum(power) : 0);
     }
 
     public double getTargetRotation() {
