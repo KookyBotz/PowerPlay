@@ -35,7 +35,6 @@ public class PathBuilderTest extends LinearOpMode {
                 .setDrivetrain(drivetrain)
                 .setLocalizer(localizer)
                 .setPower(1)
-                .setFollowDistance(10)
                 .then(new Pose())
                 .then(new Pose(0, 40, 0))
                 .setPower(0.5)
