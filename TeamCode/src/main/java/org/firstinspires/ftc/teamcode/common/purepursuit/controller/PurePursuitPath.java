@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 
 public class PurePursuitPath {
@@ -99,7 +100,6 @@ public class PurePursuitPath {
 
         // Set Powers
         drivetrain.set(powers);
-
         return true;
     }
 }

@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 @Config
 public class SwerveDrivetrain implements Drivetrain {
@@ -35,6 +36,8 @@ public class SwerveDrivetrain implements Drivetrain {
 
     @Override
     public void set(Pose pose) {
+        System.out.println(String.format(Locale.ENGLISH,"x: %.2f y: %.2f h: %.2f", pose.x, pose.y, pose.heading));
+
         double x = pose.x, y = pose.y, head = pose.heading;
         double a = x - head * (WHEEL_BASE / R),
                 b = x + head * (WHEEL_BASE / R),
