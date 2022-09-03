@@ -47,7 +47,7 @@ public class PurePursuitPath {
         Point previousPoint = waypoints.get(currentWaypoint).getPos();
         Point nextPoint = waypoints.get(currentWaypoint + 1).getPos();
 
-        if (currentWaypoint == waypoints.size() - 2) {
+        if (currentWaypoint == waypoints.size() - 2 && robotPose.distanceTo(nextPoint) < nextWaypoint.getFollowDistance()) {
             Pose powers = PurePursuitController.goToPosition(robotPose, (Pose) nextPoint, new Pose(
                     pCoefficientX, pCoefficientY, pCoefficientH
             ));
