@@ -45,4 +45,9 @@ public class MecanumDrivetrain implements Drivetrain {
         fr.setPower(frontRight);
         br.setPower(backRight);
     }
+
+    @Override
+    public void set(Pose pose, double maxPower) {
+        set(pose);
+    }
 }

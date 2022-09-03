@@ -52,7 +52,7 @@ public class PurePursuitPath {
                     pCoefficientX, pCoefficientY, pCoefficientH
             ));
 
-            drivetrain.set(powers);
+            drivetrain.set(powers, nextWaypoint.maxPower);
             return true;
         }
 
@@ -99,7 +99,7 @@ public class PurePursuitPath {
 
 
         // Set Powers
-        drivetrain.set(powers);
+        drivetrain.set(powers, nextWaypoint.maxPower);
         return true;
     }
 }

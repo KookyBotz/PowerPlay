@@ -36,9 +36,24 @@ public class SwerveDrivetrain implements Drivetrain {
 
     @Override
     public void set(Pose pose) {
+        set(pose, -1);
+    }
+
+    @Override
+    public void set(Pose pose, double maxPower) {
+
+
         System.out.println(String.format(Locale.ENGLISH,"x: %.2f y: %.2f h: %.2f", pose.x, pose.y, pose.heading));
 
         double x = pose.x, y = pose.y, head = pose.heading;
+
+        if(maxPower != -1){
+            double r = Math.hypot(x, y);
+            x = x / r * maxPower;
+            y = y / r * maxPower;
+
+        }
+
         double a = x - head * (WHEEL_BASE / R),
                 b = x + head * (WHEEL_BASE / R),
                 c = y - head * (TRACK_WIDTH / R),
