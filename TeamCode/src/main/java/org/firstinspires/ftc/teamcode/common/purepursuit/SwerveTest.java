@@ -25,8 +25,8 @@ import java.util.function.DoubleSupplier;
 @Config
 public class SwerveTest extends LinearOpMode {
 
-    public static double coordX = 0;
-    public static double coordY = 0;
+    public static double coordX = 10;
+    public static double coordY = 10;
     public static double coordHeading = 0;
 
     @Override
