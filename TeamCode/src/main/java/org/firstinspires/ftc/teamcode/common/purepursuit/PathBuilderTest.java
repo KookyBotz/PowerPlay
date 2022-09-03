@@ -34,7 +34,7 @@ public class PathBuilderTest extends LinearOpMode {
         PurePursuitPath path = new PurePursuitPathBuilder()
                 .setDrivetrain(drivetrain)
                 .setLocalizer(localizer)
-                .setPower(1)
+                .setPower(0.5)
                 .then(new Pose())
                 .then(new Pose(0, 40, 0))
                 .setPower(0.5)
