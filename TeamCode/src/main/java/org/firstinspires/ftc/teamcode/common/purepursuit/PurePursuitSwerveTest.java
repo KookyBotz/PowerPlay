@@ -38,9 +38,11 @@ public class PurePursuitSwerveTest extends LinearOpMode {
         long time = System.currentTimeMillis();
 
         PurePursuitPath path = new PurePursuitPath(robot.drivetrain, localizer,
-                new Waypoint(new Pose(0, 0, 0), 10, 0.7),
-                new Waypoint(new Pose(0, 60, 0), 10, 0.7),
-                new Waypoint(new Pose(0, 0, 0), 10, 0.7));
+                new Waypoint(new Pose(0, 0, 0), 10, 0.5),
+                new Waypoint(new Pose(0, 60, Math.PI/2.0), 10, 0.5),
+                new Waypoint(new Pose(-40, 70, Math.PI/2.0), 10, 1.0),
+                new Waypoint(new Pose(20, 50, Math.PI/2.0), 10, 0.3),
+                new Waypoint(new Pose(0, 0, Math.PI/2.0), 10, 0.5));
 
         while (opModeIsActive()) {
             localizer.periodic();
