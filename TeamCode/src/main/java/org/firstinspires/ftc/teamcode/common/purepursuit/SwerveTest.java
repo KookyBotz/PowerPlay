@@ -36,7 +36,7 @@ public class SwerveTest extends LinearOpMode {
 //                lateralPos = () -> robot.lateralEncoder.getCurrentPosition(),
 //                imuAngle = () -> -robot.imu.getAngularOrientation().firstAngle;
 
-        Localizer localizer = new BetterSwerveLocalizer(robot::getAngle, robot.drivetrain.modules);
+        Localizer localizer = new BetterSwerveLocalizer(()->-robot.getAngle(), robot.drivetrain.modules);
         Pose targetPose = new Pose(coordX, coordY, coordHeading);
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());

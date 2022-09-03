@@ -26,7 +26,7 @@ public class PurePursuitSwerveTest extends LinearOpMode {
 //                lateralPos = () -> robot.lateralEncoder.getCurrentPosition(),
 //                imuAngle = () -> -robot.imu.getAngularOrientation().firstAngle;
 
-        Localizer localizer = new BetterSwerveLocalizer(robot::getAngle, robot.drivetrain.modules);
+        Localizer localizer = new BetterSwerveLocalizer(() -> -robot.getAngle(), robot.drivetrain.modules);
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -40,8 +40,8 @@ public class PurePursuitSwerveTest extends LinearOpMode {
         PurePursuitPath path = new PurePursuitPath(robot.drivetrain, localizer,
                 new Waypoint(new Pose(0, 0, 0), 10),
                 new Waypoint(new Pose(0, 40, 0), 10),
-                new Waypoint(new Pose(40, 40, 0), 10),
-                new Waypoint(new Pose(40, 0, 0), 10),
+                new Waypoint(new Pose(-20, 40, 0), 10),
+                new Waypoint(new Pose(0, 40, 0), 10),
                 new Waypoint(new Pose(0, 0, 0), 10));
 
         while (opModeIsActive()) {
