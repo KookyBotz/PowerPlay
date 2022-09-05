@@ -50,14 +50,14 @@ public class PurePursuitPathBuilderTest extends LinearOpMode {
         PurePursuitPath path = new PurePursuitPathBuilder()
                 .setDrivetrain(drivetrain)
                 .setLocalizer(localizer)
-                .setPower(0.5)
+                .setController(true)
+                .setFollowDistance(15)
+                .setPower(1)
                 .then(new Pose())
                 .then(new Pose(0, 40, 0))
-                .setPower(0.5)
                 .then(new Pose(40, 40, 0))
-                .then(new Pose(0, 40, 0))
-                .setPower(0.3)
-                .then(new Pose(0, 0, 0))
+                .then(new Pose(40, 0, 0))
+                .then(new Pose())
                 .build();
 
         while (opModeIsActive()) {

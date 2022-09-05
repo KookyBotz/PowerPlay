@@ -19,17 +19,23 @@ public class PurePursuitPath {
     private final List<Waypoint> waypoints;
     private final Drivetrain drivetrain;
     private final Localizer localizer;
+    private final boolean pController;
 
     private int currentWaypoint = 0;
 
-    public PurePursuitPath(Drivetrain drivetrain, Localizer localizer, Waypoint... waypoints) {
+    public PurePursuitPath(Drivetrain drivetrain, Localizer localizer, boolean pController, Waypoint... waypoints) {
         this.waypoints = Arrays.asList(waypoints);
         this.drivetrain = drivetrain;
         this.localizer = localizer;
+        this.pController = pController;
 
         if (!(waypoints[waypoints.length - 1].getPos() instanceof Pose)) {
             throw new IllegalArgumentException("Last Waypoint Must Be a Pose");
         }
+    }
+
+    public PurePursuitPath(Drivetrain drivetrain, Localizer localizer, Waypoint... waypoints) {
+        this(drivetrain, localizer, true, waypoints);
     }
 
     // returns false if done, return true otherwise
@@ -51,7 +57,7 @@ public class PurePursuitPath {
                     pCoefficientX, pCoefficientY, pCoefficientH
             ));
 
-            drivetrain.set(powers);
+            drivetrain.set(pController ? powers : new Pose());
             return true;
         }
 

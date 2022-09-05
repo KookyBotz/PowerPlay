@@ -15,6 +15,7 @@ public class PurePursuitPathBuilder {
     private double currentPower = 1;
     private double followDistance = 10;
     private List<Waypoint> waypoints;
+    private boolean pController = true;
 
     public PurePursuitPathBuilder() {
         waypoints = new ArrayList<>();
@@ -41,6 +42,14 @@ public class PurePursuitPathBuilder {
         return this;
     }
 
+    public PurePursuitPathBuilder setController(boolean pController){
+        if (drivetrain == null || localizer == null)
+            throw new IllegalStateException("set drivetrain and localizer first please");
+
+        this.pController = pController;
+        return this;
+    }
+
     public PurePursuitPathBuilder setFollowDistance(double distance) {
         if (drivetrain == null || localizer == null)
             throw new IllegalStateException("set drivetrain and localizer first please");
@@ -60,6 +69,6 @@ public class PurePursuitPathBuilder {
     public PurePursuitPath build() {
         if (drivetrain == null || localizer == null || waypoints.size() <= 2)
             throw new IllegalStateException("missing some info sad");
-        return new PurePursuitPath(drivetrain, localizer, waypoints.toArray(new Waypoint[0]));
+        return new PurePursuitPath(drivetrain, localizer, pController, waypoints.toArray(new Waypoint[0]));
     }
 }
