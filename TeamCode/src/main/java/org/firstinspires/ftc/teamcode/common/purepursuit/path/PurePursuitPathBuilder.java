@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.common.purepursuit.path;
 
 
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Waypoint;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
@@ -12,6 +13,7 @@ import java.util.List;
 public class PurePursuitPathBuilder {
     private Localizer localizer;
     private Drivetrain drivetrain;
+    private MotionProfile profile = new MotionProfile(Integer.MAX_VALUE, 1);
     private double currentPower = 1;
     private double followDistance = 10;
     private List<Waypoint> waypoints;
@@ -58,6 +60,14 @@ public class PurePursuitPathBuilder {
         return this;
     }
 
+    public PurePursuitPathBuilder setMotionProfile(MotionProfile profile) {
+        if (drivetrain == null || localizer == null)
+            throw new IllegalStateException("set drivetrain and localizer first PLEASE");
+
+        this.profile = profile;
+        return this;
+    }
+
     public PurePursuitPathBuilder then(Pose pose) {
         if (drivetrain == null || localizer == null)
             throw new IllegalStateException("set drivetrain and localizer first please");
@@ -69,6 +79,6 @@ public class PurePursuitPathBuilder {
     public PurePursuitPath build() {
         if (drivetrain == null || localizer == null || waypoints.size() <= 2)
             throw new IllegalStateException("missing some info sad");
-        return new PurePursuitPath(drivetrain, localizer, pController, waypoints.toArray(new Waypoint[0]));
+        return new PurePursuitPath(drivetrain, localizer, pController, profile, waypoints.toArray(new Waypoint[0]));
     }
 }

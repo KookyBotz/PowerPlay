@@ -14,7 +14,8 @@ public class MotionProfile {
             return 0;
         }
         double velocity = (maxAcceleration * time) / maxVelocity;
-
-        return Math.min(velocity, maxVelocity);
+        double thing = Math.min(velocity, maxVelocity);
+        System.out.println(thing);
+        return thing;
     }
 }

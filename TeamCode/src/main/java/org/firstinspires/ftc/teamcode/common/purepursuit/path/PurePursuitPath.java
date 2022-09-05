@@ -50,6 +50,7 @@ public class PurePursuitPath {
 
     // returns false if done, return true otherwise
     public boolean update() {
+        if(timer == null) timer = new ElapsedTime();
 
         // check if we are done with our path (reached last point)
         if (currentWaypoint == waypoints.size() - 1) {
@@ -114,7 +115,7 @@ public class PurePursuitPath {
 
 
         // Set Powers
-        drivetrain.set(powers, nextWaypoint.maxPower);
+        drivetrain.set(powers, nextWaypoint.maxPower * profile.update(timer.seconds()));
         return true;
     }
 }
