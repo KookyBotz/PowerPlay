@@ -3,17 +3,17 @@ package org.firstinspires.ftc.teamcode.opmode.teleop;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.common.commandbase.command.SharedCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.compositecommands.SharedCommand;
 import org.firstinspires.ftc.teamcode.common.freightfrenzy.Alliance;
-import org.firstinspires.ftc.teamcode.common.hardware.Robot;
+import org.firstinspires.ftc.teamcode.common.freightfrenzy.CommandBaseRobot;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 
 @TeleOp
-public class TestTeleOP extends CommandOpMode {
-    private Robot robot;
+public class CommandBaseTest extends CommandOpMode {
+    private CommandBaseRobot robot;
     private boolean intake = true;
     private BooleanSupplier outtake;
     private Consumer<Boolean> done;
@@ -21,7 +21,7 @@ public class TestTeleOP extends CommandOpMode {
 
     @Override
     public void initialize() {
-        robot = new Robot(hardwareMap);
+        robot = new CommandBaseRobot(hardwareMap);
 
         outtake = () -> gamepad1.right_bumper;
         done = (a) -> intake = a;

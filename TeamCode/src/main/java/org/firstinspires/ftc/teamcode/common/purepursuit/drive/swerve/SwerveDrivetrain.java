@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.purepursuit.drive;
+package org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve;
 
 import static java.lang.Math.atan2;
 import static java.lang.Math.hypot;
@@ -7,11 +7,10 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MathUtils;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 
 @Config
@@ -43,7 +42,7 @@ public class SwerveDrivetrain implements Drivetrain {
     public void set(Pose pose, double maxPower) {
 
 
-        System.out.println(String.format(Locale.ENGLISH,"x: %.2f y: %.2f h: %.2f", pose.x, pose.y, pose.heading));
+        System.out.printf(Locale.ENGLISH, "x: %.2f y: %.2f h: %.2f%n", pose.x, pose.y, pose.heading);
 
         double x = pose.x, y = pose.y, head = pose.heading;
 

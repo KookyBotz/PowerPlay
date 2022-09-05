@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.purepursuit.drive;
+package org.firstinspires.ftc.teamcode.common.purepursuit.localizer;
 
 import androidx.annotation.NonNull;
 
@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.TwoTrackingWheelLocalizer;
 
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
+import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +36,7 @@ import java.util.function.DoubleSupplier;
  */
 @Config
 //BRUH JUST DONT USE ROADRUNNER
-public class TwoWheelOdo extends TwoTrackingWheelLocalizer implements Localizer {
+public class TwoWheelLocalizer extends TwoTrackingWheelLocalizer implements Localizer {
     public static double TICKS_PER_REV = 8192;
     public static double WHEEL_RADIUS = 0.689; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
@@ -48,7 +49,7 @@ public class TwoWheelOdo extends TwoTrackingWheelLocalizer implements Localizer 
 
     private final DoubleSupplier horizontalPosition, lateralPosition, imuAngle;
 
-    public TwoWheelOdo(DoubleSupplier horizontalPosition, DoubleSupplier lateralPosition, DoubleSupplier imuAngle) {
+    public TwoWheelLocalizer(DoubleSupplier horizontalPosition, DoubleSupplier lateralPosition, DoubleSupplier imuAngle) {
         super(Arrays.asList(
                 new Pose2d(PARALLEL_X, PARALLEL_Y, 0),
                 new Pose2d(PERPENDICULAR_X, PERPENDICULAR_Y, Math.toRadians(90))

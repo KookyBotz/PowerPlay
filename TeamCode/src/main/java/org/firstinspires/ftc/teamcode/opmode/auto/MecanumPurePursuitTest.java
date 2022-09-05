@@ -1,27 +1,29 @@
-package org.firstinspires.ftc.teamcode.common.purepursuit;
+package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitPath;
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Localizer;
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.TwoWheelOdo;
+import org.firstinspires.ftc.teamcode.common.freightfrenzy.MecanumRobot;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Waypoint;
+import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPath;
+import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
+import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
 import java.util.function.DoubleSupplier;
 
 @TeleOp
 @Config
-public class PurePursuitTest extends LinearOpMode {
+public class MecanumPurePursuitTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        MecanumChassis robot = new MecanumChassis(hardwareMap);
+        MecanumRobot robot = new MecanumRobot(hardwareMap);
         DoubleSupplier horizontalPos = () -> robot.horizontalEncoder.getCurrentPosition(),
                 lateralPos = () -> robot.lateralEncoder.getCurrentPosition(),
                 imuAngle = () -> -robot.imu.getAngularOrientation().firstAngle;
 
-        Localizer localizer = new TwoWheelOdo(horizontalPos, lateralPos, imuAngle);
+        Localizer localizer = new TwoWheelLocalizer(horizontalPos, lateralPos, imuAngle);
 
         waitForStart();
 

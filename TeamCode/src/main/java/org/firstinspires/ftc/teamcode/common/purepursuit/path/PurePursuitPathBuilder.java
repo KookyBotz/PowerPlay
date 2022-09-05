@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.common.purepursuit.controller;
+package org.firstinspires.ftc.teamcode.common.purepursuit.path;
 
 
-import org.firstinspires.ftc.teamcode.common.purepursuit.Waypoint;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Waypoint;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Localizer;
+import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
 import java.util.ArrayList;

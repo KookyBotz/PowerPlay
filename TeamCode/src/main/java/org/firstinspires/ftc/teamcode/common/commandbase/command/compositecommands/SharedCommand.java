@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.commandbase.command;
+package org.firstinspires.ftc.teamcode.common.commandbase.command.compositecommands;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
@@ -7,17 +7,17 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystem.ArmCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystem.LinkageCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.ArmCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LinkageCommand;
 import org.firstinspires.ftc.teamcode.common.freightfrenzy.Alliance;
-import org.firstinspires.ftc.teamcode.common.hardware.Robot;
+import org.firstinspires.ftc.teamcode.common.freightfrenzy.CommandBaseRobot;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 
 public class SharedCommand extends SequentialCommandGroup {
-    public SharedCommand(Robot robot, Alliance alliance, BooleanSupplier outtake, DoubleSupplier linkage, DoubleSupplier arm, Consumer<Boolean> done) {
+    public SharedCommand(CommandBaseRobot robot, Alliance alliance, BooleanSupplier outtake, DoubleSupplier linkage, DoubleSupplier arm, Consumer<Boolean> done) {
         super(
                 new InstantCommand(() -> robot.bucket.close()),
                 new InstantCommand(() -> robot.bucket.in()),

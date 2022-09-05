@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.purepursuit.drive;
+package org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve;
 
 import com.acmerobotics.dashboard.config.Config;
 
@@ -9,16 +9,14 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.CRServoImplEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.common.purepursuit.AbsoluteAnalogEncoder;
+import org.firstinspires.ftc.teamcode.common.hardware.AbsoluteAnalogEncoder;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MathUtils;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
 
 
 @Config

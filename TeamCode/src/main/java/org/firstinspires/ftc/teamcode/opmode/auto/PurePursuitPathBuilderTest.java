@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.purepursuit;
+package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -8,19 +8,20 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitPath;
-import org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitPathBuilder;
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.BetterSwerveLocalizer;
+import org.firstinspires.ftc.teamcode.common.freightfrenzy.SwerveRobot;
+import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPath;
+import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPathBuilder;
+import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Localizer;
+import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
 @TeleOp
 @Config
-public class PathBuilderTest extends LinearOpMode {
+public class PurePursuitPathBuilderTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        SwerveChassis swerve = new SwerveChassis(hardwareMap);
+        SwerveRobot swerve = new SwerveRobot(hardwareMap);
         Drivetrain drivetrain = swerve.drivetrain;
         Localizer localizer = new BetterSwerveLocalizer(() -> -swerve.getAngle(), swerve.drivetrain.modules);
 

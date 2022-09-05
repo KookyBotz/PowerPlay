@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.purepursuit;
+package org.firstinspires.ftc.teamcode.common.freightfrenzy;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
@@ -7,15 +7,16 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.MecanumDrivetrain;
+import org.firstinspires.ftc.teamcode.common.hardware.Encoder;
+import org.firstinspires.ftc.teamcode.common.purepursuit.drive.mecanum.MecanumDrivetrain;
 
-public class MecanumChassis {
+public class MecanumRobot {
     public final DcMotorEx fl, bl, fr, br;
     public Encoder horizontalEncoder,  lateralEncoder;
     public final BNO055IMU imu;
     public MecanumDrivetrain drivetrain;
 
-    public MecanumChassis(HardwareMap hardwareMap) {
+    public MecanumRobot(HardwareMap hardwareMap) {
         fl = hardwareMap.get(DcMotorEx.class, "fl");
         bl = hardwareMap.get(DcMotorEx.class, "bl");
         fr = hardwareMap.get(DcMotorEx.class, "fr");

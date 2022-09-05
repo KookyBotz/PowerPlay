@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.common.purepursuit;
+package org.firstinspires.ftc.teamcode.opmode.teleop;
 
-import static org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitConfig.pCoefficientH;
-import static org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitConfig.pCoefficientX;
-import static org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitConfig.pCoefficientY;
+import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientH;
+import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientX;
+import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientY;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -12,18 +12,16 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitController;
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.BetterSwerveLocalizer;
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Localizer;
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.TwoWheelOdo;
+import org.firstinspires.ftc.teamcode.common.freightfrenzy.SwerveRobot;
+import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitController;
+import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveLocalizer;
+import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
-import java.util.function.DoubleSupplier;
-
 @TeleOp
 @Config
-public class SwerveTest extends LinearOpMode {
+public class SwerveGoToPositionTest extends LinearOpMode {
 
     public static double coordX = 10;
     public static double coordY = 10;
@@ -31,7 +29,7 @@ public class SwerveTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        SwerveChassis robot = new SwerveChassis(hardwareMap);
+        SwerveRobot robot = new SwerveRobot(hardwareMap);
 //        DoubleSupplier horizontalPos = () -> robot.horizontalEncoder.getCurrentPosition(),
 //                lateralPos = () -> robot.lateralEncoder.getCurrentPosition(),
 //                imuAngle = () -> -robot.imu.getAngularOrientation().firstAngle;

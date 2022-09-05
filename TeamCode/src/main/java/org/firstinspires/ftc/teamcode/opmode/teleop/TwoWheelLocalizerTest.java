@@ -1,23 +1,24 @@
-package org.firstinspires.ftc.teamcode.common.purepursuit;
+package org.firstinspires.ftc.teamcode.opmode.teleop;
 
-import static org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitConfig.pCoefficientH;
-import static org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitConfig.pCoefficientX;
-import static org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitConfig.pCoefficientY;
+import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientH;
+import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientX;
+import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientY;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.common.purepursuit.controller.PurePursuitController;
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Localizer;
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.TwoWheelOdo;
+import org.firstinspires.ftc.teamcode.common.freightfrenzy.MecanumRobot;
+import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitController;
+import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
+import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
 import java.util.function.DoubleSupplier;
 
 @TeleOp
 @Config
-public class LocalizerTest extends LinearOpMode {
+public class TwoWheelLocalizerTest extends LinearOpMode {
 
     public static double coordX = 20;
     public static double coordY = 20;
@@ -25,12 +26,12 @@ public class LocalizerTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        MecanumChassis robot = new MecanumChassis(hardwareMap);
+        MecanumRobot robot = new MecanumRobot(hardwareMap);
         DoubleSupplier horizontalPos = () -> robot.horizontalEncoder.getCurrentPosition(),
                 lateralPos = () -> robot.lateralEncoder.getCurrentPosition(),
                 imuAngle = () -> -robot.imu.getAngularOrientation().firstAngle;
 
-        Localizer localizer = new TwoWheelOdo(horizontalPos, lateralPos, imuAngle);
+        Localizer localizer = new TwoWheelLocalizer(horizontalPos, lateralPos, imuAngle);
 
         Pose targetPose = new Pose(coordX, coordY, coordHeading);
         waitForStart();

@@ -1,21 +1,14 @@
-package org.firstinspires.ftc.teamcode.common.purepursuit;
+package org.firstinspires.ftc.teamcode.common.freightfrenzy;
 
 import androidx.annotation.GuardedBy;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.MecanumDrivetrain;
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.SwerveDrivetrain;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
+import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveDrivetrain;
 
-public class SwerveChassis {
+public class SwerveRobot {
     private final Object IMULock = new Object();
     private double imuAngle = 0;
     @GuardedBy("IMULock")
@@ -23,7 +16,7 @@ public class SwerveChassis {
     public SwerveDrivetrain drivetrain;
     private Thread imuThread;
 
-    public SwerveChassis(HardwareMap hardwareMap) {
+    public SwerveRobot(HardwareMap hardwareMap) {
 
         drivetrain = new SwerveDrivetrain(hardwareMap);
 
@@ -33,9 +26,8 @@ public class SwerveChassis {
             parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
             imu.initialize(parameters);
         }
-
-
     }
+
     public void startIMUThread(LinearOpMode opMode) {
         imuThread = new Thread(() -> {
             while (!opMode.isStopRequested() && opMode.opModeIsActive()) {

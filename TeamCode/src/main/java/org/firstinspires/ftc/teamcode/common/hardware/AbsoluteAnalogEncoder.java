@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.purepursuit;
+package org.firstinspires.ftc.teamcode.common.hardware;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.util.Angle;

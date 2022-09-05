@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.hardware;
+package org.firstinspires.ftc.teamcode.common.freightfrenzy;
 
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
@@ -14,14 +14,14 @@ import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.BucketSubsyst
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.TurretSubsystem;
 
-public class Robot {
+public class CommandBaseRobot {
 
     public IntakeSubsystem intake;
     public ArmSubsystem arm;
     public BucketSubsystem bucket;
     public TurretSubsystem turret;
 
-    public Robot(HardwareMap hardwareMap) {
+    public CommandBaseRobot(HardwareMap hardwareMap) {
 
         MotorEx intakeM = new MotorEx(hardwareMap, "intake", Motor.GoBILDA.RPM_1150);
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.purepursuit.controller;
+package org.firstinspires.ftc.teamcode.common.purepursuit.path;
 
 import com.acmerobotics.dashboard.config.Config;
 

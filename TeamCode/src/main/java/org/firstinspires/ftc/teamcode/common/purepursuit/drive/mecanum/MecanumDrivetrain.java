@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode.common.purepursuit.drive;
+package org.firstinspires.ftc.teamcode.common.purepursuit.drive.mecanum;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
 import java.util.ArrayList;

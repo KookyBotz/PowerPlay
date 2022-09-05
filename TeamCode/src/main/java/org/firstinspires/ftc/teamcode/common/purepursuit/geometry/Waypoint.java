@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.purepursuit;
+package org.firstinspires.ftc.teamcode.common.purepursuit.geometry;
 
 import com.arcrobotics.ftclib.command.Command;
 
