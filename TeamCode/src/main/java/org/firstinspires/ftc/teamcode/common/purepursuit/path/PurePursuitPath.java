@@ -4,7 +4,10 @@ import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuit
 import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientX;
 import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientY;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Waypoint;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
@@ -22,12 +25,15 @@ public class PurePursuitPath {
     private final boolean pController;
 
     private int currentWaypoint = 0;
+    private ElapsedTime timer;
+    private MotionProfile profile;
 
-    public PurePursuitPath(Drivetrain drivetrain, Localizer localizer, boolean pController, Waypoint... waypoints) {
+    public PurePursuitPath(Drivetrain drivetrain, Localizer localizer, boolean pController, MotionProfile profile, Waypoint... waypoints) {
         this.waypoints = Arrays.asList(waypoints);
         this.drivetrain = drivetrain;
         this.localizer = localizer;
         this.pController = pController;
+        this.profile = profile;
 
         if (!(waypoints[waypoints.length - 1].getPos() instanceof Pose)) {
             throw new IllegalArgumentException("Last Waypoint Must Be a Pose");
@@ -35,7 +41,11 @@ public class PurePursuitPath {
     }
 
     public PurePursuitPath(Drivetrain drivetrain, Localizer localizer, Waypoint... waypoints) {
-        this(drivetrain, localizer, true, waypoints);
+        this(drivetrain, localizer, true, new MotionProfile(Integer.MAX_VALUE, 1), waypoints);
+    }
+
+    public PurePursuitPath(Drivetrain drivetrain, Localizer localizer, boolean pController, Waypoint... waypoints) {
+        this(drivetrain, localizer, pController, new MotionProfile(Integer.MAX_VALUE, 1), waypoints);
     }
 
     // returns false if done, return true otherwise
