@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.freightfrenzy.SwerveRobot;
+import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPath;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPathBuilder;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveLocalizer;
@@ -19,6 +20,8 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 @TeleOp
 @Config
 public class PurePursuitPathBuilderTest extends LinearOpMode {
+
+
     @Override
     public void runOpMode() throws InterruptedException {
         SwerveRobot swerve = new SwerveRobot(hardwareMap);
@@ -29,6 +32,18 @@ public class PurePursuitPathBuilderTest extends LinearOpMode {
 
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.enable();
+
+
+
+        while (!isStarted()) {
+            System.out.println(isStarted());
+            for (SwerveModule module : swerve.drivetrain.modules) {
+                module.setTargetRotation(0);
+            }
+            swerve.drivetrain.updateModules();
+            PhotonCore.CONTROL_HUB.clearBulkCache();
+        }
+
         waitForStart();
         swerve.startIMUThread(this);
 

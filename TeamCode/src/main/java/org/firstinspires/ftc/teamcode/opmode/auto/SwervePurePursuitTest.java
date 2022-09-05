@@ -31,6 +31,8 @@ public class SwervePurePursuitTest extends LinearOpMode {
 
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.enable();
+
+
         waitForStart();
         robot.startIMUThread(this);
 
