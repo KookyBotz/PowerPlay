@@ -47,16 +47,17 @@ public class PurePursuitPathBuilderTest extends LinearOpMode {
         waitForStart();
         swerve.startIMUThread(this);
 
+        // higher speeds = higher follow distances
         PurePursuitPath path = new PurePursuitPathBuilder()
                 .setDrivetrain(drivetrain)
                 .setLocalizer(localizer)
                 .setController(true)
-                .setFollowDistance(15)
-                .setPower(1)
+                .setFollowDistance(20)
+                .setPower(0.3)
                 .then(new Pose())
-                .then(new Pose(0, 40, 0))
-                .then(new Pose(40, 40, 0))
-                .then(new Pose(40, 0, 0))
+                .then(new Pose(0, 60, 0))
+                .then(new Pose(60, 60, 0))
+                .then(new Pose(60, 0, 0))
                 .then(new Pose())
                 .build();
 
