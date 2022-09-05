@@ -55,6 +55,9 @@ public class PurePursuitPathBuilderTest extends LinearOpMode {
                 .then(new Pose(0, 40, 0))
                 .setPower(0.5)
                 .then(new Pose(40, 40, 0))
+                .then(new Pose(0, 40, 0))
+                .setPower(0.3)
+                .then(new Pose(0, 0, 0))
                 .build();
 
         while (opModeIsActive()) {
