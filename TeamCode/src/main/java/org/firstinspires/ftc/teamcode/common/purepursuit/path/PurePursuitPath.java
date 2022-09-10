@@ -50,7 +50,7 @@ public class PurePursuitPath {
 
     // returns false if done, return true otherwise
     public boolean update() {
-        if(timer == null) timer = new ElapsedTime();
+        if (timer == null) timer = new ElapsedTime();
 
         // check if we are done with our path (reached last point)
         if (currentWaypoint == waypoints.size() - 1) {
@@ -74,7 +74,17 @@ public class PurePursuitPath {
 
 
         // check if we reached the target waypoint, if so increment and move on
-        if (robotPose.distanceTo(nextPoint) < nextWaypoint.getFollowDistance()) {
+        if (robotPose.distanceTo(nextPoint) < nextWaypoint.getFollowDistance() && nextWaypoint.getFollowDistance() != 0) {
+            System.out.println("heading error " + Math.abs(AngleUnit.normalizeRadians(robotPose.heading - ((Pose)nextPoint).heading)));
+            System.out.println(currentWaypoint);
+            currentWaypoint++;
+            return true;
+        }
+
+        if(nextWaypoint.getFollowDistance() == 0 && robotPose.distanceTo(nextPoint) < PurePursuitConfig.ALLOWED_TRANSLATIONAL_ERROR
+        && Math.abs(AngleUnit.normalizeRadians(robotPose.heading - ((Pose)nextPoint).heading)) < PurePursuitConfig.ALLOWED_HEADING_ERROR){
+            System.out.println(currentWaypoint);
+            System.out.println("next point");
             currentWaypoint++;
             return true;
         }
@@ -87,6 +97,14 @@ public class PurePursuitPath {
                 previousPoint, nextPoint, robotPose, nextWaypoint.getFollowDistance()
         );
 
+        if(nextWaypoint.getFollowDistance() == 0){
+            Pose powers = PurePursuitController.goToPosition(robotPose, (Pose) nextPoint, new Pose(
+                    pCoefficientX, pCoefficientY, pCoefficientH
+            ));
+
+            drivetrain.set(powers);
+            return true;
+        }
 
         // we want to hold heading
         if (nextPoint instanceof Pose) {

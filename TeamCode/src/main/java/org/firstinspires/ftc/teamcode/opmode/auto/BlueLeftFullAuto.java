@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPath;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPathBuilder;
 
 @Autonomous (name = "BlueLeftAuto")
-public class BlueLeftAuto extends LinearOpMode {
+public class BlueLeftFullAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -48,15 +48,15 @@ public class BlueLeftAuto extends LinearOpMode {
                 .then(new Pose(-5, -32, 0))
                 .then(new Pose(-77, -32, 0))
                 .setFollowDistance(0)
-                .then(new Pose(-77, -15, -Math.PI / 5))
+                .then(new Pose(-77, -15, -Math.PI / 6))
                 .then(new Pose(-77, -23, 0))
-                .then(new Pose(-77, -15, -Math.PI / 5))
+                .then(new Pose(-77, -15, -Math.PI / 6))
                 .then(new Pose(-77, -23, 0))
-                .then(new Pose(-77, -15, -Math.PI / 5))
+                .then(new Pose(-77, -15, -Math.PI / 6))
                 .then(new Pose(-77, -23, 0))
-                .then(new Pose(-77, -15, -Math.PI / 5))
+                .then(new Pose(-77, -15, -Math.PI / 6))
                 .then(new Pose(-77, -23, 0))
-                .then(new Pose(-77, -15, -Math.PI / 5))
+                .then(new Pose(-77, -15, -Math.PI / 6))
                 .then(new Pose(-77, -23, 0))
                 .setFollowDistance(10)
                 .then(new Pose(-77, -32, 0))
