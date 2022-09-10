@@ -47,7 +47,7 @@ public class BlueLeftFullAuto extends LinearOpMode {
                 .setMotionProfile(new MotionProfile(0.5, 1))
                 .then(new Pose(-5, -32, 0))
                 .then(new Pose(-53, -32, 0))
-                .setFollowDistance(2)
+                .setFollowDistance(0)
                 .then(new Pose(-53, -15, Math.PI / 6))
                 .then(new Pose(-53, -23, 0))
                 .then(new Pose(-53, -15, Math.PI / 6))
