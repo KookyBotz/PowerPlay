@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPath;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPathBuilder;
 
-@Autonomous (name = "BlueLeftAuto")
+@Autonomous (name = "BlueLeftFullAuto")
 public class BlueLeftFullAuto extends LinearOpMode {
 
     @Override
@@ -47,7 +47,7 @@ public class BlueLeftFullAuto extends LinearOpMode {
                 .setMotionProfile(new MotionProfile(0.5, 1))
                 .then(new Pose(-5, -32, 0))
                 .then(new Pose(-53, -32, 0))
-                .setFollowDistance(0)
+                .setFollowDistance(2)
                 .then(new Pose(-53, -15, Math.PI / 6))
                 .then(new Pose(-53, -23, 0))
                 .then(new Pose(-53, -15, Math.PI / 6))
