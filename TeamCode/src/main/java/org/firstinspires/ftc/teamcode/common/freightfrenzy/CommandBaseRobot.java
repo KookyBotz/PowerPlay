@@ -9,10 +9,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.BucketSubsystem;
-import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.TurretSubsystem;
+import org.firstinspires.ftc.teamcode.common.subsystem.ArmSubsystem;
+import org.firstinspires.ftc.teamcode.common.subsystem.BucketSubsystem;
+import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.common.subsystem.TurretSubsystem;
 
 public class CommandBaseRobot {
 

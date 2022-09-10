@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.commandbase.subsystem;
+package org.firstinspires.ftc.teamcode.common.subsystem;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
@@ -6,8 +6,6 @@ import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;

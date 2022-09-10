@@ -1,8 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.teleop;
-
-import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientH;
-import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientX;
-import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientY;
+package org.firstinspires.ftc.teamcode.opmode.test;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -13,20 +9,15 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.freightfrenzy.SwerveRobot;
-import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitController;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Waypoint;
+import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPath;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
 @TeleOp
 @Config
-public class SwerveGoToPositionTest extends LinearOpMode {
-
-    public static double coordX = 10;
-    public static double coordY = 10;
-    public static double coordHeading = 0;
-
+public class SwervePurePursuitTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         SwerveRobot robot = new SwerveRobot(hardwareMap);
@@ -34,40 +25,30 @@ public class SwerveGoToPositionTest extends LinearOpMode {
 //                lateralPos = () -> robot.lateralEncoder.getCurrentPosition(),
 //                imuAngle = () -> -robot.imu.getAngularOrientation().firstAngle;
 
-        Localizer localizer = new BetterSwerveLocalizer(()->-robot.getAngle(), robot.drivetrain.modules);
-        Pose targetPose = new Pose(coordX, coordY, coordHeading);
+        Localizer localizer = new BetterSwerveLocalizer(() -> -robot.getAngle(), robot.drivetrain.modules);
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.enable();
+
+
         waitForStart();
         robot.startIMUThread(this);
 
         long time = System.currentTimeMillis();
 
+        PurePursuitPath path = new PurePursuitPath(robot.drivetrain, localizer,
+                new Waypoint(new Pose(0, 0, 0), 10, 0.5),
+                new Waypoint(new Pose(0, 60, Math.PI/2.0), 10, 0.5),
+                new Waypoint(new Pose(-40, 70, Math.PI/2.0), 10, 1.0),
+                new Waypoint(new Pose(20, 50, Math.PI/2.0), 10, 0.3),
+                new Waypoint(new Pose(0, 0, Math.PI/2.0), 10, 0.5));
+
         while (opModeIsActive()) {
-            targetPose.x = coordX;
-            targetPose.y = coordY;
-            targetPose.heading = coordHeading;
             localizer.periodic();
-            Pose drive;
-            if(!gamepad1.a) {
-                drive = new Pose(
-                        new Point(-gamepad1.left_stick_y,
-                                gamepad1.left_stick_x).rotate(-robot.getAngle()),
-                        gamepad1.right_stick_x
-                );
-            }else{
-                drive = PurePursuitController.goToPosition(
-                        localizer.getPos(), targetPose, new Pose(pCoefficientX, pCoefficientY, pCoefficientH)
-                );
-            }
-            robot.drivetrain.set(drive);
+            path.update();
             robot.drivetrain.updateModules();
-
-//
-
 
 
 //            long currTime = System.currentTimeMillis();
@@ -79,6 +60,5 @@ public class SwerveGoToPositionTest extends LinearOpMode {
 
             PhotonCore.CONTROL_HUB.clearBulkCache();
         }
- 
     }
 }

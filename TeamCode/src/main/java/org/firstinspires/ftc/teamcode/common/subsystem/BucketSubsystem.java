@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.commandbase.subsystem;
+package org.firstinspires.ftc.teamcode.common.subsystem;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.Servo;

@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomma
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.ArmSubsystem;
+import org.firstinspires.ftc.teamcode.common.subsystem.ArmSubsystem;
 
 import java.util.function.DoubleSupplier;
 
