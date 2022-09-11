@@ -55,7 +55,7 @@ public class BetterSwerveLocalizer implements Localizer, com.acmerobotics.roadru
 
     @Override
     public void setPos(Pose pose) {
-        this.poseEstimate = new Pose2d(pose.x, pose.y, pose.heading);
+        setPoseEstimate(new Pose2d(pose.y, pose.x, pose.heading));
     }
 
     @Override

@@ -22,7 +22,7 @@ public class BlueLeftFullAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Robot robot = new Robot(hardwareMap);
         Drivetrain drivetrain = robot.drivetrain;
-        Localizer localizer = new BetterSwerveLocalizer(() -> -robot.getAngle(), robot.drivetrain.modules);
+        Localizer localizer = new BetterSwerveLocalizer(() -> -robot.getAngle() + Math.PI, robot.drivetrain.modules);
 
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.enable();
@@ -42,24 +42,25 @@ public class BlueLeftFullAuto extends LinearOpMode {
                 .setDrivetrain(drivetrain)
                 .setLocalizer(localizer)
                 .setController(true)
-                .setFollowDistance(9)
-                .setStartPosition(new Pose(6, 90, 0))
+                .setFollowDistance(10)
+                .setStartPosition(new Pose(6, 90, Math.PI))
                 .setPower(0.4)
                 .setMotionProfile(new MotionProfile(0.3, 1))
-                .then(new Pose(6, 90, 0))
-                .then(new Pose(24, 84, 0))
-                .then(new Pose(60, 84, 0))
-                .then(new Pose(60, 120, Math.PI / 6))
-                .then(new Pose(60, 132, 0))
-                .then(new Pose(60, 120, Math.PI / 6))
-                .then(new Pose(60, 132, 0))
-                .then(new Pose(60, 120, Math.PI / 6))
-                .then(new Pose(60, 132, 0))
-                .then(new Pose(60, 120, Math.PI / 6))
-                .then(new Pose(60, 132, 0))
-                .then(new Pose(60, 120, Math.PI / 6))
-                .then(new Pose(60, 132, 0))
-                .then(new Pose(60, 120, Math.PI / 6))
+                .then(new Pose(6, 90, Math.PI))
+                .then(new Pose(24, 84, Math.PI))
+                .then(new Pose(60, 84, Math.PI))
+                .setFollowDistance(0)
+                .then(new Pose(60, 120, 7 * Math.PI / 6))
+                .then(new Pose(60, 132, Math.PI))
+                .then(new Pose(60, 120, 7 * Math.PI / 6))
+                .then(new Pose(60, 132, Math.PI))
+                .then(new Pose(60, 120, 7 * Math.PI / 6))
+                .then(new Pose(60, 132, Math.PI))
+                .then(new Pose(60, 120, 7 * Math.PI / 6))
+                .then(new Pose(60, 132, Math.PI))
+                .then(new Pose(60, 120, 7 * Math.PI / 6))
+                .then(new Pose(60, 132, Math.PI))
+                .then(new Pose(60, 120, 7 * Math.PI / 6))
                 // cycle other side
                 .then(new Pose(60, 12, 0))
                 .then(new Pose(60, 24, -Math.PI / 6))
@@ -71,8 +72,8 @@ public class BlueLeftFullAuto extends LinearOpMode {
                 .then(new Pose(60, 24, -Math.PI / 6))
                 .then(new Pose(60, 12, 0))
                 .then(new Pose(60, 24, -Math.PI / 6))
+                .setFollowDistance(10)
                 .then(new Pose(60, 132, 0))
-                .then(new Pose())
 
                 .build();
 

@@ -40,7 +40,7 @@ public class PurePursuitPathBuilder {
     public PurePursuitPathBuilder setStartPosition(Pose pose) {
         if (drivetrain == null || localizer == null)
             throw new IllegalStateException("set drivetrain and localizer cringe");
-        this.localizer.setPos(new Pose(pose.y, pose.x, pose.heading));
+        this.localizer.setPos(pose);
         return this;
     }
 
