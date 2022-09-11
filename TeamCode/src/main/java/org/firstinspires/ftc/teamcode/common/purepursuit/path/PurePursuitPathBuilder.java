@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.common.purepursuit.path;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Waypoint;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
@@ -33,6 +34,13 @@ public class PurePursuitPathBuilder {
         if (drivetrain == null) throw new IllegalStateException("set drivetrain first please");
         this.localizer = localizer;
 
+        return this;
+    }
+
+    public PurePursuitPathBuilder setStartPosition(Pose pose) {
+        if (drivetrain == null || localizer == null)
+            throw new IllegalStateException("set drivetrain and localizer cringe");
+        this.localizer.setPos(pose);
         return this;
     }
 
