@@ -95,15 +95,15 @@ public class BlueLeftFullAuto extends LinearOpMode {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         new PurePursuitCommand(path),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 123, 7 * Math.PI / 6), new MotionProfile(0.5, 1)),
+                        new PositionCommand(drivetrain, localizer, new Pose(60, 128, 7 * Math.PI / 6), new MotionProfile(0.5, 1)),
                         new PositionCommand(drivetrain, localizer, new Pose(60, 123, 0), new MotionProfile(0.5, 1.0)),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 123, 7 * Math.PI / 6), new MotionProfile(0.5, 1.0)),
+                        new PositionCommand(drivetrain, localizer, new Pose(60, 128, 7 * Math.PI / 6), new MotionProfile(0.5, 1.0)),
                         new PositionCommand(drivetrain, localizer, new Pose(60, 123, 0), new MotionProfile(0.5, 1.0)),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 123, 7 * Math.PI / 6), new MotionProfile(0.5, 1.0)),
+                        new PositionCommand(drivetrain, localizer, new Pose(60, 128, 7 * Math.PI / 6), new MotionProfile(0.5, 1.0)),
                         new PositionCommand(drivetrain, localizer, new Pose(60, 123, 0), new MotionProfile(0.5, 1.0)),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 123, 7 * Math.PI / 6), new MotionProfile(0.5, 1.0)),
+                        new PositionCommand(drivetrain, localizer, new Pose(60, 128, 7 * Math.PI / 6), new MotionProfile(0.5, 1.0)),
                         new PositionCommand(drivetrain, localizer, new Pose(60, 123, 0), new MotionProfile(0.5, 1.0)),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 123, 7 * Math.PI / 6), new MotionProfile(0.5, 1.0)),
+                        new PositionCommand(drivetrain, localizer, new Pose(60, 128, 7 * Math.PI / 6), new MotionProfile(0.5, 1.0)),
                         new PositionCommand(drivetrain, localizer, new Pose(60, 123, 0), new MotionProfile(0.5, 1.0)),
                         new PurePursuitCommand(path2)
                 )
