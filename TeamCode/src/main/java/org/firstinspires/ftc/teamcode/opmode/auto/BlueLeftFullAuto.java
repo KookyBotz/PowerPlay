@@ -59,7 +59,6 @@ public class BlueLeftFullAuto extends LinearOpMode {
                 .then(new Pose(-53, -15, Math.PI / 6))
                 .setFollowDistance(15)
                 .then(new Pose(-53, 70, Math.PI))
-                /*
                 .setFollowDistance(0)
                 .then(new Pose(-53, 62, 7 * Math.PI / 6))
                 .then(new Pose(-53, 70, Math.PI))
@@ -74,7 +73,6 @@ public class BlueLeftFullAuto extends LinearOpMode {
                 // 7pi / 6
                 .then(new Pose(-53, -32, 0))
                 .then(new Pose(-33, -32, 0))
-                */
                 // stay still if left
                 // go somewhere else if other case
 
