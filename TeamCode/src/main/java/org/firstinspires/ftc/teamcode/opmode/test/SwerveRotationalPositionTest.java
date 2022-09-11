@@ -41,8 +41,21 @@ public class SwerveRotationalPositionTest extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(0, 0, Math.PI / 4), new MotionProfile(0.2, 0.2))
+                        new PositionCommand(drivetrain, localizer, new Pose(0, 0, Math.PI / 4), new MotionProfile(0.5, 0.5))
                 )
         );
+
+        while (opModeIsActive()) {
+            localizer.periodic();
+            CommandScheduler.getInstance().run();
+            robot.drivetrain.updateModules();
+
+            telemetry.addData("current pose", localizer.getPos());
+            telemetry.update();
+
+            PhotonCore.CONTROL_HUB.clearBulkCache();
+        }
+
+        CommandScheduler.getInstance().reset();
     }
 }
