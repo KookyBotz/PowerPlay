@@ -8,6 +8,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PurePursuitCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
@@ -94,7 +95,7 @@ public class BlueLeftFullAuto extends LinearOpMode {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         new PurePursuitCommand(path),
-                        new WaitCommand(3000),
+                        new PositionCommand(drivetrain, localizer, new Pose(20, 20, 0)),
                         new PurePursuitCommand(path2)
                 )
         );
