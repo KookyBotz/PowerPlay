@@ -9,6 +9,8 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
+import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig;
+import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitController;
 
 public class PositionCommand extends CommandBase {
     Drivetrain drivetrain;
@@ -21,9 +23,18 @@ public class PositionCommand extends CommandBase {
         this.targetPose = targetPose;
     }
 
-/*
-drive = PurePursuitController.goToPosition(
-                        localizer.getPos(), targetPose, new Pose(pCoefficientX, pCoefficientY, pCoefficientH)
-                );
- */
+    @Override
+    public void execute() {
+        drivetrain.set(PurePursuitController.goToPosition(localizer.getPos(), targetPose, new Pose(pCoefficientX, pCoefficientY, pCoefficientH)));
+    }
+
+    @Override
+    public boolean isFinished() {
+        if (drivetrain)
+    }
+
+    @Override
+    public void end() {
+
+    }
 }
