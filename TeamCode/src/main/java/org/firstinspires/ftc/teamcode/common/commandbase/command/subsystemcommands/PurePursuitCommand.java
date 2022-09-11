@@ -21,4 +21,9 @@ public class PurePursuitCommand extends CommandBase {
     public boolean isFinished() {
         return !running;
     }
+
+    @Override
+    public void end(boolean interrupted){
+        System.out.println("done");
+    }
 }

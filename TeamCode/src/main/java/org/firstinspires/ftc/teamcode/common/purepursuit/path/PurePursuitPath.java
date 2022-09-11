@@ -52,16 +52,18 @@ public class PurePursuitPath {
     public boolean update() {
         if (timer == null) timer = new ElapsedTime();
 
-        // check if we are done with our path (reached last point)
-        if (currentWaypoint == waypoints.size() - 1) {
-            drivetrain.set(new Pose(0, 0, 0));
-            return false;
-        }
 
         Pose robotPose = localizer.getPos();
         Waypoint nextWaypoint = waypoints.get(currentWaypoint + 1);
         Point previousPoint = waypoints.get(currentWaypoint).getPos();
         Point nextPoint = waypoints.get(currentWaypoint + 1).getPos();
+
+        // check if we are done with our path (reached last point)
+        if (currentWaypoint == waypoints.size() - 2 && robotPose.distanceTo(nextPoint) < PurePursuitConfig.ALLOWED_TRANSLATIONAL_ERROR) {
+            drivetrain.set(new Pose(0, 0, 0));
+            return false;
+        }
+
 
         if (currentWaypoint == waypoints.size() - 2 && robotPose.distanceTo(nextPoint) < nextWaypoint.getFollowDistance()) {
             Pose powers = PurePursuitController.goToPosition(robotPose, (Pose) nextPoint, new Pose(
@@ -75,14 +77,14 @@ public class PurePursuitPath {
 
         // check if we reached the target waypoint, if so increment and move on
         if (robotPose.distanceTo(nextPoint) < nextWaypoint.getFollowDistance() && nextWaypoint.getFollowDistance() != 0) {
-            System.out.println("heading error " + Math.abs(AngleUnit.normalizeRadians(robotPose.heading - ((Pose)nextPoint).heading)));
+            System.out.println("heading error " + Math.abs(AngleUnit.normalizeRadians(robotPose.heading - ((Pose) nextPoint).heading)));
             System.out.println(currentWaypoint);
             currentWaypoint++;
             return true;
         }
 
-        if(nextWaypoint.getFollowDistance() == 0 && robotPose.distanceTo(nextPoint) < PurePursuitConfig.ALLOWED_TRANSLATIONAL_ERROR
-        && Math.abs(AngleUnit.normalizeRadians(robotPose.heading - ((Pose)nextPoint).heading)) < PurePursuitConfig.ALLOWED_HEADING_ERROR){
+        if (nextWaypoint.getFollowDistance() == 0 && robotPose.distanceTo(nextPoint) < PurePursuitConfig.ALLOWED_TRANSLATIONAL_ERROR
+                && Math.abs(AngleUnit.normalizeRadians(robotPose.heading - ((Pose) nextPoint).heading)) < PurePursuitConfig.ALLOWED_HEADING_ERROR) {
             System.out.println(currentWaypoint);
             System.out.println("next point");
             currentWaypoint++;
@@ -97,12 +99,13 @@ public class PurePursuitPath {
                 previousPoint, nextPoint, robotPose, nextWaypoint.getFollowDistance()
         );
 
-        if(nextWaypoint.getFollowDistance() == 0){
+        if (nextWaypoint.getFollowDistance() == 0) {
             Pose powers = PurePursuitController.goToPosition(robotPose, (Pose) nextPoint, new Pose(
                     pCoefficientX, pCoefficientY, pCoefficientH
             ));
 
-            drivetrain.set(powers);
+            drivetrain.set(powers, nextWaypoint.maxPower * profile.update(timer.seconds()));
+
             return true;
         }
 

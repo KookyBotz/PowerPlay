@@ -1,10 +1,14 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
+import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PurePursuitCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
@@ -49,37 +53,55 @@ public class BlueLeftFullAuto extends LinearOpMode {
                 .then(new Pose(6, 90, Math.PI))
                 .then(new Pose(24, 84, Math.PI))
                 .then(new Pose(60, 84, Math.PI))
-                .setFollowDistance(0)
-                .then(new Pose(60, 120, 7 * Math.PI / 6))
-                .then(new Pose(60, 132, Math.PI))
-                .then(new Pose(60, 120, 7 * Math.PI / 6))
-                .then(new Pose(60, 132, Math.PI))
-                .then(new Pose(60, 120, 7 * Math.PI / 6))
-                .then(new Pose(60, 132, Math.PI))
-                .then(new Pose(60, 120, 7 * Math.PI / 6))
-                .then(new Pose(60, 132, Math.PI))
-                .then(new Pose(60, 120, 7 * Math.PI / 6))
-                .then(new Pose(60, 132, Math.PI))
-                .then(new Pose(60, 120, 7 * Math.PI / 6))
+                .then(new Pose(60, 115, 7 * Math.PI / 6))
+                .build();
+//                .setFollowDistance(0)
+//                .then(new Pose(60, 123, 7 * Math.PI / 6))
+//                .then(new Pose(60, 123, Math.PI))
+//                .then(new Pose(60, 123, 7 * Math.PI / 6))
+//                .then(new Pose(60, 123, Math.PI))
+//                .then(new Pose(60, 123, 7 * Math.PI / 6))
+//                .then(new Pose(60, 123, Math.PI))
+//                .then(new Pose(60, 123, 7 * Math.PI / 6))
+//                .then(new Pose(60, 123, Math.PI))
+//                .then(new Pose(60, 123, 7 * Math.PI / 6))
+//                .then(new Pose(60, 123, Math.PI))
+//                .then(new Pose(60, 123, 7 * Math.PI / 6))
                 // cycle other side
-                .then(new Pose(60, 12, 0))
-                .then(new Pose(60, 24, -Math.PI / 6))
-                .then(new Pose(60, 12, 0))
-                .then(new Pose(60, 24, -Math.PI / 6))
-                .then(new Pose(60, 12, 0))
-                .then(new Pose(60, 24, -Math.PI / 6))
-                .then(new Pose(60, 12, 0))
-                .then(new Pose(60, 24, -Math.PI / 6))
-                .then(new Pose(60, 12, 0))
-                .then(new Pose(60, 24, -Math.PI / 6))
+        PurePursuitPath path2 = new PurePursuitPathBuilder()
+                .setDrivetrain(drivetrain)
+                .setLocalizer(localizer)
+                .setController(true)
                 .setFollowDistance(10)
-                .then(new Pose(60, 132, 0))
+                .setPower(0.4)
+                .setMotionProfile(new MotionProfile(0.3, 1))
+                .then(new Pose(60, 115, 7 * Math.PI / 6))
+                .then(new Pose(60, 12, 0))
+//                .then(new Pose(60, 24, -Math.PI / 6))
+//                .then(new Pose(60, 12, 0))
+//                .then(new Pose(60, 24, -Math.PI / 6))
+//                .then(new Pose(60, 12, 0))
+//                .then(new Pose(60, 24, -Math.PI / 6))
+//                .then(new Pose(60, 12, 0))
+//                .then(new Pose(60, 24, -Math.PI / 6))
+//                .then(new Pose(60, 12, 0))
+//                .then(new Pose(60, 24, -Math.PI / 6))
+//                .setFollowDistance(10)
+                .then(new Pose(60, 123, 0))
 
                 .build();
 
+        CommandScheduler.getInstance().schedule(
+                new SequentialCommandGroup(
+                        new PurePursuitCommand(path),
+                        new WaitCommand(3000),
+                        new PurePursuitCommand(path2)
+                )
+        );
+
         while (opModeIsActive()) {
             localizer.periodic();
-            path.update();
+            CommandScheduler.getInstance().run();
             robot.drivetrain.updateModules();
 
             telemetry.addData("current pose", localizer.getPos());
@@ -87,5 +109,7 @@ public class BlueLeftFullAuto extends LinearOpMode {
 
             PhotonCore.CONTROL_HUB.clearBulkCache();
         }
+
+        CommandScheduler.getInstance().reset();
     }
 }
