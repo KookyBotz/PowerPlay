@@ -30,11 +30,15 @@ public class PositionCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (drivetrain)
+        Pose error = targetPose.subtract(localizer.getPos());
+        if (error.x < PurePursuitConfig.ALLOWED_TRANSLATIONAL_ERROR && error.y < PurePursuitConfig.ALLOWED_TRANSLATIONAL_ERROR && error.heading < PurePursuitConfig.ALLOWED_HEADING_ERROR) {
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public void end() {
-
+    public void end(boolean interrupted) {
+        drivetrain.set(new Pose());
     }
 }
