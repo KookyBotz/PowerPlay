@@ -34,8 +34,6 @@ public class PurePursuitPathBuilderTest extends LinearOpMode {
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.enable();
 
-
-
         while (!isStarted()) {
             System.out.println(isStarted());
             for (SwerveModule module : swerve.drivetrain.modules) {
