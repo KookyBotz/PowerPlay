@@ -30,10 +30,7 @@ public class PositionCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (Math.abs(localizer.getPos().distanceTo(targetPose)) < PurePursuitConfig.ALLOWED_TRANSLATIONAL_ERROR && targetPose.subtract(localizer.getPos()).heading < PurePursuitConfig.ALLOWED_HEADING_ERROR) {
-            return true;
-        }
-        return false;
+        return (Math.abs(localizer.getPos().distanceTo(targetPose)) < PurePursuitConfig.ALLOWED_TRANSLATIONAL_ERROR && targetPose.subtract(localizer.getPos()).heading < PurePursuitConfig.ALLOWED_HEADING_ERROR);
     }
 
     @Override
