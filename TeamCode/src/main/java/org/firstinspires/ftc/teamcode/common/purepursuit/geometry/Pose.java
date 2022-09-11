@@ -27,11 +27,6 @@ public class Pose extends Point {
         return new Pose(this.x / other.x, this.y / other.y, this.heading / other.heading);
     }
 
-
-
-
-
-
     @Override
     public String toString() {
         return String.format(Locale.ENGLISH, "%.2f %.2f %.2f", x, y, heading);
