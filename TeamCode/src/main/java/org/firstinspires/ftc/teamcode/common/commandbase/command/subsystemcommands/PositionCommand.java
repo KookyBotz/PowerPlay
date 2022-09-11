@@ -32,7 +32,6 @@ public class PositionCommand extends CommandBase {
     public void execute() {
         if (timer == null) {
             timer = new ElapsedTime();
-            timer.startTime();
         }
         drivetrain.set(PurePursuitController.goToPosition(localizer.getPos(), targetPose, new Pose(pCoefficientX, pCoefficientY, pCoefficientH)), profile.update(timer.milliseconds()));
     }
