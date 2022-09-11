@@ -39,8 +39,8 @@ public class PositionCommand extends CommandBase {
     @Override
     public boolean isFinished() {
         boolean a = (Math.abs(localizer.getPos().distanceTo(targetPose)) < PurePursuitConfig.ALLOWED_TRANSLATIONAL_ERROR
-                && targetPose.subtract(localizer.getPos()).heading < PurePursuitConfig.ALLOWED_HEADING_ERROR);
-        System.out.print(a);
+                && localizer.getPos().subtract(targetPose).heading < PurePursuitConfig.ALLOWED_HEADING_ERROR);
+        System.out.print("HERE123" + a);
         return a;
     }
 
