@@ -7,6 +7,7 @@ import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuit
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
@@ -38,8 +39,9 @@ public class PositionCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
+        double heading_error = Math.abs(AngleUnit.normalizeRadians(targetPose.heading - localizer.getPos().heading));
         boolean a = (Math.abs(localizer.getPos().distanceTo(targetPose)) < PurePursuitConfig.ALLOWED_TRANSLATIONAL_ERROR
-                && localizer.getPos().subtract(targetPose).heading < PurePursuitConfig.ALLOWED_HEADING_ERROR);
+                && heading_error < PurePursuitConfig.ALLOWED_HEADING_ERROR);
         System.out.print("HERE123" + a);
         return a;
     }
@@ -47,5 +49,6 @@ public class PositionCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         drivetrain.set(new Pose());
+        System.out.println("false");
     }
 }

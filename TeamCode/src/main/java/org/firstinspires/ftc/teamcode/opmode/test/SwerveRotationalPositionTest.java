@@ -22,7 +22,7 @@ public class SwerveRotationalPositionTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Robot robot = new Robot(hardwareMap);
         Drivetrain drivetrain = robot.drivetrain;
-        Localizer localizer = new BetterSwerveLocalizer(() -> -robot.getAngle() + Math.PI, robot.drivetrain.modules);
+        Localizer localizer = new BetterSwerveLocalizer(() -> -robot.getAngle(), robot.drivetrain.modules);
 
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.enable();
@@ -40,7 +40,8 @@ public class SwerveRotationalPositionTest extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(0, 0, Math.PI / 4), new MotionProfile(1, 1))
+                        //new PositionCommand(drivetrain, localizer, new Pose(0, 0, Math.PI/4, new MotionProfile(0.0, 0.0)))
+
                 )
         );
 

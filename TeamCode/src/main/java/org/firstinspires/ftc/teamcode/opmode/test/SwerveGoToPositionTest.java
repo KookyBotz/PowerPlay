@@ -23,9 +23,9 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 @Config
 public class SwerveGoToPositionTest extends LinearOpMode {
 
-    public static double coordX = 10;
-    public static double coordY = 10;
-    public static double coordHeading = 0;
+    public static double coordX = 0;
+    public static double coordY = 0;
+    public static double coordHeading = Math.PI / 4;
 
     @Override
     public void runOpMode() throws InterruptedException {
