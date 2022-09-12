@@ -40,7 +40,7 @@ public class SwerveRotationalPositionTest extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        //new PositionCommand(drivetrain, localizer, new Pose(0, 0, Math.PI/4, new MotionProfile(0.0, 0.0)))
+                        new PositionCommand(drivetrain, localizer, new Pose(0, 0, Math.PI/4))
 
                 )
         );

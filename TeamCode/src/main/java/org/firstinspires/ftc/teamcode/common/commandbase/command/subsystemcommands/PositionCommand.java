@@ -22,7 +22,7 @@ public class PositionCommand extends CommandBase {
     MotionProfile profile;
     ElapsedTime timer;
 
-    public PositionCommand(Drivetrain drivetrain, Localizer localizer, Pose targetPose, MotionProfile profile) {
+    public PositionCommand(Drivetrain drivetrain, Localizer localizer, Pose targetPose) {
         this.drivetrain = drivetrain;
         this.localizer = localizer;
         this.targetPose = targetPose;
@@ -34,7 +34,7 @@ public class PositionCommand extends CommandBase {
         if (timer == null) {
             timer = new ElapsedTime();
         }
-        drivetrain.set(PurePursuitController.goToPosition(localizer.getPos(), targetPose, new Pose(pCoefficientX, pCoefficientY, pCoefficientH)), profile.update(timer.milliseconds()));
+        drivetrain.set(PurePursuitController.goToPosition(localizer.getPos(), targetPose, new Pose(pCoefficientX, pCoefficientY, pCoefficientH)));
     }
 
     @Override

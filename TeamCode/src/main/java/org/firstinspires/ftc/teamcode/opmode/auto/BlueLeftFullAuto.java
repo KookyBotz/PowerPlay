@@ -49,8 +49,8 @@ public class BlueLeftFullAuto extends LinearOpMode {
                 .setController(true)
                 .setFollowDistance(10)
                 .setStartPosition(new Pose(6, 90, Math.PI))
-                .setPower(0.4)
-                .setMotionProfile(new MotionProfile(0.3, 1))
+                .setPower(0.7)
+                .setMotionProfile(new MotionProfile(0.7, 1))
                 .then(new Pose(6, 90, Math.PI))
                 .then(new Pose(24, 84, Math.PI))
                 .then(new Pose(60, 84, Math.PI))
@@ -74,8 +74,8 @@ public class BlueLeftFullAuto extends LinearOpMode {
                 .setLocalizer(localizer)
                 .setController(true)
                 .setFollowDistance(10)
-                .setPower(0.4)
-                .setMotionProfile(new MotionProfile(0.3, 1))
+                .setPower(0.7)
+                .setMotionProfile(new MotionProfile(0.7, 1))
                 .then(new Pose(60, 115, 7 * Math.PI / 6))
                 .then(new Pose(60, 12, 0))
 //                .then(new Pose(60, 24, -Math.PI / 6))
@@ -95,16 +95,27 @@ public class BlueLeftFullAuto extends LinearOpMode {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         new PurePursuitCommand(path),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 123, Math.PI / 4), new MotionProfile(0.5, 0.7)),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 123, 0), new MotionProfile(0.5, 0.7)),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 123, Math.PI / 4), new MotionProfile(0.5, 0.7)),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 123, 0), new MotionProfile(0.5, 0.7)),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 123, Math.PI / 4), new MotionProfile(0.5, 0.7)),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 123, 0), new MotionProfile(0.5, 0.7)),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 123, Math.PI / 4), new MotionProfile(0.5, 0.7)),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 123, 0), new MotionProfile(0.5, 0.7)),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 123, Math.PI / 4), new MotionProfile(0.5, 0.7)),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 123, 0), new MotionProfile(0.5, 0.7)),
+                        new WaitCommand(1000),
+                        new PositionCommand(drivetrain, localizer, new Pose(60, 115, 7 * Math.PI / 6)),
+                        new WaitCommand(1000),
+                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, Math.PI)),
+                        new WaitCommand(1000),
+                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, 7 * Math.PI / 6)),
+                        new WaitCommand(1000),
+                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, Math.PI)),
+                        new WaitCommand(1000),
+                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, 7 * Math.PI / 6)),
+                        new WaitCommand(1000),
+                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, Math.PI)),
+                        new WaitCommand(1000),
+                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, 7 * Math.PI / 6)),
+                        new WaitCommand(1000),
+                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, Math.PI)),
+                        new WaitCommand(1000),
+                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, 7 * Math.PI / 6)),
+                        new WaitCommand(1000),
+                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, Math.PI)),
+                        new WaitCommand(1000),
                         new PurePursuitCommand(path2)
                 )
         );
