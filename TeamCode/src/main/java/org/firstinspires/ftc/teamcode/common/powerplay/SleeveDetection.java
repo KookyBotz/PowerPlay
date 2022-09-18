@@ -8,6 +8,8 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class SleeveDetection extends OpenCvPipeline {
     /*
     YELLOW  = Parking Left
@@ -36,6 +38,10 @@ public class SleeveDetection extends OpenCvPipeline {
     public static final int COLOR_MAX = 49;
     public static final int COLOR_MIN = 205;
 
+    private Mat yelMat = new Mat(), cyaMat = new Mat(), magMat = new Mat();
+
+    Telemetry telemetry = new Telemetry();
+
     Point sleeve_pointA = new Point(
             SLEEVE_TOPLEFT_ANCHOR_POINT.x,
             SLEEVE_TOPLEFT_ANCHOR_POINT.y);
@@ -49,7 +55,9 @@ public class SleeveDetection extends OpenCvPipeline {
     @Override
     public Mat processFrame(Mat input) {
         Imgproc.blur(input, input, new Size(5, 5));
-        Core.inRange(input, lower_magenta_bounds, upper_magenta_bounds, input);
-        return input;
+        Core.inRange(input, lower_yellow_bounds, upper_yellow_bounds, yelMat);
+        telemetry.addData("val:", Core.countNonZero(yelMat));
+        telemetry.update();
+        return yelMat;
     }
 }
