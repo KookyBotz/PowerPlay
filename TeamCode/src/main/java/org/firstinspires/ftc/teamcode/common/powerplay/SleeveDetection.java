@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.common.powerplay;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -40,12 +41,12 @@ public class SleeveDetection extends OpenCvPipeline {
             upper_magenta_bounds = new Scalar(255, COLOR_MAX, 255, 255);
 
     private final Scalar
-            RED   = new Scalar(255, 0, 0),
-            GREEN = new Scalar(0, 255, 0),
-            BLUE  = new Scalar(0, 0, 255),
-            WHITE = new Scalar(255, 255, 255);
+            YELLOW  = new Scalar(255, 255, 0),
+            CYAN    = new Scalar(0, 255, 255),
+            MAGENTA = new Scalar(255, 0, 255),
+            WHITE   = new Scalar(255, 255, 255);
 
-    private Mat yelMat = new Mat(), cyaMat = new Mat(), magMat = new Mat();
+    private Mat yelMat = new Mat(), cyaMat = new Mat(), magMat = new Mat(), blurredMat = new Mat();
 
     Point sleeve_pointA = new Point(
             SLEEVE_TOPLEFT_ANCHOR_POINT.x,
@@ -59,23 +60,48 @@ public class SleeveDetection extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
-        Imgproc.blur(input, input, new Size(5, 5));
+        Imgproc.blur(input, blurredMat, new Size(5, 5));
+        blurredMat = blurredMat.submat(new Rect(sleeve_pointA, sleeve_pointB));
 
-        Core.inRange(input, lower_yellow_bounds, upper_yellow_bounds, yelMat);
-        Core.inRange(input, lower_cyan_bounds, upper_cyan_bounds, cyaMat);
-        Core.inRange(input, lower_magenta_bounds, upper_magenta_bounds, magMat);
+        Core.inRange(blurredMat, lower_yellow_bounds, upper_yellow_bounds, yelMat);
+        Core.inRange(blurredMat, lower_cyan_bounds, upper_cyan_bounds, cyaMat);
+        Core.inRange(blurredMat, lower_magenta_bounds, upper_magenta_bounds, magMat);
 
         yelPercent = Core.countNonZero(yelMat);
         cyaPercent = Core.countNonZero(cyaMat);
         magPercent = Core.countNonZero(magMat);
 
-        Imgproc.rectangle(
-                yelMat,
-                sleeve_pointA,
-                sleeve_pointB,
-                GREEN,
-                2
-        );
-        return yelMat;
+        double maxPercent = Math.max(yelPercent, Math.max(cyaPercent, magPercent));
+
+        if (maxPercent == yelPercent) {
+            rotation = SleeveRotation.YELLOW;
+            Imgproc.rectangle(
+                    input,
+                    sleeve_pointA,
+                    sleeve_pointB,
+                    YELLOW,
+                    2
+            );
+        } else if (maxPercent == cyaPercent) {
+            rotation = SleeveRotation.CYAN;
+            Imgproc.rectangle(
+                    input,
+                    sleeve_pointA,
+                    sleeve_pointB,
+                    CYAN,
+                    2
+            );
+        } else if (maxPercent == magPercent) {
+            rotation = SleeveRotation.MAGENTA;
+            Imgproc.rectangle(
+                    input,
+                    sleeve_pointA,
+                    sleeve_pointB,
+                    MAGENTA,
+                    2
+            );
+        }
+
+        return input;
     }
 }
