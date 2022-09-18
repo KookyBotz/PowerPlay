@@ -14,8 +14,12 @@ public class SleeveDetection extends OpenCvPipeline {
         BLUE
     }
 
-    Scalar  lower_yellow_bounds = new Scalar(180, 180, 0),
-            upper_yellow_bounds = new Scalar(255, 255, 30);
+    public static Scalar  lower_yellow_bounds = new Scalar(205, 205, 0, 255),
+            upper_yellow_bounds = new Scalar(255, 255, 49, 255);
+    public static Scalar  lower_cyan_bounds = new Scalar(205, 205, 0, 255),
+            upper_cyan_bounds = new Scalar(255, 255, 49, 255);
+    public static Scalar  lower_yellow_bounds = new Scalar(205, 205, 0, 255),
+            upper_yellow_bounds = new Scalar(255, 255, 49, 255);
 
     Mat thresh = new Mat();
 
@@ -35,7 +39,9 @@ public class SleeveDetection extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
-        Core.inRange(input, lower_yellow_bounds, upper_yellow_bounds, thresh);
-        return thresh;
+//        Core.inRange(input, lower_yellow_bounds, upper_yellow_bounds, thresh);
+//        return thresh;
+        Core.inRange(input, lower_yellow_bounds, upper_yellow_bounds, input);
+        return input;
     }
 }
