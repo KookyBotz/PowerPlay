@@ -9,10 +9,16 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 public class SleeveDetection extends OpenCvPipeline {
+    /*
+    YELLOW  = Parking Left
+    CYAN    = Parking Middle
+    MAGENTA = Parking Right
+     */
+
     public enum SleeveRotation {
-        RED,
-        GREEN,
-        BLUE
+        YELLOW,
+        CYAN,
+        MAGENTA
     }
 
     public static Scalar lower_yellow_bounds  = new Scalar(205, 205, 0, 255),
@@ -23,8 +29,12 @@ public class SleeveDetection extends OpenCvPipeline {
                          upper_magenta_bounds = new Scalar(255, 49, 255, 255);
 
     public static Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(30, 23);
+
     public static int REGION_WIDTH = 30;
     public static int REGION_HEIGHT = 50;
+
+    public static final int COLOR_MAX = 49;
+    public static final int COLOR_MIN = 205;
 
     Point sleeve_pointA = new Point(
             SLEEVE_TOPLEFT_ANCHOR_POINT.x,
@@ -34,7 +44,7 @@ public class SleeveDetection extends OpenCvPipeline {
             SLEEVE_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
             SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
 
-    private volatile SleeveRotation rotation = SleeveRotation.RED;
+    private volatile SleeveRotation rotation = SleeveRotation.YELLOW;
 
     @Override
     public Mat processFrame(Mat input) {
