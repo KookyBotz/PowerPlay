@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.common.powerplay;
 
+import android.os.DropBoxManager;
+
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -40,8 +42,6 @@ public class SleeveDetection extends OpenCvPipeline {
 
     private Mat yelMat = new Mat(), cyaMat = new Mat(), magMat = new Mat();
 
-    Telemetry telemetry = new Telemetry();
-
     Point sleeve_pointA = new Point(
             SLEEVE_TOPLEFT_ANCHOR_POINT.x,
             SLEEVE_TOPLEFT_ANCHOR_POINT.y);
@@ -52,6 +52,11 @@ public class SleeveDetection extends OpenCvPipeline {
 
     private volatile SleeveRotation rotation = SleeveRotation.YELLOW;
 
+    Telemetry telemetry;
+
+    public SleeveDetection(Telemetry telemetry) {
+        this.telemetry = telemetry;
+    }
     @Override
     public Mat processFrame(Mat input) {
         Imgproc.blur(input, input, new Size(5, 5));
