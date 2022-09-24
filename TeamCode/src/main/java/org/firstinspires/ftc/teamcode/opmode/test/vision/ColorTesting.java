@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.test.vision;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.opencv.core.Mat;
@@ -10,11 +11,12 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 
+@Config
 public class ColorTesting extends LinearOpMode {
     int width = 320, height = 240;
     OpenCvCamera cam;
     RelocalizerDetection pipeline;
-    
+
     @Override
     public void runOpMode() throws InterruptedException {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -50,6 +52,7 @@ public class ColorTesting extends LinearOpMode {
         {
             // ftc dashboard stuff
 
+
             // Don't burn CPU cycles busy-looping in this sample
             sleep(50);
         }
@@ -68,6 +71,8 @@ public class ColorTesting extends LinearOpMode {
 
         public static Scalar lower_red = new Scalar(COLOR_MIN, 0, 0, 255);
         public static Scalar upper_red = new Scalar(255, COLOR_MAX, COLOR_MAX, 255);
+
+        Mat mask = new Mat();
 
         public RelocalizerDetection() {}
 
