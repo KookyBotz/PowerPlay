@@ -52,13 +52,12 @@ public class ColorTesting extends LinearOpMode {
             }
         });
 
+        FtcDashboard.getInstance().startCameraStream(cam, 30);
+
         waitForStart();
 
         while (opModeIsActive())
         {
-            // ftc dashboard stuff
-            FtcDashboard.getInstance().startCameraStream(cam, 30);
-
 
             // Don't burn CPU cycles busy-looping in this sample
             sleep(50);
@@ -92,6 +91,7 @@ public class ColorTesting extends LinearOpMode {
             Imgproc.blur(input, processed, new Size(5, 5));
             Core.inRange(processed, lower_red, upper_red, mask);
             Core.add(processed, mask, input);
+            processed.release();
             return input;
         }
     }
