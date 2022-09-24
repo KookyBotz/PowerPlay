@@ -1,10 +1,14 @@
 package org.firstinspires.ftc.teamcode.opmode.test.vision;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -51,6 +55,7 @@ public class ColorTesting extends LinearOpMode {
         while (opModeIsActive())
         {
             // ftc dashboard stuff
+            FtcDashboard.getInstance().startCameraStream(cam, 30);
 
 
             // Don't burn CPU cycles busy-looping in this sample
@@ -81,7 +86,10 @@ public class ColorTesting extends LinearOpMode {
 
         @Override
         public Mat processFrame(Mat input) {
-
+            Mat processed = new Mat();
+            Imgproc.blur(input, processed, new Size(5, 5));
+            Core.inRange(processed, lower_red, upper_red, mask);
+            Core.add(processed, mask, input);
             return input;
         }
     }
