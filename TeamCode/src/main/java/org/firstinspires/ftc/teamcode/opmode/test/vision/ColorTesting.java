@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmode.test.vision;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -17,6 +18,7 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 @Config
+@Autonomous(name = "ColorTesting")
 public class ColorTesting extends LinearOpMode {
     int width = 320, height = 240;
     OpenCvCamera cam;
