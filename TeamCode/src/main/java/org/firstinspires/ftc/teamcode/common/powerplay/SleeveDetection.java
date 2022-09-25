@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.common.powerplay;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -9,6 +11,7 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
+@Config
 public class SleeveDetection extends OpenCvPipeline {
     /*
     YELLOW  = Parking Left
@@ -27,8 +30,8 @@ public class SleeveDetection extends OpenCvPipeline {
     public static int REGION_WIDTH = 30;
     public static int REGION_HEIGHT = 50;
 
-    public static int COLOR_MAX = 49;
-    public static int COLOR_MIN = 205;
+    public static int COLOR_MAX = 100;
+    public static int COLOR_MIN = 200;
 
     private static final Scalar
             lower_yellow_bounds  = new Scalar(COLOR_MIN, COLOR_MIN, 0, 255),
@@ -61,7 +64,7 @@ public class SleeveDetection extends OpenCvPipeline {
     @Override
     public Mat processFrame(Mat input) {
         Imgproc.blur(input, blurredMat, new Size(5, 5));
-        blurredMat = blurredMat.submat(new Rect(sleeve_pointA, sleeve_pointB));
+        //blurredMat = blurredMat.submat(new Rect(sleeve_pointA, sleeve_pointB));
 
         Core.inRange(blurredMat, lower_yellow_bounds, upper_yellow_bounds, yelMat);
         Core.inRange(blurredMat, lower_cyan_bounds, upper_cyan_bounds, cyaMat);
@@ -102,6 +105,6 @@ public class SleeveDetection extends OpenCvPipeline {
             );
         }
 
-        return input;
+        return yelMat;
     }
 }
