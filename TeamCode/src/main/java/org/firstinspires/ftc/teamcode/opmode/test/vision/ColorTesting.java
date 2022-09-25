@@ -10,16 +10,10 @@ import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
-import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Config
 @Autonomous(name = "ColorTesting")
@@ -37,10 +31,6 @@ public class ColorTesting extends LinearOpMode {
         pipeline2 = new SleeveDetection();
         cam.setPipeline(pipeline);
 
-        // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
-        // out when the RC activity is in portrait. We do our actual image processing assuming
-        // landscape orientation, though.
-
         cam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
@@ -52,22 +42,13 @@ public class ColorTesting extends LinearOpMode {
             @Override
             public void onError(int errorCode)
             {
-                /*
-                 * This will be called if the camera could not be opened
-                 */
+
             }
         });
 
         FtcDashboard.getInstance().startCameraStream(cam, 30);
 
         waitForStart();
-
-        while (opModeIsActive())
-        {
-
-            // Don't burn CPU cycles busy-looping in this sample
-            sleep(50);
-        }
     }
 }
 
@@ -101,17 +82,9 @@ class RelocalizerDetection extends OpenCvPipeline {
         lower_red = new Scalar(r1, g1, b1, 255);
         upper_red = new Scalar(r2, g2, b2, 255);
         Mat processed = new Mat();
-
-        //Imgproc.blur(input, processed, new Size(5, 5));
-
         Core.inRange(input, lower_red, upper_red, mask);
-//        Imgproc.dilate(input, mask, new Mat());
-//        Imgproc.dilate(input, mask, new Mat());
-
         Mat rgb = new Mat();
-        //Imgproc.cvtColor(mask, rgb, Imgproc.COLOR_GRAY2BGR);
         Mat overlayMat = new Mat();
-//        Core.copyTo(input, overlayMat, mask);
         processed.release();
         rgb.release();
         overlayMat.release();
