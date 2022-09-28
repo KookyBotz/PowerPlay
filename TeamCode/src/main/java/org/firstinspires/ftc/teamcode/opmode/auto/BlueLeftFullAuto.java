@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.RisingMotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPath;
@@ -50,7 +51,7 @@ public class BlueLeftFullAuto extends LinearOpMode {
                 .setFollowDistance(10)
                 .setStartPosition(new Pose(6, 90, Math.PI))
                 .setPower(0.7)
-                .setMotionProfile(new MotionProfile(0.7, 1))
+                .setMotionProfile(new RisingMotionProfile(0.7, 1))
                 .then(new Pose(6, 90, Math.PI))
                 .then(new Pose(24, 84, Math.PI))
                 .then(new Pose(60, 84, Math.PI))
@@ -75,7 +76,7 @@ public class BlueLeftFullAuto extends LinearOpMode {
                 .setController(true)
                 .setFollowDistance(10)
                 .setPower(0.7)
-                .setMotionProfile(new MotionProfile(0.7, 1))
+                .setMotionProfile(new RisingMotionProfile(0.7, 1))
                 .then(new Pose(60, 115, 7 * Math.PI / 6))
                 .then(new Pose(60, 12, 0))
 //                .then(new Pose(60, 24, -Math.PI / 6))
