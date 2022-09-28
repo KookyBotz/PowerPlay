@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Waypoint;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.RisingMotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
@@ -41,11 +42,11 @@ public class PurePursuitPath {
     }
 
     public PurePursuitPath(Drivetrain drivetrain, Localizer localizer, Waypoint... waypoints) {
-        this(drivetrain, localizer, true, new MotionProfile(Integer.MAX_VALUE, 1), waypoints);
+        this(drivetrain, localizer, true, new RisingMotionProfile(Integer.MAX_VALUE, 1), waypoints);
     }
 
     public PurePursuitPath(Drivetrain drivetrain, Localizer localizer, boolean pController, Waypoint... waypoints) {
-        this(drivetrain, localizer, pController, new MotionProfile(Integer.MAX_VALUE, 1), waypoints);
+        this(drivetrain, localizer, pController, new RisingMotionProfile(Integer.MAX_VALUE, 1), waypoints);
     }
 
     // returns false if done, return true otherwise

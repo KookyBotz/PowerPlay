@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.freightfrenzy.SwerveRobot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.RisingMotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPath;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPathBuilder;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveLocalizer;
@@ -53,7 +54,7 @@ public class PurePursuitPathBuilderTest extends LinearOpMode {
                 .setController(true)
                 .setFollowDistance(15)
                 .setPower(1.0)
-                .setMotionProfile(new MotionProfile(0.25, 1))
+                .setMotionProfile(new RisingMotionProfile(0.25, 1))
                 .then(new Pose())
                 .then(new Pose(0, 60, 0))
                 .then(new Pose(60, 60, 0))

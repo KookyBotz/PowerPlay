@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.RisingMotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPath;
@@ -44,7 +45,7 @@ public class BlueLeftAuto extends LinearOpMode {
                 .setController(true)
                 .setFollowDistance(15)
                 .setPower(1.0)
-                .setMotionProfile(new MotionProfile(0.5, 1))
+                .setMotionProfile(new RisingMotionProfile(0.5, 1))
                 .then(new Pose(-5, -32, 0))
                 .then(new Pose(-77, -32, 0))
                 .setFollowDistance(0)

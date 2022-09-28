@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.common.purepursuit.path;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Waypoint;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.RisingMotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
@@ -13,7 +14,7 @@ import java.util.List;
 public class PurePursuitPathBuilder {
     private Localizer localizer;
     private Drivetrain drivetrain;
-    private MotionProfile profile = new MotionProfile(Integer.MAX_VALUE, 1);
+    private MotionProfile profile = new RisingMotionProfile(Integer.MAX_VALUE, 1);
     private double currentPower = 1;
     private double followDistance = 10;
     private List<Waypoint> waypoints;
