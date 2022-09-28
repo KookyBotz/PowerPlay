@@ -7,7 +7,7 @@ import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuit
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionProfile;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Waypoint;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;

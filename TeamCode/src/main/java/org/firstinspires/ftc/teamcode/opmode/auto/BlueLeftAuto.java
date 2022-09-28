@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionProfile;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;

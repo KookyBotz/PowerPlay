@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.common.purepursuit.path;
 
 
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionProfile;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Waypoint;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
-import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
