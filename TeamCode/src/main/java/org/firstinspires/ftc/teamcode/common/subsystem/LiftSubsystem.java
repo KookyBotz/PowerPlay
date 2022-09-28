@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.TrapezoidalMotionProfile;
 
 @Config
 public class LiftSubsystem extends SubsystemBase {
@@ -14,12 +15,26 @@ public class LiftSubsystem extends SubsystemBase {
     private final PIDController controller;
     private final MotionProfile profile;
 
-    public static double maxA = 1;
+    public static double p = 0.0;
+    public static double i = 0.0;
+    public static double d = 0.0;
+    public static double f = 0.0;
+
     public static double maxV = 2;
+    public static double maxA = 1;
 
     public LiftSubsystem(DcMotorEx lift) {
         this.lift = lift;
 
+        this.controller = new PIDController(p, i, d);
+        controller.setPID(p, i, d);
 
+        this.profile = new TrapezoidalMotionProfile(maxV, maxA);
+    }
+
+    // loop
+
+    public void setPos(int pos) {
+        lift.setTargetPosition(pos);
     }
 }
