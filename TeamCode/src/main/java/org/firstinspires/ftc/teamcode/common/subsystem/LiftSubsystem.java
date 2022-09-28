@@ -37,9 +37,10 @@ public class LiftSubsystem extends SubsystemBase {
         this.timer = new ElapsedTime();
     }
 
-    // loop
     public void loop() {
-        double velocity = profile.update(timer.time());
+        // not finished, still need to add pid control to this
+        double power = profile.update(timer.time());
+        lift.setPower(power);
     }
 
     public void setPos(int pos) {
