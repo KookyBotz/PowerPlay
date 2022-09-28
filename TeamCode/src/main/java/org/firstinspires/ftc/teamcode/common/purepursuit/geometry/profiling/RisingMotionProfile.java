@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling;
 
 public class RisingMotionProfile implements MotionProfile {
-    private final double maxVelocity;
-    private final double maxAcceleration;
+    private final double maxV;
+    private final double maxA;
 
-    public RisingMotionProfile(double maxVelocity, double maxAcceleration) {
-        this.maxVelocity = maxVelocity;
-        this.maxAcceleration = maxAcceleration;
+    public RisingMotionProfile(double maxV, double maxA) {
+        this.maxV = maxV;
+        this.maxA = maxA;
     }
 
     @Override
@@ -14,7 +14,7 @@ public class RisingMotionProfile implements MotionProfile {
         if (time < 0) {
             return 0;
         }
-        double velocity = (maxAcceleration * time) / maxVelocity;
-        return Math.min(velocity, maxVelocity);
+        double velocity = (maxA * time) / maxV;
+        return Math.min(velocity, maxV);
     }
 }
