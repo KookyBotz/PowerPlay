@@ -47,6 +47,10 @@ public class LiftSubsystem extends SubsystemBase {
         lift.setTargetPosition(pos);
     }
 
+    public int getPos() {
+        return lift.getCurrentPosition();
+    }
+
     public void resetTime() {
         timer.reset();
     }
