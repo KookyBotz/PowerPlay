@@ -8,10 +8,15 @@ public class IntakeSubsystem extends SubsystemBase {
     private final MotorEx extension;
     private final Servo barLeft, barRight;
 
-    public IntakeSubsystem(MotorEx extension, Servo barLeft, Servo barRight) {
+    private final Servo claw, turret;
+
+    public IntakeSubsystem(MotorEx extension, Servo barLeft, Servo barRight, Servo claw, Servo turret) {
         this.extension = extension;
         this.barLeft = barLeft;
         this.barRight = barRight;
+
+        this.claw = claw;
+        this.turret = turret;
     }
 
     public void setExtension(int pos) {
