@@ -93,6 +93,15 @@ public class BlueLeftFullAuto extends LinearOpMode {
 
                 .build();
 
+        // go to preload position path
+        // once there, extend up,
+        // as soon as cone released, extend intake
+        // grab cone
+        // retract to bring cone back
+        // extend up
+        // repeat
+        // park in designated area
+
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         new PurePursuitCommand(path),
