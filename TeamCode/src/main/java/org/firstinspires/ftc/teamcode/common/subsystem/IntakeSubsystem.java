@@ -14,8 +14,11 @@ public class IntakeSubsystem extends SubsystemBase {
     public static int extension_out_pos = 100;
     public static int extension_in_pos = 0;
 
-    public static int claw_open_pos = 10;
-    public static int claw_closed_pos = 5;
+    public static double claw_open_pos = 10;
+    public static double claw_closed_pos = 5;
+
+    public static double forebar_extended = 0.4;
+    public static double forebar_retracted = 0.1;
 
     public IntakeSubsystem(MotorEx extension, Servo barLeft, Servo barRight, Servo claw, Servo turret) {
         this.extension = extension;
@@ -23,8 +26,6 @@ public class IntakeSubsystem extends SubsystemBase {
         this.barRight = barRight;
         this.claw = claw;
         this.turret = turret;
-
-
     }
 
     public void setExtension(int pos) {
@@ -37,5 +38,15 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void openClaw() {
         claw.setPosition(claw_open_pos);
+    }
+
+    public void extendForebar() {
+        barLeft.setPosition(forebar_extended);
+        barRight.setPosition(forebar_extended);
+    }
+
+    public void closedForebar() {
+        barLeft.setPosition(forebar_retracted);
+        barRight.setPosition(forebar_retracted);
     }
 }
