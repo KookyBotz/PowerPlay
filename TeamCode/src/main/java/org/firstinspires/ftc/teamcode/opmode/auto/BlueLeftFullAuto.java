@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModu
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.RisingMotionProfile;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.TrapezoidalMotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPath;
@@ -43,6 +44,18 @@ public class BlueLeftFullAuto extends LinearOpMode {
 
         waitForStart();
         robot.startIMUThread(this);
+
+        PurePursuitPath preloadPath = new PurePursuitPathBuilder()
+                .setDrivetrain(drivetrain)
+                .setLocalizer(localizer)
+                .setFollowDistance(10)
+                .setStartPosition(new Pose(6, 90, Math.PI))
+                .setPower(0.7)
+                .setMotionProfile(new TrapezoidalMotionProfile(0.7, 1))
+                .then(new Pose(6, 90, Math.PI))
+                .then(new Pose(24, 84, Math.PI))
+                .then(new Pose(60, 84, Math.PI))
+                .build();
 
         PurePursuitPath path = new PurePursuitPathBuilder()
                 .setDrivetrain(drivetrain)
