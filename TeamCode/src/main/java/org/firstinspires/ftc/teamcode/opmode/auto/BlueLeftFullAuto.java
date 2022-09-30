@@ -55,6 +55,8 @@ public class BlueLeftFullAuto extends LinearOpMode {
                 .then(new Pose(6, 90, Math.PI))
                 .then(new Pose(24, 84, Math.PI))
                 .then(new Pose(60, 84, Math.PI))
+                .then(new Pose(60, 108, Math.PI))
+                .then(new Pose(72, 108, Math.PI))
                 .build();
 
         PurePursuitPath path = new PurePursuitPathBuilder()
