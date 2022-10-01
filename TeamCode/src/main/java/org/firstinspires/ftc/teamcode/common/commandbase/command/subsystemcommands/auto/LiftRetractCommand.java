@@ -1,4 +1,14 @@
 package org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto;
 
-public class LiftRetractCommand {
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+
+import org.firstinspires.ftc.teamcode.common.hardware.Robot;
+
+public class LiftRetractCommand extends SequentialCommandGroup {
+    public LiftRetractCommand(Robot robot) {
+        super(
+                new InstantCommand(() -> robot.lift.setPos(robot.lift.retracted))
+        );
+    }
 }
