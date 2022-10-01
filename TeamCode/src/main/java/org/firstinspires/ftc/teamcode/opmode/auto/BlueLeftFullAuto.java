@@ -117,31 +117,36 @@ public class BlueLeftFullAuto extends LinearOpMode {
         // repeat
         // park in designated area
 
+//        CommandScheduler.getInstance().schedule(
+//                new SequentialCommandGroup(
+//                        new PurePursuitCommand(path),
+//                        new WaitCommand(1000),
+//                        new PositionCommand(drivetrain, localizer, new Pose(60, 115, 7 * Math.PI / 6)),
+//                        new WaitCommand(1000),
+//                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, Math.PI)),
+//                        new WaitCommand(1000),
+//                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, 7 * Math.PI / 6)),
+//                        new WaitCommand(1000),
+//                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, Math.PI)),
+//                        new WaitCommand(1000),
+//                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, 7 * Math.PI / 6)),
+//                        new WaitCommand(1000),
+//                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, Math.PI)),
+//                        new WaitCommand(1000),
+//                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, 7 * Math.PI / 6)),
+//                        new WaitCommand(1000),
+//                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, Math.PI)),
+//                        new WaitCommand(1000),
+//                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, 7 * Math.PI / 6)),
+//                        new WaitCommand(1000),
+//                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, Math.PI)),
+//                        new WaitCommand(1000),
+//                        new PurePursuitCommand(path2)
+//                )
+//        );
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PurePursuitCommand(path),
-                        new WaitCommand(1000),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 115, 7 * Math.PI / 6)),
-                        new WaitCommand(1000),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, Math.PI)),
-                        new WaitCommand(1000),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, 7 * Math.PI / 6)),
-                        new WaitCommand(1000),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, Math.PI)),
-                        new WaitCommand(1000),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, 7 * Math.PI / 6)),
-                        new WaitCommand(1000),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, Math.PI)),
-                        new WaitCommand(1000),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, 7 * Math.PI / 6)),
-                        new WaitCommand(1000),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, Math.PI)),
-                        new WaitCommand(1000),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, 7 * Math.PI / 6)),
-                        new WaitCommand(1000),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, Math.PI)),
-                        new WaitCommand(1000),
-                        new PurePursuitCommand(path2)
+                        new PurePursuitCommand(preloadPath)
                 )
         );
 
