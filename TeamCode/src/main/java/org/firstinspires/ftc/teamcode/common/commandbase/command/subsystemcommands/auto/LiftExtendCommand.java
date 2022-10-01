@@ -6,6 +6,6 @@ import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 
 public class LiftExtendCommand extends SequentialCommandGroup {
     public LiftExtendCommand(Robot robot) {
-        robot.lift.
+        robot.lift.setPos(robot.lift.high_pos);
     }
 }
