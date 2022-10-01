@@ -102,6 +102,7 @@ public class SleeveDetection extends OpenCvPipeline {
                     sleeve_pointB,
                     MAGENTA,
                     2
+
             );
         }
 
