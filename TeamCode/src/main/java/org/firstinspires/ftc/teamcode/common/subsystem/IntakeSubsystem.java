@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Config
 public class IntakeSubsystem extends SubsystemBase {
     private final MotorEx extension;
-    private Motor test;
     private final Servo barLeft, barRight;
     private final Servo claw, turret;
 
@@ -28,7 +27,6 @@ public class IntakeSubsystem extends SubsystemBase {
         this.barRight = barRight;
         this.claw = claw;
         this.turret = turret;
-
     }
 
     public void setExtension(int pos) {
