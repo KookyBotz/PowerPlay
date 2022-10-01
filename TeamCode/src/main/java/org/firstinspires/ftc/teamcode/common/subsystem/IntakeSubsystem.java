@@ -40,6 +40,10 @@ public class IntakeSubsystem extends SubsystemBase {
         claw.setPosition(position);
     }
 
+    public int getExtension() {
+        return extension.getCurrentPosition();
+    }
+
     public void extensionOut() {
         extension.setTargetPosition(extension_out_pos);
     }
