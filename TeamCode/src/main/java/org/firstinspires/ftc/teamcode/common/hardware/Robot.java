@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveDrivetrain;
+import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.LiftSubsystem;
 
@@ -19,6 +20,7 @@ public class Robot {
     private Thread imuThread;
 
     public SwerveDrivetrain drivetrain;
+    public Localizer localizer;
 
     public IntakeSubsystem intake;
     public LiftSubsystem lift;
