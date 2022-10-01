@@ -15,7 +15,7 @@ public class ClawCommand extends CommandBase {
 
     @Override
     public void execute() {
-
+        intake.setClaw(pos);
     }
 
     @Override
