@@ -27,6 +27,11 @@ public class LiftSubsystem extends SubsystemBase {
     public static double maxV = 2;
     public static double maxA = 1;
 
+    public static int high_pos = 100;
+    public static int medium_pos = 75;
+    public static int low_pos = 50;
+    public static int retracted = 0;
+
     public LiftSubsystem(DcMotorEx lift) {
         this.lift = lift;
 
