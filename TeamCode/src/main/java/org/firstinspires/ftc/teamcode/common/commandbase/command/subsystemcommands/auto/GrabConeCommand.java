@@ -14,6 +14,9 @@ public class GrabConeCommand extends SequentialCommandGroup {
         super(
                 new IntakeExtendCommand(robot),
                 new WaitUntilCommand(() -> robot.intake.getExtension() == robot.intake.extension_out_pos),
+                new WaitCommand(1000),
+                new ClawCommand(robot.intake, robot.intake.claw_closed_pos),
+                new WaitCommand(1000),
                 new IntakeRetractCommand(robot)
         );
     }

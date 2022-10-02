@@ -19,6 +19,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double claw_closed_pos = 5;
 
     public static double forebar_extended = 0.4;
+    public static double forebar_middle = 0.25;
     public static double forebar_retracted = 0.1;
 
     public IntakeSubsystem(MotorEx extension, Servo barLeft, Servo barRight, Servo claw, Servo turret) {
