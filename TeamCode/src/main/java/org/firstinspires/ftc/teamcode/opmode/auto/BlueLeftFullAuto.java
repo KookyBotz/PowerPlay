@@ -150,6 +150,8 @@ public class BlueLeftFullAuto extends LinearOpMode {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         new PurePursuitCommand(preloadPath),
+                        /*
+                         */
                         new ScoreConeCommand(robot)
                         .andThen(new PositionCommand(drivetrain, localizer, new Pose(60, 115, Math.PI)))
                         .alongWith(new GrabConeCommand(robot)),
