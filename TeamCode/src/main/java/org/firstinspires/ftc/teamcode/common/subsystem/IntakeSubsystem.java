@@ -67,7 +67,7 @@ public class IntakeSubsystem extends SubsystemBase {
         barRight.setPosition(forebar_extended);
     }
 
-    public void closedForebar() {
+    public void closeForebar() {
         barLeft.setPosition(forebar_retracted);
         barRight.setPosition(forebar_retracted);
     }
