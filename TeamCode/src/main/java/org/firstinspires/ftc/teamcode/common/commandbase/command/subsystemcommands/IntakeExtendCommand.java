@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
 public class IntakeExtendCommand extends SequentialCommandGroup {
-    public IntakeExtendCommand(Robot robot, Pose pose) {
+    public IntakeExtendCommand(Robot robot) {
         super(
                 new WaitUntilCommand(() -> robot.lift.getPos() < robot.lift.high_pos - 10),
                 new InstantCommand(() -> robot.intake.extensionOut())
