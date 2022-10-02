@@ -151,6 +151,7 @@ public class BlueLeftFullAuto extends LinearOpMode {
                 new SequentialCommandGroup(
                         new PurePursuitCommand(preloadPath),
                         new ScoreConeCommand(robot)
+                        .andThen(new PositionCommand(drivetrain, localizer, new Pose(60, 115, 7 * Math.PI / 6)))
                         .alongWith(new GrabConeCommand(robot)),
                         new ScoreConeCommand(robot)
                         .alongWith(new GrabConeCommand(robot)),
