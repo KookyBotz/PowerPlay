@@ -14,6 +14,8 @@ public class ScoreConeCommand extends SequentialCommandGroup {
         super(
                 new LiftExtendCommand(robot),
                 new WaitUntilCommand(() -> robot.lift.getPos() == robot.lift.high_pos),
+                // TODO add some sort of scoring mechanism or sequence here, as so far it
+                // is just a passive deposit mechanism
                 new WaitCommand(300),
                 new LiftRetractCommand(robot)
         );
