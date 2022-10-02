@@ -8,8 +8,11 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeExtendCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PurePursuitCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.GrabConeCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.ScoreConeCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
@@ -146,7 +149,9 @@ public class BlueLeftFullAuto extends LinearOpMode {
 //        );
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PurePursuitCommand(preloadPath)
+                        new PurePursuitCommand(preloadPath),
+                        new ScoreConeCommand(robot)
+                        .alongWith(new GrabConeCommand(robot))
                 )
         );
 
