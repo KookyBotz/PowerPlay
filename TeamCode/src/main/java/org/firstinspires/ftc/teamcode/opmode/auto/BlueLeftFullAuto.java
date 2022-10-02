@@ -151,7 +151,17 @@ public class BlueLeftFullAuto extends LinearOpMode {
                 new SequentialCommandGroup(
                         new PurePursuitCommand(preloadPath),
                         new ScoreConeCommand(robot)
-                        .alongWith(new GrabConeCommand(robot))
+                        .alongWith(new GrabConeCommand(robot)),
+                        new ScoreConeCommand(robot)
+                        .alongWith(new GrabConeCommand(robot)),
+                        new ScoreConeCommand(robot)
+                        .alongWith(new GrabConeCommand(robot)),
+                        new ScoreConeCommand(robot)
+                        .alongWith(new GrabConeCommand(robot)),
+                        new ScoreConeCommand(robot)
+                        .alongWith(new GrabConeCommand(robot)),
+                        new ScoreConeCommand(robot)
+                        // done with left side, either park or cycle other side
                 )
         );
 
