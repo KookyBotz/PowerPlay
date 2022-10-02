@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeExtendCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeRetractCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 
 public class GrabConeCommand extends SequentialCommandGroup {
@@ -12,6 +13,7 @@ public class GrabConeCommand extends SequentialCommandGroup {
         super(
                 new IntakeExtendCommand(robot),
                 new WaitCommand(500),
+                new IntakeRetractCommand(robot)
         );
     }
 }
