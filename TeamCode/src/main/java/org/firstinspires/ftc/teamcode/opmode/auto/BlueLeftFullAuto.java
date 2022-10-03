@@ -167,6 +167,9 @@ public class BlueLeftFullAuto extends LinearOpMode {
                         new PositionCommand(drivetrain, localizer, new Pose(60, 110, 7 * Math.PI / 6))
                         .alongWith(new ScoreConeCommand(robot))
                         .alongWith(new GrabConeCommand(robot)),
+
+
+
                         new ScoreConeCommand(robot)
                         .alongWith(new GrabConeCommand(robot)),
                         new ScoreConeCommand(robot)
