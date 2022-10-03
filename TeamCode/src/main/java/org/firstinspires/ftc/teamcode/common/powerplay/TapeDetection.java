@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.powerplay;
 
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.openftc.easyopencv.OpenCvPipeline;
@@ -21,8 +22,13 @@ public class TapeDetection extends OpenCvPipeline {
             RED  = new Scalar(255, 0, 0),
             BLUE = new Scalar(0, 0, 255);
 
+    private Mat redMat = new Mat(), blueMat = new Mat();
+
     @Override
     public Mat processFrame(Mat input) {
+        Core.inRange(input, lower_red_bounds, upper_red_bounds, redMat);
+        Core.inRange(input, lower_blue_bounds, upper_blue_bounds, blueMat);
+
         return null;
     }
 }
