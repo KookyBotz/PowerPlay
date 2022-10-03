@@ -34,12 +34,12 @@ public class SleeveDetection extends OpenCvPipeline {
     public static int COLOR_MIN = 200;
 
     private static final Scalar
-            lower_yellow_bounds  = new Scalar(COLOR_MIN, COLOR_MIN, 0, 255),
-            upper_yellow_bounds  = new Scalar(255, 255, COLOR_MAX, 255),
-            lower_cyan_bounds    = new Scalar(0, COLOR_MIN, COLOR_MIN, 255),
-            upper_cyan_bounds    = new Scalar(COLOR_MAX, 255, 255, 255),
-            lower_magenta_bounds = new Scalar(COLOR_MIN, 0, COLOR_MIN, 255),
-            upper_magenta_bounds = new Scalar(255, COLOR_MAX, 255, 255);
+            lower_yellow_bounds  = new Scalar(200, 200, 0, 255),
+            upper_yellow_bounds  = new Scalar(255, 255, 130, 255),
+            lower_cyan_bounds    = new Scalar(0, 200, 200, 255),
+            upper_cyan_bounds    = new Scalar(150, 255, 255, 255),
+            lower_magenta_bounds = new Scalar(170, 0, 170, 255),
+            upper_magenta_bounds = new Scalar(255, 60, 255, 255);
 
     private final Scalar
             YELLOW  = new Scalar(255, 255, 0),
@@ -64,7 +64,7 @@ public class SleeveDetection extends OpenCvPipeline {
     @Override
     public Mat processFrame(Mat input) {
         Imgproc.blur(input, blurredMat, new Size(5, 5));
-        //blurredMat = blurredMat.submat(new Rect(sleeve_pointA, sleeve_pointB));
+        blurredMat = blurredMat.submat(new Rect(sleeve_pointA, sleeve_pointB));
         
         Core.inRange(blurredMat, lower_yellow_bounds, upper_yellow_bounds, yelMat);
         Core.inRange(blurredMat, lower_cyan_bounds, upper_cyan_bounds, cyaMat);
@@ -105,6 +105,6 @@ public class SleeveDetection extends OpenCvPipeline {
             );
         }
 
-        return yelMat;
+        return input;
     }
 }
