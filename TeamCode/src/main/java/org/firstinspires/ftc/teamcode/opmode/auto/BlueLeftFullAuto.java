@@ -149,7 +149,6 @@ public class BlueLeftFullAuto extends LinearOpMode {
 //        );
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PurePursuitCommand(preloadPath),
                         /*
                         go to desired position
                         HERE extend both grabber and scoring slides
@@ -161,6 +160,7 @@ public class BlueLeftFullAuto extends LinearOpMode {
                         repeat HERE command five more times (first was preload five more for cone cycle)
                         and then either park or do thingy on other side
                          */
+                        new PurePursuitCommand(preloadPath),
                         new ScoreConeCommand(robot)
                         .andThen(new PositionCommand(drivetrain, localizer, new Pose(60, 115, Math.PI)))
                         .alongWith(new GrabConeCommand(robot)),
