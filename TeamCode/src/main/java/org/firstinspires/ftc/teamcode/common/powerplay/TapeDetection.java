@@ -6,6 +6,11 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 public class TapeDetection extends OpenCvPipeline {
 
+    public enum Side {
+        RED,
+        BLUE
+    }
+
     private static final Scalar
             lower_red_bounds  = new Scalar(200, 0, 0),
             upper_red_bounds  = new Scalar(255, 100, 100),
