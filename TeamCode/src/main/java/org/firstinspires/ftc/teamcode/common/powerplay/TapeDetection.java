@@ -15,6 +15,10 @@ public class TapeDetection extends OpenCvPipeline {
             lower_blue_bounds = new Scalar(0, 0, 200),
             upper_blue_bounds = new Scalar(100, 100, 255);
 
+    private final Scalar
+            RED = new Scalar(255, 0, 0),
+            BLUE = new Scalar(0, 0, 255);
+
     @Override
     public Mat processFrame(Mat input) {
         return null;
