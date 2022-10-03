@@ -151,6 +151,15 @@ public class BlueLeftFullAuto extends LinearOpMode {
                 new SequentialCommandGroup(
                         new PurePursuitCommand(preloadPath),
                         /*
+                        go to desired position
+                        HERE extend both grabber and scoring slides
+                        when retracting main slides
+                        go to grabbing position
+                        close claw and retract with grabbing slides
+                        and then as retracting
+                        rotate bot back to normal
+                        repeat HERE command five more times (first was preload five more for cone cycle)
+                        and then either park or do thingy on other side
                          */
                         new ScoreConeCommand(robot)
                         .andThen(new PositionCommand(drivetrain, localizer, new Pose(60, 115, Math.PI)))
