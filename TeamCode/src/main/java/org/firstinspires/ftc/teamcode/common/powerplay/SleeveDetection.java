@@ -26,7 +26,7 @@ public class SleeveDetection extends OpenCvPipeline {
     }
 
     // TOPLEFT anchor point for the bounding box
-    private static Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(145, 168);
+    private static final Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(145, 168);
 
     // Width and height for the bounding box
     public static int REGION_WIDTH = 30;
@@ -115,6 +115,12 @@ public class SleeveDetection extends OpenCvPipeline {
                     2
             );
         }
+
+        // Memory cleanup
+        blurredMat.release();
+        yelMat.release();
+        cyaMat.release();
+        magMat.release();
 
         return input;
     }
