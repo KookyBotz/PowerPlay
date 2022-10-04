@@ -20,16 +20,15 @@ public class VisionTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        pipeline = new RelocalizerDetection();
-        pipeline2 = new SleeveDetection();
-        cam.setPipeline(pipeline);
+        sleeveDetection = new SleeveDetection();
+        camera.setPipeline(sleeveDetection);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
             public void onOpened()
             {
-                cam.startStreaming(320,240, OpenCvCameraRotation.SIDEWAYS_LEFT);
+                camera.startStreaming(320,240, OpenCvCameraRotation.SIDEWAYS_LEFT);
             }
 
             @Override
@@ -38,5 +37,12 @@ public class VisionTest extends LinearOpMode {
 
             }
         });
+
+        while (!isStarted()) {
+            telemetry.addData("ROTATION: ", sleeveDetection.getRotation());
+            telemetry.update();
+        }
+
+        waitForStart();
     }
 }
