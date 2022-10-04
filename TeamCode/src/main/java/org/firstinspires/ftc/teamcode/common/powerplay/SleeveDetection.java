@@ -30,9 +30,6 @@ public class SleeveDetection extends OpenCvPipeline {
     public static int REGION_WIDTH = 30;
     public static int REGION_HEIGHT = 50;
 
-    public static int COLOR_MAX = 100;
-    public static int COLOR_MIN = 200;
-
     private static final Scalar
             lower_yellow_bounds  = new Scalar(200, 200, 0, 255),
             upper_yellow_bounds  = new Scalar(255, 255, 130, 255),
