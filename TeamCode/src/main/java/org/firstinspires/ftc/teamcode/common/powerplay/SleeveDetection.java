@@ -41,8 +41,7 @@ public class SleeveDetection extends OpenCvPipeline {
     private final Scalar
             YELLOW  = new Scalar(255, 255, 0),
             CYAN    = new Scalar(0, 255, 255),
-            MAGENTA = new Scalar(255, 0, 255),
-            WHITE   = new Scalar(255, 255, 255);
+            MAGENTA = new Scalar(255, 0, 255);
 
     private double yelPercent, cyaPercent, magPercent;
 
