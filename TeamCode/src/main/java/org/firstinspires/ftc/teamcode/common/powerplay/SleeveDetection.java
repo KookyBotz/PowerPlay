@@ -104,4 +104,8 @@ public class SleeveDetection extends OpenCvPipeline {
 
         return input;
     }
+
+    public SleeveRotation getRotation() {
+        return rotation;
+    }
 }
