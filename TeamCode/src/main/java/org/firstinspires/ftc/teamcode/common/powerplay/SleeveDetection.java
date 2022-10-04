@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.powerplay;
 
-import com.acmerobotics.dashboard.config.Config;
+//import com.acmerobotics.dashboard.config.Config;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -11,7 +11,7 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-@Config
+//@Config
 public class SleeveDetection extends OpenCvPipeline {
     /*
     YELLOW  = Parking Left
@@ -65,46 +65,46 @@ public class SleeveDetection extends OpenCvPipeline {
         Mat m = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3));
         Imgproc.morphologyEx(blurredMat, blurredMat, Imgproc.MORPH_CLOSE, m);
         
-        Core.inRange(blurredMat, lower_yellow_bounds, upper_yellow_bounds, yelMat);
-        Core.inRange(blurredMat, lower_cyan_bounds, upper_cyan_bounds, cyaMat);
-        Core.inRange(blurredMat, lower_magenta_bounds, upper_magenta_bounds, magMat);
+//        Core.inRange(blurredMat, lower_yellow_bounds, upper_yellow_bounds, yelMat);
+//        Core.inRange(blurredMat, lower_cyan_bounds, upper_cyan_bounds, cyaMat);
+//        Core.inRange(blurredMat, lower_magenta_bounds, upper_magenta_bounds, magMat);
+//
+//        yelPercent = Core.countNonZero(yelMat);
+//        cyaPercent = Core.countNonZero(cyaMat);
+//        magPercent = Core.countNonZero(magMat);
+//
+//        double maxPercent = Math.max(yelPercent, Math.max(cyaPercent, magPercent));
+//
+//        if (maxPercent == yelPercent) {
+//            position = ParkingPosition.LEFT;
+//            Imgproc.rectangle(
+//                    input,
+//                    sleeve_pointA,
+//                    sleeve_pointB,
+//                    YELLOW,
+//                    2
+//            );
+//        } else if (maxPercent == cyaPercent) {
+//            position = ParkingPosition.CENTER;
+//            Imgproc.rectangle(
+//                    input,
+//                    sleeve_pointA,
+//                    sleeve_pointB,
+//                    CYAN,
+//                    2
+//            );
+//        } else if (maxPercent == magPercent) {
+//            position = ParkingPosition.RIGHT;
+//            Imgproc.rectangle(
+//                    input,
+//                    sleeve_pointA,
+//                    sleeve_pointB,
+//                    MAGENTA,
+//                    2
+//            );
+//        }
 
-        yelPercent = Core.countNonZero(yelMat);
-        cyaPercent = Core.countNonZero(cyaMat);
-        magPercent = Core.countNonZero(magMat);
-
-        double maxPercent = Math.max(yelPercent, Math.max(cyaPercent, magPercent));
-
-        if (maxPercent == yelPercent) {
-            position = ParkingPosition.LEFT;
-            Imgproc.rectangle(
-                    input,
-                    sleeve_pointA,
-                    sleeve_pointB,
-                    YELLOW,
-                    2
-            );
-        } else if (maxPercent == cyaPercent) {
-            position = ParkingPosition.CENTER;
-            Imgproc.rectangle(
-                    input,
-                    sleeve_pointA,
-                    sleeve_pointB,
-                    CYAN,
-                    2
-            );
-        } else if (maxPercent == magPercent) {
-            position = ParkingPosition.RIGHT;
-            Imgproc.rectangle(
-                    input,
-                    sleeve_pointA,
-                    sleeve_pointB,
-                    MAGENTA,
-                    2
-            );
-        }
-
-        return input;
+        return blurredMat;
     }
 
     public ParkingPosition getPosition() {
