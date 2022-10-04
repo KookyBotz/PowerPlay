@@ -19,10 +19,10 @@ public class SleeveDetection extends OpenCvPipeline {
     MAGENTA = Parking Right
      */
 
-    public enum SleeveRotation {
-        YELLOW,
-        CYAN,
-        MAGENTA
+    public enum ParkingPosition {
+        LEFT,
+        CENTER,
+        RIGHT
     }
 
     private static Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(145, 168);
@@ -56,7 +56,7 @@ public class SleeveDetection extends OpenCvPipeline {
             SLEEVE_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
             SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
 
-    private volatile SleeveRotation rotation = SleeveRotation.YELLOW;
+    private volatile ParkingPosition position = ParkingPosition.LEFT;
 
     @Override
     public Mat processFrame(Mat input) {
@@ -74,7 +74,7 @@ public class SleeveDetection extends OpenCvPipeline {
         double maxPercent = Math.max(yelPercent, Math.max(cyaPercent, magPercent));
 
         if (maxPercent == yelPercent) {
-            rotation = SleeveRotation.YELLOW;
+            rotation = ParkingPosition.LEFT;
             Imgproc.rectangle(
                     input,
                     sleeve_pointA,
@@ -83,7 +83,7 @@ public class SleeveDetection extends OpenCvPipeline {
                     2
             );
         } else if (maxPercent == cyaPercent) {
-            rotation = SleeveRotation.CYAN;
+            rotation = ParkingPosition.CENTER;
             Imgproc.rectangle(
                     input,
                     sleeve_pointA,
@@ -92,7 +92,7 @@ public class SleeveDetection extends OpenCvPipeline {
                     2
             );
         } else if (maxPercent == magPercent) {
-            rotation = SleeveRotation.MAGENTA;
+            rotation = ParkingPosition.RIGHT;
             Imgproc.rectangle(
                     input,
                     sleeve_pointA,
@@ -105,7 +105,7 @@ public class SleeveDetection extends OpenCvPipeline {
         return input;
     }
 
-    public SleeveRotation getRotation() {
-        return rotation;
+    public ParkingPosition getPosition() {
+        return position;
     }
 }
