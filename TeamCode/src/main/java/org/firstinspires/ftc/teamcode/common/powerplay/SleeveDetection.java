@@ -61,6 +61,9 @@ public class SleeveDetection extends OpenCvPipeline {
     public Mat processFrame(Mat input) {
         Imgproc.blur(input, blurredMat, new Size(5, 5));
         blurredMat = blurredMat.submat(new Rect(sleeve_pointA, sleeve_pointB));
+
+        Mat m = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3));
+        Imgproc.morphologyEx(blurredMat, blurredMat, Imgproc.MORPH_CLOSE, m);
         
         Core.inRange(blurredMat, lower_yellow_bounds, upper_yellow_bounds, yelMat);
         Core.inRange(blurredMat, lower_cyan_bounds, upper_cyan_bounds, cyaMat);
