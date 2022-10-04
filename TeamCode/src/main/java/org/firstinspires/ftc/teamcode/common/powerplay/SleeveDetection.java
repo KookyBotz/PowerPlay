@@ -74,7 +74,7 @@ public class SleeveDetection extends OpenCvPipeline {
         double maxPercent = Math.max(yelPercent, Math.max(cyaPercent, magPercent));
 
         if (maxPercent == yelPercent) {
-            rotation = ParkingPosition.LEFT;
+            position = ParkingPosition.LEFT;
             Imgproc.rectangle(
                     input,
                     sleeve_pointA,
@@ -83,7 +83,7 @@ public class SleeveDetection extends OpenCvPipeline {
                     2
             );
         } else if (maxPercent == cyaPercent) {
-            rotation = ParkingPosition.CENTER;
+            position = ParkingPosition.CENTER;
             Imgproc.rectangle(
                     input,
                     sleeve_pointA,
@@ -92,7 +92,7 @@ public class SleeveDetection extends OpenCvPipeline {
                     2
             );
         } else if (maxPercent == magPercent) {
-            rotation = ParkingPosition.RIGHT;
+            position = ParkingPosition.RIGHT;
             Imgproc.rectangle(
                     input,
                     sleeve_pointA,

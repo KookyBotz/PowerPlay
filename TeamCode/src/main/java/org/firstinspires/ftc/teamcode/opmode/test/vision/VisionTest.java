@@ -39,7 +39,7 @@ public class VisionTest extends LinearOpMode {
         });
 
         while (!isStarted()) {
-            telemetry.addData("ROTATION: ", sleeveDetection.getRotation());
+            telemetry.addData("ROTATION: ", sleeveDetection.getPosition());
             telemetry.update();
         }
 
