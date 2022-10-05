@@ -37,7 +37,7 @@ public class LiftSubsystem extends SubsystemBase {
 
         this.controller = new PIDController(p, i, d);
         controller.setPID(p, i, d);
-        this.profile = new TrapezoidalMotionProfile(maxV, maxA);
+        this.profile = new TrapezoidalMotionProfile(maxV, maxA, 0);
 
         this.timer = new ElapsedTime();
     }
