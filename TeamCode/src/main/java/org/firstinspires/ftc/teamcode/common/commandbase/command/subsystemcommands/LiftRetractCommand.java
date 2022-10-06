@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 public class LiftRetractCommand extends SequentialCommandGroup {
     public LiftRetractCommand(Robot robot) {
         super(
-                new InstantCommand(() -> robot.lift.setPos(robot.lift.retracted))
+                new LiftCommand(robot.lift, robot.lift.low_pos)
         );
     }
 }
