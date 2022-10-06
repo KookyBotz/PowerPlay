@@ -39,33 +39,7 @@ public class BlueLeftAuto extends LinearOpMode {
         waitForStart();
         robot.startIMUThread(this);
 
-        PurePursuitPath path = new PurePursuitPathBuilder()
-                .setDrivetrain(drivetrain)
-                .setLocalizer(localizer)
-                .setController(true)
-                .setFollowDistance(15)
-                .setPower(1.0)
-                .setMotionProfile(new RisingMotionProfile(0.5, 1))
-                .then(new Pose(-5, -32, 0))
-                .then(new Pose(-77, -32, 0))
-                .setFollowDistance(0)
-                .then(new Pose(-77, -15, -Math.PI / 5))
-                .then(new Pose(-77, -23, 0))
-                .then(new Pose(-77, -15, -Math.PI / 5))
-                .then(new Pose(-77, -23, 0))
-                .then(new Pose(-77, -15, -Math.PI / 5))
-                .then(new Pose(-77, -23, 0))
-                .then(new Pose(-77, -15, -Math.PI / 5))
-                .then(new Pose(-77, -23, 0))
-                .then(new Pose(-77, -15, -Math.PI / 5))
-                .then(new Pose(-77, -23, 0))
-                .setFollowDistance(10)
-                .then(new Pose(-77, -32, 0))
-                .then(new Pose(-33, -32, 0))
-                // stay still if left
-                // go somewhere else if other case
 
-                .build();
 
         while (opModeIsActive()) {
             localizer.periodic();
