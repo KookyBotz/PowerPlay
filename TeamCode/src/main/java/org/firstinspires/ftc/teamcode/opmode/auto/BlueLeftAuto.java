@@ -41,6 +41,15 @@ public class BlueLeftAuto extends LinearOpMode {
         waitForStart();
         robot.startIMUThread(this);
 
+        PurePursuitPath preloadPath = new PurePursuitPathBuilder()
+                .setDrivetrain(drivetrain)
+                .setLocalizer(localizer)
+                .setFollowDistance(10)
+                .setStartPosition(new Pose(6, 90, Math.PI))
+                .setPower(0.7)
+                .setMotionProfile(new RisingMotionProfile(0.7, 1))
+                .build();
+
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
 
