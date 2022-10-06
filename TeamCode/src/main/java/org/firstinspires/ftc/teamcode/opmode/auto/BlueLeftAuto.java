@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -11,6 +13,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomman
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeExtendCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftExtendCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PurePursuitCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.ForebarCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
@@ -65,7 +68,10 @@ public class BlueLeftAuto extends LinearOpMode {
                     new PurePursuitCommand(preloadPath),
                     new LiftExtendCommand(robot)
                     .alongWith(new IntakeExtendCommand(robot))
-                    .alongWith(new ClawCommand(robot))
+                    .alongWith(new ForebarCommand(robot.intake, robot.intake.forebar_retracted))
+                    .alongWith(new InstantCommand(() -> robot.intake.openClaw()),
+                    new WaitUntilCommand(robot.lift.getPos() == robot.lift.high_pos)
+
                 )
         );
 
