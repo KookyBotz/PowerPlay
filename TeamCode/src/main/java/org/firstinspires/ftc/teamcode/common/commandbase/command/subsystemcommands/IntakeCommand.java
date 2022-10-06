@@ -4,11 +4,11 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
 
-public class ExtensionCommand extends CommandBase {
+public class IntakeCommand extends CommandBase {
     private IntakeSubsystem intake;
     private int pos;
 
-    public ExtensionCommand(IntakeSubsystem intake, int pos) {
+    public IntakeCommand(IntakeSubsystem intake, int pos) {
         this.intake = intake;
         this.pos = pos;
     }
