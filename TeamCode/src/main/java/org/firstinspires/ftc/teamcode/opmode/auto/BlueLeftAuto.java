@@ -7,6 +7,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.ClawCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeExtendCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftExtendCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PurePursuitCommand;
@@ -64,6 +65,7 @@ public class BlueLeftAuto extends LinearOpMode {
                     new PurePursuitCommand(preloadPath),
                     new LiftExtendCommand(robot)
                     .alongWith(new IntakeExtendCommand(robot))
+                    .alongWith(new ClawCommand(robot))
                 )
         );
 
