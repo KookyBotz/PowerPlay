@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
+import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -39,11 +41,15 @@ public class BlueLeftAuto extends LinearOpMode {
         waitForStart();
         robot.startIMUThread(this);
 
+        CommandScheduler.getInstance().schedule(
+                new SequentialCommandGroup(
 
+                )
+        );
 
         while (opModeIsActive()) {
             localizer.periodic();
-            path.update();
+            CommandScheduler.getInstance().run();
             robot.drivetrain.updateModules();
 
             telemetry.addData("current pose", localizer.getPos());
