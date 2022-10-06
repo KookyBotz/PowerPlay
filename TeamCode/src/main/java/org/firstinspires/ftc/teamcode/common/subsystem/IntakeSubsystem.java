@@ -12,8 +12,8 @@ public class IntakeSubsystem extends SubsystemBase {
     private final Servo barLeft, barRight;
     private final Servo claw, turret;
 
-    public static int extension_out_pos = 100;
-    public static int extension_in_pos = 0;
+    public static int intake_out_pos = 100;
+    public static int intake_in_pos = 0;
 
     public static double claw_open_pos = 10;
     public static double claw_closed_pos = 5;
@@ -47,11 +47,11 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void extensionOut() {
-        extension.setTargetPosition(extension_out_pos);
+        extension.setTargetPosition(intake_out_pos);
     }
 
     public void extensionIn() {
-        extension.setTargetPosition(extension_in_pos);
+        extension.setTargetPosition(intake_in_pos);
     }
 
     public void closeClaw() {
