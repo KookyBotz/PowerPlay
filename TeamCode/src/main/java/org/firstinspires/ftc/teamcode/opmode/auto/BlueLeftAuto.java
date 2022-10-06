@@ -48,6 +48,12 @@ public class BlueLeftAuto extends LinearOpMode {
                 .setStartPosition(new Pose(6, 90, Math.PI))
                 .setPower(0.7)
                 .setMotionProfile(new RisingMotionProfile(0.7, 1))
+                .then(new Pose(6, 90, Math.PI))
+                .then(new Pose(24, 84, Math.PI))
+                .then(new Pose(60, 84, Math.PI))
+                .then(new Pose(60, 108, Math.PI))
+                .then(new Pose(72, 108, Math.PI))
+                .then(new Pose(72, 108, 7 * Math.PI / 6))
                 .build();
 
         CommandScheduler.getInstance().schedule(
