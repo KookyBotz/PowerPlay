@@ -83,6 +83,8 @@ public class BlueLeftAuto extends LinearOpMode {
                     new WaitCommand(1000)
                     .andThen(new IntakeRetractCommand(robot))
                     .alongWith(new ForebarCommand(robot.intake, robot.intake.forebar_retracted))
+                    .andThen(new WaitCommand(1000))
+                    .andThen(new InstantCommand(() -> robot.intake.openClaw()))
                 ))
         );
 
