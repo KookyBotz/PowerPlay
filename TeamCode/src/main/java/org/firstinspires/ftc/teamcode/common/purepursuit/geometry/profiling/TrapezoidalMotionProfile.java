@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling;
 public class TrapezoidalMotionProfile implements MotionProfile {
     private final double maxV;
     private final double maxA;
-    private final double inches;
+    private final double distance;
 
-    public TrapezoidalMotionProfile(double maxV, double maxA, double inches) {
+    public TrapezoidalMotionProfile(double maxV, double maxA, double distance) {
         this.maxV = maxV;
         this.maxA = maxA;
-        this.inches = inches;
+        this.distance = distance;
     }
 
     @Override
