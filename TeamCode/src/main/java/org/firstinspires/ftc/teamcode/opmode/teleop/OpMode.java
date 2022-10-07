@@ -11,4 +11,9 @@ public class OpMode extends CommandOpMode {
     public void initialize() {
         robot = new Robot(hardwareMap);
     }
+
+    @Override
+    public void run() {
+
+    }
 }
