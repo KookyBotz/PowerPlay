@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode.common.hardware;
 
 import androidx.annotation.GuardedBy;
 
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
@@ -34,6 +36,12 @@ public class Robot {
             parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
             imu.initialize(parameters);
         }
+
+        MotorEx extension = new MotorEx(hardwareMap, "extension");
+        Servo   barLeft   = hardwareMap.get(Servo.class, "forebarLeft"),
+                barRight  = hardwareMap.get(Servo.class, "forebarRight"),
+                claw      = hardwareMap.get(Servo.class, "claw"),
+                turret    = hardwareMap.get(Servo.class, "turret");
     }
 
     public void startIMUThread(LinearOpMode opMode) {
