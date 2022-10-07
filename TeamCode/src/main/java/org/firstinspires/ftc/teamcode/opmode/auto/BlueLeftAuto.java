@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode.auto;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.ClawCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeExtendCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeRetractCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftExtendCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PurePursuitCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.ForebarCommand;
@@ -73,6 +75,11 @@ public class BlueLeftAuto extends LinearOpMode {
                     .alongWith(new ForebarCommand(robot.intake, robot.intake.forebar_retracted))
                     .alongWith(new InstantCommand(() -> robot.intake.openClaw()),
                     new WaitUntilCommand(() -> robot.lift.getPos() == robot.lift.high_pos)
+                    .andThen(new WaitCommand(1000))
+                    .alongWith(new IntakeRetractCommand(robot)),
+                    new ForebarCommand(robot.intake, robot.intake.forebar_extended)
+                    .andThen(new WaitCommand(300))
+                    .andThen(new InstantCommand(() -> robot.intake.closeClaw()))
                 ))
         );
 
