@@ -70,6 +70,23 @@ public class BlueLeftAuto extends LinearOpMode {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                     new PurePursuitCommand(preloadPath),
+                    // cycle
+                    new LiftExtendCommand(robot)
+                    .alongWith(new IntakeExtendCommand(robot))
+                    .alongWith(new ForebarCommand(robot.intake, robot.intake.forebar_retracted))
+                    .alongWith(new InstantCommand(() -> robot.intake.openClaw())),
+                    new WaitUntilCommand(() -> robot.lift.getPos() == robot.lift.high_pos)
+                    .andThen(new WaitCommand(1000))
+                    .alongWith(new IntakeRetractCommand(robot)),
+                    new ForebarCommand(robot.intake, robot.intake.forebar_extended)
+                    .andThen(new WaitCommand(300))
+                    .andThen(new InstantCommand(() -> robot.intake.closeClaw())),
+                    new WaitCommand(1000)
+                    .andThen(new IntakeRetractCommand(robot))
+                    .alongWith(new ForebarCommand(robot.intake, robot.intake.forebar_retracted))
+                    .andThen(new WaitCommand(1000))
+                    .andThen(new InstantCommand(() -> robot.intake.openClaw())),
+                    // cycle
                     new LiftExtendCommand(robot)
                     .alongWith(new IntakeExtendCommand(robot))
                     .alongWith(new ForebarCommand(robot.intake, robot.intake.forebar_retracted))
@@ -85,7 +102,8 @@ public class BlueLeftAuto extends LinearOpMode {
                     .alongWith(new ForebarCommand(robot.intake, robot.intake.forebar_retracted))
                     .andThen(new WaitCommand(1000))
                     .andThen(new InstantCommand(() -> robot.intake.openClaw()))
-                ))
+
+                )
         );
 
         while (opModeIsActive()) {
