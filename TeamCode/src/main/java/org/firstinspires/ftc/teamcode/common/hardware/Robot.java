@@ -51,7 +51,8 @@ public class Robot {
                 turret    = hardwareMap.get(Servo.class, "turret");
         intake = new IntakeSubsystem(extension, barLeft, barRight, claw, turret);
 
-        MotorEx lift = new MotorEx(hardwareMap, "lift");
+        DcMotorEx liftM = hardwareMap.get(DcMotorEx.class, "lift");
+        lift = new LiftSubsystem(liftM);
     }
 
     public void startIMUThread(LinearOpMode opMode) {
