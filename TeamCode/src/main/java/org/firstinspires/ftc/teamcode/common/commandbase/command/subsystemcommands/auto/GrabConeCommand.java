@@ -13,7 +13,7 @@ public class GrabConeCommand extends SequentialCommandGroup {
     public GrabConeCommand(Robot robot) {
         super(
                 new IntakeExtendCommand(robot),
-                new WaitUntilCommand(() -> robot.intake.getExtension() == robot.intake.extension_out_pos),
+                new WaitUntilCommand(() -> robot.intake.getExtension() == robot.intake.intake_out_pos),
                 new WaitCommand(1000),
                 new ClawCommand(robot.intake, robot.intake.claw_closed_pos),
                 new WaitCommand(1000),
