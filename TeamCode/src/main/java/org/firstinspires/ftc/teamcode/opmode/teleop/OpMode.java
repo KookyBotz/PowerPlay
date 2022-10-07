@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 public class OpMode extends CommandOpMode {
     private Robot robot;
 
-    private ElapsedTime time;
+    private ElapsedTime timer;
     private double loopTime = 0;
 
     @Override
@@ -20,6 +20,10 @@ public class OpMode extends CommandOpMode {
 
     @Override
     public void run() {
+        if (timer == null) {
+            timer = new ElapsedTime();
+        }
+
         double loopTime2 = System.currentTimeMillis();
 
         telemetry.addData("u/s: ", loopTime2 - loopTime);
