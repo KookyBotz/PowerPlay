@@ -25,6 +25,8 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPath;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPathBuilder;
 
+import java.util.function.BooleanSupplier;
+
 @Autonomous (name = "BlueLeftAuto")
 public class BlueLeftAuto extends LinearOpMode {
 
@@ -70,9 +72,8 @@ public class BlueLeftAuto extends LinearOpMode {
                     .alongWith(new IntakeExtendCommand(robot))
                     .alongWith(new ForebarCommand(robot.intake, robot.intake.forebar_retracted))
                     .alongWith(new InstantCommand(() -> robot.intake.openClaw()),
-                    new WaitUntilCommand(robot.lift.getPos() == robot.lift.high_pos)
-
-                )
+                    new WaitUntilCommand(() -> robot.lift.getPos() == robot.lift.high_pos)
+                ))
         );
 
         while (opModeIsActive()) {
