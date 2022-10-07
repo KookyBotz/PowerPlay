@@ -42,6 +42,8 @@ public class Robot {
                 barRight  = hardwareMap.get(Servo.class, "forebarRight"),
                 claw      = hardwareMap.get(Servo.class, "claw"),
                 turret    = hardwareMap.get(Servo.class, "turret");
+
+        intake = new IntakeSubsystem(extension, barLeft, barRight, claw, turret);
     }
 
     public void startIMUThread(LinearOpMode opMode) {
