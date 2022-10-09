@@ -137,7 +137,7 @@ public class PurePursuitPath {
 
 
         // Set Powers
-        drivetrain.set(powers, nextWaypoint.maxPower * profile.update(timer.seconds()));
+        drivetrain.set(powers, profile.update(timer.seconds()));
         return true;
     }
 }
