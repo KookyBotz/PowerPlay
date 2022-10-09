@@ -27,9 +27,6 @@ public class OpMode extends CommandOpMode {
 
         double loopTime2 = System.currentTimeMillis();
 
-        if (gamepad1.a) {
-            schedule(new IntakeExtendCommand(robot));
-        }
 
         telemetry.addData("u/s: ", loopTime2 - loopTime);
         telemetry.update();
