@@ -10,11 +10,11 @@ public class RisingMotionProfile implements MotionProfile {
     }
 
     @Override
-    public double update(double time) {
+    public double[] update(double time) {
         if (time < 0) {
-            return 0;
+            return null;
         }
         double velocity = (maxA * time) / maxV;
-        return Math.min(velocity, maxV);
+        return new double[]{0, Math.min(velocity, maxV), 0};
     }
 }

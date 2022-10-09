@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Kinematics;
 
 public class IntakeExtendCommand extends SequentialCommandGroup {
-    public IntakeExtendCommand(Robot robot, double x, double y) {
+    public IntakeExtendCommand(Robot robot) {
         super(
 //                double[] arr = Kinematics.forebar(x, y);
 //                new WaitUntilCommand(() -> robot.lift.getPos() < robot.lift.high_pos - 50),

@@ -10,7 +10,7 @@ public class FallingMotionProfile implements MotionProfile {
     }
 
     @Override
-    public double update(double time) {
-        return 0;
+    public double[] update(double time) {
+        return new double[]{0, 0, 0};
     }
 }

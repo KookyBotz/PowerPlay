@@ -106,7 +106,7 @@ public class PurePursuitPath {
                     pCoefficientX, pCoefficientY, pCoefficientH
             ));
 
-            drivetrain.set(powers, nextWaypoint.maxPower * profile.update(timer.seconds()));
+            drivetrain.set(powers, nextWaypoint.maxPower * profile.update(timer.seconds())[1]);
 
             return true;
         }
@@ -138,7 +138,8 @@ public class PurePursuitPath {
 
 
         // Set Powers
-        drivetrain.set(powers, profile.update(timer.seconds()) / MAX_SPEED_VERTICAL);
+        // TODO: Revisit this
+        drivetrain.set(powers, profile.update(timer.seconds())[0] / MAX_SPEED_VERTICAL);
         return true;
     }
 }

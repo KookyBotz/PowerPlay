@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveDrivetrain;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.TrapezoidalMotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.LiftSubsystem;
@@ -49,7 +50,7 @@ public class Robot {
                 barRight  = hardwareMap.get(Servo.class, "forebarRight"),
                 claw      = hardwareMap.get(Servo.class, "claw"),
                 turret    = hardwareMap.get(Servo.class, "turret");
-        intake = new IntakeSubsystem(extension, barLeft, barRight, claw, turret);
+        intake = new IntakeSubsystem(extension, barLeft, barRight, claw, turret, new TrapezoidalMotionProfile(60, 120, 30));
 
         DcMotorEx liftM = hardwareMap.get(DcMotorEx.class, "lift");
         lift = new LiftSubsystem(liftM);
