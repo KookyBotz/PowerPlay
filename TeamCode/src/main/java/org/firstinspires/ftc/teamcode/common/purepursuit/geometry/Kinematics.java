@@ -11,6 +11,6 @@ public class Kinematics {
         double targetInches = Math.sqrt(Math.pow(FOREBAR_LENGTH, 2) - Math.pow(y, 2));
         double targetRadians = Math.asin(y / FOREBAR_LENGTH);
 
-        return new double[]{targetInches, targetRadians};
+        return new double[]{x - targetInches, targetRadians};
     }
 }
