@@ -53,7 +53,6 @@ public class PurePursuitPathBuilderTest extends LinearOpMode {
                 .setLocalizer(localizer)
                 .setController(true)
                 .setFollowDistance(15)
-                .setPower(1.0)
                 .setMotionProfile(new RisingMotionProfile(0.25, 1))
                 .then(new Pose())
                 .then(new Pose(0, 60, 0))

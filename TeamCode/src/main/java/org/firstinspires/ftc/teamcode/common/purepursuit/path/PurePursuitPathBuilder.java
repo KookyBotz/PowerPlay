@@ -15,7 +15,6 @@ public class PurePursuitPathBuilder {
     private Localizer localizer;
     private Drivetrain drivetrain;
     private MotionProfile profile = new RisingMotionProfile(Integer.MAX_VALUE, 1);
-    private double currentPower = 1;
     private double followDistance = 10;
     private List<Waypoint> waypoints;
     private boolean pController = true;
@@ -41,14 +40,6 @@ public class PurePursuitPathBuilder {
         if (drivetrain == null || localizer == null)
             throw new IllegalStateException("set drivetrain and localizer cringe");
         this.localizer.setPos(pose);
-        return this;
-    }
-
-    public PurePursuitPathBuilder setPower(double power) {
-        if (drivetrain == null || localizer == null)
-            throw new IllegalStateException("set drivetrain and localizer first please");
-
-        this.currentPower = power;
         return this;
     }
 
@@ -79,7 +70,7 @@ public class PurePursuitPathBuilder {
     public PurePursuitPathBuilder then(Pose pose) {
         if (drivetrain == null || localizer == null)
             throw new IllegalStateException("set drivetrain and localizer first please");
-        waypoints.add(new Waypoint(pose, followDistance, currentPower));
+        waypoints.add(new Waypoint(pose, followDistance, 1.0));
 
         return this;
     }
