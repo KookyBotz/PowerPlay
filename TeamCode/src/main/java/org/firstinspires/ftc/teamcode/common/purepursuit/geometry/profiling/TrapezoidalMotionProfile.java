@@ -42,14 +42,14 @@ public class TrapezoidalMotionProfile implements MotionProfile {
         aCur = getAccel(time);
 
         if (time <= tRad) {
-            return aCur * time;
+            velocity =  aCur * time;
         } else if ((time - tRad) <= tCir) {
-            return maxV;
+            velocity = maxV;
         } else if ((time - tRad - tCir) <= tRad) {
-            return getAccel(tRad) * tRad - maxA * (time - tCir - tRad);
+            velocity = getAccel(tRad) * tRad - maxA * (time - tCir - tRad);
         }
 
-        return 0.0;
+        return velocity;
     }
 
     private double getAccel(double time) {
