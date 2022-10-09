@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmode.test.System;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
@@ -40,10 +42,15 @@ public class SlideTesting extends CommandOpMode {
 
     @Override
     public void run() {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         // extension.setTargetPosition((int) profile.update(timer.time())[0] * 28);
         extension.setTargetPosition(pos);
         controller.setPID(P, I, D);
-        double power = controller.calculate();
+        double power = controller.calculate(extension.getCurrentPosition(), pos);
         extension.set(power);
+        telemetry.addData("power", power);
+        telemetry.addData("posit", pos);
+        telemetry.update();
     }
 }
