@@ -4,21 +4,41 @@ public class TrapezoidalMotionProfile implements MotionProfile {
     private final double maxV;
     private final double maxA;
     private final double distance;
-    private final double tNorm;
-    private final double tA;
+
+    private final double inverseTime;
+    private double dRad;
+    private double tRad;
+    private double tCir;
+    private double dCir;
 
     public TrapezoidalMotionProfile(double maxV, double maxA, double distance) {
         this.maxV = maxV;
         this.maxA = maxA;
         this.distance = distance;
 
-        this.tNorm = distance / maxV;
-        this.tA = maxV / maxA;
+        this.inverseTime = Math.pow(maxV, 2) / Math.pow(maxA, 3);
     }
 
     @Override
     public double update(double time)
     {
-        i
+        if (time < 0) {
+            return 0;
+        }
+
+        if (inverseTime <= distance) {
+            tRad = maxV / maxA;
+            dRad = (maxA * Math.pow(tRad, 2)) / 2;
+        } else {
+            tRad = Math.sqrt(distance / maxA);
+            dRad = distance / 2;
+        }
+
+        dCir = distance - (2 * dRad);
+        tCir = dCir / maxV;
+
+
+
+        return 0.0;
     }
 }
