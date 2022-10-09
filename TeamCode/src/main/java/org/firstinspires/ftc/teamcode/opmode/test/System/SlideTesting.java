@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeExtendCommand;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.TrapezoidalMotionProfile;
 
 @Config
+@TeleOp(name = "SlideTesting")
 public class SlideTesting extends CommandOpMode {
 
     //private Robot robot;
@@ -41,7 +43,7 @@ public class SlideTesting extends CommandOpMode {
         // extension.setTargetPosition((int) profile.update(timer.time())[0] * 28);
         extension.setTargetPosition(pos);
         controller.setPID(P, I, D);
-        double velocity = controller.calculate();
-        extension.setVelocity(velocity);
+        double power = controller.calculate();
+        extension.set(power);
     }
 }
