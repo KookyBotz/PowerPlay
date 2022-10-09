@@ -13,5 +13,7 @@ public class PurePursuitConfig {
     public static double pCoefficientH = -Math.PI / 2.5;
 
     // inches per sec
-    public static double MAX_SPEED = 72;
+    public static double MAX_SPEED_VERTICAL = 72;
+    public static double MAX_SPEED_HORIZONTAL = 72;
+    public static double MAX_SPEED_ROBOT =
 }
