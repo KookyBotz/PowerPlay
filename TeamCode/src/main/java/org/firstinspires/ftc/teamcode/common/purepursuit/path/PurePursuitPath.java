@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.purepursuit.path;
 
-import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.MAX_SPEED;
+import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.MAX_SPEED_VERTICAL;
 import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientH;
 import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientX;
 import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientY;
@@ -138,7 +138,7 @@ public class PurePursuitPath {
 
 
         // Set Powers
-        drivetrain.set(powers, profile.update(timer.seconds()) / MAX_SPEED);
+        drivetrain.set(powers, profile.update(timer.seconds()) / MAX_SPEED_VERTICAL);
         return true;
     }
 }
