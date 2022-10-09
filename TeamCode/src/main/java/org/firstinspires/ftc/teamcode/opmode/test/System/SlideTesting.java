@@ -38,12 +38,11 @@ public class SlideTesting extends CommandOpMode {
         timer = new ElapsedTime();
 
         controller = new PIDController(P, I, D);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
 
     @Override
     public void run() {
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
         // extension.setTargetPosition((int) profile.update(timer.time())[0] * 28);
         extension.setTargetPosition(pos);
         controller.setPID(P, I, D);
