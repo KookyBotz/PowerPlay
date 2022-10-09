@@ -26,7 +26,9 @@ public class SlideTesting extends CommandOpMode {
     public static double I = 0.0;
     public static double D = 0.0;
 
-    public static int pos = 0;
+    public static double maxD = 0;
+    public static double maxV = 0.0;
+    public static double maxA = 0.0;
 
     PIDController controller;
 
@@ -34,7 +36,7 @@ public class SlideTesting extends CommandOpMode {
     public void initialize() {
         //robot = new Robot(hardwareMap);
         extension = new MotorEx(hardwareMap, "extension");
-        profile = new TrapezoidalMotionProfile(10, 20, 10);
+        profile = new TrapezoidalMotionProfile(maxV, maxA, maxD);
         timer = new ElapsedTime();
 
         controller = new PIDController(P, I, D);
@@ -44,13 +46,23 @@ public class SlideTesting extends CommandOpMode {
     @Override
     public void run() {
         // extension.setTargetPosition((int) profile.update(timer.time())[0] * 28);
-        extension.setTargetPosition(pos);
+        //extension.setTargetPosition(pos);
+        profile = new TrapezoidalMotionProfile(maxV, maxA, maxD);
+
         controller.setPID(P, I, D);
-        double power = controller.calculate(extension.getCurrentPosition(), pos);
+        double[] profiles = profile.update(timer.time());
+        double pos2 = (int) profiles[0];
+        double power = controller.calculate(extension.getCurrentPosition(), pos2);
         extension.set(power);
         telemetry.addData("power", power);
         telemetry.addData("curPo", extension.getCurrentPosition());
-        telemetry.addData("posit", pos);
+        telemetry.addData("motPo", profiles[0]);
+        telemetry.addData("motVe", profiles[1]);
+        telemetry.addData("motAc", profiles[2]);
         telemetry.update();
+
+        if (gamepad1.a) {
+            timer.reset();
+        }
     }
 }
