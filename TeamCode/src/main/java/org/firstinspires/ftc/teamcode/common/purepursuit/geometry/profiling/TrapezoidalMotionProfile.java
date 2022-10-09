@@ -12,6 +12,7 @@ public class TrapezoidalMotionProfile implements MotionProfile {
     private double dCir;
     private double aCur;
     private double vCur;
+    private double pCur;
 
     public TrapezoidalMotionProfile(double maxV, double maxA, double distance) {
         this.maxV = maxV;
@@ -41,8 +42,19 @@ public class TrapezoidalMotionProfile implements MotionProfile {
 
         aCur = getAccel(time);
         vCur = getVelo(time);
+        pCur = getPos(time);
 
+        return pCur;
+    }
 
+    private double getPos(double time) {
+        if (time <= tRad) {
+            return (maxA * Math.pow(time, 2)) / 2;
+        } else if (time <= tRad + tCir) {
+            return dRad + ((time - tRad) * getVelo(tRad));
+        } else {
+            return dRad + dCir + getVelo(tRad + tCir) * (time - tRad - tCir) - ((maxA * Math.pow(time - tRad - tCir, 2)) / 2);
+        }
     }
 
     private double getVelo(double time) {
@@ -50,13 +62,17 @@ public class TrapezoidalMotionProfile implements MotionProfile {
             return aCur * time;
         } else if ((time - tRad) <= tCir) {
             return maxV;
-        } else if ((time - tRad - tCir) <= tRad) {
+        } else {
             return getAccel(tRad) * tRad - maxA * (time - tCir - tRad);
         }
 
-
-
-        return 0.0;
+//        if (time <= tRad) {
+//            velocity =  aCur * time;
+//        } else if ((time - tRad) <= tCir) {
+//            velocity = maxV;
+//        } else if ((time - tRad - tCir) <= tRad) {
+//            velocity = getAccel(tRad) * tRad - maxA * (time - tCir - tRad);
+//        }
     }
 
     private double getAccel(double time) {
