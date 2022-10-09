@@ -41,7 +41,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void loop() {
         double target = profile.update(timer.time())[1];
-        extension.setTargetPosition(target);
+        extension.setTargetPosition((int) target);
+        // pid control
     }
 
     public void setExtension(int pos) {
