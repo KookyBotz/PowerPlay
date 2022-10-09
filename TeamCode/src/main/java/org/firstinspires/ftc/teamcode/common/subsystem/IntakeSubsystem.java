@@ -15,7 +15,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final Servo barLeft, barRight;
     private final Servo claw, turret;
 
-    private final MotionProfile profile;
+    private MotionProfile profile;
     private final ElapsedTime timer;
 
     public static int intake_out_pos = 100;
@@ -43,6 +43,10 @@ public class IntakeSubsystem extends SubsystemBase {
         double target = profile.update(timer.time())[1];
         extension.setTargetPosition((int) target);
         // pid control
+    }
+
+    public void setMotionProfile(MotionProfile profile) {
+        this.profile = profile;
     }
 
     public void setExtension(int pos) {

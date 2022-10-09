@@ -44,8 +44,8 @@ public class LiftSubsystem extends SubsystemBase {
 
     public void loop() {
         // TODO : add motion profiling and pid control
-        double power = profile.update(timer.time());
-        lift.setPower(power);
+        double[] power = profile.update(timer.time());
+        lift.setPower(power[0]);
     }
 
     public void setPos(int pos) {
