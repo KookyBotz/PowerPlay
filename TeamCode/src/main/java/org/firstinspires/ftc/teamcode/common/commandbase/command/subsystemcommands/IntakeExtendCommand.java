@@ -3,10 +3,12 @@ package org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomma
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Kinematics;
 
 public class IntakeExtendCommand extends SequentialCommandGroup {
-    public IntakeExtendCommand(Robot robot) {
+    public IntakeExtendCommand(Robot robot, double x, double y) {
         super(
+                double[] arr = Kinematics.forebar(x, y);
 //                new WaitUntilCommand(() -> robot.lift.getPos() < robot.lift.high_pos - 50),
 //                new InstantCommand(() -> robot.intake.extensionOut())
 //                .alongWith(new InstantCommand(() -> robot.intake.openClaw()))
