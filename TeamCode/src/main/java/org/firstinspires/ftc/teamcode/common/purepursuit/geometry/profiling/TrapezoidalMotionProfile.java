@@ -24,6 +24,25 @@ public class TrapezoidalMotionProfile implements MotionProfile {
 
     @Override
     public double[] update(double time) {
+
+        if (time < 0) {
+            return new double[]{0, 0, 0};
+        }
+
+        if (inverseTime <= distance) {
+            tRad = maxV / maxA;
+            dRad = (maxA * Math.pow(tRad, 2)) / 2;
+        } else {
+            tRad = Math.sqrt(distance / maxA);
+            dRad = distance / 2;
+        }
+
+        dCir = distance - (2 * dRad);
+        tCir = dCir / maxV;
+
+        aCur = getAccel(time);
+        vCur = getVelo(time);
+        pCur = getPos(time);
         return new double[]{pCur, vCur, aCur};
     }
 
