@@ -50,6 +50,7 @@ public class SlideTesting extends CommandOpMode {
         double power = controller.calculate(extension.getCurrentPosition(), pos);
         extension.set(power);
         telemetry.addData("power", power);
+        telemetry.addData("curPo", extension.getCurrentPosition());
         telemetry.addData("posit", pos);
         telemetry.update();
     }
