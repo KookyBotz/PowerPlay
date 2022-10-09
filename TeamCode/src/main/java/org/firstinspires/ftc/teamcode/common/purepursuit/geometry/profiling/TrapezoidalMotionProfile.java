@@ -23,7 +23,7 @@ public class TrapezoidalMotionProfile implements MotionProfile {
     }
 
     @Override
-    public double update(double time)
+    public double update(double time, boolean a)
     {
         if (time < 0) {
             return 0;
@@ -43,17 +43,23 @@ public class TrapezoidalMotionProfile implements MotionProfile {
         aCur = getAccel(time);
         vCur = getVelo(time);
         pCur = getPos(time);
+        if (a) {
+            return pCur;
+        } else {
+            return vCur;
+        }
 
-        return pCur;
     }
 
     private double getPos(double time) {
         if (time <= tRad) {
             return (maxA * Math.pow(time, 2)) / 2;
         } else if (time <= tRad + tCir) {
-            return dRad + ((time - tRad) * getVelo(tRad));
+            return (dRad + ((time - tRad) * getVelo(tRad)));
+        } else if (time - tRad - tCir <= tRad) {
+            return dRad + dCir + (getVelo(tRad + tCir) * (time - tRad - tCir)) - ((maxA * Math.pow(time - tRad - tCir, 2)) / 2);
         } else {
-            return dRad + dCir + getVelo(tRad + tCir) * (time - tRad - tCir) - ((maxA * Math.pow(time - tRad - tCir, 2)) / 2);
+            return 0.0;
         }
     }
 
@@ -62,8 +68,10 @@ public class TrapezoidalMotionProfile implements MotionProfile {
             return getAccel(time) * time;
         } else if ((time - tRad) <= tCir) {
             return maxV;
-        } else {
+        } else if (time - tRad - tCir <= tRad) {
             return getAccel(tRad) * tRad - maxA * (time - tCir - tRad);
+        } else {
+            return 0.0;
         }
     }
 
@@ -72,8 +80,10 @@ public class TrapezoidalMotionProfile implements MotionProfile {
             return maxA;
         } else if (time <= (tRad + tCir)) {
             return 0.0;
+        } else if (time <= 2 * tRad + tCir) {
+            return -maxA;
         } else {
-            return (2 * tRad) + tCir;
+            return 0.0;
         }
     }
 }
