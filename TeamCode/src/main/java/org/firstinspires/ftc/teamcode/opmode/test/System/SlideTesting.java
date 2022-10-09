@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmode.test.System;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -21,16 +22,26 @@ public class SlideTesting extends CommandOpMode {
     public static double I = 0.0;
     public static double D = 0.0;
 
+    public static int pos = 0;
+
+    PIDController controller;
+
     @Override
     public void initialize() {
         //robot = new Robot(hardwareMap);
         extension = new MotorEx(hardwareMap, "extension");
         profile = new TrapezoidalMotionProfile(10, 20, 10);
         timer = new ElapsedTime();
+
+        controller = new PIDController(P, I, D);
     }
 
     @Override
     public void run() {
         // extension.setTargetPosition((int) profile.update(timer.time())[0] * 28);
+        extension.setTargetPosition(pos);
+        controller.setPID(P, I, D);
+        double velocity = controller.calculate();
+        extension.setVelocity(velocity);
     }
 }
