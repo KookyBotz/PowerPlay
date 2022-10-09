@@ -23,6 +23,11 @@ public class TrapezoidalMotionProfile implements MotionProfile {
     }
 
     @Override
+    public double update(double time) {
+        return 0.0;
+    }
+
+
     public double update(double time, boolean a)
     {
         if (time < 0) {
