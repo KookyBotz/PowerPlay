@@ -30,6 +30,10 @@ public class IntakeSubsystem extends SubsystemBase {
         this.turret = turret;
     }
 
+    public void loop() {
+
+    }
+
     public void setExtension(int pos) {
         extension.setTargetPosition(pos);
     }

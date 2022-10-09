@@ -11,7 +11,7 @@ public class TrapezoidalMotionProfile implements MotionProfile {
     private double tCir;
     private double dCir;
     private double aCur;
-    private double velocity;
+    private double vCur;
 
     public TrapezoidalMotionProfile(double maxV, double maxA, double distance) {
         this.maxV = maxV;
@@ -40,16 +40,23 @@ public class TrapezoidalMotionProfile implements MotionProfile {
         tCir = dCir / maxV;
 
         aCur = getAccel(time);
+        vCur = getVelo(time);
 
+
+    }
+
+    private double getVelo(double time) {
         if (time <= tRad) {
-            velocity =  aCur * time;
+            return aCur * time;
         } else if ((time - tRad) <= tCir) {
-            velocity = maxV;
+            return maxV;
         } else if ((time - tRad - tCir) <= tRad) {
-            velocity = getAccel(tRad) * tRad - maxA * (time - tCir - tRad);
+            return getAccel(tRad) * tRad - maxA * (time - tCir - tRad);
         }
 
-        return velocity;
+
+
+        return 0.0;
     }
 
     private double getAccel(double time) {

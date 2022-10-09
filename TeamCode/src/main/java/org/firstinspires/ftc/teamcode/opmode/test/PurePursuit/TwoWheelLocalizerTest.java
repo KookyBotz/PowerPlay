@@ -1,12 +1,15 @@
-package org.firstinspires.ftc.teamcode.opmode.test;
+package org.firstinspires.ftc.teamcode.opmode.test.PurePursuit;
+
+import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientH;
+import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientX;
+import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientY;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.freightfrenzy.MecanumRobot;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Waypoint;
-import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPath;
+import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitController;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
@@ -15,7 +18,12 @@ import java.util.function.DoubleSupplier;
 
 @TeleOp
 @Config
-public class MecanumPurePursuitTest extends LinearOpMode {
+public class TwoWheelLocalizerTest extends LinearOpMode {
+
+    public static double coordX = 20;
+    public static double coordY = 20;
+    public static double coordHeading = 1;
+
     @Override
     public void runOpMode() throws InterruptedException {
         MecanumRobot robot = new MecanumRobot(hardwareMap);
@@ -25,19 +33,31 @@ public class MecanumPurePursuitTest extends LinearOpMode {
 
         Localizer localizer = new TwoWheelLocalizer(horizontalPos, lateralPos, imuAngle);
 
+        Pose targetPose = new Pose(coordX, coordY, coordHeading);
         waitForStart();
 
         long time = System.currentTimeMillis();
 
-        PurePursuitPath path = new PurePursuitPath(robot.drivetrain, localizer,
-                new Waypoint(new Pose(0, 0, 0), 10),
-                new Waypoint(new Pose(40, 0, Math.toRadians(90)), 10),
-                new Waypoint(new Pose(40, 40, 0), 10));
-
         while (opModeIsActive()) {
+            targetPose.x = coordX;
+            targetPose.y = coordY;
+            targetPose.heading = coordHeading;
             localizer.periodic();
+//            robot.drivetrain.set(
+//                    new Pose(
+//                            -gamepad1.left_stick_y,
+//                            gamepad1.left_stick_x,
+//                            gamepad1.right_stick_x
+//                    )
+//            );
 
-            path.update();
+            Pose powers = PurePursuitController.goToPosition(
+                    localizer.getPos(), targetPose, new Pose(pCoefficientX, pCoefficientY, pCoefficientH)
+            );
+
+            telemetry.addData("powers", powers);
+
+            robot.drivetrain.set(powers);
 
             long currTime = System.currentTimeMillis();
             telemetry.addData("hz", 1000 / (currTime - time));
