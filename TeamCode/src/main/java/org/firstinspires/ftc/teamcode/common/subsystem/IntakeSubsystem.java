@@ -5,12 +5,18 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
 
 @Config
 public class IntakeSubsystem extends SubsystemBase {
     private final MotorEx extension;
     private final Servo barLeft, barRight;
     private final Servo claw, turret;
+
+    private final MotionProfile profile;
+    private final ElapsedTime timer;
 
     public static int intake_out_pos = 100;
     public static int intake_in_pos = 0;
@@ -22,16 +28,20 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double forebar_middle = 0.25;
     public static double forebar_retracted = 0.1;
 
-    public IntakeSubsystem(MotorEx extension, Servo barLeft, Servo barRight, Servo claw, Servo turret) {
+    public IntakeSubsystem(MotorEx extension, Servo barLeft, Servo barRight, Servo claw, Servo turret, MotionProfile profile) {
         this.extension = extension;
         this.barLeft = barLeft;
         this.barRight = barRight;
         this.claw = claw;
         this.turret = turret;
+
+        this.profile = profile;
+        this.timer = new ElapsedTime();
     }
 
     public void loop() {
-
+        double target = profile.update(timer.time())[1];
+        extension.setTargetPosition(target);
     }
 
     public void setExtension(int pos) {
