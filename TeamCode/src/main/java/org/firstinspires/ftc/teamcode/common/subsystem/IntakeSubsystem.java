@@ -28,6 +28,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double forebar_middle = 0.25;
     public static double forebar_retracted = 0.1;
 
+    public static final double FOREBAR_LENGTH = 9.842;
+
     public IntakeSubsystem(MotorEx extension, Servo barLeft, Servo barRight, Servo claw, Servo turret, MotionProfile profile) {
         this.extension = extension;
         this.barLeft = barLeft;

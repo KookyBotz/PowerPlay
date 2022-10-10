@@ -3,18 +3,17 @@ package org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomma
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Kinematics;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.opmode.test.System.ExtensionTest;
 
 public class ExtensionCommand extends CommandBase {
     private IntakeSubsystem intake;
-    private double x;
-    private double y;
+    private double[] points;
 
     public ExtensionCommand(IntakeSubsystem intake, double x, double y) {
         this.intake = intake;
-        this.x = x;
-        this.y = y;
+        this.points = Kinematics.forebar(x, y, intake.FOREBAR_LENGTH);
     }
 
     @Override
