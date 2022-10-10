@@ -33,6 +33,7 @@ public class SlideTesting extends CommandOpMode {
     PIDController controller;
 
     boolean curState = true;
+    boolean flag = true;
 
     @Override
     public void initialize() {
@@ -63,16 +64,20 @@ public class SlideTesting extends CommandOpMode {
             timer.reset();
         }
 
-        if (!curState) {
+        if (!curState && flag) {
             for (int i = 0; i < 2; i++) {
                 profiles[i] *= -1;
             }
+            flag = false;
         }
         telemetry.addData("power", power);
         telemetry.addData("curPo", extension.getCurrentPosition());
         telemetry.addData("motPo", profiles[0]);
         telemetry.addData("motVe", profiles[1]);
         telemetry.addData("motAc", profiles[2]);
+        telemetry.addData("maxD", maxD);
+        telemetry.addData("maxV", maxV);
+        telemetry.addData("maxA", maxA);
         telemetry.update();
 
         if (gamepad1.a) {
