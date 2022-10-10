@@ -32,6 +32,8 @@ public class SlideTesting extends CommandOpMode {
 
     PIDController controller;
 
+    boolean curState = true;
+
     @Override
     public void initialize() {
         //robot = new Robot(hardwareMap);
@@ -54,6 +56,16 @@ public class SlideTesting extends CommandOpMode {
         double pos2 = (int) profiles[0];
         double power = controller.calculate(extension.getCurrentPosition(), pos2);
         extension.set(power);
+        if (extension.getCurrentPosition() >= maxD - 10 && curState) {
+            curState = false;
+            maxD = 0;
+        }
+
+        if (!curState) {
+            for (int i = 0; i < 2; i++) {
+                profiles[i] *= -1;
+            }
+        }
         telemetry.addData("power", power);
         telemetry.addData("curPo", extension.getCurrentPosition());
         telemetry.addData("motPo", profiles[0]);
@@ -62,6 +74,7 @@ public class SlideTesting extends CommandOpMode {
         telemetry.update();
 
         if (gamepad1.a) {
+            extension.resetEncoder();
             timer.reset();
         }
     }
