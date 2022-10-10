@@ -84,10 +84,16 @@ public class SlideTesting extends CommandOpMode {
 
         if (gamepad1.a) {
             timer.reset();
+            extension.resetEncoder();
         }
 
         if (gamepad1.b) {
             extension.resetEncoder();
+        }
+
+        if (gamepad1.y) {
+            maxA *= -1;
+            maxD = 0;
         }
     }
 }
