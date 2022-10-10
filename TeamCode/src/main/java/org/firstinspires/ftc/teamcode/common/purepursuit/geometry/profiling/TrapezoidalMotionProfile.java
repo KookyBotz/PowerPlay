@@ -54,7 +54,7 @@ public class TrapezoidalMotionProfile implements MotionProfile {
         } else if (time - tRad - tCir <= tRad) {
             return dRad + dCir + (getVelo(tRad + tCir) * (time - tRad - tCir)) - ((maxA * Math.pow(time - tRad - tCir, 2)) / 2);
         } else {
-            return 0.0;
+            return distance;
         }
     }
 

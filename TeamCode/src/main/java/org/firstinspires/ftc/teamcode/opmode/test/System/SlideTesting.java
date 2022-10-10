@@ -58,7 +58,7 @@ public class SlideTesting extends CommandOpMode {
         double pos2 = (int) profiles[0];
         double power = controller.calculate(extension.getCurrentPosition(), pos2);
         extension.set(power);
-        if (extension.getCurrentPosition() >= maxD - 10 && curState) {
+        if (extension.getCurrentPosition() >= maxD - 100 && curState) {
             curState = false;
             maxD = 0;
             timer.reset();
@@ -78,6 +78,8 @@ public class SlideTesting extends CommandOpMode {
         telemetry.addData("maxD", maxD);
         telemetry.addData("maxV", maxV);
         telemetry.addData("maxA", maxA);
+        telemetry.addData("bools:", curState);
+        telemetry.addData("boolsflag:", flag);
         telemetry.update();
 
         if (gamepad1.a) {
