@@ -38,6 +38,7 @@ public class SlideTesting extends CommandOpMode {
     public void initialize() {
         //robot = new Robot(hardwareMap);
         extension = new MotorEx(hardwareMap, "extension");
+        extension.resetEncoder();
         profile = new TrapezoidalMotionProfile(maxV, maxA, maxD);
         timer = new ElapsedTime();
 
@@ -59,6 +60,7 @@ public class SlideTesting extends CommandOpMode {
         if (extension.getCurrentPosition() >= maxD - 10 && curState) {
             curState = false;
             maxD = 0;
+            timer.reset();
         }
 
         if (!curState) {
@@ -74,8 +76,11 @@ public class SlideTesting extends CommandOpMode {
         telemetry.update();
 
         if (gamepad1.a) {
-            extension.resetEncoder();
             timer.reset();
+        }
+
+        if (gamepad1.b) {
+            extension.resetEncoder();
         }
     }
 }
