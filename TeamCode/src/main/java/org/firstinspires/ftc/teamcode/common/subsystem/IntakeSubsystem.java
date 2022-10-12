@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.TrapezoidalMotionProfile;
 
 @Config
 public class IntakeSubsystem extends SubsystemBase {
@@ -25,8 +26,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double D = 0.0;
 
     public static double distance = 0.0;
-    public static double maxV = 0.0;
-    public static double maxA = 0.0;
+    public static double maxV = 60;
+    public static double maxA = 30;
 
     public static int intake_out_pos = 100;
     public static int intake_in_pos = 0;
@@ -40,14 +41,14 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public static final double FOREBAR_LENGTH = 9.842;
 
-    public IntakeSubsystem(MotorEx extension, Servo barLeft, Servo barRight, Servo claw, Servo turret, MotionProfile profile) {
+    public IntakeSubsystem(MotorEx extension, Servo barLeft, Servo barRight, Servo claw, Servo turret) {
         this.extension = extension;
         this.barLeft = barLeft;
         this.barRight = barRight;
         this.claw = claw;
         this.turret = turret;
 
-        this.profile = profile;
+        this.profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
         this.timer = new ElapsedTime();
         this.controller = new PIDController(P, I, D);
     }
@@ -63,7 +64,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setExtension(int pos) {
-        extension.setTargetPosition(pos);
+        this.distance = pos;
     }
 
     public void setForebar(double pos) {

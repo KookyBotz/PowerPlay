@@ -51,8 +51,8 @@ public class Robot {
                 barRight  = hardwareMap.get(Servo.class, "forebarRight"),
                 claw      = hardwareMap.get(Servo.class, "claw"),
                 turret    = hardwareMap.get(Servo.class, "turret");
-        MotionProfile intakeProfile = new TrapezoidalMotionProfile(60, 120, 30);
-        intake = new IntakeSubsystem(extension, barLeft, barRight, claw, turret, intakeProfile);
+        intake = new IntakeSubsystem(extension, barLeft, barRight, claw, turret);
+
 
         DcMotorEx liftM = hardwareMap.get(DcMotorEx.class, "lift");
         lift = new LiftSubsystem(liftM);
