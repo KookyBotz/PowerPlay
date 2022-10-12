@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling;
 
 public class TrapezoidalMotionProfile implements MotionProfile {
-    private final double maxV;
-    private final double maxA;
-    private final double distance;
+    public final double maxV;
+    public final double maxA;
+    public final double distance;
 
     private final double inverseTime;
     private double dRad;

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.common.subsystem;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -17,6 +18,15 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private MotionProfile profile;
     private final ElapsedTime timer;
+    private final PIDController controller;
+
+    public static double P = 0.0;
+    public static double I = 0.0;
+    public static double D = 0.0;
+
+    public static double distance = 0.0;
+    public static double maxV = 0.0;
+    public static double maxA = 0.0;
 
     public static int intake_out_pos = 100;
     public static int intake_in_pos = 0;
@@ -39,12 +49,13 @@ public class IntakeSubsystem extends SubsystemBase {
 
         this.profile = profile;
         this.timer = new ElapsedTime();
+        this.controller = new PIDController(P, I, D);
     }
 
     public void loop() {
-        double target = profile.update(timer.time())[1];
-        extension.setTargetPosition((int) target);
-        // pid control
+        double target = profile.update(timer.time())[0];
+        double power = controller.calculate(extension.getCurrentPosition(), target);
+        extension.set(power);
     }
 
     public void setMotionProfile(MotionProfile profile) {
@@ -91,5 +102,13 @@ public class IntakeSubsystem extends SubsystemBase {
     public void closeForebar() {
         barLeft.setPosition(forebar_retracted);
         barRight.setPosition(forebar_retracted);
+    }
+
+    public void resetTimer() {
+        timer.reset();
+    }
+
+    public void setPID(double P, double I, double D) {
+        controller.setPID(P, I, D);
     }
 }
