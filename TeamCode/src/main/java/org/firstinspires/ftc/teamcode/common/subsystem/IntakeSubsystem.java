@@ -44,7 +44,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public static final double FOREBAR_LENGTH = 9.842;
 
-    // TODO: Pass robot class, and initialize here
     // thanks aabhas <3
     public IntakeSubsystem(HardwareMap hardwareMap) {
         this.extension = new MotorEx(hardwareMap, "extension");
