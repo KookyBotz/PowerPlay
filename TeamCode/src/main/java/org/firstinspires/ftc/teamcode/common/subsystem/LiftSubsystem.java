@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
@@ -35,8 +36,8 @@ public class LiftSubsystem extends SubsystemBase {
 
     // TODO: Pass robot class, and initialize here
     // thanks aabhas <3
-    public LiftSubsystem(Robot robot) {
-        this.lift = robot.hMap.get(DcMotorEx.class, "lift");
+    public LiftSubsystem(HardwareMap hardwareMap) {
+        this.lift = hardwareMap.get(DcMotorEx.class, "lift");
 
         this.controller = new PIDController(p, i, d);
         controller.setPID(p, i, d);
