@@ -32,6 +32,8 @@ public class LiftSubsystem extends SubsystemBase {
     public static int low_pos = 50;
     public static int retracted = 0;
 
+    // TODO: Pass robot class, and initialize here
+    // thanks aabhas <3
     public LiftSubsystem(DcMotorEx lift) {
         this.lift = lift;
 

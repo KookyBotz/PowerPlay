@@ -52,9 +52,9 @@ public class Robot {
                 barRight  = hardwareMap.get(Servo.class, "forebarRight"),
                 claw      = hardwareMap.get(Servo.class, "claw"),
                 turret    = hardwareMap.get(Servo.class, "turret");
-        AnalogInput claw2 = hardwareMap.get(AnalogInput.class, "claw");
-        claw2.getVoltage();
-        claw2.getMaxVoltage();
+//        AnalogInput claw2 = hardwareMap.get(AnalogInput.class, "claw");
+//        claw2.getVoltage();
+//        claw2.getMaxVoltage();
 
         intake = new IntakeSubsystem(extension, barLeft, barRight, claw, turret);
 
