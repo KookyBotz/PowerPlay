@@ -5,6 +5,8 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.AnalogSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -50,6 +52,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         this.profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
         this.timer = new ElapsedTime();
+        timer.reset();
         this.controller = new PIDController(P, I, D);
     }
 
@@ -57,6 +60,13 @@ public class IntakeSubsystem extends SubsystemBase {
         double target = profile.update(timer.time())[0];
         double power = controller.calculate(extension.getCurrentPosition(), target);
         extension.set(power);
+
+        //AnalogInput sensor = new AnalogInput()
+                //
+                // AnalogInput claw = hardwareMap.get(AnalogInput.class, "clawName");
+                //
+                // mult by 360/33.33
+
     }
 
     public void setMotionProfile(MotionProfile profile) {

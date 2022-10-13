@@ -5,6 +5,7 @@ import androidx.annotation.GuardedBy;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -51,6 +52,10 @@ public class Robot {
                 barRight  = hardwareMap.get(Servo.class, "forebarRight"),
                 claw      = hardwareMap.get(Servo.class, "claw"),
                 turret    = hardwareMap.get(Servo.class, "turret");
+        AnalogInput claw2 = hardwareMap.get(AnalogInput.class, "claw");
+        claw2.getVoltage();
+        claw2.getMaxVoltage();
+
         intake = new IntakeSubsystem(extension, barLeft, barRight, claw, turret);
 
 
