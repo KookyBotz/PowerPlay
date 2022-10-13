@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.AnalogSensor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -45,12 +46,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // TODO: Pass robot class, and initialize here
     // thanks aabhas <3
-    public IntakeSubsystem(MotorEx extension, Servo barLeft, Servo barRight, Servo claw, Servo turret) {
-        this.extension = extension;
-        this.barLeft = barLeft;
-        this.barRight = barRight;
-        this.claw = claw;
-        this.turret = turret;
+    public IntakeSubsystem(HardwareMap hardwareMap) {
+        this.extension = new MotorEx(hardwareMap, "extension");
+        this.barLeft = hardwareMap.get(Servo.class, "forebarLeft");
+        this.barRight = hardwareMap.get(Servo.class, "forebarRight");
+        this.claw = hardwareMap.get(Servo.class, "claw");
+        this.turret = hardwareMap.get(Servo.class, "turret");
 
         this.profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
         this.timer = new ElapsedTime();
