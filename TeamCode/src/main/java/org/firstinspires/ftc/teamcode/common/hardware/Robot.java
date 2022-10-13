@@ -37,6 +37,8 @@ public class Robot {
     public IntakeSubsystem intake;
     public LiftSubsystem lift;
 
+    public HardwareMap hMap;
+
     public Robot(HardwareMap hardwareMap) {
         drivetrain = new SwerveDrivetrain(hardwareMap);
 
@@ -60,7 +62,9 @@ public class Robot {
 
 
         DcMotorEx liftM = hardwareMap.get(DcMotorEx.class, "lift");
-        lift = new LiftSubsystem(liftM);
+        lift = new LiftSubsystem(this);
+
+        hMap = hardwareMap;
     }
 
     public void startIMUThread(LinearOpMode opMode) {

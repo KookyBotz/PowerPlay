@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.RisingMotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.TrapezoidalMotionProfile;
@@ -34,8 +35,8 @@ public class LiftSubsystem extends SubsystemBase {
 
     // TODO: Pass robot class, and initialize here
     // thanks aabhas <3
-    public LiftSubsystem(DcMotorEx lift) {
-        this.lift = lift;
+    public LiftSubsystem(Robot robot) {
+        this.lift = robot.hMap.get(DcMotorEx.class, "lift");
 
         this.controller = new PIDController(p, i, d);
         controller.setPID(p, i, d);
