@@ -34,8 +34,6 @@ public class LiftSubsystem extends SubsystemBase {
     public static int low_pos = 50;
     public static int retracted = 0;
 
-    // TODO: Pass robot class, and initialize here
-    // thanks aabhas <3
     public LiftSubsystem(HardwareMap hardwareMap) {
         this.lift = hardwareMap.get(DcMotorEx.class, "lift");
 
