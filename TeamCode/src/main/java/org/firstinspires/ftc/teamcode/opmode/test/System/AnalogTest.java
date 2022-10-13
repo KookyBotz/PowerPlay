@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmode.test.System;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -16,6 +18,8 @@ public class AnalogTest extends CommandOpMode {
     public void initialize() {
         claw = hardwareMap.get(Servo.class, "claw");
         input = hardwareMap.get(AnalogInput.class, "claw");
+
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
 
     @Override
