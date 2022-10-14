@@ -21,7 +21,7 @@ public class LiftSubsystem extends SubsystemBase {
     private final ElapsedTime timer;
     private final PIDController controller;
 
-    public static double P = 0.018;
+    public static double P = 0.02;
     public static double I = 0.0;
     public static double D = 0.0;
 
@@ -33,6 +33,9 @@ public class LiftSubsystem extends SubsystemBase {
     public static int medium_pos = 75;
     public static int low_pos = 50;
     public static int retracted = 0;
+
+    public double power = 0.0;
+    public double[] funcs;
 
     // thanks aabhas <3
     public LiftSubsystem(HardwareMap hardwareMap) {
@@ -49,8 +52,8 @@ public class LiftSubsystem extends SubsystemBase {
     public void loop() {
         profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
         controller.setPID(P, I, D);
-        double target = profile.update(timer.time())[0];
-        double power = controller.calculate(lift.getCurrentPosition(), target);
+        funcs = profile.update(timer.time());
+        power = controller.calculate(lift.getCurrentPosition(), funcs[0]);
         lift.setPower(power);
     }
 

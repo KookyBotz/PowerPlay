@@ -41,13 +41,13 @@ public class OpMode extends CommandOpMode {
         boolean a = gamepad1.a;
         if (a && !fA) {
             schedule(new InstantCommand(() -> robot.lift.resetTimer())
-            .alongWith(new InstantCommand(() -> robot.lift.setDVA(500, 500, 800))));
+            .alongWith(new InstantCommand(() -> robot.lift.setDVA(500, 1000, 1600))));
         }
         boolean fA = a;
 
         boolean b = gamepad1.b;
         if (b && !fB) {
-            schedule(new InstantCommand(() -> robot.lift.setDVA(-500, -500, -800))
+            schedule(new InstantCommand(() -> robot.lift.setDVA(-500, -1000, -1600))
             .alongWith(new InstantCommand(() -> robot.lift.resetTimer())));
         }
         fB = b;
@@ -59,6 +59,7 @@ public class OpMode extends CommandOpMode {
         telemetry.addData("u/s: ", loopTime2 - loopTime);
         telemetry.addData("target:", 135);
         telemetry.addData("curPos:", robot.lift.getPos());
+        telemetry.addData("curPow:", robot.lift.power);
         telemetry.update();
 
         loopTime = System.currentTimeMillis();
