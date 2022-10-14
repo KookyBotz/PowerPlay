@@ -57,9 +57,11 @@ public class OpMode extends CommandOpMode {
         CommandScheduler.getInstance().run();
 
         telemetry.addData("u/s: ", loopTime2 - loopTime);
-        telemetry.addData("target:", 135);
         telemetry.addData("curPos:", robot.lift.getPos());
         telemetry.addData("curPow:", robot.lift.power);
+        telemetry.addData("targetPos", robot.lift.funcs[0]);
+        telemetry.addData("targetVel", robot.lift.funcs[1]);
+        telemetry.addData("targetAcc", robot.lift.funcs[2]);
         telemetry.update();
 
         loopTime = System.currentTimeMillis();
