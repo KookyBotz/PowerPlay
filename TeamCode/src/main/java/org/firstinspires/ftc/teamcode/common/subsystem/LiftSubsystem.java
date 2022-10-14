@@ -16,18 +16,17 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.Trap
 public class LiftSubsystem extends SubsystemBase {
     public final DcMotorEx lift;
 
+    private MotionProfile profile;
+    private final ElapsedTime timer;
     private final PIDController controller;
-    private final MotionProfile profile;
 
-    private ElapsedTime timer;
+    public static double P = 0.0;
+    public static double I = 0.0;
+    public static double D = 0.0;
 
-    public static double p = 0.0;
-    public static double i = 0.0;
-    public static double d = 0.0;
-    public static double f = 0.0;
-
-    public static double maxV = 2;
-    public static double maxA = 1;
+    public static double distance = 0.0;
+    public static double maxV = 16;
+    public static double maxA = 8;
 
     public static int high_pos = 100;
     public static int medium_pos = 75;
@@ -46,6 +45,8 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void loop() {
+        profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
+        controller.setPID(P, I, D);
         // TODO : add motion profiling and pid control
         double[] power = profile.update(timer.time());
         lift.setPower(power[0]);
@@ -59,7 +60,17 @@ public class LiftSubsystem extends SubsystemBase {
         return lift.getCurrentPosition();
     }
 
-    public void resetTime() {
+    public void resetTimer() {
         timer.reset();
+    }
+
+    public void setPID(double P, double I, double D) {
+        controller.setPID(P, I, D);
+    }
+
+    public void setDVA(double d, double v, double a) {
+        this.distance = d;
+        this.maxV = v;
+        this.maxA = a;
     }
 }
