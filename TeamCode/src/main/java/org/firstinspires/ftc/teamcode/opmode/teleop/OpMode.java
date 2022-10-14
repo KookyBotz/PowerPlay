@@ -35,6 +35,7 @@ public class OpMode extends CommandOpMode {
 
         double loopTime2 = System.currentTimeMillis();
 
+        // use fallimg edge dedteier
         if (gamepad1.a) {
             schedule(new InstantCommand(() -> robot.intake.resetTimer())
             .alongWith(new InstantCommand(() -> robot.intake.setDVA(135, 16, 8))));
