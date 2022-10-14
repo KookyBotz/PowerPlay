@@ -47,17 +47,11 @@ public class Robot {
             imu.initialize(parameters);
         }
 
-//        MotorEx extension = new MotorEx(hardwareMap, "extension");
-//        Servo   barLeft   = hardwareMap.get(Servo.class, "forebarLeft"),
-//                barRight  = hardwareMap.get(Servo.class, "forebarRight"),
-//                claw      = hardwareMap.get(Servo.class, "claw"),
-//                turret    = hardwareMap.get(Servo.class, "turret");
 //        AnalogInput claw2 = hardwareMap.get(AnalogInput.class, "claw");
 //        claw2.getVoltage();
 //        claw2.getMaxVoltage();
 
         //intake = new IntakeSubsystem(hardwareMap);
-
 
         //DcMotorEx liftM = hardwareMap.get(DcMotorEx.class, "lift");
         lift = new LiftSubsystem(hardwareMap);
