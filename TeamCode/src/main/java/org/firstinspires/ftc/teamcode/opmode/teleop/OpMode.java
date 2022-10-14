@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeExtendCommand;
@@ -15,8 +16,7 @@ public class OpMode extends CommandOpMode {
     @Override
     public void initialize() {
         robot = new Robot(hardwareMap);
-
-        robot.intake.openClaw();
+        //robot.intake.openClaw();
     }
 
     @Override
@@ -27,6 +27,10 @@ public class OpMode extends CommandOpMode {
 
         double loopTime2 = System.currentTimeMillis();
 
+        if (gamepad1.a) {
+            schedule(new InstantCommand(() -> robot.intake.resetTimer())
+            .alongWith(new InstantCommand(() -> robot.intake.setExtension(135))));
+        }
 
         telemetry.addData("u/s: ", loopTime2 - loopTime);
         telemetry.update();

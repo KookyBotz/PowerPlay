@@ -58,18 +58,18 @@ public class SlideTesting extends CommandOpMode {
         double pos2 = (int) profiles[0];
         double power = controller.calculate(extension.getCurrentPosition(), pos2);
         extension.set(power);
-        if (extension.getCurrentPosition() >= maxD - 100 && curState) {
-            curState = false;
-            maxD = 0;
-            timer.reset();
-        }
-
-        if (!curState && flag) {
-            for (int i = 0; i < 2; i++) {
-                profiles[i] *= -1;
-            }
-            flag = false;
-        }
+//        if (extension.getCurrentPosition() >= maxD - 100 && curState) {
+//            curState = false;
+//            maxD = 0;
+//            timer.reset();
+//        }
+//
+//        if (!curState && flag) {
+//            for (int i = 0; i < 2; i++) {
+//                profiles[i] *= -1;
+//            }
+//            flag = false;
+//        }
         telemetry.addData("power", power);
         telemetry.addData("curPo", extension.getCurrentPosition());
         telemetry.addData("motPo", profiles[0]);

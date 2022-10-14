@@ -11,6 +11,6 @@ public class CycleCommand extends SequentialCommandGroup {
         new ParallelCommandGroup(
             new InstantCommand(() -> robot.intake.setExtension(500)),
             new InstantCommand(() -> robot.intake.resetTimer())
-        )
+        );
     }
 }

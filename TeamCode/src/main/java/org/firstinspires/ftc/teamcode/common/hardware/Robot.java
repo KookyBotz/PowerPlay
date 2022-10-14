@@ -60,7 +60,7 @@ public class Robot {
 
 
         //DcMotorEx liftM = hardwareMap.get(DcMotorEx.class, "lift");
-        lift = new LiftSubsystem(hardwareMap);
+        //lift = new LiftSubsystem(hardwareMap);
     }
 
     public void startIMUThread(LinearOpMode opMode) {

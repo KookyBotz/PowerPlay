@@ -29,8 +29,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double D = 0.0;
 
     public static double distance = 0.0;
-    public static double maxV = 60;
-    public static double maxA = 30;
+    public static double maxV = 16;
+    public static double maxA = 8;
 
     public static int intake_out_pos = 100;
     public static int intake_in_pos = 0;
