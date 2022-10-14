@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeExtendCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 
@@ -35,19 +36,17 @@ public class OpMode extends CommandOpMode {
             timer = new ElapsedTime();
         }
 
-        double loopTime2 = System.currentTimeMillis();
-
         // use fallimg edge dedteier
         boolean a = gamepad1.a;
         if (a && !fA) {
             schedule(new InstantCommand(() -> robot.lift.resetTimer())
-            .alongWith(new InstantCommand(() -> robot.lift.setDVA(500, 1000, 1600))));
+            .alongWith(new InstantCommand(() -> robot.lift.setDVA(500, 1500, 7500))));
         }
         boolean fA = a;
 
         boolean b = gamepad1.b;
         if (b && !fB) {
-            schedule(new InstantCommand(() -> robot.lift.setDVA(-500, -1000, -1600))
+            schedule(new InstantCommand(() -> robot.lift.setDVA(-500, -1500, -7500))
             .alongWith(new InstantCommand(() -> robot.lift.resetTimer())));
         }
         fB = b;
@@ -56,14 +55,18 @@ public class OpMode extends CommandOpMode {
         robot.lift.loop();
         CommandScheduler.getInstance().run();
 
-        telemetry.addData("u/s: ", loopTime2 - loopTime);
-        telemetry.addData("curPos:", robot.lift.getPos());
+         telemetry.addData("curPos:", robot.lift.getPos());
         telemetry.addData("curPow:", robot.lift.power);
         telemetry.addData("targetPos", robot.lift.funcs[0]);
         telemetry.addData("targetVel", robot.lift.funcs[1]);
         telemetry.addData("targetAcc", robot.lift.funcs[2]);
+        telemetry.addData("draw", robot.lift.lift.getCurrent(CurrentUnit.MILLIAMPS));
+
+        double loop = System.currentTimeMillis();
+        telemetry.addData("hz ", 1000 / (loop - loopTime));
+
         telemetry.update();
 
-        loopTime = System.currentTimeMillis();
+        loopTime = loop;
     }
 }
