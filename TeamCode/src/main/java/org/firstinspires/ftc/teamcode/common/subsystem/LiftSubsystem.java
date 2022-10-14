@@ -37,8 +37,8 @@ public class LiftSubsystem extends SubsystemBase {
     public LiftSubsystem(HardwareMap hardwareMap) {
         this.lift = hardwareMap.get(DcMotorEx.class, "lift");
 
-        this.controller = new PIDController(p, i, d);
-        controller.setPID(p, i, d);
+        this.controller = new PIDController(P, I, D);
+        controller.setPID(P, I, D);
         this.profile = new TrapezoidalMotionProfile(maxV, maxA, 0);
 
         this.timer = new ElapsedTime();
@@ -47,9 +47,9 @@ public class LiftSubsystem extends SubsystemBase {
     public void loop() {
         profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
         controller.setPID(P, I, D);
-        // TODO : add motion profiling and pid control
-        double[] power = profile.update(timer.time());
-        lift.setPower(power[0]);
+        double target = profile.update(timer.time())[0];
+        double power = controller.calculate(lift.getCurrentPosition(), target);
+        lift.setPower(power);
     }
 
     public void setPos(int pos) {
