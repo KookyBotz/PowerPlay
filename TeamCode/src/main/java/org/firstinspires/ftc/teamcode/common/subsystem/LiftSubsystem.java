@@ -21,13 +21,13 @@ public class LiftSubsystem extends SubsystemBase {
     private final ElapsedTime timer;
     private final PIDController controller;
 
-    public static double P = 0.0;
+    public static double P = 0.018;
     public static double I = 0.0;
     public static double D = 0.0;
 
     public static double distance = 0.0;
-    public static double maxV = 16;
-    public static double maxA = 8;
+    public static double maxV = 20;
+    public static double maxA = 20;
 
     public static int high_pos = 100;
     public static int medium_pos = 75;

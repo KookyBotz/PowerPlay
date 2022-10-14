@@ -41,13 +41,13 @@ public class OpMode extends CommandOpMode {
         boolean a = gamepad1.a;
         if (a && !fA) {
             schedule(new InstantCommand(() -> robot.lift.resetTimer())
-            .alongWith(new InstantCommand(() -> robot.lift.setDVA(135, 16, 8))));
+            .alongWith(new InstantCommand(() -> robot.lift.setDVA(500, 500, 800))));
         }
         boolean fA = a;
 
         boolean b = gamepad1.b;
         if (b && !fB) {
-            schedule(new InstantCommand(() -> robot.lift.setDVA(-135, -16, -8))
+            schedule(new InstantCommand(() -> robot.lift.setDVA(-500, -500, -800))
             .alongWith(new InstantCommand(() -> robot.lift.resetTimer())));
         }
         fB = b;
