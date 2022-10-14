@@ -14,6 +14,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.TrapezoidalMotionProfile;
 
+import javax.xml.transform.TransformerException;
+
 @Config
 public class IntakeSubsystem extends SubsystemBase {
     private final MotorEx extension;
@@ -47,6 +49,7 @@ public class IntakeSubsystem extends SubsystemBase {
     // thanks aabhas <3
     public IntakeSubsystem(HardwareMap hardwareMap) {
         this.extension = new MotorEx(hardwareMap, "extension");
+        extension.resetEncoder();
         this.barLeft = hardwareMap.get(Servo.class, "forebarLeft");
         this.barRight = hardwareMap.get(Servo.class, "forebarRight");
         this.claw = hardwareMap.get(Servo.class, "claw");
@@ -59,6 +62,8 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void loop() {
+        profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
+        controller.setPID(P, I, D);
         double target = profile.update(timer.time())[0];
         double power = controller.calculate(extension.getCurrentPosition(), target);
         extension.set(power);
@@ -123,5 +128,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void setPID(double P, double I, double D) {
         controller.setPID(P, I, D);
+    }
+
+    public void setDVA(double d, double v, double a) {
+        this.distance = d;
+        this.maxV = v;
+        this.maxA = a;
     }
 }

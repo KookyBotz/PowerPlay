@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 public class GrabConeCommand extends SequentialCommandGroup {
     public GrabConeCommand(Robot robot) {
         super(
-                new IntakeExtendCommand(robot)
-                .alongWith(new ForebarCommand(robot.intake, robot.intake, ))
+                //
+                //.alongWith(new ForebarCommand(robot.intake, robot.intake, ))
         );
     }
 }
