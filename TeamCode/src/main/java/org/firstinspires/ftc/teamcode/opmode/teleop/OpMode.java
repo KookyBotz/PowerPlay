@@ -52,7 +52,8 @@ public class OpMode extends CommandOpMode {
         }
         fB = b;
 
-        robot.intake.loop();
+        //robot.intake.loop();
+        robot.lift.loop();
         CommandScheduler.getInstance().run();
 
         telemetry.addData("u/s: ", loopTime2 - loopTime);
