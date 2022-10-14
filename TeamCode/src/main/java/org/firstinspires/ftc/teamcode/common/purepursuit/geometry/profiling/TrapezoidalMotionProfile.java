@@ -43,6 +43,9 @@ public class TrapezoidalMotionProfile implements MotionProfile {
         aCur = getAccel(time);
         vCur = getVelo(time);
         pCur = getPos(time);
+        if (distance <= 0) {
+            pCur = Math.abs(distance) + pCur;
+        }
         return new double[]{pCur, vCur, aCur};
     }
 
