@@ -19,6 +19,8 @@ public class OpMode extends CommandOpMode {
 
     private ElapsedTime timer;
     private double loopTime = 0;
+    private boolean fA = false;
+    private boolean fB = false;
 
     @Override
     public void initialize() {
@@ -36,15 +38,19 @@ public class OpMode extends CommandOpMode {
         double loopTime2 = System.currentTimeMillis();
 
         // use fallimg edge dedteier
-        if (gamepad1.a) {
+        boolean a = gamepad1.a;
+        if (a && !fA) {
             schedule(new InstantCommand(() -> robot.intake.resetTimer())
             .alongWith(new InstantCommand(() -> robot.intake.setDVA(135, 16, 8))));
         }
+        boolean fA = a;
 
-        if (gamepad1.b) {
+        boolean b = gamepad1.b;
+        if (b && !fB) {
             schedule(new InstantCommand(() -> robot.intake.setDVA(-135, -16, -8))
             .alongWith(new InstantCommand(() -> robot.intake.resetTimer())));
         }
+        fB = b;
 
         robot.intake.loop();
         CommandScheduler.getInstance().run();
