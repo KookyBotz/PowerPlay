@@ -55,7 +55,7 @@ public class OpMode extends CommandOpMode {
         robot.lift.loop();
         CommandScheduler.getInstance().run();
 
-         telemetry.addData("curPos:", robot.lift.getPos());
+        telemetry.addData("curPos:", robot.lift.getPos());
         telemetry.addData("curPow:", robot.lift.power);
         telemetry.addData("targetPos", robot.lift.funcs[0]);
         telemetry.addData("targetVel", robot.lift.funcs[1]);
