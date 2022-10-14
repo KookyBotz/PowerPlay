@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -36,6 +37,7 @@ public class LiftSubsystem extends SubsystemBase {
     // thanks aabhas <3
     public LiftSubsystem(HardwareMap hardwareMap) {
         this.lift = hardwareMap.get(DcMotorEx.class, "lift");
+        lift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.controller = new PIDController(P, I, D);
         controller.setPID(P, I, D);
