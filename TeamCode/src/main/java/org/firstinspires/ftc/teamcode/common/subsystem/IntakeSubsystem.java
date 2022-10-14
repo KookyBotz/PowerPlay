@@ -82,6 +82,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void setExtension(int pos) {
         this.distance = pos;
+        resetTimer();
     }
 
     public void setForebar(double pos) {
