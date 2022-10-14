@@ -37,7 +37,7 @@ public class OpMode extends CommandOpMode {
 
         if (gamepad1.a) {
             schedule(new InstantCommand(() -> robot.intake.resetTimer())
-            .alongWith(new InstantCommand(() -> robot.intake.setExtension(135))));
+            .alongWith(new InstantCommand(() -> robot.intake.setDVA(135, 16, 8))));
         }
 
         if (gamepad1.b) {
