@@ -14,12 +14,14 @@ public class CycleCommand extends ParallelCommandGroup {
             new InstantCommand(() -> robot.intake.setPos(400)),
             new InstantCommand(() -> robot.intake.openClaw()),
             new InstantCommand(() -> robot.intake.extendForebar()),
+            new InstantCommand(() -> robot.intake.intakeTurret()),
             new SequentialCommandGroup(
                 new WaitUntilCommand(()->robot.intake.getPos() > 390),
                 new WaitCommand(1000),
                 new InstantCommand(() -> robot.intake.closeClaw()),
                 new WaitCommand(250),
                 new InstantCommand(() -> robot.intake.closeForebar()),
+                new InstantCommand(() -> robot.intake.depositTurret()),
                 new InstantCommand(() -> robot.intake.setPos(-400))
             ),
             new SequentialCommandGroup(

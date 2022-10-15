@@ -143,6 +143,14 @@ public class IntakeSubsystem extends SubsystemBase {
         barRight.setPosition(1 - fourbar_retracted);
     }
 
+    public void intakeTurret() {
+        turret.setPosition(turret_intake);
+    }
+
+    public void depositTurret() {
+        turret.setPosition(turret_deposit);
+    }
+
     public void resetTimer() {
         timer.reset();
     }
