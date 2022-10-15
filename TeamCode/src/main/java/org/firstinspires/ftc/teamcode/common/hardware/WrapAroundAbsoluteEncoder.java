@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 
 public class WrapAroundAbsoluteEncoder extends AbsoluteAnalogEncoder {
     private boolean leftHalf = true;
+    private double tolerance = Math.PI / 20;
 
     public WrapAroundAbsoluteEncoder(AnalogInput enc) {
         super(enc);
@@ -21,10 +22,15 @@ public class WrapAroundAbsoluteEncoder extends AbsoluteAnalogEncoder {
         // 0-3.3v to pi
         // if right half then
         // 0-3.3v to pi - 2pi
-        double voltage =
-        if (leftHalf) {
-
+//        double min = (leftHalf) ? 0 : Math.PI;
+        double currentPosition = map(super.getEncoder().getVoltage(), 0, 3.3, 0, Math.PI);
+        if (pastPosition >= Math.PI - tolerance && currentPosition <= 0 + tolerance) ||
+           (pastPosition <= 0 + tolerance && currentPosition >= Math.PI - tolerance){
+            leftHalf = !leftHalf;
         }
+
+        pastPosition = currentPosition;
+        return (leftHalf) ? currentPosition : currentPosition + Math.PI;
     }
 
     private double map(double val, double in_min, double in_max, double out_min, double out_max) {

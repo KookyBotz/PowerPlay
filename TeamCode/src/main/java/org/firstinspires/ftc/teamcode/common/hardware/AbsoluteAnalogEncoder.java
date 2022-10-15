@@ -41,4 +41,7 @@ public class AbsoluteAnalogEncoder {
         return pastPosition;
     }
 
+    public AnalogInput getEncoder() {
+        return encoder;
+    }
 }
