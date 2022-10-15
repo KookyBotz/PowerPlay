@@ -5,13 +5,13 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class Kinematics {
 
-    public static double[] forebar(double x, double y, double l) {
+    public static double[] fourbar(double x, double y, double l) {
 
         // TODO: Add checks for edge cases
         double targetInches = Math.sqrt(Math.pow(l, 2) - Math.pow(y, 2));
         double targetRadians = Math.asin(y / l);
 
-        if (y < 0){
+        if (y > 0) {
             targetRadians = map(targetRadians, 0, Math.PI / 2, 0.1, 0.61);
         }
         // check quadrant
