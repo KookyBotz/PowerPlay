@@ -24,8 +24,8 @@ public class WrapAroundAbsoluteEncoder extends AbsoluteAnalogEncoder {
         // 0-3.3v to pi - 2pi
 //        double min = (leftHalf) ? 0 : Math.PI;
         double currentPosition = map(super.getEncoder().getVoltage(), 0, 3.3, 0, Math.PI);
-        if (pastPosition >= Math.PI - tolerance && currentPosition <= 0 + tolerance) ||
-           (pastPosition <= 0 + tolerance && currentPosition >= Math.PI - tolerance){
+        if ((pastPosition >= Math.PI - tolerance && currentPosition <= 0 + tolerance) ||
+           (pastPosition <= 0 + tolerance && currentPosition >= Math.PI - tolerance)){
             leftHalf = !leftHalf;
         }
 
