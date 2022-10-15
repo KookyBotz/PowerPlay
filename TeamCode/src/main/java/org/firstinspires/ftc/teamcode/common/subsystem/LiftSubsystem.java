@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -43,6 +44,7 @@ public class LiftSubsystem extends SubsystemBase {
     public LiftSubsystem(HardwareMap hardwareMap) {
         this.lift = new MotorEx(hardwareMap, "lift");
         lift.resetEncoder();
+        lift.motorEx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.profile = new TrapezoidalMotionProfile(maxV, maxA, 0);

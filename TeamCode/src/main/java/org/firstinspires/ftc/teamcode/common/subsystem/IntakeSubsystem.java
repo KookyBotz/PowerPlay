@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.outoftheboxrobotics.photoncore.PhotonLynxModule;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.AnalogSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -57,6 +58,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem(HardwareMap hardwareMap) {
         this.extension = new MotorEx(hardwareMap, "extension");
         extension.resetEncoder();
+        extension.motorEx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.barLeft = hardwareMap.get(Servo.class, "fourbarLeft");
         this.barRight = hardwareMap.get(Servo.class, "fourbarRight");
         this.claw = hardwareMap.get(Servo.class, "claw");
