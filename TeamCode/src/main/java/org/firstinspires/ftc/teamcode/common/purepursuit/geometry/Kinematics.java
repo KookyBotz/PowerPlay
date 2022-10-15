@@ -11,6 +11,16 @@ public class Kinematics {
         double targetInches = Math.sqrt(Math.pow(l, 2) - Math.pow(y, 2));
         double targetRadians = Math.asin(y / l);
 
+        if (y < 0){
+            targetRadians = map(targetRadians, 0, Math.PI / 2, 0.1, 0.61);
+        }
+        // check quadrant
+        // based on that then map it between different number of values
+
         return new double[]{x - targetInches, targetRadians};
+    }
+
+    public static double map(double val, double in_min, double in_max, double out_min, double out_max) {
+        return (val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 }
