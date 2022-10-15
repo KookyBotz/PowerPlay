@@ -62,13 +62,13 @@ public class OpMode extends CommandOpMode {
         boolean x = gamepad1.x;
         if (x && !fX) {
             schedule(new InstantCommand(() -> robot.intake.resetTimer())
-            .alongWith(new InstantCommand(() -> robot.intake.setDVA(600, 150, 750))));
+            .alongWith(new InstantCommand(() -> robot.intake.setDVA(200, 15, 75))));
         }
         boolean fX = x;
 
         boolean y = gamepad1.y;
         if (y && !fY) {
-            schedule(new InstantCommand(() -> robot.intake.setDVA(-600, -150, -750))
+            schedule(new InstantCommand(() -> robot.intake.setDVA(-200, -15, -75))
             .alongWith(new InstantCommand(() -> robot.intake.resetTimer())));
         }
         fY = y;
