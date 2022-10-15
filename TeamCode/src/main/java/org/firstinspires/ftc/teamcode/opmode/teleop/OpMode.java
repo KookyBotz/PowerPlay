@@ -24,6 +24,8 @@ public class OpMode extends CommandOpMode {
     private double loopTime = 0;
     private boolean fA = false;
     private boolean fB = false;
+    private boolean fX = false;
+    private boolean fY = false;
 
     @Override
     public void initialize() {
@@ -53,6 +55,20 @@ public class OpMode extends CommandOpMode {
             .alongWith(new InstantCommand(() -> robot.lift.resetTimer())));
         }
         fB = b;
+
+        boolean x = gamepad1.x;
+        if (x && !fX) {
+            schedule(new InstantCommand(() -> robot.lift.resetTimer())
+                    .alongWith(new InstantCommand(() -> robot.lift.setDVA(500, 1500, 7500))));
+        }
+        boolean fX = x;
+
+        boolean y = gamepad1.y;
+        if (y && !fY) {
+            schedule(new InstantCommand(() -> robot.lift.setDVA(-500, -1500, -7500))
+                    .alongWith(new InstantCommand(() -> robot.lift.resetTimer())));
+        }
+        fY = y;
 
         //robot.intake.loop();
         robot.lift.loop();

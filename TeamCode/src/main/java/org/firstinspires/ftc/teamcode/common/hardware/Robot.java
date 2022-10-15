@@ -53,7 +53,7 @@ public class Robot {
 //        claw2.getVoltage();
 //        claw2.getMaxVoltage();
 
-        //intake = new IntakeSubsystem(hardwareMap);
+        intake = new IntakeSubsystem(hardwareMap);
 
         //DcMotorEx liftM = hardwareMap.get(DcMotorEx.class, "lift");
         lift = new LiftSubsystem(hardwareMap);
