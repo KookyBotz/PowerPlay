@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmode.test.System;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.opmode.teleop.OpMode;
 
+@TeleOp(name = "WiringTest")
 public class WiringTest extends OpMode {
 
     Servo a, b, c, d;

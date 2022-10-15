@@ -68,33 +68,33 @@ public class BlueLeftAuto extends LinearOpMode {
                     // cycle
                     new LiftExtendCommand(robot)
                     .alongWith(new IntakeExtendCommand(robot))
-                    .alongWith(new FourbarCommand(robot.intake, robot.intake.forebar_retracted))
+                    .alongWith(new FourbarCommand(robot.intake, robot.intake.fourbar_retracted))
                     .alongWith(new InstantCommand(() -> robot.intake.openClaw())),
                     new WaitUntilCommand(() -> robot.lift.getPos() == robot.lift.high_pos)
                     .andThen(new WaitCommand(1000))
                     .alongWith(new IntakeRetractCommand(robot)),
-                    new FourbarCommand(robot.intake, robot.intake.forebar_extended)
+                    new FourbarCommand(robot.intake, robot.intake.fourbar_extended)
                     .andThen(new WaitCommand(300))
                     .andThen(new InstantCommand(() -> robot.intake.closeClaw())),
                     new WaitCommand(1000)
                     .andThen(new IntakeRetractCommand(robot))
-                    .alongWith(new FourbarCommand(robot.intake, robot.intake.forebar_retracted))
+                    .alongWith(new FourbarCommand(robot.intake, robot.intake.fourbar_retracted))
                     .andThen(new WaitCommand(1000))
                     .andThen(new InstantCommand(() -> robot.intake.openClaw())),
                     // cycle
                     new LiftExtendCommand(robot)
                     .alongWith(new IntakeExtendCommand(robot))
-                    .alongWith(new FourbarCommand(robot.intake, robot.intake.forebar_retracted))
+                    .alongWith(new FourbarCommand(robot.intake, robot.intake.fourbar_retracted))
                     .alongWith(new InstantCommand(() -> robot.intake.openClaw())),
                     new WaitUntilCommand(() -> robot.lift.getPos() == robot.lift.high_pos)
                     .andThen(new WaitCommand(1000))
                     .alongWith(new IntakeRetractCommand(robot)),
-                    new FourbarCommand(robot.intake, robot.intake.forebar_extended)
+                    new FourbarCommand(robot.intake, robot.intake.fourbar_extended)
                     .andThen(new WaitCommand(300))
                     .andThen(new InstantCommand(() -> robot.intake.closeClaw())),
                     new WaitCommand(1000)
                     .andThen(new IntakeRetractCommand(robot))
-                    .alongWith(new FourbarCommand(robot.intake, robot.intake.forebar_retracted))
+                    .alongWith(new FourbarCommand(robot.intake, robot.intake.fourbar_retracted))
                     .andThen(new WaitCommand(1000))
                     .andThen(new InstantCommand(() -> robot.intake.openClaw()))
 
