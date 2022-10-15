@@ -19,7 +19,10 @@ public class LiftSubsystem extends SubsystemBase {
 
     private MotionProfile profile;
     private final ElapsedTime timer;
+    private final ElapsedTime voltageTimer;
     private final PIDController controller;
+
+    private double voltage;
 
     private double P = 0.02;
     private double I = 0.0;
@@ -42,11 +45,15 @@ public class LiftSubsystem extends SubsystemBase {
         this.lift = hardwareMap.get(DcMotorEx.class, "lift");
         lift.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        this.profile = new TrapezoidalMotionProfile(maxV, maxA, 0);
+        this.timer = new ElapsedTime();
+        timer.reset();
+        this.voltageTimer = new ElapsedTime();
+        voltageTimer.reset();
         this.controller = new PIDController(P, I, D);
         controller.setPID(P, I, D);
-        this.profile = new TrapezoidalMotionProfile(maxV, maxA, 0);
 
-        this.timer = new ElapsedTime();
+        // GO AWAY
     }
 
     public void loop() {
