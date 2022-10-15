@@ -81,8 +81,6 @@ public class IntakeSubsystem extends SubsystemBase {
             voltageTimer.reset();
         }
 
-        profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
-        controller.setPID(P, I, D);
         double target = profile.update(timer.time())[0];
         power = controller.calculate(extension.encoder.getPosition(), target) / voltage * 12;
         extension.set(power);
@@ -92,7 +90,6 @@ public class IntakeSubsystem extends SubsystemBase {
                 // AnalogInput claw = hardwareMap.get(AnalogInput.class, "clawName");
                 //
                 // mult by 360/33.33
-
     }
 
     public void setMotionProfile(MotionProfile profile) {
@@ -163,5 +160,6 @@ public class IntakeSubsystem extends SubsystemBase {
         this.distance = d;
         this.maxV = v;
         this.maxA = a;
+        this.profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
     }
 }

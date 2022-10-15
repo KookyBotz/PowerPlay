@@ -63,12 +63,9 @@ public class LiftSubsystem extends SubsystemBase {
             voltageTimer.reset();
         }
 
-        profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
-        controller.setPID(P, I, D);
         double target = profile.update(timer.time())[0];
         power = controller.calculate(lift.encoder.getPosition(), target) / voltage * 12;
         lift.set(power);
-
     }
 
     public void setPos(int pos) {
@@ -92,5 +89,6 @@ public class LiftSubsystem extends SubsystemBase {
         this.distance = d;
         this.maxV = v;
         this.maxA = a;
+        this.profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
     }
 }
