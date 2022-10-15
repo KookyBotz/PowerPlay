@@ -12,10 +12,10 @@ public class WiringTest extends OpMode {
 
     @Override
     public void initialize() {
-        a = hardwareMap.get(Servo.class, "port0");
-        b = hardwareMap.get(Servo.class, "port1");
-        c = hardwareMap.get(Servo.class, "port2");
-        d = hardwareMap.get(Servo.class, "port3");
+        a = hardwareMap.get(Servo.class, "claw");
+        b = hardwareMap.get(Servo.class, "turret");
+        c = hardwareMap.get(Servo.class, "fourbarLeft");
+        d = hardwareMap.get(Servo.class, "fourbarRight");
     }
 
     @Override
@@ -28,10 +28,12 @@ public class WiringTest extends OpMode {
             b.setPosition(1);
         }
 
+        // left
         if (gamepad1.x) {
-            c.setPosition(1);
+            c.setPosition(0);
         }
 
+        // right
         if (gamepad1.y) {
             d.setPosition(1);
         }
