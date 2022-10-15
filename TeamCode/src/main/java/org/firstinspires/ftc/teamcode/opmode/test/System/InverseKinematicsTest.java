@@ -24,7 +24,7 @@ public class InverseKinematicsTest extends OpMode {
 
     @Override
     public void run() {
-        double[] kinVals = Kinematics.fourbar(4, 4, robot.intake.FOURBAR_LENGTH);
+        double[] kinVals = Kinematics.fourbar(x, y, l);
         telemetry.addData("CurPos", kinVals[0]);
         telemetry.addData("CurAng", kinVals[1]);
         telemetry.update();

@@ -49,6 +49,11 @@ public class TrapezoidalMotionProfile implements MotionProfile {
         return new double[]{pCur, vCur, aCur};
     }
 
+    public double[] update(double time, double start) {
+        double[] updateFuncs = update(time);
+        updateFuncs[0] += start;
+        return updateFuncs;
+    }
     private double getPos(double time) {
         if (time <= tRad) {
             return (maxA * Math.pow(time, 2)) / 2;
