@@ -41,14 +41,16 @@ public class IntakeSubsystem extends SubsystemBase {
     private double maxV = 16;
     private double maxA = 8;
 
-    public static int intake_out_pos = 100;
-    public static int intake_in_pos = 0;
+    public static int intake_out_pos = 500;
 
-    public static double claw_open_pos = 10;
-    public static double claw_closed_pos = 5;
+    public static double claw_pos_open = 0.2;
+    public static double claw_pos_closed = 0.36;
 
-    public static double fourbar_extended = 0.4;
-    public static double fourbar_retracted = 0.1;
+    public static double fourbar_extended = 0.075;
+    public static double fourbar_retracted = 0.75;
+
+    private double turret_deposit = 0;
+    private double turret_intake = 0.62;
 
     public static final double FOURBAR_LENGTH = 9.842;
 
@@ -119,26 +121,26 @@ public class IntakeSubsystem extends SubsystemBase {
         extension.setTargetPosition(intake_out_pos);
     }
 
-    public void extensionIn() {
-        extension.setTargetPosition(intake_in_pos);
-    }
+    //public void extensionIn() {
+//        extension.setTargetPosition(intake_in_pos);
+//    }
 
     public void closeClaw() {
-        claw.setPosition(claw_closed_pos);
+        claw.setPosition(claw_pos_closed);
     }
 
     public void openClaw() {
-        claw.setPosition(claw_open_pos);
+        claw.setPosition(claw_pos_open);
     }
 
     public void extendForebar() {
         barLeft.setPosition(fourbar_extended);
-        barRight.setPosition(fourbar_extended);
+        barRight.setPosition(1 - fourbar_extended);
     }
 
     public void closeForebar() {
         barLeft.setPosition(fourbar_retracted);
-        barRight.setPosition(fourbar_retracted);
+        barRight.setPosition(1 - fourbar_retracted);
     }
 
     public void resetTimer() {
