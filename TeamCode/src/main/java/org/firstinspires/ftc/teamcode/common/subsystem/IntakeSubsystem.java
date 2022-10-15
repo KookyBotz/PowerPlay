@@ -99,7 +99,7 @@ public class IntakeSubsystem extends SubsystemBase {
         this.distance = pos;
     }
 
-    public void setForebar(double pos) {
+    public void setFourbar(double pos) {
         // TODO set forebar
     }
 
