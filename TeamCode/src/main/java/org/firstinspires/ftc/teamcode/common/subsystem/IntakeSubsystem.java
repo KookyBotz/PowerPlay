@@ -102,7 +102,8 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setFourbar(double pos) {
-        // TODO set forebar
+        barLeft.setPosition(pos);
+        barRight.setPosition(1 - pos);
     }
 
     public void setClaw(double position) {
