@@ -51,6 +51,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public static final double FOURBAR_LENGTH = 9.842;
 
+    public double power = 0.0;
+
     // thanks aabhas <3
     public IntakeSubsystem(HardwareMap hardwareMap) {
         this.extension = new MotorEx(hardwareMap, "extension");
@@ -79,7 +81,7 @@ public class IntakeSubsystem extends SubsystemBase {
         profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
         controller.setPID(P, I, D);
         double target = profile.update(timer.time())[0];
-        double power = controller.calculate(extension.getCurrentPosition(), target) / voltage * 12;
+        power = controller.calculate(extension.getCurrentPosition(), target) / voltage * 12;
         extension.set(power);
 
         //AnalogInput sensor = new AnalogInput()
@@ -106,7 +108,7 @@ public class IntakeSubsystem extends SubsystemBase {
         claw.setPosition(position);
     }
 
-    public int getExtension() {
+    public int getPos() {
         return extension.getCurrentPosition();
     }
 

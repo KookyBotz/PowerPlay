@@ -31,7 +31,7 @@ public class OpMode extends CommandOpMode {
     public void initialize() {
         robot = new Robot(hardwareMap);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.enable();
 
 
@@ -62,26 +62,25 @@ public class OpMode extends CommandOpMode {
         boolean x = gamepad1.x;
         if (x && !fX) {
             schedule(new InstantCommand(() -> robot.intake.resetTimer())
-                    .alongWith(new InstantCommand(() -> robot.intake.setDVA(600, 150, 750))));
+            .alongWith(new InstantCommand(() -> robot.intake.setDVA(600, 150, 750))));
         }
         boolean fX = x;
 
         boolean y = gamepad1.y;
         if (y && !fY) {
             schedule(new InstantCommand(() -> robot.intake.setDVA(-600, -150, -750))
-                    .alongWith(new InstantCommand(() -> robot.intake.resetTimer())));
+            .alongWith(new InstantCommand(() -> robot.intake.resetTimer())));
         }
         fY = y;
 
-        //robot.intake.loop();
+        robot.intake.loop();
         robot.lift.loop();
         CommandScheduler.getInstance().run();
 
         telemetry.addData("curPos:", robot.lift.getPos());
         telemetry.addData("curPow:", robot.lift.power);
-//        telemetry.addData("targetPos", robot.lift.funcs[0]);
-//        telemetry.addData("targetVel", robot.lift.funcs[1]);
-//        telemetry.addData("targetAcc", robot.lift.funcs[2]);
+        telemetry.addData("curPos:", robot.intake.getPos());
+        telemetry.addData("curPow:", robot.intake.power);
 
         double loop = System.currentTimeMillis();
         telemetry.addData("hz ", 1000 / (loop - loopTime));
@@ -89,5 +88,7 @@ public class OpMode extends CommandOpMode {
         telemetry.update();
 
         loopTime = loop;
+        PhotonCore.CONTROL_HUB.clearBulkCache();
+        PhotonCore.EXPANSION_HUB.clearBulkCache();
     }
 }
