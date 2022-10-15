@@ -32,7 +32,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private double voltage;
 
-    private double P = 0.0;
+    private double P = 0.015;
     private double I = 0.0;
     private double D = 0.0;
 
