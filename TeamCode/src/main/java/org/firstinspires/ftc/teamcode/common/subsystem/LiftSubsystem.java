@@ -79,6 +79,7 @@ public class LiftSubsystem extends SubsystemBase {
         return lift.encoder.getPosition();
     }
 
+    // TODO reset timer internally in setpos
     public void resetTimer() {
         timer.reset();
     }

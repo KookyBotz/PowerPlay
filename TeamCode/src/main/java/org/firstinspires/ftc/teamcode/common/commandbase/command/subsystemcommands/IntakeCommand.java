@@ -15,6 +15,6 @@ public class IntakeCommand extends CommandBase {
 
     @Override
     public void execute() {
-        intake.setExtension(pos);
+        intake.setPos(pos);
     }
 }

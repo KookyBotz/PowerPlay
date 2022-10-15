@@ -60,13 +60,13 @@ public class OpMode extends CommandOpMode {
         boolean x = gamepad1.x;
         if (x && !fX) {
             schedule(new InstantCommand(() -> robot.intake.resetTimer())
-            .alongWith(new InstantCommand(() -> robot.intake.setDVA(200, 15, 75))));
+            .alongWith(new InstantCommand(() -> robot.intake.setDVA(400, 1500, 7500))));
         }
         boolean fX = x;
 
         boolean y = gamepad1.y;
         if (y && !fY) {
-            schedule(new InstantCommand(() -> robot.intake.setDVA(-200, -15, -75))
+            schedule(new InstantCommand(() -> robot.intake.setDVA(-400, -1500, -7500))
             .alongWith(new InstantCommand(() -> robot.intake.resetTimer())));
         }
         fY = y;
@@ -86,7 +86,6 @@ public class OpMode extends CommandOpMode {
         telemetry.update();
 
         loopTime = loop;
-        PhotonCore.CONTROL_HUB.clearBulkCache();
         PhotonCore.EXPANSION_HUB.clearBulkCache();
     }
 }

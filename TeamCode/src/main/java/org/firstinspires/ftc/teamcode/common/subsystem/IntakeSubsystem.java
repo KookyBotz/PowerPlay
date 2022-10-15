@@ -58,7 +58,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem(HardwareMap hardwareMap) {
         this.extension = new MotorEx(hardwareMap, "extension");
         extension.resetEncoder();
-        extension.motorEx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.barLeft = hardwareMap.get(Servo.class, "fourbarLeft");
         this.barRight = hardwareMap.get(Servo.class, "fourbarRight");
         this.claw = hardwareMap.get(Servo.class, "claw");
@@ -98,7 +97,7 @@ public class IntakeSubsystem extends SubsystemBase {
         this.profile = profile;
     }
 
-    public void setExtension(int pos) {
+    public void setPos(int pos) {
         this.distance = pos;
     }
 
@@ -140,6 +139,7 @@ public class IntakeSubsystem extends SubsystemBase {
         barRight.setPosition(fourbar_retracted);
     }
 
+    // TODO reset timer internally in setpos
     public void resetTimer() {
         timer.reset();
     }

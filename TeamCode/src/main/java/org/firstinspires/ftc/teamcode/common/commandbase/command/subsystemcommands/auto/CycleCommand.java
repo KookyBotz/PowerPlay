@@ -9,8 +9,10 @@ import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 public class CycleCommand extends SequentialCommandGroup {
     public CycleCommand(Robot robot) {
         new ParallelCommandGroup(
-            new InstantCommand(() -> robot.intake.setExtension(500)),
-            new InstantCommand(() -> robot.intake.resetTimer())
+            new InstantCommand(() -> robot.intake.setPos(400)),
+            new InstantCommand(() -> robot.intake.resetTimer()),
+            new InstantCommand(() -> robot.lift.setPos(500)),
+            new InstantCommand(() -> robot.lift.resetTimer())
         );
     }
 }
