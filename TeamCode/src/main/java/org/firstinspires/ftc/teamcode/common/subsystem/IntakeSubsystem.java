@@ -83,7 +83,7 @@ public class IntakeSubsystem extends SubsystemBase {
         profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
         controller.setPID(P, I, D);
         double target = profile.update(timer.time())[0];
-        power = controller.calculate(extension.getCurrentPosition(), target) / voltage * 12;
+        power = controller.calculate(extension.encoder.getPosition(), target) / voltage * 12;
         extension.set(power);
 
         //AnalogInput sensor = new AnalogInput()
@@ -111,7 +111,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public int getPos() {
-        return extension.getCurrentPosition();
+        return extension.encoder.getPosition();
     }
 
     public void extensionOut() {

@@ -44,7 +44,6 @@ public class LiftSubsystem extends SubsystemBase {
     public LiftSubsystem(HardwareMap hardwareMap) {
         this.lift = new MotorEx(hardwareMap, "lift");
         lift.resetEncoder();
-        lift.motorEx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.profile = new TrapezoidalMotionProfile(maxV, maxA, 0);
@@ -67,7 +66,7 @@ public class LiftSubsystem extends SubsystemBase {
         profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
         controller.setPID(P, I, D);
         double target = profile.update(timer.time())[0];
-        power = controller.calculate(lift.getCurrentPosition(), target) / voltage * 12;
+        power = controller.calculate(lift.encoder.getPosition(), target) / voltage * 12;
         lift.set(power);
 
     }
@@ -77,7 +76,7 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public int getPos() {
-        return lift.getCurrentPosition();
+        return lift.encoder.getPosition();
     }
 
     public void resetTimer() {

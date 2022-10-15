@@ -33,8 +33,6 @@ public class OpMode extends CommandOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.enable();
-
-
     }
 
     @Override
