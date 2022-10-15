@@ -12,7 +12,6 @@ public class CycleCommand extends SequentialCommandGroup {
         super (
             new ParallelCommandGroup(
                 new InstantCommand(() -> robot.intake.setPos(400)),
-                new InstantCommand(() -> robot.intake.resetTimer()),
                 new InstantCommand(() -> robot.lift.setPos(500)),
                 new InstantCommand(() -> robot.lift.resetTimer())
             ),

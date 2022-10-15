@@ -16,8 +16,8 @@ import org.firstinspires.ftc.teamcode.opmode.teleop.OpMode;
 public class InverseKinematicsTest extends OpMode {
     private Robot robot;
 
-    private boolean fA = false;
     private boolean fB = false;
+    private boolean fA = false;
 
     public static double x, y, l;
 
@@ -32,17 +32,18 @@ public class InverseKinematicsTest extends OpMode {
 
         boolean a = gamepad1.a;
         if (a && !fA) {
-            schedule(new InstantCommand(() -> robot.lift.resetTimer())
-                    .alongWith(new InstantCommand(() -> robot.lift.setDVA(500, 1500, 7500))));
+            schedule(new InstantCommand(() -> robot.intake.resetTimer())
+                    .alongWith(new InstantCommand(() -> robot.intake.setDVA(400, 750, 2500))));
         }
         boolean fA = a;
 
         boolean b = gamepad1.b;
         if (b && !fB) {
-            schedule(new InstantCommand(() -> robot.lift.resetTimer()));
-            //.alongWith(new InstantCommand(() -> robot.lift.setDVA(500 + Kinematics.fourbar(1, 1, 1)[0])))
+            schedule(new InstantCommand(() -> robot.intake.setDVA(-400, -750, -2500))
+                    .alongWith(new InstantCommand(() -> robot.intake.resetTimer())));
         }
-        boolean fB = b;
+        fB = b;
+
 
         double[] kinVals = Kinematics.fourbar(x, y, l);
         telemetry.addData("CurPos", kinVals[0]);

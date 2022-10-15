@@ -99,6 +99,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void setPos(int pos) {
         this.distance = pos;
+        resetTimer();
     }
 
     public void setFourbar(double pos) {
@@ -140,7 +141,6 @@ public class IntakeSubsystem extends SubsystemBase {
         barRight.setPosition(fourbar_retracted);
     }
 
-    // TODO reset timer internally in setpos
     public void resetTimer() {
         timer.reset();
     }

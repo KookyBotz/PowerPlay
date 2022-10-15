@@ -73,13 +73,13 @@ public class LiftSubsystem extends SubsystemBase {
 
     public void setPos(int pos) {
         lift.setTargetPosition(pos);
+        resetTimer();
     }
 
     public int getPos() {
         return lift.encoder.getPosition();
     }
 
-    // TODO reset timer internally in setpos
     public void resetTimer() {
         timer.reset();
     }
