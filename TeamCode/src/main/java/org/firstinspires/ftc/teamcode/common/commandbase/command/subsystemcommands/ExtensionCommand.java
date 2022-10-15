@@ -15,10 +15,10 @@ public class ExtensionCommand extends SequentialCommandGroup {
     public ExtensionCommand(Robot robot, double x, double y) {
         super(
 
-            new IntakeCommand(robot.intake, (int) Kinematics.forebar(x, y, robot.intake.FOREBAR_LENGTH)[0])
+            new IntakeCommand(robot.intake, (int) Kinematics.forebar(x, y, robot.intake.FOURBAR_LENGTH)[0])
         );
         this.intake = intake;
-        this.points = Kinematics.forebar(x, y, intake.FOREBAR_LENGTH);
+        this.points = Kinematics.forebar(x, y, intake.FOURBAR_LENGTH);
 
 
     }

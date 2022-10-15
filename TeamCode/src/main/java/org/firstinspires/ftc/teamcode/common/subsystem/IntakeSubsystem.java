@@ -46,11 +46,10 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double claw_open_pos = 10;
     public static double claw_closed_pos = 5;
 
-    public static double forebar_extended = 0.4;
-    public static double forebar_middle = 0.25;
-    public static double forebar_retracted = 0.1;
+    public static double fourbar_extended = 0.4;
+    public static double fourbar_retracted = 0.1;
 
-    public static final double FOREBAR_LENGTH = 9.842;
+    public static final double FOURBAR_LENGTH = 9.842;
 
     // thanks aabhas <3
     public IntakeSubsystem(HardwareMap hardwareMap) {
@@ -128,13 +127,13 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void extendForebar() {
-        barLeft.setPosition(forebar_extended);
-        barRight.setPosition(forebar_extended);
+        barLeft.setPosition(fourbar_extended);
+        barRight.setPosition(fourbar_extended);
     }
 
     public void closeForebar() {
-        barLeft.setPosition(forebar_retracted);
-        barRight.setPosition(forebar_retracted);
+        barLeft.setPosition(fourbar_retracted);
+        barRight.setPosition(fourbar_retracted);
     }
 
     public void resetTimer() {
