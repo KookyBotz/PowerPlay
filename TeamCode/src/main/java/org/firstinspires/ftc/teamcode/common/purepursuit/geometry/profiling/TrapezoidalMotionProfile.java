@@ -6,13 +6,14 @@ public class TrapezoidalMotionProfile implements MotionProfile {
     public final double distance;
 
     private final double inverseTime;
+    private final double epsilon = 1.401298E-45;
     private double dRad;
     private double tRad;
     private double tCir;
     private double dCir;
-    private double aCur;
-    private double vCur;
-    private double pCur;
+    private double aCur = 0.0;
+    private double vCur = 0.0;
+    private double pCur = 0.0;
 
     public TrapezoidalMotionProfile(double maxV, double maxA, double distance) {
         this.maxV = maxV;
@@ -22,6 +23,7 @@ public class TrapezoidalMotionProfile implements MotionProfile {
         this.inverseTime = Math.pow(maxV, 2) / Math.pow(maxA, 3);
     }
 
+    // thx daryoush <3
     @Override
     public double[] update(double time) {
 
@@ -41,8 +43,14 @@ public class TrapezoidalMotionProfile implements MotionProfile {
         tCir = dCir / maxV;
 
         aCur = getAccel(time);
-        vCur = getVelo(time);
-        pCur = getPos(time);
+        if (Math.abs(aCur) > epsilon) {
+            vCur = getVelo(time);
+        }
+
+        if (Math.abs(vCur) > epsilon) {
+            pCur = getPos(time);
+        }
+
         if (distance <= 0) {
             pCur = Math.abs(distance) + pCur;
         }

@@ -118,10 +118,6 @@ public class IntakeSubsystem extends SubsystemBase {
         extension.setTargetPosition(intake_out_pos);
     }
 
-    //public void extensionIn() {
-//        extension.setTargetPosition(intake_in_pos);
-//    }
-
     public void closeClaw() {
         claw.setPosition(claw_pos_closed);
     }
