@@ -5,10 +5,12 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.outoftheboxrobotics.photoncore.PhotonLynxModule;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.AnalogSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
@@ -24,7 +26,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private MotionProfile profile;
     private final ElapsedTime timer;
+    private final ElapsedTime voltageTimer;
     private final PIDController controller;
+    private final VoltageSensor voltageSensor;
+
+    private double voltage;
 
     private double P = 0.0;
     private double I = 0.0;
@@ -58,14 +64,23 @@ public class IntakeSubsystem extends SubsystemBase {
         this.profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
         this.timer = new ElapsedTime();
         timer.reset();
+        this.voltageTimer = new ElapsedTime();
+        timer.reset();
         this.controller = new PIDController(P, I, D);
+        this.voltageSensor = hardwareMap.voltageSensor.iterator().next();
+        this.voltage = voltageSensor.getVoltage();
     }
 
     public void loop() {
+        if (voltageTimer.seconds() > 5) {
+            voltage = voltageSensor.getVoltage();
+            voltageTimer.reset();
+        }
+
         profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
         controller.setPID(P, I, D);
         double target = profile.update(timer.time())[0];
-        double power = controller.calculate(extension.getCurrentPosition(), target);
+        double power = controller.calculate(extension.getCurrentPosition(), target) / voltage * 12;
         extension.set(power);
 
         //AnalogInput sensor = new AnalogInput()
