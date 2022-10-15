@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
@@ -21,6 +22,7 @@ public class LiftSubsystem extends SubsystemBase {
     private final ElapsedTime timer;
     private final ElapsedTime voltageTimer;
     private final PIDController controller;
+    private final VoltageSensor voltageSensor;
 
     private double voltage;
 
@@ -52,8 +54,8 @@ public class LiftSubsystem extends SubsystemBase {
         voltageTimer.reset();
         this.controller = new PIDController(P, I, D);
         controller.setPID(P, I, D);
-
-        // GO AWAY
+        this.voltageSensor = hardwareMap.voltageSensor.iterator().next();
+        this.voltage = voltageSensor.getVoltage();
     }
 
     public void loop() {
