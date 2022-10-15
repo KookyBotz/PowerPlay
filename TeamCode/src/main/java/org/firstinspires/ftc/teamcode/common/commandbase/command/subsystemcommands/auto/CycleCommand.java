@@ -27,15 +27,14 @@ public class CycleCommand extends ParallelCommandGroup {
                         new InstantCommand(() -> robot.intake.resetTimer())
                 ),
                 new SequentialCommandGroup(
-                        new InstantCommand(() -> robot.lift.setDVA(500, 1000, 7500)),
+                        new InstantCommand(() -> robot.lift.setDVA(525, 1000, 7500)),
                         new InstantCommand(() -> robot.lift.resetTimer()),
-                        new WaitCommand(2000),
-                        new InstantCommand(() -> robot.lift.setDVA(-500, -1000, -7500)),
+                        new WaitUntilCommand(()->robot.lift.getPos() > 500),
+                        new InstantCommand(() -> robot.lift.setDVA(-525, -1000, -7500)),
                         new InstantCommand(() -> robot.lift.resetTimer())
                 ),
                 new WaitUntilCommand(() -> robot.intake.getPos() < 40 && robot.lift.getPos() < 40),
-                new InstantCommand(() -> robot.intake.openClaw()),
-                new WaitCommand(2000)
+                new InstantCommand(() -> robot.intake.openClaw()).andThen(new WaitCommand(1000))
         );
     }
 }
