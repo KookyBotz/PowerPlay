@@ -78,6 +78,7 @@ public class LiftSubsystem extends SubsystemBase {
         double target = profile.update(timer.time())[0];
         power = controller.calculate(lift.getCurrentPosition(), target) / voltage * 12;
         lift.set(power);
+
     }
 
     public void setPos(int pos) {

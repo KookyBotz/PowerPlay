@@ -31,8 +31,10 @@ public class OpMode extends CommandOpMode {
     public void initialize() {
         robot = new Robot(hardwareMap);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+        PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         PhotonCore.enable();
+
+
     }
 
     @Override
@@ -87,6 +89,5 @@ public class OpMode extends CommandOpMode {
         telemetry.update();
 
         loopTime = loop;
-        PhotonCore.CONTROL_HUB.clearBulkCache();
     }
 }
