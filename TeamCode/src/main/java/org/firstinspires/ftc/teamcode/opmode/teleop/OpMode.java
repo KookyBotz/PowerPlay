@@ -6,6 +6,8 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -49,14 +51,14 @@ public class OpMode extends CommandOpMode {
         boolean a = gamepad1.a;
         if (a && !fA) {
             schedule(new InstantCommand(() -> robot.lift.resetTimer())
-            .alongWith(new InstantCommand(() -> robot.lift.setDVA(500, 1500, 7500))));
+                    .alongWith(new InstantCommand(() -> robot.lift.setDVA(500, 1500, 7500))));
         }
         boolean fA = a;
 
         boolean b = gamepad1.b;
         if (b && !fB) {
             schedule(new InstantCommand(() -> robot.lift.setDVA(-500, -1500, -7500))
-            .alongWith(new InstantCommand(() -> robot.lift.resetTimer())));
+                    .alongWith(new InstantCommand(() -> robot.lift.resetTimer())));
         }
         fB = b;
 
@@ -64,20 +66,26 @@ public class OpMode extends CommandOpMode {
         boolean x = gamepad1.x;
         if (x && !fX) {
             schedule(new InstantCommand(() -> robot.intake.resetTimer())
-            .alongWith(new InstantCommand(() -> robot.intake.setDVA(400, 750, 2500))));
+                    .alongWith(new InstantCommand(() -> robot.intake.setDVA(400, 750, 2500))));
         }
         boolean fX = x;
 
         boolean y = gamepad1.y;
         if (y && !fY) {
             schedule(new InstantCommand(() -> robot.intake.setDVA(-400, -750, -2500))
-            .alongWith(new InstantCommand(() -> robot.intake.resetTimer())));
+                    .alongWith(new InstantCommand(() -> robot.intake.resetTimer())));
         }
         fY = y;
 
         boolean rb = gamepad1.right_bumper;
         if (rb && !fRB) {
-            schedule(new CycleCommand(robot));
+            schedule(new SequentialCommandGroup(
+                    new CycleCommand(robot),
+                    new CycleCommand(robot),
+                    new CycleCommand(robot),
+                    new CycleCommand(robot),
+                    new CycleCommand(robot)
+            ));
         }
         fRB = rb;
 

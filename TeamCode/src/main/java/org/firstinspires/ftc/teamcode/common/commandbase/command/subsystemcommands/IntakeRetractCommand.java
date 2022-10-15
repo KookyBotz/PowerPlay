@@ -12,7 +12,7 @@ public class IntakeRetractCommand extends SequentialCommandGroup {
 //                new InstantCommand(() -> robot.intake.closeForebar()),
 //                new InstantCommand(() -> robot.intake.extensionIn()),
 //                new WaitUntilCommand(() -> robot.intake.getExtension() < robot.intake.extension_out_pos - 10)
-                new IntakeCommand(robot.intake, robot.intake.intake_in_pos)
+//                new IntakeCommand(robot.intake, robot.intake.intake_in_pos)
         );
 
     }
