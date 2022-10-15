@@ -77,10 +77,9 @@ public class OpMode extends CommandOpMode {
 
         telemetry.addData("curPos:", robot.lift.getPos());
         telemetry.addData("curPow:", robot.lift.power);
-        telemetry.addData("targetPos", robot.lift.funcs[0]);
-        telemetry.addData("targetVel", robot.lift.funcs[1]);
-        telemetry.addData("targetAcc", robot.lift.funcs[2]);
-        telemetry.addData("draw", robot.lift.lift.getCurrent(CurrentUnit.MILLIAMPS));
+//        telemetry.addData("targetPos", robot.lift.funcs[0]);
+//        telemetry.addData("targetVel", robot.lift.funcs[1]);
+//        telemetry.addData("targetAcc", robot.lift.funcs[2]);
 
         double loop = System.currentTimeMillis();
         telemetry.addData("hz ", 1000 / (loop - loopTime));
