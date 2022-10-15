@@ -5,6 +5,8 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class Kinematics {
 
+    public static final double TICKS_TO_INCHES = 23;
+
     public static double[] fourbar(double x, double y, double l) {
 
         // TODO: Add checks for edge cases
