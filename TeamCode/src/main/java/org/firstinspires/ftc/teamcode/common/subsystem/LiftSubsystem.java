@@ -59,10 +59,15 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void loop() {
+        if (voltageTimer.seconds() > 5) {
+            voltage = voltageSensor.getVoltage();
+            voltageTimer.reset();
+        }
+
         profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
         controller.setPID(P, I, D);
-        funcs = profile.update(timer.time());
-        power = controller.calculate(lift.getCurrentPosition(), funcs[0]);
+        double target = profile.update(timer.time())[0];
+        power = controller.calculate(lift.getCurrentPosition(), target) / voltage * 12;
         lift.setPower(power);
     }
 
