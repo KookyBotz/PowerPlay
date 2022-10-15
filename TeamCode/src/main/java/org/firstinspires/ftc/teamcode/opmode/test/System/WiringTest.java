@@ -20,22 +20,20 @@ public class WiringTest extends OpMode {
 
     @Override
     public void run() {
-        if (gamepad1.a) {
-            a.setPosition(1);
-        }
-
-        if (gamepad1.b) {
-            b.setPosition(1);
-        }
-
-        // left
-        if (gamepad1.x) {
-            c.setPosition(0);
-        }
-
-        // right
-        if (gamepad1.y) {
-            d.setPosition(1);
-        }
+//        if (gamepad1.a) {
+//            c.setPosition(0.5);
+//            d.setPosition(0.5);
+//        }
+//
+//        // left
+//        if (gamepad1.x) {
+//            c.setPosition(0);
+//            d.setPosition(1);
+//        }
+//
+//        // right
+//        if (gamepad1.y) {
+//            d.setPosition(1);
+//        }
     }
 }
