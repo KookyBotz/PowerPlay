@@ -55,8 +55,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem(HardwareMap hardwareMap) {
         this.extension = new MotorEx(hardwareMap, "extension");
         extension.resetEncoder();
-        this.barLeft = hardwareMap.get(Servo.class, "forebarLeft");
-        this.barRight = hardwareMap.get(Servo.class, "forebarRight");
+        this.barLeft = hardwareMap.get(Servo.class, "fourbarLeft");
+        this.barRight = hardwareMap.get(Servo.class, "fourbarRight");
         this.claw = hardwareMap.get(Servo.class, "claw");
         this.turret = hardwareMap.get(Servo.class, "turret");
 
