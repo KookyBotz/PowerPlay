@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeExtendCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.CycleCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 
 @Config
@@ -26,6 +27,7 @@ public class OpMode extends CommandOpMode {
     private boolean fB = false;
     private boolean fX = false;
     private boolean fY = false;
+    private boolean fRB = false;
 
     @Override
     public void initialize() {
@@ -70,6 +72,12 @@ public class OpMode extends CommandOpMode {
             .alongWith(new InstantCommand(() -> robot.intake.resetTimer())));
         }
         fY = y;
+
+        boolean rb = gamepad1.right_bumper;
+        if (rb && !fRB) {
+            schedule(new CycleCommand(robot));
+        }
+        fRB = rb;
 
         robot.intake.loop();
         robot.lift.loop();
