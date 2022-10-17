@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomman
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftExtendCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PurePursuitCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.FourbarCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.CycleCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
@@ -66,37 +67,12 @@ public class BlueLeftAuto extends LinearOpMode {
                 new SequentialCommandGroup(
                     new PurePursuitCommand(preloadPath),
                     // cycle
-                    new LiftExtendCommand(robot)
-                    .alongWith(new IntakeExtendCommand(robot))
-                    .alongWith(new FourbarCommand(robot.intake, robot.intake.fourbar_retracted))
-                    .alongWith(new InstantCommand(() -> robot.intake.openClaw())),
-                    new WaitUntilCommand(() -> robot.lift.getPos() == robot.lift.high_pos)
-                    .andThen(new WaitCommand(1000))
-                    .alongWith(new IntakeRetractCommand(robot)),
-                    new FourbarCommand(robot.intake, robot.intake.fourbar_extended)
-                    .andThen(new WaitCommand(300))
-                    .andThen(new InstantCommand(() -> robot.intake.closeClaw())),
-                    new WaitCommand(1000)
-                    .andThen(new IntakeRetractCommand(robot))
-                    .alongWith(new FourbarCommand(robot.intake, robot.intake.fourbar_retracted))
-                    .andThen(new WaitCommand(1000))
-                    .andThen(new InstantCommand(() -> robot.intake.openClaw())),
-                    // cycle
-                    new LiftExtendCommand(robot)
-                    .alongWith(new IntakeExtendCommand(robot))
-                    .alongWith(new FourbarCommand(robot.intake, robot.intake.fourbar_retracted))
-                    .alongWith(new InstantCommand(() -> robot.intake.openClaw())),
-                    new WaitUntilCommand(() -> robot.lift.getPos() == robot.lift.high_pos)
-                    .andThen(new WaitCommand(1000))
-                    .alongWith(new IntakeRetractCommand(robot)),
-                    new FourbarCommand(robot.intake, robot.intake.fourbar_extended)
-                    .andThen(new WaitCommand(300))
-                    .andThen(new InstantCommand(() -> robot.intake.closeClaw())),
-                    new WaitCommand(1000)
-                    .andThen(new IntakeRetractCommand(robot))
-                    .alongWith(new FourbarCommand(robot.intake, robot.intake.fourbar_retracted))
-                    .andThen(new WaitCommand(1000))
-                    .andThen(new InstantCommand(() -> robot.intake.openClaw()))
+                    new CycleCommand(robot),
+                    new CycleCommand(robot),
+                    new CycleCommand(robot),
+                    new CycleCommand(robot),
+                    new CycleCommand(robot),
+                    new CycleCommand(robot)
 
                 )
         );
