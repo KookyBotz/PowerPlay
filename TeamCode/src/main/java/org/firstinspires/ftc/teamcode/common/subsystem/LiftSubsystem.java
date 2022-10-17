@@ -33,7 +33,9 @@ public class LiftSubsystem extends SubsystemBase {
     private double maxV = 20;
     private double maxA = 20;
 
-    public static int high_pos = 100;
+    public static int high_pos = 500;
+    public static int high_maxV =
+
     public static int medium_pos = 75;
     public static int low_pos = 50;
     public static int retracted = 0;
