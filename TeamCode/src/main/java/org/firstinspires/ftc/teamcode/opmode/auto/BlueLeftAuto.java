@@ -64,6 +64,14 @@ public class BlueLeftAuto extends LinearOpMode {
                 .then(new Pose(72, 108, 7 * Math.PI / 6))
                 .build();
 
+        PurePursuitPath visionPath = new PurePursuitPathBuilder()
+                .setDrivetrain(drivetrain)
+                .setLocalizer(localizer)
+                .setFollowDistance(10)
+                .setMotionProfile(new RisingMotionProfile(0.7, 1))
+                // math to calculate parking position
+                .build();
+
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                     new PurePursuitCommand(preloadPath),
