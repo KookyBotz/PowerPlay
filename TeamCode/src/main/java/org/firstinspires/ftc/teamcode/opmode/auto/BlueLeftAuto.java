@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomman
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PurePursuitCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.FourbarCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.CycleCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.ScoreCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
@@ -72,8 +73,7 @@ public class BlueLeftAuto extends LinearOpMode {
                     new CycleCommand(robot),
                     new CycleCommand(robot),
                     new CycleCommand(robot),
-                    new CycleCommand(robot)
-
+                    new ScoreCommand(robot)
                 )
         );
 
