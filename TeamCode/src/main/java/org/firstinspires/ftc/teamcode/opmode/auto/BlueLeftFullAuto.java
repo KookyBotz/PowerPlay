@@ -152,24 +152,24 @@ public class BlueLeftFullAuto extends LinearOpMode {
                         repeat HERE command five more times (first was preload five more for cone cycle)
                         and then either park or do thingy on other side
                          */
-                        new PurePursuitCommand(preloadPath),
-                        new ScoreConeCommand(robot)
-                        .andThen(new PositionCommand(drivetrain, localizer, new Pose(60, 115, Math.PI)))
-                        .alongWith(new GrabConeCommand(robot)),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, 7 * Math.PI / 6))
-                        .alongWith(new ScoreConeCommand(robot))
-                        .alongWith(new GrabConeCommand(robot)),
-                        new PositionCommand(drivetrain, localizer, new Pose(60, 115, Math.PI)),
-
-
-
-                        new ScoreConeCommand(robot)
-                        .alongWith(new GrabConeCommand(robot)),
-                        new ScoreConeCommand(robot)
-                        .alongWith(new GrabConeCommand(robot)),
-                        new ScoreConeCommand(robot)
-                        .alongWith(new GrabConeCommand(robot)),
-                        new ScoreConeCommand(robot)
+                        new PurePursuitCommand(preloadPath)
+//                        new ScoreConeCommand(robot)
+//                        .andThen(new PositionCommand(drivetrain, localizer, new Pose(60, 115, Math.PI)))
+//                        .alongWith(new GrabConeCommand(robot)),
+//                        new PositionCommand(drivetrain, localizer, new Pose(60, 110, 7 * Math.PI / 6))
+//                        .alongWith(new ScoreConeCommand(robot))
+//                        .alongWith(new GrabConeCommand(robot)),
+//                        new PositionCommand(drivetrain, localizer, new Pose(60, 115, Math.PI)),
+//
+//
+//
+//                        new ScoreConeCommand(robot)
+//                        .alongWith(new GrabConeCommand(robot)),
+//                        new ScoreConeCommand(robot)
+//                        .alongWith(new GrabConeCommand(robot)),
+//                        new ScoreConeCommand(robot)
+//                        .alongWith(new GrabConeCommand(robot)),
+//                        new ScoreConeCommand(robot)
                         // done with left side, either park or cycle other side
                 )
         );
