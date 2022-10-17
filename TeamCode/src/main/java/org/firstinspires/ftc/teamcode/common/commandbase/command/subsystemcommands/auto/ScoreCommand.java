@@ -8,14 +8,19 @@ import org.firstinspires.ftc.teamcode.common.subsystem.LiftSubsystem;
 public class ScoreCommand extends CommandBase {
     private LiftSubsystem lift;
     private int pos;
+    private int vel;
+    private int acc;
 
-    public ScoreCommand(LiftSubsystem lift, int pos, ) {
-
+    public ScoreCommand(LiftSubsystem lift, int pos, int vel, int acc) {
+        this.lift = lift;
+        this.pos = pos;
+        this.vel = vel;
+        this.acc = acc;
     }
 
     @Override
     public void execute() {
-        lift.setDVA(pos, 1500, 7500)
+        lift.setDVA(pos, vel, acc);
         lift.resetTimer();
     }
 
