@@ -2,30 +2,22 @@ package org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomma
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
+import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.subsystem.LiftSubsystem;
 
-public class ScoreCommand extends CommandBase {
-    private LiftSubsystem lift;
-    private int pos;
-    private int vel;
-    private int acc;
+public class ScoreCommand extends SequentialCommandGroup {
+    public ScoreCommand(Robot robot) {
+        super (
+                new InstantCommand(() -> robot.lift.setDVA(525, 1000, 7500)),
+                new InstantCommand(() -> robot.lift.resetTimer()),
 
-    public ScoreCommand(LiftSubsystem lift, int pos, int vel, int acc) {
-        this.lift = lift;
-        this.pos = pos;
-        this.vel = vel;
-        this.acc = acc;
-    }
+                new WaitCommand(400),
 
-    @Override
-    public void execute() {
-        lift.setDVA(pos, vel, acc);
-        lift.resetTimer();
-    }
-
-    @Override
-    public boolean isFinished() {
-        return true;
+                new InstantCommand(() -> robot.lift.setDVA(-525, -1000, -7500)),
+                new InstantCommand(() -> robot.lift.resetTimer())
+        );
     }
 }
