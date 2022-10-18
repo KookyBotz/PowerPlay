@@ -67,9 +67,13 @@ public class BlueLeftAuto extends LinearOpMode {
                 module.setTargetRotation(0);
             }
             robot.drivetrain.updateModules();
-            position = sleeveDetection.getPosition();
-            PhotonCore.CONTROL_HUB.clearBulkCache();
 
+            position = sleeveDetection.getPosition();
+            telemetry.addData("Sleeve Position", position);
+            telemetry.addLine("RUNNING BLUE 5 CYCLE");
+            telemetry.update();
+
+            PhotonCore.CONTROL_HUB.clearBulkCache();
         }
 
         waitForStart();
