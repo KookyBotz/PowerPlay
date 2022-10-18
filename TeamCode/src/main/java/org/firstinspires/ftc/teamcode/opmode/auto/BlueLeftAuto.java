@@ -31,7 +31,7 @@ public class BlueLeftAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Robot robot = new Robot(hardwareMap);
+        Robot robot = new Robot(hardwareMap, true);
         Drivetrain drivetrain = robot.drivetrain;
         Localizer localizer = new BetterSwerveLocalizer(() -> -robot.getAngle(), robot.drivetrain.modules);
 

@@ -39,7 +39,7 @@ public class Robot {
     public IntakeSubsystem intake;
     public LiftSubsystem lift;
 
-    public Robot(HardwareMap hardwareMap) {
+    public Robot(HardwareMap hardwareMap, boolean isAuto) {
         //drivetrain = new SwerveDrivetrain(hardwareMap);
 
         synchronized (imuLock) {
@@ -53,10 +53,10 @@ public class Robot {
 //        claw2.getVoltage();
 //        claw2.getMaxVoltage();
 
-        intake = new IntakeSubsystem(hardwareMap);
+        intake = new IntakeSubsystem(hardwareMap, isAuto);
 
         //DcMotorEx liftM = hardwareMap.get(DcMotorEx.class, "lift");
-        lift = new LiftSubsystem(hardwareMap);
+        lift = new LiftSubsystem(hardwareMap, isAuto);
     }
 
     public void startIMUThread(LinearOpMode opMode) {

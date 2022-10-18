@@ -44,9 +44,11 @@ public class LiftSubsystem extends SubsystemBase {
     public double power = 0.0;
 
     // thanks aabhas <3
-    public LiftSubsystem(HardwareMap hardwareMap) {
+    public LiftSubsystem(HardwareMap hardwareMap, boolean isAuto) {
         this.lift = new MotorEx(hardwareMap, "lift");
-        lift.resetEncoder();
+        if (isAuto) {
+            lift.resetEncoder();
+        }
         lift.motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.profile = new TrapezoidalMotionProfile(maxV, maxA, 0);
