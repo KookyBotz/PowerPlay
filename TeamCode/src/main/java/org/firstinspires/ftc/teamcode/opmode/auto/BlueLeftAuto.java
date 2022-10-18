@@ -1,16 +1,19 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PurePursuitCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.CycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.ScoreCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
+import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
@@ -19,6 +22,9 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveL
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPath;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPathBuilder;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Autonomous (name = "BlueLeftAuto")
 public class BlueLeftAuto extends LinearOpMode {
@@ -29,15 +35,41 @@ public class BlueLeftAuto extends LinearOpMode {
         Drivetrain drivetrain = robot.drivetrain;
         Localizer localizer = new BetterSwerveLocalizer(() -> -robot.getAngle(), robot.drivetrain.modules);
 
+        SleeveDetection sleeveDetection;
+        OpenCvCamera camera;
+        SleeveDetection.ParkingPosition position = SleeveDetection.ParkingPosition.LEFT;
+
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.enable();
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        sleeveDetection = new SleeveDetection();
+        camera.setPipeline(sleeveDetection);
+
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                camera.startStreaming(320,240, OpenCvCameraRotation.SIDEWAYS_LEFT);
+            }
+
+            @Override
+            public void onError(int errorCode)
+            {
+
+            }
+        });
 
         while (!isStarted()) {
             for (SwerveModule module : robot.drivetrain.modules) {
                 module.setTargetRotation(0);
             }
             robot.drivetrain.updateModules();
+            position = sleeveDetection.getPosition();
             PhotonCore.CONTROL_HUB.clearBulkCache();
+
         }
 
         waitForStart();
@@ -57,12 +89,21 @@ public class BlueLeftAuto extends LinearOpMode {
                 .then(new Pose(72, 108, 7 * Math.PI / 6))
                 .build();
 
+        Pose parkingPose;
+        if (position == SleeveDetection.ParkingPosition.LEFT) {
+            parkingPose = new Pose(60, 132, Math.PI);
+        } else if (position == SleeveDetection.ParkingPosition.CENTER) {
+            parkingPose = new Pose(60, 108, Math.PI);
+        } else {
+            parkingPose = new Pose(60, 84, Math.PI);
+        }
+
         PurePursuitPath visionPath = new PurePursuitPathBuilder()
                 .setDrivetrain(drivetrain)
                 .setLocalizer(localizer)
-                .setFollowDistance(10)
+                .setFollowDistance(4)
                 .setMotionProfile(new RisingMotionProfile(0.7, 1))
-                // math to calculate parking position
+                .then(parkingPose)
                 .build();
 
         CommandScheduler.getInstance().schedule(
@@ -74,7 +115,9 @@ public class BlueLeftAuto extends LinearOpMode {
                     new CycleCommand(robot),
                     new CycleCommand(robot),
                     new CycleCommand(robot),
-                    new ScoreCommand(robot)
+                    new ScoreCommand(robot),
+                    // park
+                    new PurePursuitCommand(visionPath)
                 )
         );
 
