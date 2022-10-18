@@ -1,11 +1,11 @@
 package org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling;
 
 public class TrapezoidalMotionProfile implements MotionProfile {
-    public final double maxV;
-    public final double maxA;
-    public final double distance;
+    public double maxV;
+    public double maxA;
+    public double distance;
 
-    private final double inverseTime;
+    private double inverseTime;
     private final double epsilon = 1.401298E-45;
     private double dRad;
     private double tRad;
@@ -16,6 +16,14 @@ public class TrapezoidalMotionProfile implements MotionProfile {
     private double pCur = 0.0;
 
     public TrapezoidalMotionProfile(double maxV, double maxA, double distance) {
+        this.maxV = maxV;
+        this.maxA = maxA;
+        this.distance = distance;
+
+        this.inverseTime = Math.pow(maxV, 2) / Math.pow(maxA, 3);
+    }
+
+    public void create(double maxV, double maxA, double distance){
         this.maxV = maxV;
         this.maxA = maxA;
         this.distance = distance;
