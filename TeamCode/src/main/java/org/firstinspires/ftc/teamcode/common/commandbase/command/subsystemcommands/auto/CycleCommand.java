@@ -12,6 +12,7 @@ public class CycleCommand extends SequentialCommandGroup {
     public CycleCommand(Robot robot) {
         super(
                 //extend intake to pick up
+                // TODO replace with TBD IntakeCommand
                 new InstantCommand(() -> robot.intake.setDVA(400, 750, 2500)),
                 new InstantCommand(() -> robot.intake.resetTimer()),
                 new InstantCommand(() -> robot.intake.openClaw()),
@@ -19,6 +20,7 @@ public class CycleCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> robot.intake.intakeTurret()),
 
                 //extend slides to deposit
+                // TODO replace with new LiftCommand
                 new InstantCommand(() -> robot.lift.setDVA(525, 1000, 7500)),
                 new InstantCommand(() -> robot.lift.resetTimer()),
 
@@ -31,8 +33,10 @@ public class CycleCommand extends SequentialCommandGroup {
                 new WaitCommand(200),
                 new InstantCommand(() -> robot.intake.closeForebar()),
                 new InstantCommand(() -> robot.intake.depositTurret()),
+                // TODO replace with TBD IntakeCommand
                 new InstantCommand(() -> robot.intake.setDVA(-400, -750, -2500)),
                 new InstantCommand(() -> robot.intake.resetTimer()),
+                // TODO replace with new LiftCommand
                 new InstantCommand(() -> robot.lift.setDVA(-525, -1000, -7500)),
                 new InstantCommand(() -> robot.lift.resetTimer()),
 
