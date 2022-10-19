@@ -82,6 +82,7 @@ public class SleeveDetection extends OpenCvPipeline {
         cyaPercent = Core.countNonZero(cyaMat);
         magPercent = Core.countNonZero(magMat);
 
+
         // Calculates the highest amount of pixels being covered on each side
         double maxPercent = Math.max(yelPercent, Math.max(cyaPercent, magPercent));
 
