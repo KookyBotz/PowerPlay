@@ -63,6 +63,15 @@ public class SleeveDetection extends OpenCvPipeline {
     private volatile ParkingPosition position = ParkingPosition.LEFT;
 
     @Override
+    public void init(Mat input) {
+        yelMat = new Mat();
+        cyaMat = new Mat();
+        magMat = new Mat();
+        blurredMat = new Mat();
+        kernel = new Mat();
+    }
+
+    @Override
     public Mat processFrame(Mat input) {
         // Noise reduction
         Imgproc.blur(input, blurredMat, new Size(5, 5));
@@ -122,6 +131,7 @@ public class SleeveDetection extends OpenCvPipeline {
         yelMat.release();
         cyaMat.release();
         magMat.release();
+        kernel.release();
 
         return input;
     }
