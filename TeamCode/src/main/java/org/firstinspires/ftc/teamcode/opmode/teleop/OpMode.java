@@ -33,7 +33,7 @@ public class OpMode extends CommandOpMode {
 
     @Override
     public void initialize() {
-        robot = new Robot(hardwareMap);
+        robot = new Robot(hardwareMap, true);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         robot.intake.setFourbar(0.6);
