@@ -27,6 +27,9 @@ public class ProfilingTest extends CommandOpMode {
     public static double P = 0.0, I = 0.0, D = 0.0;
 
     private double currentPos = 0.0;
+    private boolean fB = false;
+    private boolean fA = false;
+    private double loopTime = 0;
 
     @Override
     public void initialize() {
@@ -51,24 +54,36 @@ public class ProfilingTest extends CommandOpMode {
         double power = controller.calculate(currentPos, distance);
         m.set(power);
 
-        telemetry.addData("power", power);
-        telemetry.addData("currentPosition", currentPos);
-        telemetry.addData("projectedPosition", profiles[0]);
-        telemetry.addData("projectedVelocity", profiles[1]);
-        telemetry.addData("projectedAcceleration", profiles[2]);
-        telemetry.update();
-
-        if (gamepad1.a) {
+        boolean a = gamepad1.a;
+        if (a && !fA) {
             timer.reset();
             m.resetEncoder();
+            distance =
+            maxV *= -1;
+            maxA *= -1;
         }
+        fA = a;
 
-        if (gamepad1.b) {
+        boolean b = gamepad1.b;
+        if (b && !fB) {
             timer.reset();
             distance = -currentPos;
             maxV *= -1;
             maxA *= -1;
         }
+        fB = b;
+
+        telemetry.addData("power", power);
+        telemetry.addData("currentPosition", currentPos);
+        telemetry.addData("projectedPosition", profiles[0]);
+        telemetry.addData("projectedVelocity", profiles[1]);
+        telemetry.addData("projectedAcceleration", profiles[2]);
+        double loop = System.currentTimeMillis();
+        telemetry.addData("hz ", 1000 / (loop - loopTime));
+
+        telemetry.update();
+
+        loopTime = loop;
 
         PhotonCore.CONTROL_HUB.clearBulkCache();
     }
