@@ -38,6 +38,7 @@ public class OpMode extends CommandOpMode {
 
         robot.intake.setFourbar(0.6);
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+        PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         PhotonCore.enable();
     }
 
@@ -100,10 +101,12 @@ public class OpMode extends CommandOpMode {
 
         double loop = System.currentTimeMillis();
         telemetry.addData("hz ", 1000 / (loop - loopTime));
-
         telemetry.update();
 
         loopTime = loop;
         PhotonCore.EXPANSION_HUB.clearBulkCache();
+        PhotonCore.CONTROL_HUB.clearBulkCache();
     }
+
+
 }

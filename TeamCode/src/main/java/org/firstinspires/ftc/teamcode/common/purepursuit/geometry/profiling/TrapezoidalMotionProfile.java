@@ -15,6 +15,7 @@ public class TrapezoidalMotionProfile implements MotionProfile {
     private double vCur = 0.0;
     private double pCur = 0.0;
 
+    // thx daryoush <3
     public TrapezoidalMotionProfile(double maxV, double maxA, double distance) {
         this.maxV = maxV;
         this.maxA = maxA;
