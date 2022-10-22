@@ -63,6 +63,13 @@ public class ProfilingTest extends CommandOpMode {
             m.resetEncoder();
         }
 
+        if (gamepad1.b) {
+            timer.reset();
+            distance = -currentPos;
+            maxV *= -1;
+            maxA *= -1;
+        }
+
         PhotonCore.CONTROL_HUB.clearBulkCache();
     }
 }
