@@ -51,14 +51,14 @@ public class ProfilingTest extends CommandOpMode {
         profile.recondition(maxV, maxA, distance);
         controller.setPID(P, I, D);
         double[] profiles = profile.update(timer.time());
-        double power = controller.calculate(currentPos, distance);
+        double power = controller.calculate(currentPos, profiles[0]);
         m.set(power);
 
         boolean a = gamepad1.a;
         if (a && !fA) {
             timer.reset();
             m.resetEncoder();
-            distance =
+            distance = 100;
             maxV *= -1;
             maxA *= -1;
         }
