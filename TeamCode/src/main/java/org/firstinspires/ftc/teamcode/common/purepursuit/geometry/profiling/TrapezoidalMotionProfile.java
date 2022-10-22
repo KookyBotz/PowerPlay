@@ -23,15 +23,14 @@ public class TrapezoidalMotionProfile implements MotionProfile {
         this.inverseTime = Math.pow(maxV, 2) / Math.pow(maxA, 3);
     }
 
-    public void recondition(double maxV, double maxA, double distance){
-        this.maxV = maxV;
-        this.maxA = maxA;
-        this.distance = distance;
+//    public void recondition(double maxV, double maxA, double distance){
+//        this.maxV = maxV;
+//        this.maxA = maxA;
+//        this.distance = distance;
+//
+//        this.inverseTime = Math.pow(maxV, 2) / Math.pow(maxA, 3);
+//    }
 
-        this.inverseTime = Math.pow(maxV, 2) / Math.pow(maxA, 3);
-    }
-
-    // thx daryoush <3
     @Override
     public double[] update(double time) {
 
