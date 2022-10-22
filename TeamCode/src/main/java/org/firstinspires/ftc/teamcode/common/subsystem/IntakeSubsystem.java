@@ -32,6 +32,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final VoltageSensor voltageSensor;
 
     private double voltage;
+    private double intakePosition;
 
     private double P = 0.01;
     private double I = 0.0;
@@ -78,13 +79,14 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void loop() {
+        intakePosition = extension.encoder.getPosition();
         if (voltageTimer.seconds() > 5) {
             voltage = voltageSensor.getVoltage();
             voltageTimer.reset();
         }
 
         double target = profile.update(timer.time())[0];
-        power = controller.calculate(extension.encoder.getPosition(), target) / voltage * 12;
+        power = controller.calculate(intakePosition, target) / voltage * 12;
         extension.set(power);
 
         //AnalogInput sensor = new AnalogInput()
