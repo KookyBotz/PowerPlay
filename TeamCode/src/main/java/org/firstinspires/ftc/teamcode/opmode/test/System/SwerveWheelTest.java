@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.test.System;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -9,15 +10,15 @@ import org.openftc.easyopencv.OpenCvCamera;
 
 @TeleOp(name = "SwerveWheelTest")
 public class SwerveWheelTest extends OpMode {
-    Servo a, b, c, d;
+    CRServo a, b, c, d;
     DcMotorEx mA, mB, mC, mD;
 
     @Override
     public void initialize() {
-        a = hardwareMap.get(Servo.class, "frontRightServo");
-        b = hardwareMap.get(Servo.class, "backRightServo");
-        c = hardwareMap.get(Servo.class, "frontLeftServo");
-        d = hardwareMap.get(Servo.class, "backLeftServo");
+        a = hardwareMap.get(CRServo.class, "rightFrontServo");
+        b = hardwareMap.get(CRServo.class, "rightRearServo");
+        c = hardwareMap.get(CRServo.class, "leftFrontServo");
+        d = hardwareMap.get(CRServo.class, "leftRearServo");
 
         mA = hardwareMap.get(DcMotorEx.class, "rightFrontMotor");
         mB = hardwareMap.get(DcMotorEx.class, "leftFrontMotor");
@@ -28,27 +29,27 @@ public class SwerveWheelTest extends OpMode {
     @Override
     public void run() {
         if (gamepad1.a) {
-            a.setPosition(1);
+            a.setPower(1);
         } else {
-            a.setPosition(0);
+            a.setPower(0);
         }
 
         if (gamepad1.b) {
-            b.setPosition(1);
+            b.setPower(1);
         } else {
-            b.setPosition(0);
+            b.setPower(0);
         }
 
         if (gamepad1.x) {
-            c.setPosition(1);
+            c.setPower(1);
         } else {
-            c.setPosition(0);
+            c.setPower(0);
         }
 
         if (gamepad1.y) {
-            d.setPosition(1);
+            d.setPower(1);
         } else {
-            d.setPosition(0);
+            d.setPower(0);
         }
 
         if (gamepad1.right_bumper) {

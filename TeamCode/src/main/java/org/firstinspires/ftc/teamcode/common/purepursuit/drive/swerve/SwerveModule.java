@@ -21,9 +21,9 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MathUtils;
 
 @Config
 public class SwerveModule {
-    public static PIDFCoefficients MODULE_PID = new PIDFCoefficients(1, 0, 0.02, 0);
+    public static PIDFCoefficients MODULE_PID = new PIDFCoefficients(0.95, 0, 0.02, 0);
 
-    public static double K_STATIC = 0.05;
+    public static double K_STATIC = 0.03;
 
     public static double MAX_SERVO = 1, MAX_MOTOR = 1;
 
