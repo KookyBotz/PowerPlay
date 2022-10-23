@@ -60,23 +60,7 @@ public class Robot {
     }
 
     public Robot(HardwareMap hardwareMap) {
-        //drivetrain = new SwerveDrivetrain(hardwareMap);
-
-        synchronized (imuLock) {
-            imu = hardwareMap.get(BNO055IMU.class, "imu");
-            BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-            parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-            imu.initialize(parameters);
-        }
-
-//        AnalogInput claw2 = hardwareMap.get(AnalogInput.class, "claw");
-//        claw2.getVoltage();
-//        claw2.getMaxVoltage();
-
-        intake = new IntakeSubsystem(hardwareMap, false);
-
-        //DcMotorEx liftM = hardwareMap.get(DcMotorEx.class, "lift");
-        lift = new LiftSubsystem(hardwareMap, false);
+        this(hardwareMap, false);
     }
 
     public void startIMUThread(LinearOpMode opMode) {
