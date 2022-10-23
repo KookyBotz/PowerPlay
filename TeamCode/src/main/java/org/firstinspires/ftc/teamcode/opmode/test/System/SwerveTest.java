@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.test.PurePursuit;
+package org.firstinspires.ftc.teamcode.opmode.test.System;
 
 import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientH;
 import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientX;
@@ -13,15 +13,15 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
-import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitController;
-import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveLocalizer;
-import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
+import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveLocalizer;
+import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
+import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitController;
 
 @TeleOp
 @Config
-public class SwerveGoToPositionTest extends LinearOpMode {
+public class SwerveTest extends LinearOpMode {
 
     public static double coordX = 0;
     public static double coordY = 0;
@@ -34,8 +34,8 @@ public class SwerveGoToPositionTest extends LinearOpMode {
 //                lateralPos = () -> robot.lateralEncoder.getCurrentPosition(),
 //                imuAngle = () -> -robot.imu.getAngularOrientation().firstAngle;
 
-        Localizer localizer = new BetterSwerveLocalizer(()->-robot.getAngle(), robot.drivetrain.modules);
-        Pose targetPose = new Pose(coordX, coordY, coordHeading);
+        //Localizer localizer = new BetterSwerveLocalizer(()->-robot.getAngle(), robot.drivetrain.modules);
+        //Pose targetPose = new Pose(coordX, coordY, coordHeading);
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -47,22 +47,15 @@ public class SwerveGoToPositionTest extends LinearOpMode {
         long time = System.currentTimeMillis();
 
         while (opModeIsActive()) {
-            targetPose.x = coordX;
-            targetPose.y = coordY;
-            targetPose.heading = coordHeading;
-            localizer.periodic();
-            Pose drive;
-            if(!gamepad1.a) {
-                drive = new Pose(
-                        new Point(-gamepad1.left_stick_y,
-                                gamepad1.left_stick_x).rotate(-robot.getAngle()),
-                        gamepad1.right_stick_x
-                );
-            }else{
-                drive = PurePursuitController.goToPosition(
-                        localizer.getPos(), targetPose, new Pose(pCoefficientX, pCoefficientY, pCoefficientH)
-                );
-            }
+//            targetPose.x = coordX;
+//            targetPose.y = coordY;
+//            targetPose.heading = coordHeading;
+            //localizer.periodic();
+            Pose drive = new Pose(
+                    new Point(-gamepad1.left_stick_y,
+                            gamepad1.left_stick_x).rotate(-robot.getAngle()),
+                    gamepad1.right_stick_x
+            );
             robot.drivetrain.set(drive);
             robot.drivetrain.updateModules();
 
@@ -70,12 +63,13 @@ public class SwerveGoToPositionTest extends LinearOpMode {
 
 
 
-//            long currTime = System.currentTimeMillis();
-//            telemetry.addData("hz", 1000 / (currTime - time));
-//            time = currTime;
-
-            telemetry.addData("pose", localizer.getPos());
+            long currTime = System.currentTimeMillis();
+            telemetry.addData("hz", 1000 / (currTime - time));
+            time = currTime;
             telemetry.update();
+
+//            telemetry.addData("pose", localizer.getPos());
+//            telemetry.update();
 
             PhotonCore.CONTROL_HUB.clearBulkCache();
         }

@@ -40,7 +40,7 @@ public class Robot {
     public LiftSubsystem lift;
 
     public Robot(HardwareMap hardwareMap, boolean isAuto) {
-        //drivetrain = new SwerveDrivetrain(hardwareMap);
+        drivetrain = new SwerveDrivetrain(hardwareMap);
 
         synchronized (imuLock) {
             imu = hardwareMap.get(BNO055IMU.class, "imu");
