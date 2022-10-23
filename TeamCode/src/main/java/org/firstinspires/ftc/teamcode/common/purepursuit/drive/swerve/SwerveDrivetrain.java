@@ -25,7 +25,7 @@ public class SwerveDrivetrain implements Drivetrain {
 
     public static double TRACK_WIDTH = 9, WHEEL_BASE = 9;
     private final double R;
-    public static double frontLeftOffset = 6.16, frontRightOffset = 3.05, rearLeftOffset = 0.37, rearRightOffset = 1.23;
+    public static double frontLeftOffset = 3.28, frontRightOffset = 6.26, rearLeftOffset = 2.63, rearRightOffset = 4.89;
 
     public SwerveDrivetrain(HardwareMap hardwareMap) {
         leftFrontModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "leftFrontMotor"), hardwareMap.get(CRServo.class, "leftFrontServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "leftFrontEncoder"), 2.32).zero(frontLeftOffset));
