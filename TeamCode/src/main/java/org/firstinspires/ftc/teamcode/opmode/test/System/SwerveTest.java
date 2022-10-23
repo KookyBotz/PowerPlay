@@ -40,6 +40,7 @@ public class SwerveTest extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+        PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.enable();
         waitForStart();
         robot.startIMUThread(this);
@@ -66,12 +67,14 @@ public class SwerveTest extends LinearOpMode {
             long currTime = System.currentTimeMillis();
             telemetry.addData("hz", 1000 / (currTime - time));
             time = currTime;
+
             telemetry.update();
 
 //            telemetry.addData("pose", localizer.getPos());
 //            telemetry.update();
 
             PhotonCore.CONTROL_HUB.clearBulkCache();
+            PhotonCore.EXPANSION_HUB.clearBulkCache();
         }
 
     }

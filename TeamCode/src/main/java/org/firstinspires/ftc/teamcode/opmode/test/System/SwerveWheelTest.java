@@ -30,25 +30,25 @@ public class SwerveWheelTest extends OpMode {
         if (gamepad1.a) {
             a.setPosition(1);
         } else {
-            a.setPosition(0.5);
+            a.setPosition(0);
         }
 
         if (gamepad1.b) {
             b.setPosition(1);
         } else {
-            b.setPosition(0.5);
+            b.setPosition(0);
         }
 
         if (gamepad1.x) {
             c.setPosition(1);
         } else {
-            c.setPosition(0.5);
+            c.setPosition(0);
         }
 
         if (gamepad1.y) {
             d.setPosition(1);
         } else {
-            d.setPosition(0.5);
+            d.setPosition(0);
         }
 
         if (gamepad1.right_bumper) {
