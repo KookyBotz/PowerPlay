@@ -17,6 +17,5 @@ public class SwervePIDTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         motor = hardwareMap.get(DcMotorEx.class, "leftFrontMotor");
         servo = hardwareMap.get(CRServo.class, "leftFrontServo");
-
     }
 }

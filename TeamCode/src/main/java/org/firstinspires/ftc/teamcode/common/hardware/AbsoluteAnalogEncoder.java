@@ -19,7 +19,7 @@ public class AbsoluteAnalogEncoder {
         encoder = enc;
         analogRange = aRange;
         offset = 0;
-        inverted = false;
+        inverted = true;
     }
     public AbsoluteAnalogEncoder zero(double off){
         offset = off;
