@@ -4,9 +4,13 @@ import static java.lang.Math.atan2;
 import static java.lang.Math.hypot;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.common.hardware.AbsoluteAnalogEncoder;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MathUtils;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
@@ -21,9 +25,10 @@ public class SwerveDrivetrain implements Drivetrain {
 
     public static double TRACK_WIDTH = 9, WHEEL_BASE = 9;
     private final double R;
+    public static double frontLeftOffset = 0, frontRightOffset = 0, rearLeftOffset = 0, rearRightOffset = 0;
 
     public SwerveDrivetrain(HardwareMap hardwareMap) {
-        leftFrontModule = new SwerveModule(hardwareMap, "leftFrontMotor", "leftFrontServo", "leftFrontEncoder");
+        leftFrontModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "leftFrontMotor"), hardwareMap.get(CRServo.class, "leftFrontServo", new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "leftFrontEncoder", 2.32))))
         leftRearModule = new SwerveModule(hardwareMap, "leftRearMotor", "leftRearServo", "leftRearEncoder");
         rightRearModule = new SwerveModule(hardwareMap, "rightRearMotor", "rightRearServo", "rightRearEncoder");
         rightFrontModule = new SwerveModule(hardwareMap, "rightFrontMotor", "rightFrontServo", "rightFrontEncoder");
