@@ -34,7 +34,7 @@ public class SwerveModule {
 
     public static double ALLOWED_BB_ERROR = Math.toRadians(5);
 
-    public static boolean MOTOR_FLIPPING = true;
+    public static boolean MOTOR_FLIPPING = false;
 
     public static double FLIP_BIAS = Math.toRadians(0);
 
