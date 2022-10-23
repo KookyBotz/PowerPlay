@@ -49,8 +49,6 @@ public class SwerveModule {
 
     private boolean wheelFlipped = false;
 
-
-
     public SwerveModule(DcMotorEx m, CRServo s, AbsoluteAnalogEncoder e) {
         motor = m;
         MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
@@ -116,7 +114,7 @@ public class SwerveModule {
         //flip check
         if(MOTOR_FLIPPING) power*=flipModifier();
 
-        motor.setPower(power);
+        //motor.setPower(power);
     }
 
     public boolean isWithinAllowedError(){
