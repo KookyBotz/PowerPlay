@@ -134,13 +134,9 @@ public class SwerveModule {
         }
         double current = getModuleRotation();
         //normalize for wraparound
-        if (current - target > Math.PI) current -= (2 * Math.PI);
-        else if (target - current > Math.PI) current += (2 * Math.PI);
-
         if (MOTOR_FLIPPING) {
-                //flip target
-            wheelFlipped = Math.abs(current - target) > (Math.PI / 2 - flipModifier()*FLIP_BIAS);
-            if (wheelFlipped) target = MathUtils.norm(target + Math.PI);
+            wheelFlipped = Math.abs(MathUtils.normDelta(target-current)) > Math.PI/2;
+            if(wheelFlipped) target=MathUtils.norm(target+Math.PI);
         }
         rotationController.setSetPoint(target);
     }
