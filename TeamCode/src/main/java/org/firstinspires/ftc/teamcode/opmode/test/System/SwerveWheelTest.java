@@ -14,15 +14,15 @@ public class SwerveWheelTest extends OpMode {
 
     @Override
     public void initialize() {
-        a = hardwareMap.get(Servo.class, "a");
-        b = hardwareMap.get(Servo.class, "b");
-        c = hardwareMap.get(Servo.class, "c");
-        d = hardwareMap.get(Servo.class, "d");
+        a = hardwareMap.get(Servo.class, "frontRightServo");
+        b = hardwareMap.get(Servo.class, "backRightServo");
+        c = hardwareMap.get(Servo.class, "frontLeftServo");
+        d = hardwareMap.get(Servo.class, "backLeftServo");
 
-        mA = hardwareMap.get(DcMotorEx.class, "mA");
-        mB = hardwareMap.get(DcMotorEx.class, "mB");
-        mC = hardwareMap.get(DcMotorEx.class, "mC");
-        mD = hardwareMap.get(DcMotorEx.class, "mD");
+        mA = hardwareMap.get(DcMotorEx.class, "rightFrontMotor");
+        mB = hardwareMap.get(DcMotorEx.class, "leftFrontMotor");
+        mC = hardwareMap.get(DcMotorEx.class, "leftRearMotor");
+        mD = hardwareMap.get(DcMotorEx.class, "rightRearMotor");
     }
 
     @Override
