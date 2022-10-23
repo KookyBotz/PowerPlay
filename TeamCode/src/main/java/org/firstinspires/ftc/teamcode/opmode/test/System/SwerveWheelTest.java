@@ -64,6 +64,30 @@ public class SwerveWheelTest extends OpMode {
             mC.setPower(0);
             mD.setPower(0);
         }
+
+        if (gamepad1.dpad_down) {
+            mA.setPower(1.0);
+        } else {
+            mA.setPower(0);
+        }
+
+        if (gamepad1.dpad_left) {
+            mB.setPower(1.0);
+        } else {
+            mB.setPower(0);
+        }
+
+        if (gamepad1.dpad_up) {
+            mC.setPower(1.0);
+        } else {
+            mC.setPower(0);
+        }
+
+        if (gamepad1.dpad_right) {
+            mD.setPower(1.0);
+        } else {
+            mD.setPower(0);
+        }
     }
 
 }
