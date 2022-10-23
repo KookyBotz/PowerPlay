@@ -19,7 +19,7 @@ public class AbsoluteAnalogEncoder {
         encoder = enc;
         analogRange = aRange;
         offset = 0;
-        inverted = true;
+        inverted = false;
     }
     public AbsoluteAnalogEncoder zero(double off){
         offset = off;
@@ -35,7 +35,7 @@ public class AbsoluteAnalogEncoder {
 
     private double pastPosition = 1;
     public double getCurrentPosition() {
-        double pos = Angle.norm(encoder.getVoltage()*(inverted ? -1 : 1)*Math.PI*2/2.3);
+        double pos = Angle.norm(encoder.getVoltage()*(inverted ? 1 : -1)*Math.PI*2/2.3);
         //checks for crazy values when the encoder is close to zero
         if(!VALUE_REJECTION || Math.abs(Angle.normDelta(pastPosition)) > 0.1 || Math.abs(Angle.normDelta(pos)) < 1) pastPosition = pos;
         return pastPosition;
