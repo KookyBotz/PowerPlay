@@ -49,7 +49,7 @@ public class SleeveDetection extends OpenCvPipeline {
 
     // Percent and mat definitions
     private double yelPercent, cyaPercent, magPercent;
-    private Mat yelMat = new Mat(), cyaMat = new Mat(), magMat = new Mat(), blurredMat = new Mat();
+    private Mat yelMat, cyaMat, magMat, blurredMat, kernel;
 
     // Anchor point definitions
     Point sleeve_pointA = new Point(
@@ -63,13 +63,22 @@ public class SleeveDetection extends OpenCvPipeline {
     private volatile ParkingPosition position = ParkingPosition.LEFT;
 
     @Override
+    public void init(Mat input) {
+        yelMat = new Mat();
+        cyaMat = new Mat();
+        magMat = new Mat();
+        blurredMat = new Mat();
+        kernel = new Mat();
+    }
+
+    @Override
     public Mat processFrame(Mat input) {
         // Noise reduction
         Imgproc.blur(input, blurredMat, new Size(5, 5));
         blurredMat = blurredMat.submat(new Rect(sleeve_pointA, sleeve_pointB));
 
         // Apply Morphology
-        Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3));
+        kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3));
         Imgproc.morphologyEx(blurredMat, blurredMat, Imgproc.MORPH_CLOSE, kernel);
 
         // Gets channels from given source mat
@@ -122,6 +131,7 @@ public class SleeveDetection extends OpenCvPipeline {
         yelMat.release();
         cyaMat.release();
         magMat.release();
+        kernel.release();
 
         return input;
     }

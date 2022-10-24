@@ -24,8 +24,9 @@ public class LiftSubsystem extends SubsystemBase {
     private final VoltageSensor voltageSensor;
 
     private double voltage;
+    private double liftPosition;
 
-    private double P = 0.02;
+    private double P = 0.025;
     private double I = 0.0;
     private double D = 0.0;
 
@@ -63,13 +64,14 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void loop() {
+        liftPosition = lift.encoder.getPosition();
         if (voltageTimer.seconds() > 5) {
             voltage = voltageSensor.getVoltage();
             voltageTimer.reset();
         }
 
         double target = profile.update(timer.time())[0];
-        power = controller.calculate(lift.encoder.getPosition(), target) / voltage * 12;
+        power = controller.calculate(liftPosition, target) / voltage * 12;
         lift.set(power);
     }
 

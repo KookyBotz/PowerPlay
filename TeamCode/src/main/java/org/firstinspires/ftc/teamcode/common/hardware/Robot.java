@@ -40,7 +40,7 @@ public class Robot {
     public LiftSubsystem lift;
 
     public Robot(HardwareMap hardwareMap, boolean isAuto) {
-        //drivetrain = new SwerveDrivetrain(hardwareMap);
+        drivetrain = new SwerveDrivetrain(hardwareMap);
 
         synchronized (imuLock) {
             imu = hardwareMap.get(BNO055IMU.class, "imu");
@@ -57,6 +57,10 @@ public class Robot {
 
         //DcMotorEx liftM = hardwareMap.get(DcMotorEx.class, "lift");
         lift = new LiftSubsystem(hardwareMap, isAuto);
+    }
+
+    public Robot(HardwareMap hardwareMap) {
+        this(hardwareMap, false);
     }
 
     public void startIMUThread(LinearOpMode opMode) {
