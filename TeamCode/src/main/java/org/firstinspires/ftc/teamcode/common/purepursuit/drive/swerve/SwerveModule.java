@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve;
 import com.acmerobotics.dashboard.config.Config;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.util.Angle;
 import com.arcrobotics.ftclib.controller.PIDFController;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.CRServoImplEx;
@@ -15,6 +17,7 @@ import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.common.hardware.AbsoluteAnalogEncoder;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MathUtils;
 
@@ -49,12 +52,13 @@ public class SwerveModule {
 
     private boolean wheelFlipped = false;
 
+
+
     public SwerveModule(DcMotorEx m, CRServo s, AbsoluteAnalogEncoder e) {
         motor = m;
         MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
         motorConfigurationType.setAchieveableMaxRPMFraction(MAX_MOTOR);
         motor.setMotorType(motorConfigurationType);
-        setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         servo = s;
         ((CRServoImplEx) servo).setPwmRange(new PwmControl.PwmRange(1000, 2000));
@@ -71,12 +75,22 @@ public class SwerveModule {
     }
 
 
+    double realError = 0;
     public void update() {
         double target = getTargetRotation(), current = getModuleRotation();
+
+        if(MOTOR_FLIPPING && Math.abs(AngleUnit.normalizeRadians(current-target))>Math.PI/2) {
+            realError = target - current;
+            current = AngleUnit.normalizeRadians(current + Math.PI);
+            wheelFlipped = !wheelFlipped;
+        }
         if (current - target > Math.PI) current -= (2 * Math.PI);
         else if (target - current > Math.PI) current += (2 * Math.PI);
+
+
         double power = Range.clip(rotationController.calculate(current), -MAX_SERVO, MAX_SERVO);
         if(Double.isNaN(power)) power = 0;
+
         servo.setPower(Math.abs(rotationController.getPositionError()) > ALLOWED_BB_ERROR ? power+K_STATIC*Math.signum(power) : 0);
     }
 
@@ -108,9 +122,6 @@ public class SwerveModule {
     double lastMotorPower = 0;
     public void setMotorPower(double power) {
         //target check
-        if(WAIT_FOR_TARGET && !isWithinAllowedError()){
-            power*=Math.cos(Range.clip(rotationController.getPositionError(), -Math.PI/2, Math.PI/2));
-        }
         lastMotorPower = power;
         //flip check
         if(MOTOR_FLIPPING) power*=flipModifier();
@@ -132,12 +143,6 @@ public class SwerveModule {
         if(Math.abs(lastMotorPower) < MIN_MOTOR_TO_TURN){
             //add stuff like X-ing preAlign
             return;
-        }
-        double current = getModuleRotation();
-        //normalize for wraparound
-        if (MOTOR_FLIPPING) {
-            wheelFlipped = Math.abs(MathUtils.normDelta(target-current)) > Math.PI/2;
-            if(wheelFlipped) target=MathUtils.norm(target+Math.PI);
         }
         rotationController.setSetPoint(target);
     }
