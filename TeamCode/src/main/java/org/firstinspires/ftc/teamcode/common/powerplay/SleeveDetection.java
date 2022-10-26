@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.powerplay;
 
-//import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.config.Config;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -11,7 +11,7 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-//@Config
+@Config
 public class SleeveDetection extends OpenCvPipeline {
     /*
     YELLOW  = Parking Left
