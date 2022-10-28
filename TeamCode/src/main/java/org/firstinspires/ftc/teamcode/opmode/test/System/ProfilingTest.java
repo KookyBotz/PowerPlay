@@ -30,6 +30,7 @@ public class ProfilingTest extends CommandOpMode {
     private boolean fB = false;
     private boolean fA = false;
     private double loopTime = 0;
+    public static double startPos = 0;
 
     @Override
     public void initialize() {
@@ -48,7 +49,7 @@ public class ProfilingTest extends CommandOpMode {
         currentPos = m.encoder.getPosition();
         profile.recondition(maxV, maxA, distance);
         controller.setPID(P, I, D);
-        double[] profiles = profile.update(timer.time());
+        double[] profiles = profile.update(timer.time(), startPos);
         double power = controller.calculate(currentPos, profiles[0]);
         m.set(power);
 
@@ -56,9 +57,10 @@ public class ProfilingTest extends CommandOpMode {
         if (a && !fA) {
             timer.reset();
             m.resetEncoder();
-            distance = 400;
+            distance = distance2;
             maxV *= -1;
             maxA *= -1;
+            startPos = 0;
         }
         fA = a;
 
@@ -68,6 +70,7 @@ public class ProfilingTest extends CommandOpMode {
             distance = -currentPos;
             maxV *= -1;
             maxA *= -1;
+            startPos = currentPos;
         }
         fB = b;
 
