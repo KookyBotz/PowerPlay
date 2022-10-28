@@ -51,17 +51,25 @@ public class TrapezoidalMotionProfile implements MotionProfile {
         tCir = dCir / maxV;
 
         aCur = getAccel(time);
-        if (Math.abs(aCur) > epsilon) {
-            vCur = getVelo(time);
-        }
-
-        if (Math.abs(vCur) > epsilon) {
-            pCur = getPos(time);
-        }
+//        temporarily removing code to fix bug
+//        if (Math.abs(aCur) > epsilon) {
+//            vCur = getVelo(time);
+//        }
+//
+//        if (Math.abs(vCur) > epsilon) {
+//            pCur = getPos(time);
+//        }
 
         if (distance <= 0) {
             pCur = Math.abs(distance) + pCur;
         }
+        aCur = getAccel(time);
+        vCur = getVelo(time);
+        pCur = getPos(time);
+        if (distance <= 0) {
+            pCur += Math.abs(distance);
+        }
+
         return new double[]{pCur, vCur, aCur};
     }
 
