@@ -43,6 +43,7 @@ public class LiftSubsystem extends SubsystemBase {
     public static int retracted = 0;
 
     public double power = 0.0;
+    public double startPosition = 0.0;
 
     // thanks aabhas <3
     public LiftSubsystem(HardwareMap hardwareMap, boolean isAuto) {
@@ -71,6 +72,9 @@ public class LiftSubsystem extends SubsystemBase {
         }
 
         double target = profile.update(timer.time())[0];
+        if (distance < 0) {
+            target += startPosition;
+        }
         power = controller.calculate(liftPosition, target) / voltage * 12;
         lift.set(power);
     }
@@ -97,5 +101,10 @@ public class LiftSubsystem extends SubsystemBase {
         this.maxV = v;
         this.maxA = a;
         this.profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
+        if (d < 0) {
+            this.startPosition = Math.abs(d);
+        } else {
+            this.startPosition = 0;
+        }
     }
 }
