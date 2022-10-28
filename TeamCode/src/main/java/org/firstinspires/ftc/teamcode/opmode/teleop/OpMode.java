@@ -37,6 +37,7 @@ public class OpMode extends CommandOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         robot.intake.setFourbar(0.6);
+        robot.reset();
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         PhotonCore.enable();
@@ -94,10 +95,10 @@ public class OpMode extends CommandOpMode {
         robot.lift.loop();
         CommandScheduler.getInstance().run();
 
-        telemetry.addData("curPos:", robot.lift.getPos());
-        telemetry.addData("curPow:", robot.lift.power);
-        telemetry.addData("curPos:", robot.intake.getPos());
-        telemetry.addData("curPow:", robot.intake.power);
+        telemetry.addData("liftPos:", robot.lift.getPos());
+        telemetry.addData("liftPow:", robot.lift.power);
+        telemetry.addData("intakePos:", robot.intake.getPos());
+        telemetry.addData("intakePow:", robot.intake.power);
 
         double loop = System.currentTimeMillis();
         telemetry.addData("hz ", 1000 / (loop - loopTime));

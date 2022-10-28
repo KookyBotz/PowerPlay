@@ -77,4 +77,9 @@ public class Robot {
     public double getAngle() {
         return imuAngle;
     }
+
+    public void reset() {
+        lift.lift.resetEncoder();
+        intake.extension.resetEncoder();
+    }
 }
