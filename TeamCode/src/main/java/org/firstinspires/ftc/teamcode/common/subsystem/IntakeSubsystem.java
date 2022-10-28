@@ -91,6 +91,7 @@ public class IntakeSubsystem extends SubsystemBase {
         if (distance < 0) {
             target += startPosition;
         }
+
         power = controller.calculate(intakePosition, target) / voltage * 12;
         extension.set(power);
 
