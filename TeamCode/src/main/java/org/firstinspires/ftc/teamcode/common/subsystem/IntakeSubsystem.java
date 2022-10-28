@@ -160,6 +160,10 @@ public class IntakeSubsystem extends SubsystemBase {
         turret.setPosition(turret_deposit);
     }
 
+    public void setPower(double pow) {
+        extension.set(pow);
+    }
+
     public void resetTimer() {
         timer.reset();
     }

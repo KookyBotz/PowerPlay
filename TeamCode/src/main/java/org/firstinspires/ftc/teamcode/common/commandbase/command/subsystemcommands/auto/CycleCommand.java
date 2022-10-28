@@ -25,7 +25,7 @@ public class CycleCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> robot.lift.resetTimer()),
 
                 //wait until ready to intake
-                new WaitUntilCommand(() -> robot.intake.getPos() > 340 && robot.lift.getPos() > 590),
+                new WaitUntilCommand(() -> robot.intake.getPos() > 340 && robot.lift.getPos() > 585),
                 new WaitCommand(500),
 
                 // deposit
@@ -47,7 +47,7 @@ public class CycleCommand extends SequentialCommandGroup {
                 new WaitUntilCommand(() -> robot.intake.getPos() < 10),
                 new WaitCommand(250),
                 new InstantCommand(() -> robot.intake.openClaw()),
-                new WaitCommand(500)
+                new WaitCommand(750)
         );
     }
 }

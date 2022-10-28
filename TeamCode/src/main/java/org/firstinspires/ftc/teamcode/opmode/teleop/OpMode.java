@@ -116,5 +116,9 @@ public class OpMode extends CommandOpMode {
     @Override
     public void reset() {
         CommandScheduler.getInstance().reset();
+        robot.intake.extension.resetEncoder();
+        robot.intake.extension.set(0);
+        robot.lift.lift.resetEncoder();
+        robot.lift.lift.set(0);
     }
 }
