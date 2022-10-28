@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
-@TeleOp (name = "SwervePIDTest")
+@TeleOp(name = "SwervePIDTest")
 public class SwervePIDTest extends LinearOpMode {
 
     AnalogInput lfEncoder, lrEncoder, rrEncoder, rfEncoder;
@@ -24,10 +24,10 @@ public class SwervePIDTest extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()) {
-            telemetry.addData("LF", lfEncoder.getVoltage() / 2.32 * 2 * Math.PI);
-            telemetry.addData("LR", lrEncoder.getVoltage() / 3.3 * 2 * Math.PI);
-            telemetry.addData("RR", rrEncoder.getVoltage() / 3.3 * 2 * Math.PI);
-            telemetry.addData("RF", rfEncoder.getVoltage() / 2.32 * 2 * Math.PI);
+            telemetry.addData("LF", lfEncoder.getVoltage());
+            telemetry.addData("LR", lrEncoder.getVoltage());
+            telemetry.addData("RR", rrEncoder.getVoltage());
+            telemetry.addData("RF", rfEncoder.getVoltage());
             telemetry.update();
         }
     }
