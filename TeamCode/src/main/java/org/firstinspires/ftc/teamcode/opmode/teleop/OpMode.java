@@ -27,18 +27,15 @@ public class OpMode extends CommandOpMode {
 
     private ElapsedTime timer;
     private double loopTime = 0;
-    private boolean fA = false;
-    private boolean fB = false;
-    private boolean fX = false;
-    private boolean fY = false;
     private boolean fRB = false;
 
     @Override
     public void initialize() {
-        robot = new Robot(hardwareMap, true);
+        robot = new Robot(hardwareMap, false);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         robot.intake.setFourbar(0.6);
+        robot.startIMUThread(this);
         robot.reset();
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
@@ -57,7 +54,6 @@ public class OpMode extends CommandOpMode {
                         gamepad1.left_stick_x).rotate(-robot.getAngle()),
                 -gamepad1.right_stick_x
         );
-
 
 
         boolean rb = gamepad1.right_bumper;
@@ -85,6 +81,7 @@ public class OpMode extends CommandOpMode {
         robot.lift.loop();
         CommandScheduler.getInstance().run();
 
+        // Telemetry
         telemetry.addData("liftPos:", robot.lift.getPos());
         telemetry.addData("liftPow:", robot.lift.power);
         telemetry.addData("intakePos:", robot.intake.getPos());
@@ -92,10 +89,8 @@ public class OpMode extends CommandOpMode {
 
         double loop = System.currentTimeMillis();
         telemetry.addData("hz ", 1000 / (loop - loopTime));
-        telemetry.update();
-
         loopTime = loop;
-
+        telemetry.update();
 
         PhotonCore.EXPANSION_HUB.clearBulkCache();
         PhotonCore.CONTROL_HUB.clearBulkCache();
