@@ -34,7 +34,7 @@ public class SwerveDrivetrain implements Drivetrain {
         rightFrontModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "rightFrontMotor"), hardwareMap.get(CRServo.class, "rightFrontServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "rightFrontEncoder"), 2.3).zero(frontRightOffset));
 
         modules = new SwerveModule[]{rightFrontModule, leftFrontModule, leftRearModule, rightRearModule};
-        for(SwerveModule m : modules) m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        for (SwerveModule m : modules) m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         R = hypot(TRACK_WIDTH, WHEEL_BASE);
     }
 
@@ -45,13 +45,9 @@ public class SwerveDrivetrain implements Drivetrain {
 
     @Override
     public void set(Pose pose, double maxPower) {
-
-
-        System.out.printf(Locale.ENGLISH, "x: %.2f y: %.2f h: %.2f%n", pose.x, pose.y, pose.heading);
-
         double x = pose.x, y = pose.y, head = pose.heading;
 
-        if(maxPower != -1){
+        if (maxPower != -1) {
             double r = Math.hypot(x, y);
             x = x / r * maxPower;
             y = y / r * maxPower;
@@ -71,15 +67,21 @@ public class SwerveDrivetrain implements Drivetrain {
         System.out.println(max);
         for (int i = 0; i < 4; i++) {
             SwerveModule m = modules[i];
-            if (max > 1) ws[i] /= max;
-            m.setMotorPower(ws[i]);
+            if (Math.abs(max) > 1) ws[i] /= max;
+            m.setMotorPower(Math.abs(ws[i]));
             m.setTargetRotation(MathUtils.norm(wa[i]));
 
         }
     }
 
     public void updateModules() {
-        for(SwerveModule m : modules) m.update();
+        for (SwerveModule m : modules) m.update();
     }
 
+    public String getTelemetry() {
+        return leftFrontModule.getTelemetry("leftFrontModule") + "\n" +
+                leftRearModule.getTelemetry("leftRearModule") + "\n" +
+                rightFrontModule.getTelemetry("rightFrontModule") + "\n" +
+                rightRearModule.getTelemetry("rightRearModule") + "\n";
+    }
 }

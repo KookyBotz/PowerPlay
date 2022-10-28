@@ -42,7 +42,7 @@ public class SwerveTest extends LinearOpMode {
         while (opModeIsActive()) {
             Pose drive = new Pose(
                     new Point(gamepad1.left_stick_y,
-                            -gamepad1.left_stick_x).rotate(0),
+                            -gamepad1.left_stick_x).rotate(-robot.getAngle() + Math.PI / 2),
                     -gamepad1.right_stick_x
             );
             robot.drivetrain.set(drive);
@@ -50,6 +50,7 @@ public class SwerveTest extends LinearOpMode {
 
             long currTime = System.currentTimeMillis();
             telemetry.addData("hz", 1000 / (currTime - time));
+            telemetry.addLine(robot.drivetrain.getTelemetry());
             time = currTime;
 
             telemetry.update();
