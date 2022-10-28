@@ -21,16 +21,16 @@ public class CycleCommand extends SequentialCommandGroup {
 
                 //extend slides to deposit
                 // TODO replace with new LiftCommand
-                new InstantCommand(() -> robot.lift.setDVA(570, 400, 7500)),
+                new InstantCommand(() -> robot.lift.setDVA(600, 400, 3750)),
                 new InstantCommand(() -> robot.lift.resetTimer()),
 
                 //wait until ready to intake
-                new WaitUntilCommand(() -> robot.intake.getPos() > 340 && robot.lift.getPos() > 560),
+                new WaitUntilCommand(() -> robot.intake.getPos() > 340 && robot.lift.getPos() > 580),
                 new WaitCommand(500),
 
                 // deposit
                 // TODO replace with new LiftCommand
-                new InstantCommand(() -> robot.lift.setDVA(-570, -400, -7500)),
+                new InstantCommand(() -> robot.lift.setDVA(-600, -400, -3750)),
                 new InstantCommand(() -> robot.lift.resetTimer()),
                 //intake
                 new InstantCommand(() -> robot.intake.closeClaw()),
