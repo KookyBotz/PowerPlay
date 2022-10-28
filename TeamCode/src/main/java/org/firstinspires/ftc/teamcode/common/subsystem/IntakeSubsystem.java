@@ -21,7 +21,7 @@ import javax.xml.transform.TransformerException;
 
 @Config
 public class IntakeSubsystem extends SubsystemBase {
-    private final MotorEx extension;
+    public final MotorEx extension;
     private final Servo barLeft, barRight;
     private final Servo claw, turret;
 
@@ -34,7 +34,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private double voltage;
     private double intakePosition;
 
-    private double P = 0.02;
+    private double P = 0.05;
     private double I = 0.0;
     private double D = 0.0;
 
@@ -48,8 +48,9 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double claw_pos_closed = 0.36;
 
     public static double fourbar_extended = 0.075;
-    public static double fourbar_transition = 0.495;
     public static double fourbar_retracted = 0.75;
+    public static double fourbar_transition = fourbar_retracted - 0.2;
+
 
     private double turret_deposit = 0;
     private double turret_intake = 0.62;
@@ -96,10 +97,10 @@ public class IntakeSubsystem extends SubsystemBase {
         extension.set(power);
 
         //AnalogInput sensor = new AnalogInput()
-                //
-                // AnalogInput claw = hardwareMap.get(AnalogInput.class, "clawName");
-                //
-                // mult by 360/33.33
+        //
+        // AnalogInput claw = hardwareMap.get(AnalogInput.class, "clawName");
+        //
+        // mult by 360/33.33
     }
 
     public void setMotionProfile(MotionProfile profile) {
@@ -144,6 +145,11 @@ public class IntakeSubsystem extends SubsystemBase {
     public void closeForebar() {
         barLeft.setPosition(fourbar_retracted);
         barRight.setPosition(1 - fourbar_retracted);
+    }
+
+    public void transitionFourbar() {
+        barLeft.setPosition(fourbar_transition);
+        barRight.setPosition(1 - fourbar_transition);
     }
 
     public void intakeTurret() {

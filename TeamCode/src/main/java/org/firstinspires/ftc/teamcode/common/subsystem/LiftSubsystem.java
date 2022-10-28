@@ -26,13 +26,13 @@ public class LiftSubsystem extends SubsystemBase {
     private double voltage;
     private double liftPosition;
 
-    private double P = 0.025;
+    private double P = 0.05;
     private double I = 0.0;
     private double D = 0.0;
 
     private double distance = 0.0;
-    private double maxV = 20;
-    private double maxA = 20;
+    private double maxV = 0.0;
+    private double maxA = 0.0;
 
     public static int high_pos = 500;
     public static int high_maxV = 1500;

@@ -106,7 +106,15 @@ public class OpMode extends CommandOpMode {
         loopTime = loop;
         PhotonCore.EXPANSION_HUB.clearBulkCache();
         PhotonCore.CONTROL_HUB.clearBulkCache();
+
+        if (gamepad1.left_bumper) {
+            robot.intake.extension.resetEncoder();
+            robot.lift.lift.resetEncoder();
+        }
     }
 
-
+    @Override
+    public void reset() {
+        CommandScheduler.getInstance().reset();
+    }
 }
