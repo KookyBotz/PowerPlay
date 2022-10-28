@@ -23,7 +23,7 @@ public class ProfilingTest extends CommandOpMode {
     PIDController controller;
     ElapsedTime timer;
 
-    public static double maxV = 0.0, maxA = 0.0, distance = 0.0;
+    public static double maxV = 0.0, maxA = 0.0, distance2 = 0.0, distance = 0.0;
     public static double P = 0.0, I = 0.0, D = 0.0;
 
     private double currentPos = 0.0;
@@ -41,8 +41,6 @@ public class ProfilingTest extends CommandOpMode {
         controller = new PIDController(P, I, D);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
-        PhotonCore.enable();
     }
 
     @Override
@@ -58,7 +56,7 @@ public class ProfilingTest extends CommandOpMode {
         if (a && !fA) {
             timer.reset();
             m.resetEncoder();
-            distance = 100;
+            distance = 400;
             maxV *= -1;
             maxA *= -1;
         }
@@ -84,7 +82,5 @@ public class ProfilingTest extends CommandOpMode {
         telemetry.update();
 
         loopTime = loop;
-
-        PhotonCore.CONTROL_HUB.clearBulkCache();
     }
 }
