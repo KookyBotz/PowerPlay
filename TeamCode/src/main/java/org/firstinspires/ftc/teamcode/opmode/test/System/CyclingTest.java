@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.teleop;
+package org.firstinspires.ftc.teamcode.opmode.test.System;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -7,22 +7,17 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeExtendCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.CycleCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
 @Config
-@TeleOp(name = "OpModeTest")
-public class OpMode extends CommandOpMode {
+@TeleOp(name = "CyclingTest")
+public class CyclingTest extends CommandOpMode {
     private Robot robot;
 
     private ElapsedTime timer;
@@ -51,14 +46,35 @@ public class OpMode extends CommandOpMode {
             timer = new ElapsedTime();
         }
 
-        // Drivetrain
-        Pose drive = new Pose(
-                new Point(-gamepad1.left_stick_y,
-                        gamepad1.left_stick_x).rotate(-robot.getAngle()),
-                -gamepad1.right_stick_x
-        );
+        // use fallimg edge dedteier
+        boolean a = gamepad1.a;
+        if (a && !fA) {
+            schedule(new InstantCommand(() -> robot.lift.resetTimer())
+                    .alongWith(new InstantCommand(() -> robot.lift.setDVA(500, 1500, 7500))));
+        }
+        boolean fA = a;
 
+        boolean b = gamepad1.b;
+        if (b && !fB) {
+            schedule(new InstantCommand(() -> robot.lift.setDVA(-500, -1500, -7500))
+                    .alongWith(new InstantCommand(() -> robot.lift.resetTimer())));
+        }
+        fB = b;
 
+        // 600 1500 7500
+        boolean x = gamepad1.x;
+        if (x && !fX) {
+            schedule(new InstantCommand(() -> robot.intake.resetTimer())
+                    .alongWith(new InstantCommand(() -> robot.intake.setDVA(400, 750, 2500))));
+        }
+        boolean fX = x;
+
+        boolean y = gamepad1.y;
+        if (y && !fY) {
+            schedule(new InstantCommand(() -> robot.intake.setDVA(-400, -750, -2500))
+                    .alongWith(new InstantCommand(() -> robot.intake.resetTimer())));
+        }
+        fY = y;
 
         boolean rb = gamepad1.right_bumper;
         if (rb && !fRB) {
@@ -71,15 +87,6 @@ public class OpMode extends CommandOpMode {
             ));
         }
         fRB = rb;
-
-        if (gamepad1.left_bumper) {
-            robot.intake.extension.resetEncoder();
-            robot.lift.lift.resetEncoder();
-        }
-
-        // Update
-        robot.drivetrain.set(drive);
-        robot.drivetrain.updateModules();
 
         robot.intake.loop();
         robot.lift.loop();
@@ -95,10 +102,13 @@ public class OpMode extends CommandOpMode {
         telemetry.update();
 
         loopTime = loop;
-
-
         PhotonCore.EXPANSION_HUB.clearBulkCache();
         PhotonCore.CONTROL_HUB.clearBulkCache();
+
+        if (gamepad1.left_bumper) {
+            robot.intake.extension.resetEncoder();
+            robot.lift.lift.resetEncoder();
+        }
     }
 
     @Override
