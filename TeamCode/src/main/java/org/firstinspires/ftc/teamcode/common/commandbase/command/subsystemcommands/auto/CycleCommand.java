@@ -13,7 +13,7 @@ public class CycleCommand extends SequentialCommandGroup {
         super(
                 //extend intake to pick up
                 // TODO replace with TBD IntakeCommand
-                new InstantCommand(() -> robot.intake.setDVA(350, 750, 2500)),
+                new InstantCommand(() -> robot.intake.setDVA(350, 450, 2500)),
                 new InstantCommand(() -> robot.intake.resetTimer()),
                 new InstantCommand(() -> robot.intake.openClaw()),
                 new InstantCommand(() -> robot.intake.extendForebar()),
@@ -21,16 +21,16 @@ public class CycleCommand extends SequentialCommandGroup {
 
                 //extend slides to deposit
                 // TODO replace with new LiftCommand
-                new InstantCommand(() -> robot.lift.setDVA(600, 400, 3750)),
+                new InstantCommand(() -> robot.lift.setDVA(610, 400, 3750)),
                 new InstantCommand(() -> robot.lift.resetTimer()),
 
                 //wait until ready to intake
-                new WaitUntilCommand(() -> robot.intake.getPos() > 340 && robot.lift.getPos() > 580),
+                new WaitUntilCommand(() -> robot.intake.getPos() > 340 && robot.lift.getPos() > 590),
                 new WaitCommand(500),
 
                 // deposit
                 // TODO replace with new LiftCommand
-                new InstantCommand(() -> robot.lift.setDVA(-600, -400, -3750)),
+                new InstantCommand(() -> robot.lift.setDVA(-610, -400, -3750)),
                 new InstantCommand(() -> robot.lift.resetTimer()),
                 //intake
                 new InstantCommand(() -> robot.intake.closeClaw()),
@@ -38,15 +38,16 @@ public class CycleCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> robot.intake.transitionFourbar()),
                 new InstantCommand(() -> robot.intake.depositTurret()),
                 // TODO replace with TBD IntakeCommand
-                new InstantCommand(() -> robot.intake.setDVA(-350, -750, -2500)),
+                new InstantCommand(() -> robot.intake.setDVA(-350, -450, -2500)),
                 new InstantCommand(() -> robot.intake.resetTimer()),
 
                 //transfer
                 new WaitUntilCommand(() -> robot.lift.getPos() < 10),
                 new InstantCommand(() -> robot.intake.closeForebar()),
                 new WaitUntilCommand(() -> robot.intake.getPos() < 10),
+                new WaitCommand(250),
                 new InstantCommand(() -> robot.intake.openClaw()),
-                new WaitCommand(100)
+                new WaitCommand(500)
         );
     }
 }
