@@ -49,7 +49,10 @@ public class ProfilingTest extends CommandOpMode {
         currentPos = m.encoder.getPosition();
         profile.recondition(maxV, maxA, distance);
         controller.setPID(P, I, D);
-        double[] profiles = profile.update(timer.time(), startPos);
+        double[] profiles = profile.update(timer.time());
+        if (profiles[0] < 0) {
+            profiles[0] += startPos;
+        }
         double power = controller.calculate(currentPos, profiles[0]);
         m.set(power);
 

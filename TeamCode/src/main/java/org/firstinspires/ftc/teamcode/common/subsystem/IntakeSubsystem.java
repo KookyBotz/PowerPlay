@@ -39,15 +39,16 @@ public class IntakeSubsystem extends SubsystemBase {
     private double D = 0.0;
 
     private double distance = 0.0;
-    private double maxV = 16;
-    private double maxA = 8;
+    private double maxV = 0.0;
+    private double maxA = 0.0;
 
-    public static int intake_out_pos = 500;
+    public static int intake_out_pos = 400;
 
     public static double claw_pos_open = 0.2;
     public static double claw_pos_closed = 0.36;
 
     public static double fourbar_extended = 0.075;
+    public static double fourbar_transition = 0.495;
     public static double fourbar_retracted = 0.75;
 
     private double turret_deposit = 0;
@@ -56,6 +57,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public static final double FOURBAR_LENGTH = 9.842;
 
     public double power = 0.0;
+    public double startPosition = 0.0;
 
     // thanks aabhas <3
     public IntakeSubsystem(HardwareMap hardwareMap, boolean isAuto) {
@@ -72,7 +74,7 @@ public class IntakeSubsystem extends SubsystemBase {
         this.timer = new ElapsedTime();
         timer.reset();
         this.voltageTimer = new ElapsedTime();
-        timer.reset();
+        voltageTimer.reset();
         this.controller = new PIDController(P, I, D);
         this.voltageSensor = hardwareMap.voltageSensor.iterator().next();
         this.voltage = voltageSensor.getVoltage();
@@ -86,6 +88,9 @@ public class IntakeSubsystem extends SubsystemBase {
         }
 
         double target = profile.update(timer.time())[0];
+        if (distance < 0) {
+            target += startPosition;
+        }
         power = controller.calculate(intakePosition, target) / voltage * 12;
         extension.set(power);
 
@@ -161,5 +166,10 @@ public class IntakeSubsystem extends SubsystemBase {
         this.maxV = v;
         this.maxA = a;
         this.profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
+        if (d < 0) {
+            this.startPosition = Math.abs(d);
+        } else {
+            this.startPosition = 0;
+        }
     }
 }
