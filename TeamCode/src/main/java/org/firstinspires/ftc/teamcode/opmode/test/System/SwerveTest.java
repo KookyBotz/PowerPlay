@@ -50,6 +50,8 @@ public class SwerveTest extends LinearOpMode {
 
             long currTime = System.currentTimeMillis();
             telemetry.addData("hz", 1000 / (currTime - time));
+            telemetry.addData("target", robot.drivetrain.leftFrontModule.getTargetRotation());
+            telemetry.addData("current", robot.drivetrain.leftFrontModule.getModuleRotation());
             telemetry.addLine(robot.drivetrain.getTelemetry());
             time = currTime;
 
