@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling;
 
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstraints;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionState;
 
 public class AsymetricMotionProfile {
     public final double initialPosition;
@@ -25,5 +26,9 @@ public class AsymetricMotionProfile {
         distance = finalPosition - initialPosition;
 
 
+    }
+
+    public MotionState calculate(double seconds) {
+        return null;
     }
 }
