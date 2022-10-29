@@ -4,8 +4,9 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstrai
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionState;
 
 public class AsymetricMotionProfile {
-    public final double initialPosition;
-    public final double finalPosition;
+    // TODO put initialposition -> constraints on final when done
+    public double initialPosition;
+    public double finalPosition;
     public MotionConstraints constraints;
 
     protected double dt1;

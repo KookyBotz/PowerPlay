@@ -62,6 +62,7 @@ public class ProfilingTest2 extends LinearOpMode {
             telemetry.addData("tarAcc", state.a);
             telemetry.addData("startPos", startPos);
             telemetry.addData("finalPos", finalPosition);
+            telemetry.addData("power", power);
             telemetry.update();
         }
     }
