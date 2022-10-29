@@ -24,8 +24,9 @@ public class ProfilingTest2 extends LinearOpMode {
     public static double P = 0.0, I = 0.0, D = 0.0;
     public static MotionConstraints constraints = new MotionConstraints(0, 0, 0);
 
-    public static double currentPos = 0.0;
     public static double startPos = 0.0;
+    public static double currentPos = 0.0;
+    public static double finalPosition = 0.0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -35,7 +36,7 @@ public class ProfilingTest2 extends LinearOpMode {
         constraints = new MotionConstraints(10, 1, 0.5);
         timer = new ElapsedTime();
         controller = new PIDController(P, I, D);
-        profile = new AsymetricMotionProfile(0, 0, constraints);
+        profile = new AsymetricMotionProfile(startPos, finalPosition, constraints);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         waitForStart();
@@ -45,8 +46,17 @@ public class ProfilingTest2 extends LinearOpMode {
             profile.constraints.max_acceleration = constraints.max_acceleration;
             profile.constraints.max_deceleration = constraints.max_deceleration;
             controller.setPID(P, I, D);
-            double power = controller.calculate(currentPos, profile.calculate(timer.time()).x);
+            MotionState state = profile.calculate(timer.time());
+            double power = controller.calculate(currentPos, state.x);
             m.set(power);
+
+            telemetry.addData("curPos", currentPos);
+            telemetry.addData("tarPos", state.x);
+            telemetry.addData("tarVel", state.v);
+            telemetry.addData("tarAcc", state.a);
+            telemetry.addData("startPos", startPos);
+            telemetry.addData("finalPos", finalPosition);
+            telemetry.update();
         }
     }
 }
