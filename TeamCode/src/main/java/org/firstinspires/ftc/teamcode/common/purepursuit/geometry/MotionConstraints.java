@@ -9,5 +9,5 @@ public class MotionConstraints {
         this.max_velocity = max_velocity;
         this.max_acceleration = max_acceleration;
         this.max_deceleration = max_deceleration;
-    }M
+    }
 }
