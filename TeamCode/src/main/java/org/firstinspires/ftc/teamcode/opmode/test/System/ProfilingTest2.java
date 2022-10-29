@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmode.test.System;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstraints;
@@ -11,6 +14,7 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionState;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymetricMotionProfile;
 
 @Config
+@TeleOp(name = "ProfilingTest2")
 public class ProfilingTest2 extends LinearOpMode {
     MotorEx m;
     AsymetricMotionProfile profile;
@@ -29,6 +33,8 @@ public class ProfilingTest2 extends LinearOpMode {
         m = new MotorEx(hardwareMap, "motor1");
         m.resetEncoder();
         currentPos = m.encoder.getPosition();
+
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         waitForStart();
         while (opModeIsActive()) {
