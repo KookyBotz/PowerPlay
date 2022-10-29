@@ -23,7 +23,6 @@ public class ProfilingTest2 extends LinearOpMode {
 
     public static double P = 0.0, I = 0.0, D = 0.0;
     public static MotionConstraints constraints;
-    public static MotionState state;
 
     public static double currentPos = 0.0;
     public static double startPos = 0.0;
@@ -33,12 +32,18 @@ public class ProfilingTest2 extends LinearOpMode {
         m = new MotorEx(hardwareMap, "motor1");
         m.resetEncoder();
         currentPos = m.encoder.getPosition();
-
+        constraints = new MotionConstraints(10, 1, 0.5);
+        timer = new ElapsedTime();
+        controller = new PIDController(P, I, D);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         waitForStart();
         while (opModeIsActive()) {
-            // sus
+            currentPos = m.encoder.getPosition();
+            profile.constraints = constraints;
+            controller.setPID(P, I, D);
+            double power = controller.calculate(currentPos, profile.calculate(timer.time()).x);
+            m.set(power);
         }
     }
 }

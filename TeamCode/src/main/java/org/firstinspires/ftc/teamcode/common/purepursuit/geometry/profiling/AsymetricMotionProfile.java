@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionState;
 public class AsymetricMotionProfile {
     public final double initialPosition;
     public final double finalPosition;
-    public final MotionConstraints constraints;
+    public MotionConstraints constraints;
 
     protected double dt1;
     protected double dt2;
