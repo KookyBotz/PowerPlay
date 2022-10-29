@@ -22,7 +22,7 @@ public class ProfilingTest2 extends LinearOpMode {
     ElapsedTime timer;
 
     public static double P = 0.0, I = 0.0, D = 0.0;
-    public static MotionConstraints constraints = new MotionConstraints(0, 0, 0);
+    public static double maxVel = 0.0, maxAcc = 0.0, maxDec = 0.0;
 
     public static double startPos = 0.0;
     public static double currentPos = 0.0;
@@ -33,8 +33,9 @@ public class ProfilingTest2 extends LinearOpMode {
         m = new MotorEx(hardwareMap, "motor1");
         m.resetEncoder();
         currentPos = m.encoder.getPosition();
-        constraints = new MotionConstraints(10, 1, 0.5);
+        MotionConstraints constraints = new MotionConstraints(10, 1, 0.5);
         timer = new ElapsedTime();
+        timer.reset();
         controller = new PIDController(P, I, D);
         profile = new AsymetricMotionProfile(startPos, finalPosition, constraints);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -42,13 +43,17 @@ public class ProfilingTest2 extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             currentPos = m.encoder.getPosition();
-            profile.constraints.max_velocity = constraints.max_velocity;
-            profile.constraints.max_acceleration = constraints.max_acceleration;
-            profile.constraints.max_deceleration = constraints.max_deceleration;
+            profile.constraints.max_velocity = maxVel;
+            profile.constraints.max_acceleration = maxAcc;
+            profile.constraints.max_deceleration = maxDec;
             controller.setPID(P, I, D);
             MotionState state = profile.calculate(timer.time());
             double power = controller.calculate(currentPos, state.x);
             m.set(power);
+
+            if (gamepad1.right_bumper) {
+                timer.reset();
+            }
 
             telemetry.addData("curPos", currentPos);
             telemetry.addData("tarPos", state.x);
