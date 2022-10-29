@@ -29,6 +29,9 @@ public class OpMode extends CommandOpMode {
     private double loopTime = 0;
     private boolean fRB = false;
 
+    public static double extensionPower = 0.1;
+    public static double liftPower = 0.1;
+
     @Override
     public void initialize() {
         robot = new Robot(hardwareMap, false);
@@ -56,24 +59,27 @@ public class OpMode extends CommandOpMode {
         );
 
 
-        boolean rb = gamepad1.right_bumper;
-        if (rb && !fRB) {
-            schedule(new SequentialCommandGroup(
-                    new CycleCommand(robot),
-                    new CycleCommand(robot),
-                    new CycleCommand(robot),
-                    new CycleCommand(robot),
-                    new CycleCommand(robot)
-            ));
-        }
-        fRB = rb;
-
         if (gamepad1.left_bumper) {
             robot.intake.extension.resetEncoder();
             robot.lift.lift.resetEncoder();
         }
 
-        // Update
+        // Gamepad2
+        if (gamepad2.dpad_up) {
+            // manual extend
+            robot.lift.lift.set(liftPower);
+        } else if (gamepad2.dpad_down) {
+            // manual retract
+            robot.lift.lift.set(-liftPower);
+        }
+
+        if (gamepad2.dpad_left) {
+            // intake extend
+            robot.intake.extension.set(extensionPower);
+        } else if (gamepad2.dpad_right) {
+            // intake retract
+            robot.intake.extension.set(-extensionPower);
+        }
         robot.drivetrain.set(drive);
         robot.drivetrain.updateModules();
 
