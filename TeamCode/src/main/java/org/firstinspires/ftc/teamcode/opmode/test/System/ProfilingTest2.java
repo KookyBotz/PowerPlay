@@ -46,6 +46,7 @@ public class ProfilingTest2 extends LinearOpMode {
             profile.constraints.max_velocity = maxVel;
             profile.constraints.max_acceleration = maxAcc;
             profile.constraints.max_deceleration = maxDec;
+            profile.compute();
             controller.setPID(P, I, D);
             MotionState state = profile.calculate(timer.time());
             double power = controller.calculate(currentPos, state.x);
