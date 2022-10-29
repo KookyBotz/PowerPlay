@@ -25,7 +25,7 @@ public class AsymetricMotionProfile {
     protected void compute() {
         distance = finalPosition - initialPosition;
 
-
+        this.dt1 = Math.abs(constraints.max_velocity) / Math.abs(constraints.max_acceleration);
     }
 
     public MotionState calculate(double seconds) {
