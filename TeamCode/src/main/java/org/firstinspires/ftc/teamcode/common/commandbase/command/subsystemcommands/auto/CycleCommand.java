@@ -30,7 +30,7 @@ public class CycleCommand extends SequentialCommandGroup {
 
                 // deposit
                 // TODO replace with new LiftCommand
-                new InstantCommand(() -> robot.lift.setDVA(-610, -750, -7500)),
+                new InstantCommand(() -> robot.lift.setDVA(-620, -750, -7500)),
                 new InstantCommand(() -> robot.lift.resetTimer()),
                 //intake
                 new InstantCommand(() -> robot.intake.closeClaw()),

@@ -45,12 +45,11 @@ public class IntakeSubsystem extends SubsystemBase {
     public static int intake_out_pos = 400;
 
     public static double claw_pos_open = 0.2;
-    public static double claw_pos_closed = 0.36;
+    public static double claw_pos_closed = 0.37;
 
-    public static double fourbar_extended = 0.075;
+    public static double fourbar_extended = 0.07;
     public static double fourbar_retracted = 0.75;
     public static double fourbar_transition = fourbar_retracted - 0.2;
-
 
     private double turret_deposit = 0;
     private double turret_intake = 0.62;
