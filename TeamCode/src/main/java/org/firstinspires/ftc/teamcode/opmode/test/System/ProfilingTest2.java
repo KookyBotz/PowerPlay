@@ -22,7 +22,7 @@ public class ProfilingTest2 extends LinearOpMode {
     ElapsedTime timer;
 
     public static double P = 0.0, I = 0.0, D = 0.0;
-    public static MotionConstraints constraints;
+    public static MotionConstraints constraints = new MotionConstraints(0, 0, 0);
 
     public static double currentPos = 0.0;
     public static double startPos = 0.0;
@@ -35,12 +35,15 @@ public class ProfilingTest2 extends LinearOpMode {
         constraints = new MotionConstraints(10, 1, 0.5);
         timer = new ElapsedTime();
         controller = new PIDController(P, I, D);
+        profile = new AsymetricMotionProfile(0, 0, constraints);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         waitForStart();
         while (opModeIsActive()) {
             currentPos = m.encoder.getPosition();
-            profile.constraints = constraints;
+            profile.constraints.max_velocity = constraints.max_velocity;
+            profile.constraints.max_acceleration = constraints.max_acceleration;
+            profile.constraints.max_deceleration = constraints.max_deceleration;
             controller.setPID(P, I, D);
             double power = controller.calculate(currentPos, profile.calculate(timer.time()).x);
             m.set(power);
