@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstraints;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionState;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymmetricMotionProfile;
 
@@ -64,7 +65,7 @@ public class IntakeSubsystem extends SubsystemBase {
         this.claw = hardwareMap.get(Servo.class, "claw");
         this.turret = hardwareMap.get(Servo.class, "turret");
 
-        this.profile = new AsymmetricMotionProfile(0, 0, null);
+        this.profile = new AsymmetricMotionProfile(0, 0, new MotionConstraints(0, 0, 0));
         this.timer = new ElapsedTime();
         timer.reset();
         this.voltageTimer = new ElapsedTime();

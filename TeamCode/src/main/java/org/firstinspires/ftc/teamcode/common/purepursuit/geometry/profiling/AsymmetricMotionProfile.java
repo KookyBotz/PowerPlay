@@ -23,8 +23,7 @@ public class AsymmetricMotionProfile {
         compute();
     }
 
-    // TODO put back to protected when done doing profile testing
-    public void compute() {
+    protected void compute() {
         distance = finalPosition - initialPosition;
 
         this.dt1 = Math.abs(constraints.max_velocity) / Math.abs(constraints.max_acceleration);
