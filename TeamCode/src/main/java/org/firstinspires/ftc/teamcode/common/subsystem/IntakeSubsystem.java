@@ -25,6 +25,8 @@ public class IntakeSubsystem extends SubsystemBase {
     private final Servo claw, turret;
 
     private AsymmetricMotionProfile profile;
+    public MotionConstraints constraints;
+    public MotionState curState;
     private final ElapsedTime timer;
     private final ElapsedTime voltageTimer;
     private final PIDController controller;
@@ -82,7 +84,7 @@ public class IntakeSubsystem extends SubsystemBase {
             voltageTimer.reset();
         }
 
-        MotionState curState = profile.calculate(timer.time());
+        curState = profile.calculate(timer.time());
         if (curState.v != 0) {
             targetPosition = curState.x;
         }

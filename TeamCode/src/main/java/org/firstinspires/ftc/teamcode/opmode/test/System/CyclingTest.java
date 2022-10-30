@@ -78,7 +78,7 @@ public class CyclingTest extends CommandOpMode {
             schedule(
                     new InstantCommand(() -> robot.intake.setMotionProfile(
                     new AsymmetricMotionProfile(robot.intake.getPos(), 0,
-                    new MotionConstraints(750, 2500, 2500)))));
+                    new MotionConstraints(-750, -2500, 2500)))));
         }
         fY = y;
 
@@ -102,7 +102,9 @@ public class CyclingTest extends CommandOpMode {
         telemetry.addData("liftPow:", robot.lift.power);
         telemetry.addData("intakePos:", robot.intake.getPos());
         telemetry.addData("intakePow:", robot.intake.power);
-        telemetry.addData("intakeTar:", robot.intake.getTargetPos());
+        telemetry.addData("intakeTar:", robot.intake.curState.x);
+        telemetry.addData("intakeVel:", robot.intake.curState.v);
+        telemetry.addData("intakeAcc:", robot.intake.curState.a / 100);
 
         double loop = System.currentTimeMillis();
         telemetry.addData("hz ", 1000 / (loop - loopTime));
