@@ -28,13 +28,10 @@ import java.util.Locale;
 
 @Config
 public class SwerveModule {
-    public static double P = 0.4, I = 0, D = 0.02, K_STATIC = 0.03;
+    public static double P = 0.4, I = 0, D = 0.06;
+    public double K_STATIC = 0.05;
 
     public static double MAX_SERVO = 1, MAX_MOTOR = 1;
-
-    public static double ALLOWED_COS_ERROR = Math.toRadians(2);
-
-    public static double ALLOWED_BB_ERROR = Math.toRadians(5);
 
     public static boolean MOTOR_FLIPPING = true;
 
@@ -77,7 +74,7 @@ public class SwerveModule {
         double target = getTargetRotation(), current = getModuleRotation();
 
         double error = normalizeRadians(target - current);
-        if (MOTOR_FLIPPING && Math.abs(error) > 2) {
+        if (MOTOR_FLIPPING && Math.abs(error) > Math.PI / 2) {
             target = normalizeRadians(target - Math.PI);
             wheelFlipped = true;
         } else {
@@ -88,11 +85,8 @@ public class SwerveModule {
 
         double power = Range.clip(rotationController.calculate(0, error), -MAX_SERVO, MAX_SERVO);
         if (Double.isNaN(power)) power = 0;
-        if(Math.abs(lastMotorPower) > 0.05){
-            servo.setPower(Math.abs(rotationController.getPositionError()) > ALLOWED_BB_ERROR ? power + K_STATIC * Math.signum(power) : 0);
-        }else{
-            servo.setPower(0);
-        }
+        servo.setPower(power + K_STATIC * Math.signum(power));
+
     }
 
     public double getTargetRotation() {
@@ -136,13 +130,6 @@ public class SwerveModule {
     }
 
     double lastMotorPower = 0;
-
-
-    public boolean isWithinAllowedError() {
-        double error = Math.abs(rotationController.getPositionError());
-        return error < ALLOWED_COS_ERROR || error > 2 * Math.PI - ALLOWED_COS_ERROR;
-    }
-
 
     public double getServoPower() {
         return servo.getPower();

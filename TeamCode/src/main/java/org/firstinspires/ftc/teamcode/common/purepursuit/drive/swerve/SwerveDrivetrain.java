@@ -25,10 +25,12 @@ public class SwerveDrivetrain implements Drivetrain {
 
     public static double TRACK_WIDTH = 9, WHEEL_BASE = 9;
     private final double R;
-    public static double frontLeftOffset = 0.94 - 0.07, frontRightOffset = 6.26 + 0.06, rearLeftOffset = 3.15 + 0.44, rearRightOffset = 4.5 - Math.PI + 0.1;
+    public static double frontLeftOffset = 0.94 + 0.13, frontRightOffset = 6.26 + 0.06, rearLeftOffset = 3.15 + 0.4, rearRightOffset = 4.5 - Math.PI + 0.09;
+
+    public static double frontLeftK = 0.01, frontRightK = 0.04, rearLeftK = 0.03, rearRightK = 0.03;
 
     public SwerveDrivetrain(HardwareMap hardwareMap) {
-        leftFrontModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "leftFrontMotor"), hardwareMap.get(CRServo.class, "leftFrontServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "leftFrontEncoder"), 2.3).zero(frontLeftOffset));
+        leftFrontModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "leftFrontMotor"), hardwareMap.get(CRServo.class, "leftFrontServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "leftFrontEncoder"), 2.32).zero(frontLeftOffset));
         leftRearModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "leftRearMotor"), hardwareMap.get(CRServo.class, "leftRearServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "leftRearEncoder"), 3.3).zero(rearLeftOffset));
         rightRearModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "rightRearMotor"), hardwareMap.get(CRServo.class, "rightRearServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "rightRearEncoder"), 3.3).zero(rearRightOffset));
         rightFrontModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "rightFrontMotor"), hardwareMap.get(CRServo.class, "rightFrontServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "rightFrontEncoder"), 2.3).zero(frontRightOffset));
@@ -76,6 +78,10 @@ public class SwerveDrivetrain implements Drivetrain {
 
     public void updateModules() {
         for (SwerveModule m : modules) m.update();
+        leftFrontModule.K_STATIC = frontLeftK;
+        rightFrontModule.K_STATIC = frontRightK;
+        leftRearModule.K_STATIC = rearLeftK;
+        rightRearModule.K_STATIC = rearRightK;
     }
 
     public String getTelemetry() {
