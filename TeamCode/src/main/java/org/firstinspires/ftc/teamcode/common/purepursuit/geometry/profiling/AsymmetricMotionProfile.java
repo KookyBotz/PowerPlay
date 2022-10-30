@@ -108,7 +108,7 @@ public class AsymmetricMotionProfile {
             // position is equal to the position at the end of dt1 + v * (t - dt1)
             // TODO Assess if we should actually be using constraints.max_velocity or the velocity at the end of dt1
             // Theoretically they should be the same?
-            position = Math.abs(calculate(this.dt1).x) + constraints.max_velocity * (seconds - this.dt1);
+            position = calculate(this.dt1).x + constraints.max_velocity * (seconds - this.dt1);
         } else if (seconds <= this.dt1 + this.dt2 + this.dt3) {
             // once again we do not trust people and we should not trust people...
             acceleration = Math.abs(constraints.max_deceleration);
