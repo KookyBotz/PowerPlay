@@ -59,7 +59,7 @@ public class AsymmetricMotionProfile {
             acceleration = 0;
             velocity = Math.abs(calculate(this.dt1).v);
 
-            position = Math.abs(calculate(this.dt1).x) - constraints.max_velocity * (seconds + this.dt1);
+            position = calculate(this.dt1).x + constraints.max_velocity * (seconds - this.dt1);
         } else if (seconds <= this.dt1 + this.dt2 + this.dt3) {
             acceleration = Math.abs(constraints.max_deceleration);
             double coastVelocity = Math.abs(calculate(this.dt1).v);
