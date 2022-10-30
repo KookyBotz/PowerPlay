@@ -30,7 +30,7 @@ public class ProfilingTest2 extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        m = new MotorEx(hardwareMap, "motor1");
+        m = new MotorEx(hardwareMap, "extension");
         m.resetEncoder();
         currentPos = m.encoder.getPosition();
         MotionConstraints constraints = new MotionConstraints(10, 1, 0.5);
@@ -52,7 +52,7 @@ public class ProfilingTest2 extends LinearOpMode {
             controller.setPID(P, I, D);
             MotionState state = profile.calculate(timer.time());
             double power = controller.calculate(currentPos, state.x);
-            m.set(power);
+            //m.set(power);
 
             if (gamepad1.right_bumper) {
                 timer.reset();
