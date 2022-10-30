@@ -13,7 +13,7 @@ public class CycleCommand extends SequentialCommandGroup {
         super(
                 //extend intake to pick up
                 // TODO replace with TBD IntakeCommand
-                new InstantCommand(() -> robot.intake.setDVA(350, 450, 2500)),
+                //new InstantCommand(() -> robot.intake.setDVA(350, 450, 2500)),
                 new InstantCommand(() -> robot.intake.resetTimer()),
                 new InstantCommand(() -> robot.intake.openClaw()),
                 new InstantCommand(() -> robot.intake.extendForebar()),
@@ -38,7 +38,7 @@ public class CycleCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> robot.intake.transitionFourbar()),
                 new InstantCommand(() -> robot.intake.depositTurret()),
                 // TODO replace with TBD IntakeCommand
-                new InstantCommand(() -> robot.intake.setDVA(-350, -450, -2500)),
+                //new InstantCommand(() -> robot.intake.setDVA(-350, -450, -2500)),
                 new InstantCommand(() -> robot.intake.resetTimer()),
 
                 //transfer

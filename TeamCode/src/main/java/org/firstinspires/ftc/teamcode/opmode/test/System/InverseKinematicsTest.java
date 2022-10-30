@@ -32,15 +32,15 @@ public class InverseKinematicsTest extends OpMode {
 
         boolean a = gamepad1.a;
         if (a && !fA) {
-            schedule(new InstantCommand(() -> robot.intake.resetTimer())
-                    .alongWith(new InstantCommand(() -> robot.intake.setDVA(400, 750, 2500))));
+//            schedule(new InstantCommand(() -> robot.intake.resetTimer())
+//                    .alongWith(new InstantCommand(() -> robot.intake.setDVA(400, 750, 2500))));
         }
         boolean fA = a;
 
         boolean b = gamepad1.b;
         if (b && !fB) {
-            schedule(new InstantCommand(() -> robot.intake.setDVA(-400, -750, -2500))
-                    .alongWith(new InstantCommand(() -> robot.intake.resetTimer())));
+//            schedule(new InstantCommand(() -> robot.intake.setDVA(-400, -750, -2500))
+//                    .alongWith(new InstantCommand(() -> robot.intake.resetTimer())));
         }
         fB = b;
 
