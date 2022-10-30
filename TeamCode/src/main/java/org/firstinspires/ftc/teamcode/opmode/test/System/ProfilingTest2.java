@@ -11,13 +11,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstraints;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionState;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymetricMotionProfile;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymmetricMotionProfile;
 
 @Config
 @TeleOp(name = "ProfilingTest2")
 public class ProfilingTest2 extends LinearOpMode {
     MotorEx m;
-    AsymetricMotionProfile profile;
+    AsymmetricMotionProfile profile;
     PIDController controller;
     ElapsedTime timer;
 
@@ -37,7 +37,7 @@ public class ProfilingTest2 extends LinearOpMode {
         timer = new ElapsedTime();
         timer.reset();
         controller = new PIDController(P, I, D);
-        profile = new AsymetricMotionProfile(startPos, finalPosition, constraints);
+        profile = new AsymmetricMotionProfile(startPos, finalPosition, constraints);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         waitForStart();

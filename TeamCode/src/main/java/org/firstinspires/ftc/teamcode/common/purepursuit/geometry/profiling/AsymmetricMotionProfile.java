@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstraints;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionState;
 
-public class AsymetricMotionProfile {
+public class AsymmetricMotionProfile {
     // TODO put initialposition -> constraints on final when done
     public double initialPosition;
     public double finalPosition;
@@ -16,7 +16,7 @@ public class AsymetricMotionProfile {
     protected double profileDuration;
     protected double distance;
 
-    public AsymetricMotionProfile(double initialPosition, double finalPosition, MotionConstraints constraints) {
+    public AsymmetricMotionProfile(double initialPosition, double finalPosition, MotionConstraints constraints) {
         this.initialPosition = initialPosition;
         this.finalPosition = finalPosition;
         this.constraints = constraints;

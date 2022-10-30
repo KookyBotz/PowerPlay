@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionState;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymetricMotionProfile;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymmetricMotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.TrapezoidalMotionProfile;
 
@@ -27,7 +27,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final Servo barLeft, barRight;
     private final Servo claw, turret;
 
-    private AsymetricMotionProfile profile;
+    private AsymmetricMotionProfile profile;
     private final ElapsedTime timer;
     private final ElapsedTime voltageTimer;
     private final PIDController controller;
@@ -68,7 +68,7 @@ public class IntakeSubsystem extends SubsystemBase {
         this.claw = hardwareMap.get(Servo.class, "claw");
         this.turret = hardwareMap.get(Servo.class, "turret");
 
-        this.profile = new AsymetricMotionProfile(0, 0, null);
+        this.profile = new AsymmetricMotionProfile(0, 0, null);
         this.timer = new ElapsedTime();
         timer.reset();
         this.voltageTimer = new ElapsedTime();
@@ -109,7 +109,7 @@ public class IntakeSubsystem extends SubsystemBase {
         // mult by 360/33.33
     }
 
-    public void setMotionProfile(AsymetricMotionProfile profile) {
+    public void setMotionProfile(AsymmetricMotionProfile profile) {
         this.profile = profile;
         resetTimer();
     }
@@ -172,10 +172,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void resetTimer() {
         timer.reset();
-    }
-
-    public void setPID(double P, double I, double D) {
-        controller.setPID(P, I, D);
     }
 
     public void setTargetPosition(double target){
