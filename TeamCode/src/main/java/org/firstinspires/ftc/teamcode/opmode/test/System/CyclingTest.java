@@ -77,8 +77,9 @@ public class CyclingTest extends CommandOpMode {
         if (y && !fY) {
             schedule(
                     new InstantCommand(() -> robot.intake.setMotionProfile(
-                    new AsymmetricMotionProfile(robot.intake.getPos(), 0,
-                    new MotionConstraints(-750, 2500, 2500)))));
+                            // TODO replace 400 with robot.intake.getPos() after testing is complete
+                    new AsymmetricMotionProfile(400, 0,
+                    new MotionConstraints(-750, -2500, 2500)))));
         }
         fY = y;
 
@@ -105,6 +106,7 @@ public class CyclingTest extends CommandOpMode {
         telemetry.addData("intakeTar:", robot.intake.curState.x);
         telemetry.addData("intakeVel:", robot.intake.curState.v);
         telemetry.addData("intakeAcc:", robot.intake.curState.a / 100);
+        telemetry.addData("dt1", robot.intake.profile.calculate(robot.intake.profile.dt1).x);
 
         double loop = System.currentTimeMillis();
         telemetry.addData("hz ", 1000 / (loop - loopTime));

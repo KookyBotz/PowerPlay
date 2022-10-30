@@ -9,7 +9,8 @@ public class AsymmetricMotionProfile {
     public double finalPosition;
     public MotionConstraints constraints;
 
-    protected double dt1;
+    // TODO put them on protected when done
+    public double dt1;
     protected double dt2;
     protected double dt3;
 
@@ -59,7 +60,12 @@ public class AsymmetricMotionProfile {
             acceleration = 0;
             velocity = Math.abs(calculate(this.dt1).v);
 
-            position = calculate(this.dt1).x + constraints.max_velocity * (seconds - this.dt1);
+            if (constraints.max_velocity > 0) {
+                position = Math.abs(calculate(this.dt1).x) + constraints.max_velocity * (seconds - this.dt1);
+            } else {
+                position = calculate(this.dt1).x - constraints.max_velocity * (this.dt1 + seconds); /*- constraints.max_velocity * (seconds - this.dt1);*/
+            }
+
         } else if (seconds <= this.dt1 + this.dt2 + this.dt3) {
             acceleration = Math.abs(constraints.max_deceleration);
             double coastVelocity = Math.abs(calculate(this.dt1).v);

@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final Servo barLeft, barRight;
     private final Servo claw, turret;
 
-    private AsymmetricMotionProfile profile;
+    public AsymmetricMotionProfile profile;
     public MotionConstraints constraints;
     public MotionState curState;
     private final ElapsedTime timer;
