@@ -40,18 +40,14 @@ public class IntakeSubsystem extends SubsystemBase {
     private double I = 0.0;
     private double D = 0.0;
 
-    private double distance = 0.0;
-    private double maxV = 0.0;
-    private double maxA = 0.0;
-
     public static int intake_out_pos = 400;
 
-    public static double claw_pos_open = 0.2;
-    public static double claw_pos_closed = 0.37;
+    private double claw_pos_open = 0.2;
+    private double claw_pos_closed = 0.37;
 
-    public static double fourbar_extended = 0.07;
-    public static double fourbar_retracted = 0.75;
-    public static double fourbar_transition = fourbar_retracted - 0.2;
+    private double fourbar_extended = 0.07;
+    private double fourbar_retracted = 0.75;
+    private double fourbar_transition = fourbar_retracted - 0.2;
 
     private double turret_deposit = 0;
     private double turret_intake = 0.62;
@@ -59,7 +55,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public static final double FOURBAR_LENGTH = 9.842;
 
     public double power = 0.0;
-    public double startPosition = 0.0;
     private double targetPosition = 0.0;
 
     // thanks aabhas <3
@@ -90,15 +85,13 @@ public class IntakeSubsystem extends SubsystemBase {
             voltageTimer.reset();
         }
 
-        double target;
         MotionState curState = profile.calculate(timer.time());
         if (curState.v != 0) {
-            target = curState.x;
-            targetPosition = target;
-        } else {
-            target = targetPosition;
+            targetPosition = curState.x;
         }
 
+        power = controller.calculate(intakePosition, targetPosition) / voltage * 12;
+        // extension.set(power);
 
 
 //        double target = profile.update(timer.time())[0];
@@ -122,8 +115,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setPos(int pos) {
-        this.distance = pos;
-        resetTimer();
+        this.targetPosition = pos;
     }
 
     public void setFourbar(double pos) {
@@ -186,19 +178,7 @@ public class IntakeSubsystem extends SubsystemBase {
         controller.setPID(P, I, D);
     }
 
-    public void setDVA(double d, double v, double a) {
-        this.distance = d;
-        this.maxV = v;
-        this.maxA = a;
-        this.profile = null;
-        if (d < 0) {
-            this.startPosition = Math.abs(d);
-        } else {
-            this.startPosition = 0;
-        }
-    }
-
-    public double setTargetPosition(double target){
+    public void setTargetPosition(double target){
         this.targetPosition = target;
     }
 }
