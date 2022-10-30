@@ -102,6 +102,7 @@ public class CyclingTest extends CommandOpMode {
         telemetry.addData("liftPow:", robot.lift.power);
         telemetry.addData("intakePos:", robot.intake.getPos());
         telemetry.addData("intakePow:", robot.intake.power);
+        telemetry.addData("intakeTar:", robot.intake.getTargetPos());
 
         double loop = System.currentTimeMillis();
         telemetry.addData("hz ", 1000 / (loop - loopTime));

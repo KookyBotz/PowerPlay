@@ -16,10 +16,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionState;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymmetricMotionProfile;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.TrapezoidalMotionProfile;
-
-import javax.xml.transform.TransformerException;
 
 @Config
 public class IntakeSubsystem extends SubsystemBase {
@@ -52,7 +48,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private double turret_deposit = 0;
     private double turret_intake = 0.62;
 
-    public static final double FOURBAR_LENGTH = 9.842;
+    private final double FOURBAR_LENGTH = 9.842;
 
     public double power = 0.0;
     private double targetPosition = 0.0;
@@ -129,6 +125,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public int getPos() {
         return (int) intakePosition;
+    }
+
+    public int getTargetPos() {
+        return (int) targetPosition;
     }
 
     public void extensionOut() {
