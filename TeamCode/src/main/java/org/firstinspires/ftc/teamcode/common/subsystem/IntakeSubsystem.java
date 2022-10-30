@@ -128,7 +128,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public int getPos() {
-        return extension.encoder.getPosition();
+        return (int) intakePosition;
     }
 
     public void extensionOut() {

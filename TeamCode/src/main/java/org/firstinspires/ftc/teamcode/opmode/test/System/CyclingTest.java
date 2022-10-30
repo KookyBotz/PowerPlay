@@ -14,6 +14,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.CycleCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstraints;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymmetricMotionProfile;
 
 @Config
 @TeleOp(name = "CyclingTest")
@@ -64,15 +66,19 @@ public class CyclingTest extends CommandOpMode {
         // 600 1500 7500
         boolean x = gamepad1.x;
         if (x && !fX) {
-            schedule(new InstantCommand(() -> robot.intake.resetTimer())
-                    .alongWith(new InstantCommand(() -> robot.intake.setDVA(400, 750, 2500))));
+            schedule(
+                    new InstantCommand(() -> robot.intake.setMotionProfile(
+                    new AsymmetricMotionProfile(robot.intake.getPos(), 400,
+                    new MotionConstraints(750, 2500, 2500)))));
         }
         boolean fX = x;
 
         boolean y = gamepad1.y;
         if (y && !fY) {
-            schedule(new InstantCommand(() -> robot.intake.setDVA(-400, -750, -2500))
-                    .alongWith(new InstantCommand(() -> robot.intake.resetTimer())));
+            schedule(
+                    new InstantCommand(() -> robot.intake.setMotionProfile(
+                    new AsymmetricMotionProfile(robot.intake.getPos(), 0,
+                    new MotionConstraints(750, 2500, 2500)))));
         }
         fY = y;
 
