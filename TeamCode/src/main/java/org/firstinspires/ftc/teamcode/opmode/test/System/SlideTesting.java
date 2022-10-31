@@ -90,20 +90,5 @@ public class SlideTesting extends CommandOpMode {
         if (gamepad1.b) {
             extension.resetEncoder();
         }
-
-        if (gamepad1.y) {
-            // TODO: Add below
-            // basically when this button is pressed that will indicate
-            // the motion profile to go downwards
-            //
-            // in that process, we will set the maxD to something like -10000
-            // and it will go towards that spot. we will then take the position
-            // being calculated and add that as a difference, to get the object
-            // to accelerate towards 0.
-            // possible flag required to indicate this.
-            maxA *= -1;
-            maxV *= -1;
-            maxD = 0;
-        }
     }
 }

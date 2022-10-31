@@ -4,15 +4,13 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstrai
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionState;
 
 public class AsymmetricMotionProfile {
-    // TODO put initialposition -> constraints on final when done
-    public double initialPosition;
-    public double finalPosition;
-    public MotionConstraints constraints;
+    public final double initialPosition;
+    public final double finalPosition;
+    public final MotionConstraints constraints;
 
-    // TODO put them on protected when done
-    public double dt1;
-    public double dt2;
-    public double dt3;
+    protected double dt1;
+    protected double dt2;
+    protected double dt3;
 
     protected double profileDuration;
     protected double distance;
@@ -59,7 +57,7 @@ public class AsymmetricMotionProfile {
         } else if (seconds <= this.dt1 + this.dt2) {
             acceleration = 0;
             velocity = Math.abs(calculate(this.dt1).v);
-
+            // CHANGES NEXT 5 LINES
             if (constraints.max_velocity > 0) {
                 position = Math.abs(calculate(this.dt1).x) + constraints.max_velocity * (seconds - this.dt1);
             } else {
@@ -74,6 +72,7 @@ public class AsymmetricMotionProfile {
             double endofdt2 = this.dt1 + this.dt2;
             double endOfdt2Pos = Math.abs(calculate(endofdt2).x);
             position = endOfdt2Pos + coastVelocity * (seconds - endofdt2) - 0.5 * acceleration * Math.pow(seconds - endofdt2, 2);
+            // CHANGES NEXT 3 LINES
             if (finalPosition < initialPosition) {
                 position += 1.5 * Math.abs(calculate(this.dt1 + this.dt2).x);
             }
