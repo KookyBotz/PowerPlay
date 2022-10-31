@@ -74,7 +74,9 @@ public class AsymmetricMotionProfile {
             double endofdt2 = this.dt1 + this.dt2;
             double endOfdt2Pos = Math.abs(calculate(endofdt2).x);
             position = endOfdt2Pos + coastVelocity * (seconds - endofdt2) - 0.5 * acceleration * Math.pow(seconds - endofdt2, 2);
-            position += 2 * Math.abs(calculate(this.dt1 + this.dt2).x);
+            if (finalPosition < initialPosition) {
+                position += 1.5 * Math.abs(calculate(this.dt1 + this.dt2).x);
+            }
             acceleration *= -1;
 
         } else {

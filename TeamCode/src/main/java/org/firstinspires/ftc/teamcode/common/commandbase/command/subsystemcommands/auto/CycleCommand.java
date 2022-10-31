@@ -7,6 +7,8 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstraints;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymmetricMotionProfile;
 
 public class CycleCommand extends SequentialCommandGroup {
     public CycleCommand(Robot robot) {
@@ -14,6 +16,9 @@ public class CycleCommand extends SequentialCommandGroup {
                 //extend intake to pick up
                 // TODO replace with TBD IntakeCommand
                 //new InstantCommand(() -> robot.intake.setDVA(350, 450, 2500)),
+                new InstantCommand(() -> robot.intake.setMotionProfile(
+                        new AsymmetricMotionProfile(robot.intake.getPos(), 350,
+                        new MotionConstraints(450, 2500, 2500)))),
                 new InstantCommand(() -> robot.intake.resetTimer()),
                 new InstantCommand(() -> robot.intake.openClaw()),
                 new InstantCommand(() -> robot.intake.extendForebar()),
@@ -21,7 +26,10 @@ public class CycleCommand extends SequentialCommandGroup {
 
                 //extend slides to deposit
                 // TODO replace with new LiftCommand
-                new InstantCommand(() -> robot.lift.setDVA(610, 400, 3750)),
+//                new InstantCommand(() -> robot.lift.setDVA(610, 400, 3750)),
+                new InstantCommand(() -> robot.lift.setMotionProfile(
+                        new AsymmetricMotionProfile(robot.lift.getPos(), 610,
+                        new MotionConstraints(400, 3750, 3750)))),
                 new InstantCommand(() -> robot.lift.resetTimer()),
 
                 //wait until ready to intake
@@ -30,7 +38,10 @@ public class CycleCommand extends SequentialCommandGroup {
 
                 // deposit
                 // TODO replace with new LiftCommand
-                new InstantCommand(() -> robot.lift.setDVA(-620, -750, -7500)),
+//                new InstantCommand(() -> robot.lift.setDVA(-620, -750, -7500)),
+                new InstantCommand(() -> robot.lift.setMotionProfile(
+                        new AsymmetricMotionProfile(robot.lift.getPos(), 0,
+                                new MotionConstraints(750, 7500, 2500)))),
                 new InstantCommand(() -> robot.lift.resetTimer()),
                 //intake
                 new InstantCommand(() -> robot.intake.closeClaw()),
@@ -39,6 +50,9 @@ public class CycleCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> robot.intake.depositTurret()),
                 // TODO replace with TBD IntakeCommand
                 //new InstantCommand(() -> robot.intake.setDVA(-350, -450, -2500)),
+                new InstantCommand(() -> robot.intake.setMotionProfile(
+                    new AsymmetricMotionProfile(robot.intake.getPos(), 0,
+                    new MotionConstraints(450, 2500, 2500)))),
                 new InstantCommand(() -> robot.intake.resetTimer()),
 
                 //transfer

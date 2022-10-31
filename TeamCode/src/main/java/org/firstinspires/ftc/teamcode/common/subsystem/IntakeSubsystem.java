@@ -90,7 +90,7 @@ public class IntakeSubsystem extends SubsystemBase {
         }
 
         power = controller.calculate(intakePosition, targetPosition) / voltage * 12;
-        // extension.set(power);
+        extension.set(power);
 
 
 //        double target = profile.update(timer.time())[0];

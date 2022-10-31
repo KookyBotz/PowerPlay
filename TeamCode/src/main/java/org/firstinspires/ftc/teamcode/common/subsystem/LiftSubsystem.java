@@ -10,6 +10,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstraints;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionState;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymmetricMotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.TrapezoidalMotionProfile;
 
@@ -17,7 +20,9 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.Trap
 public class LiftSubsystem extends SubsystemBase {
     public final MotorEx lift;
 
-    private MotionProfile profile;
+    private AsymmetricMotionProfile profile;
+    public MotionConstraints constraints;
+    public MotionState curState;
     private final ElapsedTime timer;
     private final ElapsedTime voltageTimer;
     private final PIDController controller;
@@ -43,7 +48,7 @@ public class LiftSubsystem extends SubsystemBase {
     public static int retracted = 0;
 
     public double power = 0.0;
-    public double startPosition = 0.0;
+    public double targetPosition = 0.0;
 
     // thanks aabhas <3
     public LiftSubsystem(HardwareMap hardwareMap, boolean isAuto) {
@@ -53,7 +58,7 @@ public class LiftSubsystem extends SubsystemBase {
         }
         lift.motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        this.profile = new TrapezoidalMotionProfile(maxV, maxA, 0);
+        this.profile = new AsymmetricMotionProfile(maxV, maxA, new MotionConstraints(0, 0, 0));
         this.timer = new ElapsedTime();
         timer.reset();
         this.voltageTimer = new ElapsedTime();
@@ -71,11 +76,18 @@ public class LiftSubsystem extends SubsystemBase {
             voltageTimer.reset();
         }
 
-        double target = profile.update(timer.time())[0];
-        if (distance < 0) {
-            target += startPosition;
+//        double target = profile.update(timer.time())[0];
+//        if (distance < 0) {
+//            target += startPosition;
+//        }
+//        power = controller.calculate(liftPosition, target) / voltage * 12;
+//        lift.set(power);
+        curState = profile.calculate(timer.time());
+        if (curState.v != 0) {
+            targetPosition = curState.x;
         }
-        power = controller.calculate(liftPosition, target) / voltage * 12;
+
+        power = controller.calculate(liftPosition, targetPosition) / voltage * 12;
         lift.set(power);
     }
 
@@ -100,11 +112,16 @@ public class LiftSubsystem extends SubsystemBase {
         this.distance = d;
         this.maxV = v;
         this.maxA = a;
-        this.profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
-        if (d < 0) {
-            this.startPosition = Math.abs(d);
-        } else {
-            this.startPosition = 0;
-        }
+//        this.profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
+//        if (d < 0) {
+//            this.startPosition = Math.abs(d);
+//        } else {
+//            this.startPosition = 0;
+//        }
+    }
+
+    public void setMotionProfile(AsymmetricMotionProfile profile) {
+        this.profile = profile;
+        resetTimer();
     }
 }

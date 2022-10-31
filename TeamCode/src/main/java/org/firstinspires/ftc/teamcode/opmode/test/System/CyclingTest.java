@@ -77,8 +77,7 @@ public class CyclingTest extends CommandOpMode {
         if (y && !fY) {
             schedule(
                     new InstantCommand(() -> robot.intake.setMotionProfile(
-                            // TODO replace 400 with robot.intake.getPos() after testing is complete
-                    new AsymmetricMotionProfile(400, 0,
+                    new AsymmetricMotionProfile(robot.intake.getPos(), 0,
                     new MotionConstraints(-750, -2500, 2500)))));
         }
         fY = y;
