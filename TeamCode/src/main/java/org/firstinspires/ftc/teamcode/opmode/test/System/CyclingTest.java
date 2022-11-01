@@ -68,8 +68,8 @@ public class CyclingTest extends CommandOpMode {
         if (x && !fX) {
             schedule(
                     new InstantCommand(() -> robot.intake.setMotionProfile(
-                    new AsymmetricMotionProfile(robot.intake.getPos(), 400,
-                    new MotionConstraints(750, 2500, 2500)))));
+                    new AsymmetricMotionProfile(robot.intake.getPos(), 350,
+                    new MotionConstraints(450, 2500, 2500)))));
         }
         boolean fX = x;
 
@@ -78,7 +78,8 @@ public class CyclingTest extends CommandOpMode {
             schedule(
                     new InstantCommand(() -> robot.intake.setMotionProfile(
                     new AsymmetricMotionProfile(robot.intake.getPos(), 0,
-                    new MotionConstraints(-750, -2500, 2500)))));
+                    new MotionConstraints(-200, -2500, 2500)))),
+                    new InstantCommand(() -> robot.intake.resetTimer()));
         }
         fY = y;
 
