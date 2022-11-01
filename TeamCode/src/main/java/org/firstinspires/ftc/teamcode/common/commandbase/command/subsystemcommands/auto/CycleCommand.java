@@ -29,11 +29,11 @@ public class CycleCommand extends SequentialCommandGroup {
 //                new InstantCommand(() -> robot.lift.setDVA(610, 400, 3750)),
                 new InstantCommand(() -> robot.lift.setMotionProfile(
                         new AsymmetricMotionProfile(robot.lift.getPos(), 610,
-                        new MotionConstraints(400, 3750, 3750)))),
+                        new MotionConstraints(500, 3750, 3750)))),
                 new InstantCommand(() -> robot.lift.resetTimer()),
 
                 //wait until ready to intake
-                new WaitUntilCommand(() -> robot.intake.getPos() > 340 && robot.lift.getPos() > 585),
+                new WaitUntilCommand(() -> robot.intake.getPos() > 340 && robot.lift.getPos() > 580),
                 new WaitCommand(500),
 
                 // deposit
@@ -41,7 +41,7 @@ public class CycleCommand extends SequentialCommandGroup {
 //                new InstantCommand(() -> robot.lift.setDVA(-620, -750, -7500)),
                 new InstantCommand(() -> robot.lift.setMotionProfile(
                         new AsymmetricMotionProfile(robot.lift.getPos(), 0,
-                                new MotionConstraints(750, 7500, 2500)))),
+                        new MotionConstraints(1000, 2500, 2500)))),
                 new InstantCommand(() -> robot.lift.resetTimer()),
                 //intake
                 new InstantCommand(() -> robot.intake.closeClaw()),
