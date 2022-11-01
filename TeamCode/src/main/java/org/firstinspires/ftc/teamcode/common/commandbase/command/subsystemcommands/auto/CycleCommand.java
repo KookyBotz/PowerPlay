@@ -52,7 +52,7 @@ public class CycleCommand extends SequentialCommandGroup {
                 //new InstantCommand(() -> robot.intake.setDVA(-350, -450, -2500)),
                 new InstantCommand(() -> robot.intake.setMotionProfile(
                     new AsymmetricMotionProfile(robot.intake.getPos(), 0,
-                    new MotionConstraints(-450, -2500, 2500)))),
+                    new MotionConstraints(200, 2500, 2500)))),
                 new InstantCommand(() -> robot.intake.resetTimer()),
 
                 //transfer
