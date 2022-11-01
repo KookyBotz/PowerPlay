@@ -72,10 +72,10 @@ public class OpMode extends CommandOpMode {
 
         if (gamepad2.dpad_left) {
             // intake extend
-            robot.intake.extension.set(extensionPower);
+            robot.intake.extension.setTargetPosition(robot.intake.getPos() + 1);
         } else if (gamepad2.dpad_right) {
             // intake retract
-            robot.intake.extension.set(-extensionPower);
+
         }
 
         if (gamepad2.right_bumper) {
