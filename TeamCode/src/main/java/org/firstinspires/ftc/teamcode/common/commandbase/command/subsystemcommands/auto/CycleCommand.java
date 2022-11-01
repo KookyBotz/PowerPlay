@@ -29,7 +29,7 @@ public class CycleCommand extends SequentialCommandGroup {
 //                new InstantCommand(() -> robot.lift.setDVA(610, 400, 3750)),
                 new InstantCommand(() -> robot.lift.setMotionProfile(
                         new AsymmetricMotionProfile(robot.lift.getPos(), 610,
-                        new MotionConstraints(500, 3750, 3750)))),
+                        new MotionConstraints(500, 100000000, 7500)))),
                 new InstantCommand(() -> robot.lift.resetTimer()),
 
                 //wait until ready to intake
