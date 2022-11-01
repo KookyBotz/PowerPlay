@@ -79,8 +79,11 @@ public class OpMode extends CommandOpMode {
         }
 
         if (gamepad2.right_bumper) {
+            // rotate turret right
             // TODO revisit later
             Range.clip(0, 0, 0);
+        } else if (gamepad2.left_bumper) {
+            // rotate turret left
         }
 
         if (gamepad2.left_trigger > 0.3) {
