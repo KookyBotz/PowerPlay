@@ -60,7 +60,7 @@ public class LiftSubsystem extends SubsystemBase {
         lift.motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //this.profile = new AsymmetricMotionProfile(maxV, maxA, new MotionConstraints(0, 0, 0));
-        this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(0, 0), new MotionState(0, 0), 0, 0);
+        this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
         this.timer = new ElapsedTime();
         timer.reset();
         this.voltageTimer = new ElapsedTime();

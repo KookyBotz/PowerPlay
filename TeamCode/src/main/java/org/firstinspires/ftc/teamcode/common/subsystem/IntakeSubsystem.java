@@ -70,6 +70,7 @@ public class IntakeSubsystem extends SubsystemBase {
         this.turret = hardwareMap.get(Servo.class, "turret");
 
 //        this.profile = new AsymmetricMotionProfile(0, 0, new MotionConstraints(0, 0, 0));
+        this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
 
         this.timer = new ElapsedTime();
         timer.reset();
@@ -162,7 +163,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setFourbarFactor(double factor) {
         double fourbarAddition = 0.0035 * factor;
         double barLeftPos = barLeft.getPosition();
-        if (!(barLeftPos + fourbarAddition > fourbar_retracted)) {
+        if (!(barLeftPos + fourbarAddition > fourbar_retracted) || !(barLeftPos - fourbarAddition < fourbar_extended)) {
             barLeft.setPosition(barLeftPos + fourbarAddition);
             barRight.setPosition(1 - barLeftPos + fourbarAddition);
         }

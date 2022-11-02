@@ -117,7 +117,7 @@ public class BlueLeftAuto extends LinearOpMode {
                     new CycleCommand(robot),
                     new CycleCommand(robot),
                     new CycleCommand(robot),
-                    new ScoreCommand(robot),
+                    new CycleCommand(robot),
                     // park
                     new PurePursuitCommand(visionPath)
                 )
