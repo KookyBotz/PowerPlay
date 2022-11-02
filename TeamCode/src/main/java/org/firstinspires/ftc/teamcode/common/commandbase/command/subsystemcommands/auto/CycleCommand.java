@@ -19,6 +19,8 @@ public class CycleCommand extends SequentialCommandGroup {
 //                new InstantCommand(() -> robot.intake.setMotionProfile(
 //                        new AsymmetricMotionProfile(robot.intake.getPos(), 350,
 //                        new MotionConstraints(450, 2500, 2500)))),
+                new InstantCommand(() -> robot.intake.newProfile(300, 400, 2500)),
+
 
                 new InstantCommand(() -> robot.intake.resetTimer()),
                 new InstantCommand(() -> robot.intake.openClaw()),
@@ -53,9 +55,10 @@ public class CycleCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> robot.intake.depositTurret()),
                 // TODO replace with TBD IntakeCommand
                 //new InstantCommand(() -> robot.intake.setDVA(-350, -450, -2500)),
-                new InstantCommand(() -> robot.intake.setMotionProfile(
-                    new AsymmetricMotionProfile(robot.intake.getPos(), 0,
-                    new MotionConstraints(200, 2500, 2500)))),
+//                new InstantCommand(() -> robot.intake.setMotionProfile(
+//                    new AsymmetricMotionProfile(robot.intake.getPos(), 0,
+//                    new MotionConstraints(200, 2500, 2500)))),
+                new InstantCommand(() -> robot.intake.newProfile(0, 300, 2500)),
                 new InstantCommand(() -> robot.intake.resetTimer()),
 
                 //transfer
