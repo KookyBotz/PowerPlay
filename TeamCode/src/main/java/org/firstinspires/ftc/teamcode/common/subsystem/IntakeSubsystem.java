@@ -163,6 +163,11 @@ public class IntakeSubsystem extends SubsystemBase {
         }
     }
 
+    public void setSlideFactor(double factor) {
+        double slideAddition = 0.01 * factor;
+        targetPosition = intakePosition + slideAddition;
+    }
+
     public void transitionFourbar() {
         barLeft.setPosition(fourbar_transition);
         barRight.setPosition(1 - fourbar_transition);

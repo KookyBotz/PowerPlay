@@ -15,7 +15,7 @@ public class ClearFourbarCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (intake.getFourbarPos() < intake.fourbar_retracted - 0.1) {
+        if (intake.getFourbarPos() >= intake.fourbar_transition) {
             intake.setFourbar(intake.fourbar_transition);
         }
     }

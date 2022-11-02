@@ -83,9 +83,9 @@ public class LiftSubsystem extends SubsystemBase {
 //            target += startPosition;
 //        }
         curState = profile.get(timer.time());
-//        if (curState.getV() != 0) {
-//            targetPosition = curState.getX();
-//        }
+        if (curState.getV() != 0) {
+            targetPosition = curState.getX();
+        }
 //        power = controller.calculate(liftPosition, target) / voltage * 12;
 //        lift.set(power);
 //        curState = profile.calculate(timer.time());
@@ -95,7 +95,7 @@ public class LiftSubsystem extends SubsystemBase {
 
 
 
-        power = controller.calculate(liftPosition, curState.getX()) / voltage * 12;
+        power = controller.calculate(liftPosition, targetPosition) / voltage * 12;
         lift.set(power);
     }
 

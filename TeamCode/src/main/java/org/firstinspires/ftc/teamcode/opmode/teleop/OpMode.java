@@ -78,15 +78,6 @@ public class OpMode extends CommandOpMode {
             //robot.intake.extension.setTargetPosition(robot.intake.getPos() + 1);
         } else if (gamepad2.dpad_right) {
             // intake retract
-
-        }
-
-        if (gamepad2.right_bumper) {
-            // rotate turret right
-            // TODO revisit later
-            Range.clip(0, 0, 0);
-        } else if (gamepad2.left_bumper) {
-            // rotate turret left
         }
 
         if (gamepad2.left_trigger > 0.3) {
@@ -95,9 +86,14 @@ public class OpMode extends CommandOpMode {
             schedule(new CloseClawCommand(robot));
         }
 
-        double gamepad2_left_stick = gamepad2.left_stick_x;
-        if (gamepad2_left_stick > 0.15 || gamepad2_left_stick < -0.15) {
-            robot.intake.setFourbarFactor(gamepad2_left_stick);
+        double gamepad2_left_stick_y = gamepad2.left_stick_y;
+        if (gamepad2_left_stick_y > 0.15 || gamepad2_left_stick_y < -0.15) {
+            robot.intake.setFourbarFactor(gamepad2_left_stick_y);
+        }
+
+        double gamepad2_left_stick_x = gamepad2.left_stick_x;
+        if (gamepad2_left_stick_x > 0.15 || gamepad2_left_stick_x < -0.15) {
+            robot.intake.setSlideFactor(gamepad2_left_stick_x);
         }
 
         double gamepad2_right_stick = gamepad2.right_stick_x;
@@ -116,13 +112,13 @@ public class OpMode extends CommandOpMode {
         }
 
         if (gamepad2.a) {
-            schedule (new LiftCommand(robot, 100, 700, 2500));
+            schedule (new LiftCommand(robot, 150, 800, 4000));
         } else if (gamepad2.x) {
-            schedule (new LiftCommand(robot, 350, 700, 2500));
+            schedule (new LiftCommand(robot, 350, 800, 4000));
         } else if (gamepad2.y) {
-            schedule (new LiftCommand(robot, 610, 700, 2500));
+            schedule (new LiftCommand(robot, 610, 800, 4000));
         } else if (gamepad2.b) {
-            schedule (new LiftCommand(robot, 0, 700, 2500));
+            schedule (new LiftCommand(robot, -3, 800, 4000));
         }
 
         robot.drivetrain.set(drive);
