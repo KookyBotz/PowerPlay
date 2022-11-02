@@ -5,15 +5,23 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
 
-public class FourbarCommand extends CommandBase {
+public class ClearFourbarCommand extends CommandBase {
     private IntakeSubsystem intake;
     private double pos;
 
-    public FourbarCommand(IntakeSubsystem intake, double pos) {
+    public ClearFourbarCommand(IntakeSubsystem intake) {
         this.intake = intake;
-        this.pos = pos;
     }
 
     @Override
-    public void execute() { intake.setFourbar(pos);}
+    public void execute() {
+        if (intake.getFourbarPos() < intake.fourbar_retracted - 0.1) {
+            intake.setFourbar(intake.fourbar_transition);
+        }
+    }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }
