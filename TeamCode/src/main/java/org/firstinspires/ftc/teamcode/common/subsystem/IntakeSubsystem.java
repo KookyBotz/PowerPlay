@@ -158,7 +158,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setTurretFactor(double factor) {
         double turretAddition = 0.007 * factor;
         double turretPos = turret.getPosition();
-        if ((turretPos + turretAddition < turret_intake) && (turretPos - turretAddition > turret_deposit)) {
+        if (!(turretPos + turretAddition > turret_intake) || !(turretPos - turretAddition < turret_deposit)) {
             turret.setPosition(turretPos + turretAddition);
         }
     }

@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.ClawCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.CloseClawCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.OpenClawCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
@@ -66,15 +67,15 @@ public class OpMode extends CommandOpMode {
         // Gamepad2
         if (gamepad2.dpad_up) {
             // manual extend
-            robot.lift.lift.set(liftPower);
+            //robot.lift.lift.set(liftPower);
         } else if (gamepad2.dpad_down) {
             // manual retract
-            robot.lift.lift.set(-liftPower);
+            //robot.lift.lift.set(-liftPower);
         }
 
         if (gamepad2.dpad_left) {
             // intake extend
-            robot.intake.extension.setTargetPosition(robot.intake.getPos() + 1);
+            //robot.intake.extension.setTargetPosition(robot.intake.getPos() + 1);
         } else if (gamepad2.dpad_right) {
             // intake retract
 
@@ -99,6 +100,11 @@ public class OpMode extends CommandOpMode {
             robot.intake.setFourbarFactor(gamepad2_left_stick);
         }
 
+        double gamepad2_right_stick = gamepad2.right_stick_x;
+        if (gamepad2_right_stick > 0.15 || gamepad2_right_stick < -0.15) {
+            robot.intake.setTurretFactor(gamepad2_right_stick);
+        }
+
         if (gamepad2.left_bumper) {
             schedule (new InstantCommand(() -> robot.intake.intakeTurret()),
                     new InstantCommand(() -> robot.intake.extendForebar()),
@@ -110,13 +116,13 @@ public class OpMode extends CommandOpMode {
         }
 
         if (gamepad2.a) {
-
+            schedule (new LiftCommand(robot, 100, 700, 2500));
         } else if (gamepad2.x) {
-
+            schedule (new LiftCommand(robot, 350, 700, 2500));
         } else if (gamepad2.y) {
-
+            schedule (new LiftCommand(robot, 610, 700, 2500));
         } else if (gamepad2.b) {
-
+            schedule (new LiftCommand(robot, 0, 700, 2500));
         }
 
         robot.drivetrain.set(drive);
@@ -127,10 +133,10 @@ public class OpMode extends CommandOpMode {
         CommandScheduler.getInstance().run();
 
         // Telemetry
-        telemetry.addData("liftPos:", robot.lift.getPos());
-        telemetry.addData("liftPow:", robot.lift.power);
-        telemetry.addData("intakePos:", robot.intake.getPos());
-        telemetry.addData("intakePow:", robot.intake.power);
+//        telemetry.addData("liftPos:", robot.lift.getPos());
+//        telemetry.addData("liftPow:", robot.lift.power);
+//        telemetry.addData("intakePos:", robot.intake.getPos());
+//        telemetry.addData("intakePow:", robot.intake.power);
 
         double loop = System.currentTimeMillis();
         telemetry.addData("hz ", 1000 / (loop - loopTime));
