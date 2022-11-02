@@ -103,9 +103,9 @@ public class CyclingTest extends CommandOpMode {
         telemetry.addData("liftPow:", robot.lift.power);
         telemetry.addData("intakePos:", robot.intake.getPos());
         telemetry.addData("intakePow:", robot.intake.power);
-        telemetry.addData("intakeTar:", robot.intake.curState.x);
-        telemetry.addData("intakeVel:", robot.intake.curState.v);
-        telemetry.addData("intakeAcc:", robot.intake.curState.a / 100);
+        telemetry.addData("intakeTar:", robot.intake.curState.getX());
+        telemetry.addData("intakeVel:", robot.intake.curState.getV());
+        telemetry.addData("intakeAcc:", robot.intake.curState.getA() / 100);
 //        telemetry.addData("dt1", robot.intake.profile.calculate(robot.intake.profile.dt1).x);
 //        telemetry.addData("dt2", robot.intake.profile.calculate(robot.intake.profile.dt2 + robot.intake.profile.dt1).x);
 

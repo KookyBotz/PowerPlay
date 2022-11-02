@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.common.subsystem;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.profile.MotionProfile;
+import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
+import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
@@ -15,7 +18,6 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstraints;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionState;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymmetricMotionProfile;
 
 @Config
@@ -24,7 +26,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final Servo barLeft, barRight;
     private final Servo claw, turret;
 
-    public AsymmetricMotionProfile profile;
+    public MotionProfile profile;
     public MotionConstraints constraints;
     public MotionState curState;
     private final ElapsedTime timer;
@@ -67,7 +69,8 @@ public class IntakeSubsystem extends SubsystemBase {
         this.claw = hardwareMap.get(Servo.class, "claw");
         this.turret = hardwareMap.get(Servo.class, "turret");
 
-        this.profile = new AsymmetricMotionProfile(0, 0, new MotionConstraints(0, 0, 0));
+//        this.profile = new AsymmetricMotionProfile(0, 0, new MotionConstraints(0, 0, 0));
+
         this.timer = new ElapsedTime();
         timer.reset();
         this.voltageTimer = new ElapsedTime();
@@ -84,13 +87,13 @@ public class IntakeSubsystem extends SubsystemBase {
             voltageTimer.reset();
         }
 
-        curState = profile.calculate(timer.time());
-        if (curState.v != 0) {
-            targetPosition = curState.x;
-        }
+        curState = profile.get(timer.time());
+//        if (curState.getV() != 0) {
+//            targetPosition = curState.getX();
+//        }
 
         power = controller.calculate(intakePosition, targetPosition) / voltage * 12;
-        //extension.set(power);
+        extension.set(power);
 
 
 //        double target = profile.update(timer.time())[0];
@@ -109,7 +112,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setMotionProfile(AsymmetricMotionProfile profile) {
-        this.profile = profile;
+//        this.profile = profile;
         resetTimer();
     }
 
@@ -179,5 +182,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void setTargetPosition(double target){
         this.targetPosition = target;
+    }
+
+    public void newProfile(double targetPos, double max_v, double max_a) {
+        profile = MotionProfileGenerator.generateSimpleMotionProfile(new com.acmerobotics.roadrunner.profile.MotionState(getPos(), 0), new com.acmerobotics.roadrunner.profile.MotionState(targetPos, 0), max_v, max_a);
     }
 }
