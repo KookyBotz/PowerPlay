@@ -136,5 +136,6 @@ public class LiftSubsystem extends SubsystemBase {
     public void newProfile(double targetPos, double max_v, double max_a) {
         // start position, final position
         profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(targetPos, 0), max_v, max_a);
+        resetTimer();
     }
 }

@@ -5,6 +5,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -95,6 +97,26 @@ public class OpMode extends CommandOpMode {
         double gamepad2_left_stick = gamepad2.left_stick_x;
         if (gamepad2_left_stick > 0.15 || gamepad2_left_stick < -0.15) {
             robot.intake.setFourbarFactor(gamepad2_left_stick);
+        }
+
+        if (gamepad2.left_bumper) {
+            schedule (new InstantCommand(() -> robot.intake.intakeTurret()),
+                    new InstantCommand(() -> robot.intake.extendForebar()),
+                    new InstantCommand(() -> robot.intake.openClaw()));
+        } else if (gamepad2.right_bumper) {
+            schedule (new InstantCommand(() -> robot.intake.closeClaw()),
+                    new InstantCommand(() -> robot.intake.depositTurret()),
+                    new InstantCommand(() -> robot.intake.closeForebar()));
+        }
+
+        if (gamepad2.a) {
+
+        } else if (gamepad2.x) {
+
+        } else if (gamepad2.y) {
+
+        } else if (gamepad2.b) {
+
         }
 
         robot.drivetrain.set(drive);

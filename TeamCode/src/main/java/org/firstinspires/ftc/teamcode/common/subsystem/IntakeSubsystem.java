@@ -20,6 +20,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstraints;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymmetricMotionProfile;
 
+import java.util.concurrent.TimeUnit;
+
 @Config
 public class IntakeSubsystem extends SubsystemBase {
     public final MotorEx extension;
@@ -48,7 +50,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private double fourbar_extended = 0.07;
     private double fourbar_retracted = 0.75;
-    private double fourbar_transition = fourbar_retracted - 0.2;
+    public double fourbar_transition = fourbar_retracted - 0.2;
 
     private double turret_deposit = 0;
     private double turret_intake = 0.62;
@@ -89,21 +91,9 @@ public class IntakeSubsystem extends SubsystemBase {
         }
 
         curState = profile.get(timer.time());
-//        if (curState.getV() != 0) {
-//            targetPosition = curState.getX();
-//        }
 
         power = controller.calculate(intakePosition, curState.getX()) / voltage * 12;
         extension.set(power);
-
-
-//        double target = profile.update(timer.time())[0];
-//        if (distance < 0) {
-//            target += startPosition;
-//        }
-//
-//        power = controller.calculate(intakePosition, target) / voltage * 12;
-//        extension.set(power);
 
         //AnalogInput sensor = new AnalogInput()
         //
@@ -134,12 +124,8 @@ public class IntakeSubsystem extends SubsystemBase {
         return (int) intakePosition;
     }
 
-    public int getTargetPos() {
-        return (int) targetPosition;
-    }
-
-    public void extensionOut() {
-        extension.setTargetPosition(intake_out_pos);
+    public double getFourbarPos() {
+        return barLeft.getPosition();
     }
 
     public void closeClaw() {
@@ -190,16 +176,8 @@ public class IntakeSubsystem extends SubsystemBase {
         turret.setPosition(turret_deposit);
     }
 
-    public void setPower(double pow) {
-        extension.set(pow);
-    }
-
     public void resetTimer() {
         timer.reset();
-    }
-
-    public void setTargetPosition(double target){
-        this.targetPosition = target;
     }
 
     public void newProfile(double targetPos, double max_v, double max_a) {
