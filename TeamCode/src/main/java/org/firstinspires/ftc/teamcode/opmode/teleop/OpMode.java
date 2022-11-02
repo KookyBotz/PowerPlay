@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
 @Config
-@TeleOp(name = "OpModeTest")
+@TeleOp(name = "OpMode")
 public class OpMode extends CommandOpMode {
     private Robot robot;
 
@@ -90,6 +90,11 @@ public class OpMode extends CommandOpMode {
             schedule(new OpenClawCommand(robot));
         } else if (gamepad2.right_trigger > 0.3) {
             schedule(new CloseClawCommand(robot));
+        }
+
+        double gamepad2_left_stick = gamepad2.left_stick_x;
+        if (gamepad2_left_stick > 0.15 || gamepad2_left_stick < -0.15) {
+            robot.intake.setFourbarFactor(gamepad2_left_stick);
         }
 
         robot.drivetrain.set(drive);

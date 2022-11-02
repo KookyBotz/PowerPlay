@@ -159,6 +159,15 @@ public class IntakeSubsystem extends SubsystemBase {
         barRight.setPosition(1 - fourbar_retracted);
     }
 
+    public void setFourbarFactor(double factor) {
+        double fourbarAddition = 0.0035 * factor;
+        double barLeftPos = barLeft.getPosition();
+        if (!(barLeftPos + fourbarAddition > fourbar_retracted)) {
+            barLeft.setPosition(barLeftPos + fourbarAddition);
+            barRight.setPosition(1 - barLeftPos + fourbarAddition);
+        }
+    }
+
     public void transitionFourbar() {
         barLeft.setPosition(fourbar_transition);
         barRight.setPosition(1 - fourbar_transition);
