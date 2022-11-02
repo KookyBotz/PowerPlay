@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.common.subsystem;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.profile.MotionProfile;
+import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
+import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
@@ -11,16 +14,14 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstraints;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionState;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymmetricMotionProfile;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.TrapezoidalMotionProfile;
 
 @Config
 public class LiftSubsystem extends SubsystemBase {
     public final MotorEx lift;
 
-    private AsymmetricMotionProfile profile;
+    private MotionProfile profile;
     public MotionConstraints constraints;
     public MotionState curState;
     private final ElapsedTime timer;
@@ -58,7 +59,8 @@ public class LiftSubsystem extends SubsystemBase {
         }
         lift.motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        this.profile = new AsymmetricMotionProfile(maxV, maxA, new MotionConstraints(0, 0, 0));
+        //this.profile = new AsymmetricMotionProfile(maxV, maxA, new MotionConstraints(0, 0, 0));
+        this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(0, 0), new MotionState(0, 0), 0, 0);
         this.timer = new ElapsedTime();
         timer.reset();
         this.voltageTimer = new ElapsedTime();
@@ -80,12 +82,18 @@ public class LiftSubsystem extends SubsystemBase {
 //        if (distance < 0) {
 //            target += startPosition;
 //        }
+        curState = profile.get(timer.time());
+        if (curState.getV() != 0) {
+            targetPosition = curState.getX();
+        }
 //        power = controller.calculate(liftPosition, target) / voltage * 12;
 //        lift.set(power);
-        curState = profile.calculate(timer.time());
-        if (curState.v != 0) {
-            targetPosition = curState.x;
-        }
+//        curState = profile.calculate(timer.time());
+//        if (curState.v != 0) {
+//            targetPosition = curState.x;
+//        }
+
+
 
         power = controller.calculate(liftPosition, targetPosition) / voltage * 12;
         lift.set(power);
@@ -121,7 +129,12 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void setMotionProfile(AsymmetricMotionProfile profile) {
-        this.profile = profile;
+        //this.profile = profile;
         resetTimer();
+    }
+
+    public void newProfile(double targetPos, double max_v, double max_a) {
+        // start position, final position
+        profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(targetPos, 0), max_v, max_a);
     }
 }

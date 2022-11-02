@@ -16,9 +16,10 @@ public class CycleCommand extends SequentialCommandGroup {
                 //extend intake to pick up
                 // TODO replace with TBD IntakeCommand
                 //new InstantCommand(() -> robot.intake.setDVA(350, 450, 2500)),
-                new InstantCommand(() -> robot.intake.setMotionProfile(
-                        new AsymmetricMotionProfile(robot.intake.getPos(), 350,
-                        new MotionConstraints(450, 2500, 2500)))),
+//                new InstantCommand(() -> robot.intake.setMotionProfile(
+//                        new AsymmetricMotionProfile(robot.intake.getPos(), 350,
+//                        new MotionConstraints(450, 2500, 2500)))),
+
                 new InstantCommand(() -> robot.intake.resetTimer()),
                 new InstantCommand(() -> robot.intake.openClaw()),
                 new InstantCommand(() -> robot.intake.extendForebar()),
@@ -27,9 +28,10 @@ public class CycleCommand extends SequentialCommandGroup {
                 //extend slides to deposit
                 // TODO replace with new LiftCommand
 //                new InstantCommand(() -> robot.lift.setDVA(610, 400, 3750)),
-                new InstantCommand(() -> robot.lift.setMotionProfile(
-                        new AsymmetricMotionProfile(robot.lift.getPos(), 610,
-                        new MotionConstraints(500, 2500, 7500)))),
+//                new InstantCommand(() -> robot.lift.setMotionProfile(
+//                        new AsymmetricMotionProfile(robot.lift.getPos(), 610,
+//                        new MotionConstraints(500, 2500, 7500)))),
+                new InstantCommand(() -> robot.lift.newProfile(610, 500, 2500)),
                 new InstantCommand(() -> robot.lift.resetTimer()),
 
                 //wait until ready to intake
@@ -39,9 +41,10 @@ public class CycleCommand extends SequentialCommandGroup {
                 // deposit
                 // TODO replace with new LiftCommand
 //                new InstantCommand(() -> robot.lift.setDVA(-620, -750, -7500)),
-                new InstantCommand(() -> robot.lift.setMotionProfile(
-                        new AsymmetricMotionProfile(robot.lift.getPos(), 0,
-                        new MotionConstraints(1000, 2500, 2500)))),
+//                new InstantCommand(() -> robot.lift.setMotionProfile(
+//                        new AsymmetricMotionProfile(robot.lift.getPos(), 0,
+//                        new MotionConstraints(1000, 2500, 2500)))),
+                new InstantCommand(() -> robot.lift.newProfile(0, 500, 2500)),
                 new InstantCommand(() -> robot.lift.resetTimer()),
                 //intake
                 new InstantCommand(() -> robot.intake.closeClaw()),

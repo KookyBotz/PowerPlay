@@ -51,18 +51,19 @@ public class AsymmetricMotionProfile {
         double position;
 
         if (seconds <= this.dt1) {
-            acceleration = Math.abs(constraints.max_acceleration);
+            acceleration =  Math.abs(constraints.max_acceleration);
             velocity = seconds * acceleration;
             position = 0.5 * acceleration * Math.pow(seconds, 2);
         } else if (seconds <= this.dt1 + this.dt2) {
             acceleration = 0;
             velocity = Math.abs(calculate(this.dt1).v);
+            position = Math.abs(calculate(this.dt1).x) + constraints.max_velocity * (seconds - this.dt1);
             // CHANGES NEXT 5 LINES
-            if (constraints.max_velocity > 0) {
-                position = Math.abs(calculate(this.dt1).x) + constraints.max_velocity * (seconds - this.dt1);
-            } else {
-                position = -(constraints.max_velocity * (seconds - this.dt1 - this.dt2)) + calculate(this.dt1).x; /*- constraints.max_velocity * (seconds - this.dt1);*/
-            }
+//            if (constraints.max_velocity > 0) {
+//                position = Math.abs(calculate(this.dt1).x) + constraints.max_velocity * (seconds - this.dt1);
+//            } else {
+//                position = -(constraints.max_velocity * (seconds - this.dt1 - this.dt2)) + calculate(this.dt1).x; /*- constraints.max_velocity * (seconds - this.dt1);*/
+//            }
 
         } else if (seconds <= this.dt1 + this.dt2 + this.dt3) {
             acceleration = Math.abs(constraints.max_deceleration);
@@ -73,9 +74,9 @@ public class AsymmetricMotionProfile {
             double endOfdt2Pos = Math.abs(calculate(endofdt2).x);
             position = endOfdt2Pos + coastVelocity * (seconds - endofdt2) - 0.5 * acceleration * Math.pow(seconds - endofdt2, 2);
             // CHANGES NEXT 3 LINES
-            if (finalPosition < initialPosition) {
-                position += 1.5 * Math.abs(calculate(this.dt1 + this.dt2).x);
-            }
+//            if (finalPosition < initialPosition) {
+//                position += 1.5 * Math.abs(calculate(this.dt1 + this.dt2).x);
+//            }
             acceleration *= -1;
 
         } else {
