@@ -20,8 +20,6 @@ public class CycleCommand extends SequentialCommandGroup {
 //                        new AsymmetricMotionProfile(robot.intake.getPos(), 350,
 //                        new MotionConstraints(450, 2500, 2500)))),
                 new InstantCommand(() -> robot.intake.newProfile(300, 400, 2500)),
-
-
                 new InstantCommand(() -> robot.intake.resetTimer()),
                 new InstantCommand(() -> robot.intake.openClaw()),
                 new InstantCommand(() -> robot.intake.extendForebar()),
