@@ -93,7 +93,7 @@ public class IntakeSubsystem extends SubsystemBase {
 //            targetPosition = curState.getX();
 //        }
 
-        power = controller.calculate(intakePosition, targetPosition) / voltage * 12;
+        power = controller.calculate(intakePosition, curState.getX()) / voltage * 12;
         extension.set(power);
 
 
@@ -161,11 +161,19 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setFourbarFactor(double factor) {
-        double fourbarAddition = 0.0035 * factor;
+        double fourbarAddition = 0.007 * factor;
         double barLeftPos = barLeft.getPosition();
         if (!(barLeftPos + fourbarAddition > fourbar_retracted) || !(barLeftPos - fourbarAddition < fourbar_extended)) {
             barLeft.setPosition(barLeftPos + fourbarAddition);
             barRight.setPosition(1 - barLeftPos + fourbarAddition);
+        }
+    }
+
+    public void setTurretFactor(double factor) {
+        double turretAddition = 0.007 * factor;
+        double turretPos = turret.getPosition();
+        if ((turretPos + turretAddition < turret_intake) && (turretPos - turretAddition > turret_deposit)) {
+            turret.setPosition(turretPos + turretAddition);
         }
     }
 

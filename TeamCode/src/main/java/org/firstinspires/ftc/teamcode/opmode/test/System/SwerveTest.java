@@ -41,9 +41,9 @@ public class SwerveTest extends LinearOpMode {
 
         while (opModeIsActive()) {
             Pose drive = new Pose(
-                    new Point(Math.pow(gamepad1.left_stick_y, 3) / 2,
-                            Math.pow(-gamepad1.left_stick_x, 3) / 2).rotate(0),
-                    Math.pow(-gamepad1.right_stick_x, 3) / 2
+                    new Point(Math.pow(gamepad1.left_stick_y, 3),
+                            Math.pow(-gamepad1.left_stick_x, 3)).rotate(0),
+                    Math.pow(-gamepad1.right_stick_x, 3)
             );
 
             //-robot.getAngle()

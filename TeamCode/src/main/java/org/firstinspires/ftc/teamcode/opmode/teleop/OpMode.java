@@ -50,9 +50,9 @@ public class OpMode extends CommandOpMode {
 
         // Drivetrain
         Pose drive = new Pose(
-                new Point(-gamepad1.left_stick_y,
-                        gamepad1.left_stick_x).rotate(-robot.getAngle()),
-                -gamepad1.right_stick_x
+                new Point(Math.pow(gamepad1.left_stick_y, 3),
+                        Math.pow(-gamepad1.left_stick_x, 3)).rotate(0),
+                Math.pow(-gamepad1.right_stick_x, 3)
         );
 
 
