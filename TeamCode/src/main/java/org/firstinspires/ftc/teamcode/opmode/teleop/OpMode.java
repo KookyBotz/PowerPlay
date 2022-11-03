@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomman
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.OpenClawCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Kinematics;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
@@ -51,7 +52,7 @@ public class OpMode extends CommandOpMode {
             timer = new ElapsedTime();
         }
 
-
+        double speedMultiplier = Kinematics.map(gamepad1.right_trigger, 0, 1, 1, 0.25);
         // Drivetrain
         Pose drive = new Pose(
                 new Point(Math.pow(Math.abs(gamepad1.left_stick_y) > 0.02 ? gamepad1.left_stick_y : 0, 3),
@@ -130,10 +131,12 @@ public class OpMode extends CommandOpMode {
         CommandScheduler.getInstance().run();
 
         // Telemetry
-//        telemetry.addData("liftPos:", robot.lift.getPos());
-//        telemetry.addData("liftPow:", robot.lift.power);
-//        telemetry.addData("intakePos:", robot.intake.getPos());
-//        telemetry.addData("intakePow:", robot.intake.power);
+        telemetry.addData("liftPos:", robot.lift.getPos());
+        telemetry.addData("liftPow:", robot.lift.power);
+        telemetry.addData("intakePos:", robot.intake.getPos());
+        telemetry.addData("intakePow:", robot.intake.power);
+        telemetry.addData("intakeTarget:", robot.intake.targetPosition);
+        telemetry.addData("speed multiplier:", speedMultiplier);
 
         double loop = System.currentTimeMillis();
         telemetry.addData("hz ", 1000 / (loop - loopTime));

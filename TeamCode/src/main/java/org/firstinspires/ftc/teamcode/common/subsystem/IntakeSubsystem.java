@@ -58,7 +58,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final double FOURBAR_LENGTH = 9.842;
 
     public double power = 0.0;
-    private double targetPosition = 0.0;
+    public double targetPosition = 0.0;
 
     // thanks aabhas <3
     public IntakeSubsystem(HardwareMap hardwareMap, boolean isAuto) {
@@ -169,9 +169,13 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setSlideFactor(double factor) {
         double slideAddition = 1 * factor;
         double newPosition = intakePosition + slideAddition;
-        if (!(curState.getV() != 0) && newPosition > -5 && newPosition < 405) {
+//        if (!(curState.getV() != 0) && newPosition > -5 && newPosition < 405) {
+//            targetPosition = newPosition;
+//        }
+        if (curState.getV() == 0) {
             targetPosition = newPosition;
         }
+
     }
 
     public void transitionFourbar() {
