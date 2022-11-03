@@ -51,10 +51,11 @@ public class OpMode extends CommandOpMode {
             timer = new ElapsedTime();
         }
 
+
         // Drivetrain
         Pose drive = new Pose(
-                new Point(Math.pow(gamepad1.left_stick_y, 3),
-                        Math.pow(-gamepad1.left_stick_x, 3)).rotate(0),
+                new Point(Math.pow(Math.abs(gamepad1.left_stick_y) > 0.02 ? gamepad1.left_stick_y : 0, 3),
+                        Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3)).rotate(0),
                 Math.pow(-gamepad1.right_stick_x, 3)
         );
 
@@ -118,7 +119,7 @@ public class OpMode extends CommandOpMode {
         } else if (gamepad2.y) {
             schedule (new LiftCommand(robot, 610, 800, 4000));
         } else if (gamepad2.b) {
-            schedule (new LiftCommand(robot, -10, 800, 4000));
+            schedule (new LiftCommand(robot, -14, 800, 4000));
         }
 
         robot.drivetrain.set(drive);
