@@ -19,6 +19,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveDrivetrain;
+import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.MotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.TrapezoidalMotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
@@ -86,5 +87,8 @@ public class Robot {
     public void read() {
         intake.read();
         lift.read();
+        for (SwerveModule module : drivetrain.modules) {
+            module.read();
+        }
     }
 }

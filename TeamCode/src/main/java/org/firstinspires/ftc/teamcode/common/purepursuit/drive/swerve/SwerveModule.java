@@ -46,6 +46,7 @@ public class SwerveModule {
 
     private boolean wheelFlipped = false;
     private double target = 0.0;
+    private double position = 0.0;
 
     public SwerveModule(DcMotorEx m, CRServo s, AbsoluteAnalogEncoder e) {
         motor = m;
@@ -69,7 +70,7 @@ public class SwerveModule {
     }
 
     public void read() {
-
+        position = encoder.getCurrentPosition();
     }
 
 
@@ -98,7 +99,7 @@ public class SwerveModule {
     }
 
     public double getModuleRotation() {
-        return normalizeRadians(encoder.getCurrentPosition() - Math.PI);
+        return normalizeRadians(position - Math.PI);
     }
 
     public void setMotorPower(double power) {
