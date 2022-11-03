@@ -52,6 +52,8 @@ public class OpMode extends CommandOpMode {
             timer = new ElapsedTime();
         }
 
+        robot.read();
+
         double speedMultiplier = Kinematics.map(gamepad1.right_trigger, 0, 1, 1, 0.25);
         // Drivetrain
         Pose drive = new Pose(
@@ -136,10 +138,12 @@ public class OpMode extends CommandOpMode {
         telemetry.addData("intakePos:", robot.intake.getPos());
         telemetry.addData("intakePow:", robot.intake.power);
         telemetry.addData("intakeTarget:", robot.intake.targetPosition);
+        telemetry.addData("velocity:", robot.intake.curState.getV());
+        telemetry.addData("state:", robot.intake.curState.getV() == 0);
         telemetry.addData("speed multiplier:", speedMultiplier);
 
-        double loop = System.currentTimeMillis();
-        telemetry.addData("hz ", 1000 / (loop - loopTime));
+        double loop = System.nanoTime();
+        telemetry.addData("hz ", 1000000000 / (loop - loopTime));
         loopTime = loop;
         telemetry.update();
 

@@ -72,7 +72,6 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void loop() {
-        liftPosition = lift.encoder.getPosition();
         if (voltageTimer.seconds() > 5) {
             voltage = voltageSensor.getVoltage();
             voltageTimer.reset();
@@ -97,6 +96,10 @@ public class LiftSubsystem extends SubsystemBase {
 
         power = controller.calculate(liftPosition, targetPosition) / voltage * 12;
         lift.set(power);
+    }
+
+    public void read() {
+        liftPosition = lift.encoder.getPosition();
     }
 
     public void setPos(int pos) {

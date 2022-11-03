@@ -82,4 +82,9 @@ public class Robot {
         lift.lift.resetEncoder();
         intake.extension.resetEncoder();
     }
+
+    public void read() {
+        intake.read();
+        lift.read();
+    }
 }

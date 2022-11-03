@@ -84,7 +84,6 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void loop() {
-        intakePosition = extension.encoder.getPosition();
         if (voltageTimer.seconds() > 5) {
             voltage = voltageSensor.getVoltage();
             voltageTimer.reset();
@@ -103,6 +102,10 @@ public class IntakeSubsystem extends SubsystemBase {
         // AnalogInput claw = hardwareMap.get(AnalogInput.class, "clawName");
         //
         // mult by 360/33.33
+    }
+
+    public void read() {
+        intakePosition = extension.encoder.getPosition();
     }
 
     public void setMotionProfile(AsymmetricMotionProfile profile) {
@@ -167,12 +170,12 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setSlideFactor(double factor) {
-        double slideAddition = 1 * factor;
+        double slideAddition =  10 * factor;
         double newPosition = intakePosition + slideAddition;
 //        if (!(curState.getV() != 0) && newPosition > -5 && newPosition < 405) {
 //            targetPosition = newPosition;
 //        }
-        if (curState.getV() == 0) {
+        if (curState.getV() == 0 && newPosition >= -5 && newPosition <= 405) {
             targetPosition = newPosition;
         }
 

@@ -68,6 +68,10 @@ public class SwerveModule {
                 new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, eName)));
     }
 
+    public void read() {
+
+    }
+
 
     public void update() {
         rotationController.setPIDF(P, I, D, 0);
