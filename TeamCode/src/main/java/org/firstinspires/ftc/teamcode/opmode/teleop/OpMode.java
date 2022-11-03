@@ -57,14 +57,13 @@ public class OpMode extends CommandOpMode {
 //        telemetry.addData("READ hz ", 1000000000 / (loop - loopTime));
 //        loopTime = loop;
 
-        double speedMultiplier = Kinematics.map(gamepad1.right_trigger, 0, 1, 1, 0.25);
+        double speedMultiplier = 1 - 0.75 * gamepad1.right_trigger;
         // Drivetrain
         Pose drive = new Pose(
                 new Point(Math.pow(Math.abs(gamepad1.left_stick_y) > 0.02 ? gamepad1.left_stick_y : 0, 3),
                         Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3)).rotate(0),
                 Math.pow(-gamepad1.right_stick_x, 3)
         );
-
 
         if (gamepad1.left_bumper) {
             robot.intake.extension.resetEncoder();
