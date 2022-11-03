@@ -95,11 +95,14 @@ public class LiftSubsystem extends SubsystemBase {
 
 
         power = controller.calculate(liftPosition, targetPosition) / voltage * 12;
-        lift.set(power);
     }
 
     public void read() {
         liftPosition = lift.encoder.getPosition();
+    }
+
+    public void write() {
+        lift.set(power);
     }
 
     public void setPos(int pos) {

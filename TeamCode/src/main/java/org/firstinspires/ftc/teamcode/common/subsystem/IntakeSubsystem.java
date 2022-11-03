@@ -95,7 +95,6 @@ public class IntakeSubsystem extends SubsystemBase {
         }
 
         power = controller.calculate(intakePosition, targetPosition) / voltage * 12;
-        extension.set(power);
 
         //AnalogInput sensor = new AnalogInput()
         //
@@ -106,6 +105,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void read() {
         intakePosition = extension.encoder.getPosition();
+    }
+
+    public void write() {
+        extension.set(power);
     }
 
     public void setMotionProfile(AsymmetricMotionProfile profile) {

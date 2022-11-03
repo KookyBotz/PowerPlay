@@ -91,4 +91,12 @@ public class Robot {
             module.read();
         }
     }
+
+    public void write() {
+        intake.write();
+        lift.write();
+        for (SwerveModule module : drivetrain.modules) {
+
+        }
+    }
 }
