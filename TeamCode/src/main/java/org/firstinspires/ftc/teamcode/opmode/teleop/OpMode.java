@@ -53,6 +53,9 @@ public class OpMode extends CommandOpMode {
         }
 
         robot.read();
+        double loop = System.nanoTime();
+        telemetry.addData("READ hz ", 1000000000 / (loop - loopTime));
+        loopTime = loop;
 
         double speedMultiplier = Kinematics.map(gamepad1.right_trigger, 0, 1, 1, 0.25);
         // Drivetrain
@@ -125,28 +128,41 @@ public class OpMode extends CommandOpMode {
             schedule (new LiftCommand(robot, -14, 800, 4000));
         }
 
+        loop = System.nanoTime();
+        telemetry.addData("schedule HZ ", 1000000000 / (loop - loopTime));
+        loopTime = loop;
+
         robot.drivetrain.set(drive);
         robot.drivetrain.updateModules();
+        loop = System.nanoTime();
+        telemetry.addData("update HZ ", 1000000000 / (loop - loopTime));
+        loopTime = loop;
 
         robot.intake.loop();
         robot.lift.loop();
         CommandScheduler.getInstance().run();
+        loop = System.nanoTime();
+        telemetry.addData("command/loop HZ ", 1000000000 / (loop - loopTime));
+        loopTime = loop;
 
         robot.write();
+        loop = System.nanoTime();
+        telemetry.addData("write HZ ", 1000000000 / (loop - loopTime));
+        loopTime = loop;
 
         // Telemetry
-        telemetry.addData("liftPos:", robot.lift.getPos());
-        telemetry.addData("liftPow:", robot.lift.power);
-        telemetry.addData("intakePos:", robot.intake.getPos());
-        telemetry.addData("intakePow:", robot.intake.power);
-        telemetry.addData("intakeTarget:", robot.intake.targetPosition);
-        telemetry.addData("velocity:", robot.intake.curState.getV());
-        telemetry.addData("state:", robot.intake.curState.getV() == 0);
-        telemetry.addData("speed multiplier:", speedMultiplier);
+//        telemetry.addData("liftPos:", robot.lift.getPos());
+//        telemetry.addData("liftPow:", robot.lift.power);
+//        telemetry.addData("intakePos:", robot.intake.getPos());
+//        telemetry.addData("intakePow:", robot.intake.power);
+//        telemetry.addData("intakeTarget:", robot.intake.targetPosition);
+//        telemetry.addData("velocity:", robot.intake.curState.getV());
+//        telemetry.addData("state:", robot.intake.curState.getV() == 0);
+//        telemetry.addData("speed multiplier:", speedMultiplier);
 
-        double loop = System.nanoTime();
-        telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-        loopTime = loop;
+//        double loop = System.nanoTime();
+//        telemetry.addData("hz ", 1000000000 / (loop - loopTime));
+//        loopTime = loop;
         telemetry.update();
 
         PhotonCore.EXPANSION_HUB.clearBulkCache();
