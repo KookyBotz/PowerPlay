@@ -95,8 +95,6 @@ public class Robot {
     public void write() {
         intake.write();
         lift.write();
-        for (SwerveModule module : drivetrain.modules) {
-
-        }
+        drivetrain.write();
     }
 }

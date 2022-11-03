@@ -29,6 +29,10 @@ public class SwerveDrivetrain implements Drivetrain {
 
     public static double frontLeftK = 0.03, frontRightK = 0.05, rearLeftK = 0.04, rearRightK = 0.04;
 
+    double[] ws = new double[]{};
+    double[] wa = new double[]{};
+    double max = 0.0;
+
     public SwerveDrivetrain(HardwareMap hardwareMap) {
         leftFrontModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "leftFrontMotor"), hardwareMap.get(CRServo.class, "leftFrontServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "leftFrontEncoder"), 2.32).zero(frontLeftOffset));
         leftRearModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "leftRearMotor"), hardwareMap.get(CRServo.class, "leftRearServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "leftRearEncoder"), 3.3).zero(rearLeftOffset));
@@ -61,12 +65,15 @@ public class SwerveDrivetrain implements Drivetrain {
                 c = y - head * (TRACK_WIDTH / R),
                 d = y + head * (TRACK_WIDTH / R);
 
-        double[] ws = new double[]{hypot(b, c), hypot(b, d), hypot(a, d), hypot(a, c)};
-        double[] wa = new double[]{atan2(b, c), atan2(b, d), atan2(a, d), atan2(a, c)};
+        ws = new double[]{hypot(b, c), hypot(b, d), hypot(a, d), hypot(a, c)};
+        wa = new double[]{atan2(b, c), atan2(b, d), atan2(a, d), atan2(a, c)};
 
-        double max = MathUtils.max(ws);
+        max = MathUtils.max(ws);
         //todo integrate motor flipping here
         System.out.println(max);
+    }
+
+    public void write() {
         for (int i = 0; i < 4; i++) {
             SwerveModule m = modules[i];
             if (Math.abs(max) > 1) ws[i] /= max;
