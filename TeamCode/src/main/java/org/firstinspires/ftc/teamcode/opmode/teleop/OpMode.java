@@ -118,7 +118,7 @@ public class OpMode extends CommandOpMode {
         } else if (gamepad2.y) {
             schedule (new LiftCommand(robot, 610, 800, 4000));
         } else if (gamepad2.b) {
-            schedule (new LiftCommand(robot, -3, 800, 4000));
+            schedule (new LiftCommand(robot, -10, 800, 4000));
         }
 
         robot.drivetrain.set(drive);

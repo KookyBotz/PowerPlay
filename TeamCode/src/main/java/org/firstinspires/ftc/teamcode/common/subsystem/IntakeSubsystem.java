@@ -91,8 +91,11 @@ public class IntakeSubsystem extends SubsystemBase {
         }
 
         curState = profile.get(timer.time());
+        if (curState.getV() != 0) {
+            targetPosition = curState.getX();
+        }
 
-        power = controller.calculate(intakePosition, curState.getX()) / voltage * 12;
+        power = controller.calculate(intakePosition, targetPosition) / voltage * 12;
         extension.set(power);
 
         //AnalogInput sensor = new AnalogInput()
@@ -147,7 +150,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setFourbarFactor(double factor) {
-        double fourbarAddition = 0.007 * factor;
+        double fourbarAddition = -0.007 * factor;
         double barLeftPos = barLeft.getPosition();
         if (!(barLeftPos + fourbarAddition > fourbar_retracted) || !(barLeftPos - fourbarAddition < fourbar_extended)) {
             barLeft.setPosition(barLeftPos + fourbarAddition);
@@ -165,7 +168,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void setSlideFactor(double factor) {
         double slideAddition = 0.01 * factor;
-        targetPosition = intakePosition + slideAddition;
+        double newPosition = intakePosition + slideAddition;
+        if (!(curState.getV() != 0) && newPosition > -5 && newPosition < 405) {
+            targetPosition = newPosition;
+        }
     }
 
     public void transitionFourbar() {

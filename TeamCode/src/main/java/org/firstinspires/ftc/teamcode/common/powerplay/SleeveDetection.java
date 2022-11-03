@@ -69,6 +69,10 @@ public class SleeveDetection extends OpenCvPipeline {
         magMat = new Mat();
         blurredMat = new Mat();
         kernel = new Mat();
+
+        if (getPosition().equals(ParkingPosition.LEFT)) {
+
+        }
     }
 
     @Override
