@@ -31,7 +31,7 @@ public class CycleCommand extends SequentialCommandGroup {
 //                new InstantCommand(() -> robot.lift.setMotionProfile(
 //                        new AsymmetricMotionProfile(robot.lift.getPos(), 610,
 //                        new MotionConstraints(500, 2500, 7500)))),
-                new InstantCommand(() -> robot.lift.newProfile(610, 500, 2500)),
+                new InstantCommand(() -> robot.lift.newProfile(610, 800, 2500)),
                 new InstantCommand(() -> robot.lift.resetTimer()),
 
                 //wait until ready to intake
@@ -44,7 +44,7 @@ public class CycleCommand extends SequentialCommandGroup {
 //                new InstantCommand(() -> robot.lift.setMotionProfile(
 //                        new AsymmetricMotionProfile(robot.lift.getPos(), 0,
 //                        new MotionConstraints(1000, 2500, 2500)))),
-                new InstantCommand(() -> robot.lift.newProfile(0, 900, 4000)),
+                new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)),
                 new InstantCommand(() -> robot.lift.resetTimer()),
                 //intake
                 new InstantCommand(() -> robot.intake.closeClaw()),
