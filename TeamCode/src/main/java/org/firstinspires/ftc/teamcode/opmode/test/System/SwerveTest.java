@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
+import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitController;
 
 @TeleOp
@@ -26,6 +27,12 @@ public class SwerveTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Robot robot = new Robot(hardwareMap);
+        Localizer localizer = new TwoWheelLocalizer(
+                () -> robot.horizontalEncoder.getPosition(),
+                () -> robot.lateralEncoder.getPosition(),
+                robot::getAngle
+        );
+        robot.localizer = localizer;
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -40,6 +47,7 @@ public class SwerveTest extends LinearOpMode {
         long time = System.currentTimeMillis();
 
         while (opModeIsActive()) {
+            robot.read();
             Pose drive = new Pose(
                     new Point(Math.pow(gamepad1.left_stick_y, 3),
                             Math.pow(-gamepad1.left_stick_x, 3)).rotate(0),
@@ -52,12 +60,16 @@ public class SwerveTest extends LinearOpMode {
 
             long currTime = System.currentTimeMillis();
             telemetry.addData("hz", 1000 / (currTime - time));
-            telemetry.addData("target", robot.drivetrain.leftFrontModule.getTargetRotation());
-            telemetry.addData("current", robot.drivetrain.leftFrontModule.getModuleRotation());
+//            telemetry.addData("target", robot.drivetrain.leftFrontModule.getTargetRotation());
+//            telemetry.addData("current", robot.drivetrain.leftFrontModule.getModuleRotation());
+
+            telemetry.addData("position:", robot.localizer.getPos());
             telemetry.addLine(robot.drivetrain.getTelemetry());
             time = currTime;
 
             telemetry.update();
+            localizer.periodic();
+            robot.write();
 
             PhotonCore.CONTROL_HUB.clearBulkCache();
             PhotonCore.EXPANSION_HUB.clearBulkCache();

@@ -90,7 +90,7 @@ public class SwerveModule {
 
         double power = Range.clip(rotationController.calculate(0, error), -MAX_SERVO, MAX_SERVO);
         if (Double.isNaN(power)) power = 0;
-        servo.setPower(power + K_STATIC * Math.signum(power));
+        servo.setPower(power + (Math.abs(error) > 0.02 ? K_STATIC : 0) * Math.signum(power));
 
     }
 

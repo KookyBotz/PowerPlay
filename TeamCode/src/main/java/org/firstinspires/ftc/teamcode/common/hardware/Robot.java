@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.common.hardware;
 
 import androidx.annotation.GuardedBy;
 
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -40,6 +41,8 @@ public class Robot {
     public IntakeSubsystem intake;
     public LiftSubsystem lift;
 
+    public Motor.Encoder horizontalEncoder, lateralEncoder;
+
     public Robot(HardwareMap hardwareMap, boolean isAuto) {
         drivetrain = new SwerveDrivetrain(hardwareMap);
 
@@ -49,6 +52,9 @@ public class Robot {
             parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
             imu.initialize(parameters);
         }
+
+        horizontalEncoder = new MotorEx(hardwareMap, "rightFrontMotor").encoder;
+        lateralEncoder = new MotorEx(hardwareMap, "leftFrontMotor").encoder;
 
 //        AnalogInput claw2 = hardwareMap.get(AnalogInput.class, "claw");
 //        claw2.getVoltage();
@@ -76,7 +82,7 @@ public class Robot {
     }
 
     public double getAngle() {
-        return imuAngle;
+        return -imuAngle;
     }
 
     public void reset() {

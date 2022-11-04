@@ -37,15 +37,15 @@ import java.util.function.DoubleSupplier;
 @Config
 //BRUH JUST DONT USE ROADRUNNER
 public class TwoWheelLocalizer extends TwoTrackingWheelLocalizer implements Localizer {
-    public static double TICKS_PER_REV = 8192;
+    public static double TICKS_PER_REV = 8092;
     public static double WHEEL_RADIUS = 0.689; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
-    public static double PARALLEL_X = 2.5; // X is the up and down direction
+    public static double PARALLEL_X = 0; // X is the up and down direction
     public static double PARALLEL_Y = 4.25; // Y is the strafe direction
 
     public static double PERPENDICULAR_X = 3.75;
-    public static double PERPENDICULAR_Y = 1.125;
+    public static double PERPENDICULAR_Y = 0;
 
     private final DoubleSupplier horizontalPosition, lateralPosition, imuAngle;
 

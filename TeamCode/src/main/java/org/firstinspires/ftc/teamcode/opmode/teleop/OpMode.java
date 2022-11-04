@@ -11,14 +11,11 @@ import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.ClawCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.CloseClawCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.OpenClawCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Kinematics;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
@@ -93,17 +90,17 @@ public class OpMode extends CommandOpMode {
         }
 
         double gamepad2_left_stick_y = gamepad2.left_stick_y;
-        if (gamepad2_left_stick_y > 0.15 || gamepad2_left_stick_y < -0.15) {
+        if (Math.abs(gamepad2_left_stick_y) > 0.15) {
             robot.intake.setFourbarFactor(gamepad2_left_stick_y);
         }
 
         double gamepad2_left_stick_x = gamepad2.left_stick_x;
-        if (gamepad2_left_stick_x > 0.15 || gamepad2_left_stick_x < -0.15) {
+        if (Math.abs(gamepad2_left_stick_x) > 0.15) {
             robot.intake.setSlideFactor(gamepad2_left_stick_x);
         }
 
         double gamepad2_right_stick = gamepad2.right_stick_x;
-        if (gamepad2_right_stick > 0.15 || gamepad2_right_stick < -0.15) {
+        if (Math.abs(gamepad2_right_stick) > 0.15) {
             robot.intake.setTurretFactor(gamepad2_right_stick);
         }
 
