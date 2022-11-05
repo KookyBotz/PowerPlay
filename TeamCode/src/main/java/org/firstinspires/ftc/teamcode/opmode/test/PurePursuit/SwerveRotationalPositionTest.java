@@ -35,7 +35,6 @@ public class SwerveRotationalPositionTest extends LinearOpMode {
         }
 
         waitForStart();
-        robot.startIMUThread(this);
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(

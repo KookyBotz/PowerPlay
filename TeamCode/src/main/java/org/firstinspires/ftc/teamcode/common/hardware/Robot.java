@@ -29,11 +29,7 @@ import org.firstinspires.ftc.teamcode.common.subsystem.LiftSubsystem;
 
 public class Robot {
 
-    private final Object imuLock = new Object();
-    @GuardedBy("imuLock")
     public final BNO055IMU imu;
-    private double imuAngle = 0;
-    private Thread imuThread;
 
     public SwerveDrivetrain drivetrain;
     public Localizer localizer;
@@ -43,17 +39,16 @@ public class Robot {
 
     public Motor.Encoder horizontalEncoder, lateralEncoder;
 
-    private int currentModuleIndex = 1;
+//    private int currentModuleIndex = 1;
 
     public Robot(HardwareMap hardwareMap, boolean isAuto) {
         drivetrain = new SwerveDrivetrain(hardwareMap);
 
-        synchronized (imuLock) {
-            imu = hardwareMap.get(BNO055IMU.class, "imu");
-            BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-            parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-            imu.initialize(parameters);
-        }
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+        imu.initialize(parameters);
+
 
         horizontalEncoder = new MotorEx(hardwareMap, "rightFrontMotor").encoder;
         lateralEncoder = new MotorEx(hardwareMap, "leftFrontMotor").encoder;
@@ -72,19 +67,8 @@ public class Robot {
         this(hardwareMap, false);
     }
 
-    public void startIMUThread(LinearOpMode opMode) {
-        imuThread = new Thread(() -> {
-            while (!opMode.isStopRequested() && opMode.opModeIsActive()) {
-                synchronized (imuLock) {
-                    imuAngle = imu.getAngularOrientation().firstAngle;
-                }
-            }
-        });
-        imuThread.start();
-    }
-
     public double getAngle() {
-        return -imuAngle;
+        return -imu.getAngularOrientation().firstAngle;
     }
 
     public void reset() {

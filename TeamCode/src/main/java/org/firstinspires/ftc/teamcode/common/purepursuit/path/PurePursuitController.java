@@ -12,10 +12,11 @@ public class PurePursuitController {
 
     public static Pose goToPosition(Pose robotPose, Pose targetPose, Pose pCoefficients) {
         Pose deltaPose = relDistanceToTarget(robotPose, targetPose);
+        System.out.println("error = " + deltaPose.toString());
         Pose powers = deltaPose.divide(pCoefficients);
-        double x_rotated = powers.x * Math.cos(-robotPose.heading) - powers.y * Math.sin(-robotPose.heading);
-        double y_rotated = powers.x * Math.sin(-robotPose.heading) + powers.y * Math.cos(-robotPose.heading);
-        return new Pose(x_rotated, y_rotated, powers.heading);
+        double x_rotated = powers.x * Math.cos(robotPose.heading) - powers.y * Math.sin(robotPose.heading);
+        double y_rotated = powers.x * Math.sin(robotPose.heading) + powers.y * Math.cos(robotPose.heading);
+        return new Pose(-x_rotated, -y_rotated, powers.heading);
     }
 
     public static Point lineCircleIntersection(Point pointA, Point pointB, Point center, double radius) {

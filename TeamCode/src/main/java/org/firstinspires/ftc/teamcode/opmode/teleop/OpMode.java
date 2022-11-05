@@ -36,7 +36,6 @@ public class OpMode extends CommandOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         robot.intake.setFourbar(0.6);
-        robot.startIMUThread(this);
         robot.reset();
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
@@ -110,18 +109,20 @@ public class OpMode extends CommandOpMode {
                     new InstantCommand(() -> robot.intake.extendForebar()),
                     new InstantCommand(() -> robot.intake.openClaw()));
         } else if (gamepad2.right_bumper) {
-            schedule (new InstantCommand(() -> robot.intake.closeClaw()),
-                    new WaitCommand(500),
-                    new InstantCommand(() -> robot.intake.depositTurret()),
-                    new InstantCommand(() -> robot.intake.closeForebar()));
+            if (robot.lift.getPos() < 10) {
+                schedule (new InstantCommand(() -> robot.intake.closeClaw()),
+                        new WaitCommand(1000),
+                        new InstantCommand(() -> robot.intake.depositTurret()),
+                        new InstantCommand(() -> robot.intake.closeForebar()));
+            }
         }
 
         if (gamepad2.a) {
-            schedule (new LiftCommand(robot, 150, 800, 3000));
+            schedule (new LiftCommand(robot, 150, 700, 3000));
         } else if (gamepad2.x) {
-            schedule (new LiftCommand(robot, 350, 800, 3000));
+            schedule (new LiftCommand(robot, 350, 700, 3000));
         } else if (gamepad2.y) {
-            schedule (new LiftCommand(robot, 610, 800, 3000));
+            schedule (new LiftCommand(robot, 610, 700, 3000));
         } else if (gamepad2.b) {
             schedule (new LiftCommand(robot, -14, 3500, 8500));
         }

@@ -25,12 +25,12 @@ public class SwerveDrivetrain implements Drivetrain {
 
     public static double TRACK_WIDTH = 9, WHEEL_BASE = 9;
     private final double R;
-    public static double frontLeftOffset = 0, frontRightOffset = 0, rearLeftOffset = 0, rearRightOffset = 0;
+    public static double frontLeftOffset = 1.05, frontRightOffset = 0.07, rearLeftOffset = -2.62, rearRightOffset = 1.44;
 
     public static double frontLeftK = 0.03, frontRightK = 0.05, rearLeftK = 0.04, rearRightK = 0.04;
 
-    double[] ws = new double[]{};
-    double[] wa = new double[]{};
+    double[] ws = new double[4];
+    double[] wa = new double[4];
     double max = 0.0;
 
     public SwerveDrivetrain(HardwareMap hardwareMap) {
@@ -51,6 +51,7 @@ public class SwerveDrivetrain implements Drivetrain {
 
     @Override
     public void set(Pose pose, double maxPower) {
+        System.out.println(pose.toString());
         double x = pose.x, y = pose.y, head = pose.heading;
 
         if (maxPower != -1) {
@@ -74,23 +75,12 @@ public class SwerveDrivetrain implements Drivetrain {
     }
 
     public void write() {
-//        for (SwerveModule m : modules) {
-//            if (Math.abs(max) > 1) ws[index] /= max;
-//        }
-
         for (int i = 0; i < 4; i++) {
             SwerveModule m = modules[i];
             if (Math.abs(max) > 1) ws[i] /= max;
             m.setMotorPower(Math.abs(ws[i]));
             m.setTargetRotation(MathUtils.norm(wa[i]));
         }
-//        modules[index].setMotorPower(Math.abs(ws[index]));
-
-//        SwerveModule m = modules[index];
-//        if (Math.abs(max) > 1) ws[index] /= max;
-//        m.setMotorPower(Math.abs(ws[index]));
-//        m.setTargetRotation(MathUtils.norm(wa[index]));
-
     }
 
     public void updateModules() {

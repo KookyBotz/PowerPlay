@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
+import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitController;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
@@ -34,7 +35,13 @@ public class SwerveGoToPositionTest extends LinearOpMode {
 //                lateralPos = () -> robot.lateralEncoder.getCurrentPosition(),
 //                imuAngle = () -> -robot.imu.getAngularOrientation().firstAngle;
 
-        Localizer localizer = new BetterSwerveLocalizer(()->-robot.getAngle(), robot.drivetrain.modules);
+        Localizer localizer = new TwoWheelLocalizer(
+                () -> robot.horizontalEncoder.getPosition(),
+                () -> robot.lateralEncoder.getPosition(),
+                ()-> robot.getAngle()
+        );
+
+
         Pose targetPose = new Pose(coordX, coordY, coordHeading);
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -42,11 +49,11 @@ public class SwerveGoToPositionTest extends LinearOpMode {
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.enable();
         waitForStart();
-        robot.startIMUThread(this);
 
         long time = System.currentTimeMillis();
 
         while (opModeIsActive()) {
+            robot.read();
             targetPose.x = coordX;
             targetPose.y = coordY;
             targetPose.heading = coordHeading;
@@ -55,7 +62,7 @@ public class SwerveGoToPositionTest extends LinearOpMode {
             if(!gamepad1.a) {
                 drive = new Pose(
                         new Point(-gamepad1.left_stick_y,
-                                gamepad1.left_stick_x).rotate(-robot.getAngle()),
+                                gamepad1.left_stick_x),
                         gamepad1.right_stick_x
                 );
             }else{
@@ -65,7 +72,6 @@ public class SwerveGoToPositionTest extends LinearOpMode {
             }
             robot.drivetrain.set(drive);
             robot.drivetrain.updateModules();
-
 //
 
 
@@ -78,6 +84,9 @@ public class SwerveGoToPositionTest extends LinearOpMode {
             telemetry.update();
 
             PhotonCore.CONTROL_HUB.clearBulkCache();
+            PhotonCore.EXPANSION_HUB.clearBulkCache();
+            robot.write();
+
         }
 
     }

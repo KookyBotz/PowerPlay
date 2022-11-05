@@ -42,9 +42,9 @@ public class TwoWheelLocalizer extends TwoTrackingWheelLocalizer implements Loca
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
     public static double PARALLEL_X = 0; // X is the up and down direction
-    public static double PARALLEL_Y = 4.25; // Y is the strafe direction
+    public static double PARALLEL_Y = 1; // Y is the strafe direction
 
-    public static double PERPENDICULAR_X = 3.75;
+    public static double PERPENDICULAR_X = -4.25;
     public static double PERPENDICULAR_Y = 0;
 
     private final DoubleSupplier horizontalPosition, lateralPosition, imuAngle;
@@ -96,7 +96,7 @@ public class TwoWheelLocalizer extends TwoTrackingWheelLocalizer implements Loca
     @Override
     public Pose getPos() {
         Pose2d pose = getPoseEstimate();
-        return new Pose(pose.getY(), -pose.getX(), pose.getHeading());
+        return new Pose(-pose.getX(), pose.getY(), pose.getHeading());
     }
 
     @Override

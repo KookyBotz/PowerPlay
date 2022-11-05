@@ -139,7 +139,7 @@ public class PurePursuitPath {
 
         // Set Powers
         // TODO: Revisit this
-        drivetrain.set(powers, profile.update(timer.seconds())[0] / MAX_SPEED_VERTICAL);
+        drivetrain.set(powers);
         return true;
     }
 }

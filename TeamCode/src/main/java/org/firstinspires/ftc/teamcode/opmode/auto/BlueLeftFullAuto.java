@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionCommand;
@@ -20,6 +21,7 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPath;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPathBuilder;
 
+@Disabled
 @Autonomous (name = "BlueLeftFullAuto")
 public class BlueLeftFullAuto extends LinearOpMode {
 
@@ -41,7 +43,6 @@ public class BlueLeftFullAuto extends LinearOpMode {
         }
 
         waitForStart();
-        robot.startIMUThread(this);
 
         PurePursuitPath preloadPath = new PurePursuitPathBuilder()
                 .setDrivetrain(drivetrain)

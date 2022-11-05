@@ -7,27 +7,20 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PurePursuitCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.CycleCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
-import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Waypoint;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.RisingMotionProfile;
-import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPath;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPathBuilder;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous (name = "BlueLeftAuto")
-public class BlueLeftAuto extends LinearOpMode {
+@Autonomous(name = "DriveForwardAuto")
+public class DriveForwardAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -37,7 +30,7 @@ public class BlueLeftAuto extends LinearOpMode {
         Localizer localizer = new TwoWheelLocalizer(
                 () -> robot.horizontalEncoder.getPosition(),
                 () -> robot.lateralEncoder.getPosition(),
-                ()-> robot.getAngle() + Math.PI
+                () -> robot.getAngle()
         );
         robot.localizer = localizer;
 //        SleeveDetection sleeveDetection;
@@ -88,20 +81,11 @@ public class BlueLeftAuto extends LinearOpMode {
 
         waitForStart();
 
-
-        PurePursuitPath preloadPath = new PurePursuitPathBuilder()
-                .setDrivetrain(drivetrain)
-                .setLocalizer(localizer)
-                .setFollowDistance(10)
-                .setStartPosition(new Pose(6, 90, Math.PI))
-                .setMotionProfile(new RisingMotionProfile(0.3, 1))
-                .then(new Pose(6, 90, Math.PI))
-                .then(new Pose(24, 84, Math.PI))
-                .then(new Pose(60, 84, Math.PI))
-                .then(new Pose(60, 108, Math.PI))
-                .then(new Pose(72, 108, Math.PI))
-                .then(new Pose(72, 108, 7 * Math.PI / 6))
-                .build();
+        PurePursuitPath path = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 1),
+                new Waypoint(new Pose(0, 0, 0), 10),
+                new Waypoint(new Pose(20, 0, 0), 10),
+                new Waypoint(new Pose(20, 20, 0), 10)
+        );
 
 //        Pose parkingPose;
 //        if (position == SleeveDetection.ParkingPosition.LEFT) {
@@ -120,25 +104,10 @@ public class BlueLeftAuto extends LinearOpMode {
 //                .then(parkingPose)
 //                .build();
 
-        CommandScheduler.getInstance().schedule(
-                new SequentialCommandGroup(
-                    new PurePursuitCommand(preloadPath)
-                    // cycle
-//                    new CycleCommand(robot),
-//                    new CycleCommand(robot),
-//                    new CycleCommand(robot),
-//                    new CycleCommand(robot),
-//                    new CycleCommand(robot),
-//                    new CycleCommand(robot),
-//                    // park
-//                    new PurePursuitCommand(visionPath)
-                )
-        );
-
         while (opModeIsActive()) {
             robot.read();
 
-
+            path.update();
             CommandScheduler.getInstance().run();
             robot.drivetrain.updateModules();
             localizer.periodic();

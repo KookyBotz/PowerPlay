@@ -41,9 +41,7 @@ public class SwerveTest extends LinearOpMode {
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
 
-
         waitForStart();
-        robot.startIMUThread(this);
 
         long time = System.currentTimeMillis();
 
