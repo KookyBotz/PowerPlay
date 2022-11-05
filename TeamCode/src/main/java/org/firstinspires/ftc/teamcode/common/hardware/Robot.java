@@ -43,6 +43,8 @@ public class Robot {
 
     public Motor.Encoder horizontalEncoder, lateralEncoder;
 
+    private int currentModuleIndex = 1;
+
     public Robot(HardwareMap hardwareMap, boolean isAuto) {
         drivetrain = new SwerveDrivetrain(hardwareMap);
 
@@ -101,6 +103,8 @@ public class Robot {
     public void write() {
         intake.write();
         lift.write();
-        drivetrain.write();
+        drivetrain.write(currentModuleIndex - 1);
+        currentModuleIndex %= 4;
+        currentModuleIndex++;
     }
 }

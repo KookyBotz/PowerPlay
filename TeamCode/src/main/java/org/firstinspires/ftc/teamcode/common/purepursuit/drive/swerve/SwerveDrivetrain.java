@@ -73,13 +73,11 @@ public class SwerveDrivetrain implements Drivetrain {
         System.out.println(max);
     }
 
-    public void write() {
-        for (int i = 0; i < 4; i++) {
-            SwerveModule m = modules[i];
-            if (Math.abs(max) > 1) ws[i] /= max;
-            m.setMotorPower(Math.abs(ws[i]));
-            m.setTargetRotation(MathUtils.norm(wa[i]));
-        }
+    public void write(int index) {
+        SwerveModule m = modules[index];
+        if (Math.abs(max) > 1) ws[index] /= max;
+        m.setMotorPower(Math.abs(ws[index]));
+        m.setTargetRotation(MathUtils.norm(wa[index]));
     }
 
     public void updateModules() {

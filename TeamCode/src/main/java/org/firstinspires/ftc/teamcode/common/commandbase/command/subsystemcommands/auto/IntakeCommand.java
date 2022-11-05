@@ -19,6 +19,7 @@ public class IntakeCommand extends SequentialCommandGroup {
                 new WaitUntilCommand(() -> robot.intake.getPos() > 340 && robot.lift.getPos() > 580),
                 new WaitCommand(500),
                 new InstantCommand(() -> robot.intake.closeClaw()),
+
                 new WaitCommand(200),
                 new InstantCommand(() -> robot.intake.transitionFourbar()),
                 new InstantCommand(() -> robot.intake.depositTurret()),
