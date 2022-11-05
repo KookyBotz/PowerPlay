@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PurePursuitCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
@@ -89,6 +91,12 @@ public class DriveForwardAuto extends LinearOpMode {
                 new Waypoint(new Pose(0, 59, 4.28), 10)
         );
 
+        CommandScheduler.getInstance().schedule(
+                new PurePursuitCommand(path),
+                new WaitCommand(1000),
+                new LiftCommand(robot, 100, 400, 2000)
+        );
+
 //        Pose parkingPose;
 //        if (position == SleeveDetection.ParkingPosition.LEFT) {
 //            parkingPose = new Pose(60, 132, Math.PI);
@@ -109,7 +117,7 @@ public class DriveForwardAuto extends LinearOpMode {
         while (opModeIsActive()) {
             robot.read();
 
-            path.update();
+//            path.update();
             CommandScheduler.getInstance().run();
             robot.drivetrain.updateModules();
             localizer.periodic();

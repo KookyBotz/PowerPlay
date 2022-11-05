@@ -101,7 +101,7 @@ public class TwoWheelLocalizer extends TwoTrackingWheelLocalizer implements Loca
 
     @Override
     public void setPos(Pose pose) {
-
+        ;
     }
 
     @Override
