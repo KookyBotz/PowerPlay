@@ -158,9 +158,9 @@ public class OpMode extends CommandOpMode {
         telemetry.addData("state:", robot.intake.curState.getV() == 0);
         telemetry.addData("speed multiplier:", speedMultiplier);
 
-//        double loop = System.nanoTime();
-//        telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-//        loopTime = loop;
+        double loop = System.nanoTime();
+        telemetry.addData("hz ", 1000000000 / (loop - loopTime));
+        loopTime = loop;
         telemetry.update();
 
         PhotonCore.EXPANSION_HUB.clearBulkCache();

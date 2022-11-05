@@ -103,8 +103,9 @@ public class Robot {
     public void write() {
         intake.write();
         lift.write();
-        drivetrain.write(currentModuleIndex - 1);
-        currentModuleIndex %= 4;
-        currentModuleIndex++;
+//        drivetrain.write(currentModuleIndex - 1);
+//        currentModuleIndex %= 4;
+//        currentModuleIndex++;
+        drivetrain.write();
     }
 }

@@ -56,7 +56,7 @@ public class SwerveModule {
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         servo = s;
-        ((CRServoImplEx) servo).setPwmRange(new PwmControl.PwmRange(500, 2500, 5000));
+        ((CRServoImplEx) servo).setPwmRange(new PwmControl.PwmRange(500, 2500));
 
         encoder = e;
         rotationController = new PIDFController(P, I, D, 0);
