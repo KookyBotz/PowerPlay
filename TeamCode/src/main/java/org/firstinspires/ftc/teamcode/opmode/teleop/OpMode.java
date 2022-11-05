@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.CloseClawCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeRetractCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.OpenClawCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.CycleCommand;
@@ -72,11 +73,9 @@ public class OpMode extends CommandOpMode {
 
         // Gamepad2
         if (gamepad2.dpad_up) {
-            // manual extend
-            //robot.lift.lift.set(liftPower);
+            robot.lift.setSlideFactor(1);
         } else if (gamepad2.dpad_down) {
-            // manual retract
-            //robot.lift.lift.set(-liftPower);
+            robot.lift.setSlideFactor(-1);
         }
 
         if (gamepad2.dpad_left) {
@@ -112,29 +111,30 @@ public class OpMode extends CommandOpMode {
                     new InstantCommand(() -> robot.intake.extendForebar()),
                     new InstantCommand(() -> robot.intake.openClaw()));
         } else if (gamepad2.right_bumper) {
-            if (robot.lift.getPos() < 10 && robot.intake.getPos() < 10) {
-                schedule(new InstantCommand(() -> robot.intake.closeClaw()),
-                        new WaitCommand(500),
-                        new InstantCommand(() -> robot.intake.depositTurret()),
-                        new InstantCommand(() -> robot.intake.closeForebar()));
-            }
+//            if (robot.lift.getPos() < 10 && robot.intake.getPos() < 10) {
+//                schedule(new InstantCommand(() -> robot.intake.closeClaw()),
+//                        new WaitCommand(500),
+//                        new InstantCommand(() -> robot.intake.depositTurret()),
+//                        new InstantCommand(() -> robot.intake.closeForebar()));
+//            }
+            schedule(new IntakeRetractCommand(robot));
         }
 
         if (gamepad2.a) {
             schedule(new LiftCommand(robot, 150, 400, 1500));
         } else if (gamepad2.x) {
-            schedule(new LiftCommand(robot, 375, 400, 1500));
+            schedule(new LiftCommand(robot, 385, 400, 1500));
         } else if (gamepad2.y) {
             schedule(new LiftCommand(robot, 610, 700, 3000));
         } else if (gamepad2.b) {
             schedule(new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)));
         }
 
-        boolean dup = gamepad2.dpad_up;
-        if (dup && !pDup) {
-            schedule(new CycleCommand(robot));
-        }
-        pDup = dup;
+//        boolean dup = gamepad2.dpad_up;
+//        if (dup && !pDup) {
+//            schedule(new CycleCommand(robot));
+//        }
+//        pDup = dup;
 
 //        loop = System.nanoTime();
 //        telemetry.addData("schedule HZ ", 1000000000 / (loop - loopTime));

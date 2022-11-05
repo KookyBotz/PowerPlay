@@ -139,6 +139,14 @@ public class LiftSubsystem extends SubsystemBase {
         resetTimer();
     }
 
+    public void setSlideFactor(double factor) {
+        double slideAddition = 10 * factor;
+        double newPosition = liftPosition + slideAddition;
+        if (curState.getV() == 0 && newPosition >= -15 && newPosition <= 405) {
+            targetPosition = newPosition;
+        }
+    }
+
     public void newProfile(double targetPos, double max_v, double max_a) {
         // start position, final position
         profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(targetPos, 0), max_v, max_a);
