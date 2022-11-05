@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.common.purepursuit.path;
 
-import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.MAX_SPEED_VERTICAL;
 import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientH;
 import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientX;
 import static org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig.pCoefficientY;
@@ -28,7 +27,7 @@ public class PurePursuitPath {
 
     private int currentWaypoint = 0;
     private ElapsedTime timer;
-    private MotionProfile profile;
+    public MotionProfile profile;
 
     public PurePursuitPath(Drivetrain drivetrain, Localizer localizer, boolean pController, MotionProfile profile, Waypoint... waypoints) {
         this.waypoints = Arrays.asList(waypoints);
@@ -61,7 +60,8 @@ public class PurePursuitPath {
         Point nextPoint = waypoints.get(currentWaypoint + 1).getPos();
 
         // check if we are done with our path (reached last point)
-        if (currentWaypoint == waypoints.size() - 2 && robotPose.distanceTo(nextPoint) < PurePursuitConfig.ALLOWED_TRANSLATIONAL_ERROR) {
+        if (currentWaypoint == waypoints.size() - 2 && robotPose.distanceTo(nextPoint) < PurePursuitConfig.ALLOWED_TRANSLATIONAL_ERROR
+                && Math.abs(AngleUnit.normalizeRadians(robotPose.heading - ((Pose) nextPoint).heading)) < PurePursuitConfig.ALLOWED_HEADING_ERROR) {
             drivetrain.set(new Pose(0, 0, 0));
             return false;
         }
@@ -106,7 +106,7 @@ public class PurePursuitPath {
                     pCoefficientX, pCoefficientY, pCoefficientH
             ));
 
-            drivetrain.set(powers, nextWaypoint.maxPower * profile.update(timer.seconds())[1]);
+            drivetrain.set(powers, nextWaypoint.maxPower);
 
             return true;
         }

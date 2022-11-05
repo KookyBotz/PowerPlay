@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmode.test.System;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
+@Disabled
 
 @TeleOp
 public class Test extends OpMode {

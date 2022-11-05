@@ -1,14 +1,18 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PurePursuitCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
@@ -18,8 +22,8 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Waypoint;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.RisingMotionProfile;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.TwoWheelLocalizer;
+import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPath;
-import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitPathBuilder;
 
 @Autonomous(name = "DriveForwardAuto")
 public class DriveForwardAuto extends LinearOpMode {
@@ -28,6 +32,8 @@ public class DriveForwardAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Robot robot = new Robot(hardwareMap, true);
         Drivetrain drivetrain = robot.drivetrain;
+        ElapsedTime timer = new ElapsedTime();
+
 
         Localizer localizer = new TwoWheelLocalizer(
                 () -> robot.horizontalEncoder.getPosition(),
@@ -85,17 +91,14 @@ public class DriveForwardAuto extends LinearOpMode {
 
         waitForStart();
 
-        PurePursuitPath path = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 0.5),
-                new Waypoint(new Pose(0, 0, 0), 10),
-                new Waypoint(new Pose(0, 59, 0), 10),
-                new Waypoint(new Pose(0, 59, 4.28), 10)
-        );
 
         CommandScheduler.getInstance().schedule(
-                new PurePursuitCommand(path),
-                new WaitCommand(1000),
-                new LiftCommand(robot, 100, 400, 2000)
+                new SequentialCommandGroup(
+                        new PositionCommand(drivetrain, localizer, new Pose(0, 63, 0)),
+                        new InstantCommand(() -> robot.intake.openClaw())
+                )
         );
+
 
 //        Pose parkingPose;
 //        if (position == SleeveDetection.ParkingPosition.LEFT) {
@@ -117,7 +120,8 @@ public class DriveForwardAuto extends LinearOpMode {
         while (opModeIsActive()) {
             robot.read();
 
-//            path.update();
+            robot.intake.loop();
+            robot.lift.loop();
             CommandScheduler.getInstance().run();
             robot.drivetrain.updateModules();
             localizer.periodic();

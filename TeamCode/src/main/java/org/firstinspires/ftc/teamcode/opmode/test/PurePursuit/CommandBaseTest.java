@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.test.PurePursuit;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 //import org.firstinspires.ftc.teamcode.common.freightfrenzy.Alliance;
@@ -9,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
-
+@Disabled
 @TeleOp
 public class CommandBaseTest extends CommandOpMode {
 //    private CommandBaseRobot robot;

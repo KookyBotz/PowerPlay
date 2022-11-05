@@ -9,12 +9,8 @@ public class PurePursuitConfig {
 
     // 24, 26 for mecanum, -Math.PI / 2.5
     // look into possibly seeing if p values are too aggressive
-    public static int pCoefficientX = 18;
-    public static int pCoefficientY = 18;
-    public static double pCoefficientH = -Math.PI;
-
-    // inches per sec
-    public static double MAX_SPEED_VERTICAL = 72;
-    public static double MAX_SPEED_HORIZONTAL = 72;
-    public static double MAX_SPEED_ROBOT = 72;
+    public static int pCoefficientX = 32;
+    public static int pCoefficientY = 32;
+    public static double pCoefficientH = -Math.PI/1.5;
+    public static double max_power = 0.7;
 }

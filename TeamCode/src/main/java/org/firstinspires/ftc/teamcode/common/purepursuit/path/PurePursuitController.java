@@ -16,7 +16,12 @@ public class PurePursuitController {
         Pose powers = deltaPose.divide(pCoefficients);
         double x_rotated = powers.x * Math.cos(robotPose.heading) - powers.y * Math.sin(robotPose.heading);
         double y_rotated = powers.x * Math.sin(robotPose.heading) + powers.y * Math.cos(robotPose.heading);
-        return new Pose(-x_rotated, -y_rotated, powers.heading);
+        double x_power = -x_rotated < -PurePursuitConfig.max_power ? -PurePursuitConfig.max_power :
+                Math.min(-x_rotated, PurePursuitConfig.max_power);
+        double y_power = -y_rotated < -PurePursuitConfig.max_power ? -PurePursuitConfig.max_power :
+                Math.min(-y_rotated, PurePursuitConfig.max_power);
+        double heading_power = powers.heading;
+        return new Pose(x_power, y_power, heading_power);
     }
 
     public static Point lineCircleIntersection(Point pointA, Point pointB, Point center, double radius) {

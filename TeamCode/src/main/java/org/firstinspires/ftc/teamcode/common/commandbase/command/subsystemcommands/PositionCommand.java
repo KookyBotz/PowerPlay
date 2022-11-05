@@ -19,21 +19,16 @@ public class PositionCommand extends CommandBase {
     Drivetrain drivetrain;
     Localizer localizer;
     Pose targetPose;
-    MotionProfile profile;
     ElapsedTime timer;
 
     public PositionCommand(Drivetrain drivetrain, Localizer localizer, Pose targetPose) {
         this.drivetrain = drivetrain;
         this.localizer = localizer;
         this.targetPose = targetPose;
-        this.profile = profile;
     }
 
     @Override
     public void execute() {
-        if (timer == null) {
-            timer = new ElapsedTime();
-        }
         drivetrain.set(PurePursuitController.goToPosition(localizer.getPos(), targetPose, new Pose(pCoefficientX, pCoefficientY, pCoefficientH)));
     }
 

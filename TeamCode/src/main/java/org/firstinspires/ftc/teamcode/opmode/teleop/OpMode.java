@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
+import static java.lang.Math.PI;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -148,6 +150,14 @@ public class OpMode extends CommandOpMode {
 
         robot.drivetrain.set(drive);
         robot.drivetrain.updateModules();
+
+        if (gamepad1.right_stick_button) {
+            robot.drivetrain.leftFrontModule.setTargetRotation(PI / 4);
+            robot.drivetrain.rightFrontModule.setTargetRotation(-PI / 4);
+            robot.drivetrain.rightRearModule.setTargetRotation(PI / 4);
+            robot.drivetrain.leftRearModule.setTargetRotation(-PI / 4);
+            robot.drivetrain.updateModules();
+        }
 //        loop = System.nanoTime();
 //        telemetry.addData("update HZ ", 1000000000 / (loop - loopTime));
 //        loopTime = loop;

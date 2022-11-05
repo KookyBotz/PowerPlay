@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmode.test.System;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.opmode.teleop.OpMode;
+@Disabled
 
 @Config
 @TeleOp(name = "ServoTuning")

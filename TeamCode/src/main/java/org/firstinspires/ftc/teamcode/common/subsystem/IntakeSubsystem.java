@@ -49,8 +49,15 @@ public class IntakeSubsystem extends SubsystemBase {
     private double claw_pos_closed = 0.37;
 
     private double fourbar_extended = 0.06;
-    public double fourbar_retracted = 0.77;
+    public double fourbar_retracted = 0.75;
     public double fourbar_transition = fourbar_retracted - 0.2;
+    public double[] fourbar_pickup_position = new double[]{
+            fourbar_extended,
+            fourbar_extended + 0.05,
+            fourbar_extended + 0.10,
+            fourbar_extended + 0.15,
+            fourbar_extended + 0.2
+    };
 
     private double turret_deposit = 0;
     private double turret_intake = 0.62;
@@ -148,6 +155,11 @@ public class IntakeSubsystem extends SubsystemBase {
     public void extendForebar() {
         barLeft.setPosition(fourbar_extended);
         barRight.setPosition(1 - fourbar_extended);
+    }
+
+    public void extendForebar(int index){
+        barLeft.setPosition(fourbar_pickup_position[index]);
+        barRight.setPosition(1 - fourbar_pickup_position[index]);
     }
 
     public void closeForebar() {
