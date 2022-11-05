@@ -33,6 +33,8 @@ public class DriveForwardAuto extends LinearOpMode {
                 () -> robot.getAngle()
         );
         robot.localizer = localizer;
+        robot.intake.closeForebar();
+        robot.intake.closeClaw();
 //        SleeveDetection sleeveDetection;
 //        OpenCvCamera camera;
 //        SleeveDetection.ParkingPosition position = SleeveDetection.ParkingPosition.LEFT;
@@ -81,10 +83,10 @@ public class DriveForwardAuto extends LinearOpMode {
 
         waitForStart();
 
-        PurePursuitPath path = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 1),
+        PurePursuitPath path = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 0.5),
                 new Waypoint(new Pose(0, 0, 0), 10),
-                new Waypoint(new Pose(20, 0, 0), 10),
-                new Waypoint(new Pose(20, 20, 0), 10)
+                new Waypoint(new Pose(0, 59, 0), 10),
+                new Waypoint(new Pose(0, 59, 4.28), 10)
         );
 
 //        Pose parkingPose;

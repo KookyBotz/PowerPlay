@@ -33,6 +33,8 @@ public class OpMode extends CommandOpMode {
     public static double liftPower = 0.1;
 
     boolean pDup = false;
+    boolean pDLB = false;
+    boolean pDRB = false;
 
     @Override
     public void initialize() {
@@ -106,11 +108,13 @@ public class OpMode extends CommandOpMode {
             robot.intake.setTurretFactor(gamepad2_right_stick);
         }
 
-        if (gamepad2.left_bumper) {
+        boolean dLB = gamepad2.left_bumper;
+        boolean dRB = gamepad2.right_bumper;
+        if (dLB && !pDLB) {
             schedule(new InstantCommand(() -> robot.intake.intakeTurret()),
                     new InstantCommand(() -> robot.intake.extendForebar()),
                     new InstantCommand(() -> robot.intake.openClaw()));
-        } else if (gamepad2.right_bumper) {
+        } else if (dRB && !pDRB) {
 //            if (robot.lift.getPos() < 10 && robot.intake.getPos() < 10) {
 //                schedule(new InstantCommand(() -> robot.intake.closeClaw()),
 //                        new WaitCommand(500),
@@ -119,6 +123,8 @@ public class OpMode extends CommandOpMode {
 //            }
             schedule(new IntakeRetractCommand(robot));
         }
+        pDRB = dRB;
+        pDLB = dLB;
 
         if (gamepad2.a) {
             schedule(new LiftCommand(robot, 150, 400, 1500));

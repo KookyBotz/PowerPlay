@@ -175,9 +175,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setSlideFactor(double factor) {
         double slideAddition =  10 * factor;
         double newPosition = intakePosition + slideAddition;
-//        if (!(curState.getV() != 0) && newPosition > -5 && newPosition < 405) {
-//            targetPosition = newPosition;
-//        }
         if (curState.getV() == 0 && newPosition >= -15 && newPosition <= 405) {
             targetPosition = newPosition;
         }
@@ -203,5 +200,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void newProfile(double targetPos, double max_v, double max_a) {
         profile = MotionProfileGenerator.generateSimpleMotionProfile(new com.acmerobotics.roadrunner.profile.MotionState(getPos(), 0), new com.acmerobotics.roadrunner.profile.MotionState(targetPos, 0), max_v, max_a);
+        resetTimer();
     }
 }
