@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomma
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
@@ -9,10 +10,12 @@ import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 public class IntakeRetractCommand extends SequentialCommandGroup {
     public IntakeRetractCommand(Robot robot) {
         super(
-//                new InstantCommand(() -> robot.intake.closeForebar()),
-//                new InstantCommand(() -> robot.intake.extensionIn()),
-//                new WaitUntilCommand(() -> robot.intake.getExtension() < robot.intake.extension_out_pos - 10)
-//                new IntakeCommand(robot.intake, robot.intake.intake_in_pos)
+            new InstantCommand(() -> robot.intake.closeClaw()),
+            new WaitCommand(500),
+            new InstantCommand(() -> robot.intake.newProfile(-5, 750, 2500)),
+                new WaitUntilCommand(() -> robot.lift.getPos() < 10 && robot.intake.getPos() < 10),
+                new InstantCommand(() -> robot.intake.depositTurret()),
+                new InstantCommand(() -> robot.intake.closeForebar()),
         );
 
     }

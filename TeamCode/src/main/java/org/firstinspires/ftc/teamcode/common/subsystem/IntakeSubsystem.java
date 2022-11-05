@@ -49,7 +49,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private double claw_pos_closed = 0.37;
 
     private double fourbar_extended = 0.04;
-    public double fourbar_retracted = 0.75;
+    public double fourbar_retracted = 0.77;
     public double fourbar_transition = fourbar_retracted - 0.2;
 
     private double turret_deposit = 0;
@@ -178,7 +178,7 @@ public class IntakeSubsystem extends SubsystemBase {
 //        if (!(curState.getV() != 0) && newPosition > -5 && newPosition < 405) {
 //            targetPosition = newPosition;
 //        }
-        if (curState.getV() == 0 && newPosition >= -5 && newPosition <= 405) {
+        if (curState.getV() == 0 && newPosition >= -15 && newPosition <= 405) {
             targetPosition = newPosition;
         }
 
