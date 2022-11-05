@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
 @Config
-@TeleOp(name = "OpMode")
+@TeleOp(name = "OpMode👌👌😍🎶🎶😎😶‍🌫️😈👺")
 public class OpMode extends CommandOpMode {
     private Robot robot;
 
@@ -37,6 +37,7 @@ public class OpMode extends CommandOpMode {
     boolean pDup = false;
     boolean pDLB = false;
     boolean pDRB = false;
+    boolean pDDL = false;
 
     @Override
     public void initialize() {
@@ -44,6 +45,7 @@ public class OpMode extends CommandOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         robot.intake.setFourbar(0.6);
+        robot.intake.extension.set(-0.2);
         robot.reset();
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
@@ -82,12 +84,11 @@ public class OpMode extends CommandOpMode {
             robot.lift.setSlideFactor(-1);
         }
 
-        if (gamepad2.dpad_left) {
-            // intake extend
-            //robot.intake.extension.setTargetPosition(robot.intake.getPos() + 1);
-        } else if (gamepad2.dpad_right) {
-            // intake retract
+        boolean dDL = gamepad2.dpad_left;
+        if (dDL && !pDDL) {
+            schedule(new CycleCommand(robot));
         }
+        pDDL = dDL;
 
         if (gamepad2.left_trigger > 0.3) {
             schedule(new OpenClawCommand(robot));
