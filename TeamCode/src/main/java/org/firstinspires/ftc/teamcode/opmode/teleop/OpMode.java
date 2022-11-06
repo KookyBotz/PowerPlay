@@ -37,6 +37,7 @@ public class OpMode extends CommandOpMode {
     boolean pDLB = false;
     boolean pDRB = false;
     boolean pDDL = false;
+    boolean pDDR = false;
 
     @Override
     public void initialize() {
@@ -45,7 +46,6 @@ public class OpMode extends CommandOpMode {
 
         robot.intake.setFourbar(0.6);
         robot.intake.extension.set(-0.2);
-        robot.reset();
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
@@ -56,6 +56,7 @@ public class OpMode extends CommandOpMode {
     public void run() {
         if (timer == null) {
             timer = new ElapsedTime();
+            robot.reset();
         }
 
         robot.read();
@@ -84,9 +85,13 @@ public class OpMode extends CommandOpMode {
         }
 
         boolean dDL = gamepad2.dpad_left;
+        boolean dDR = gamepad2.dpad_right;
         if (dDL && !pDDL) {
             schedule(new CycleCommand(robot));
+        } else if (dDR && !pDDR) {
+            schedule(new InstantCommand(() -> robot.intake.setClaw(robot.intake.new_claw_pos)));
         }
+        pDDR = dDR;
         pDDL = dDL;
 
         if (gamepad2.left_trigger > 0.3) {

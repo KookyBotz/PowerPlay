@@ -44,7 +44,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private double D = 0.0;
 
     public static int intake_out_pos = 400;
-
+    public static double new_claw_pos = 0.3;
     private double claw_pos_open = 0.2;
     private double claw_pos_closed = 0.37;
 
