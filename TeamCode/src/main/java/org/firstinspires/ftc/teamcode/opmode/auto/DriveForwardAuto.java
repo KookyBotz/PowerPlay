@@ -94,7 +94,7 @@ public class DriveForwardAuto extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(0, 63, 0)),
+                       // new PositionCommand(drivetrain, localizer, new Pose(0, 63, 0)),
                         new InstantCommand(() -> robot.intake.openClaw())
                 )
         );

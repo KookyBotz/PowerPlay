@@ -21,24 +21,26 @@ public class PositionCommand extends CommandBase {
     Pose targetPose;
     ElapsedTime timer;
 
-    public PositionCommand(Drivetrain drivetrain, Localizer localizer, Pose targetPose) {
+    private double ms;
+
+    public PositionCommand(Drivetrain drivetrain, Localizer localizer, Pose targetPose, double ms) {
         this.drivetrain = drivetrain;
         this.localizer = localizer;
         this.targetPose = targetPose;
+        this.ms = ms;
     }
 
     @Override
     public void execute() {
+        if(timer == null){
+            timer = new ElapsedTime();
+        }
         drivetrain.set(PurePursuitController.goToPosition(localizer.getPos(), targetPose, new Pose(pCoefficientX, pCoefficientY, pCoefficientH)));
     }
 
     @Override
     public boolean isFinished() {
-        double heading_error = Math.abs(AngleUnit.normalizeRadians(targetPose.heading - localizer.getPos().heading));
-        boolean a = (Math.abs(localizer.getPos().distanceTo(targetPose)) < PurePursuitConfig.ALLOWED_TRANSLATIONAL_ERROR
-                && heading_error < PurePursuitConfig.ALLOWED_HEADING_ERROR);
-        System.out.print("HERE123" + a);
-        return a;
+        return timer.milliseconds() > ms;
     }
 
     @Override

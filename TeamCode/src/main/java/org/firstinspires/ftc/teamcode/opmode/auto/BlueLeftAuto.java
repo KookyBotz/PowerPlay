@@ -65,7 +65,7 @@ public class BlueLeftAuto extends LinearOpMode {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        sleeveDetection = new SleeveDetection(new Point(195, 80));
+        sleeveDetection = new SleeveDetection(new Point(175, 80));
 //        sleeveDetection.setBoundingBox(new Point(195, 80));
         camera.setPipeline(sleeveDetection);
 
@@ -97,12 +97,13 @@ public class BlueLeftAuto extends LinearOpMode {
             robot.write();
         }
 
+        SleeveDetection.ParkingPosition position = sleeveDetection.getPosition();
+
         waitForStart();
 
         PurePursuitPath preloadPath = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 0.5),
                 new Waypoint(new Pose(0, 0, 0), 0),
-                new Waypoint(new Pose(0, 63, 0), 0),
-                new Waypoint(new Pose(0, 63, 1.5 * Math.PI), 0)
+                new Waypoint(new Pose(0, 63, 0), 0)
         );
 
         PurePursuitPath intakePath = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 0.5),
@@ -112,21 +113,21 @@ public class BlueLeftAuto extends LinearOpMode {
 
         PurePursuitPath depositPath = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 0.5),
                 new Waypoint(new Pose(-5, 51, 1.5 * Math.PI), 0),
-                new Waypoint(new Pose(0, 60, Math.PI + 1.35), 0)
+                new Waypoint(new Pose(0, 60, 4.42), 0)
         );
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         // preload
                         new PurePursuitCommand(preloadPath),
+                        new PositionCommand(drivetrain, localizer, new Pose(0, 63, 1.5 * Math.PI), 1250),
                         new InstantCommand(() -> PurePursuitConfig.pCoefficientX = 24),
                         new InstantCommand(() -> PurePursuitConfig.pCoefficientY = 24),
                         new InstantCommand(() -> robot.intake.openClaw()),
-                        new WaitCommand(500),
+                        new WaitCommand(250),
                         new ClearFourbarCommand(robot.intake),
-                        new WaitUntilCommand(() -> robot.intake.getFourbarPos() <= robot.intake.fourbar_transition),
-                        new WaitCommand(750),
-                        new InstantCommand(() -> robot.lift.newProfile(610, 800, 3000)),
+                        new WaitCommand(500),
+                        new InstantCommand(() -> robot.lift.newProfile(615, 800, 3000)),
                         new InstantCommand(() -> robot.intake.intakeTurret()),
                         new WaitUntilCommand(() -> robot.lift.getPos() > 570),
                         new WaitCommand(500),
@@ -134,7 +135,7 @@ public class BlueLeftAuto extends LinearOpMode {
                         new WaitUntilCommand(() -> robot.lift.getPos() < 10),
 
                         // intake
-                        new PurePursuitCommand(intakePath),
+                        new PositionCommand(drivetrain, localizer, new Pose(-5, 51, 1.5 * Math.PI), 1250),
                         new InstantCommand(() -> robot.intake.newProfile(405, 800, 3000)),
                         new InstantCommand(() -> robot.intake.intakeTurret()),
                         new InstantCommand(() -> robot.intake.extendForebar(4)),
@@ -146,25 +147,43 @@ public class BlueLeftAuto extends LinearOpMode {
 
                         // transfer
                         new InstantCommand(() -> robot.intake.transitionFourbar()),
+
                         new WaitCommand(500),
-                        new InstantCommand(() -> robot.intake.depositTurret()),
-                        new InstantCommand(() -> robot.intake.newProfile(-5, 800, 3000)),
-                        new WaitUntilCommand(() -> robot.lift.getPos() < 10),
-                        new WaitUntilCommand(() -> robot.intake.getPos() < 10),
-                        new InstantCommand(() -> robot.intake.closeForebar()),
+
+                        new ParallelCommandGroup(
+                                new PositionCommand(drivetrain, localizer, new Pose(0, 60, 4.42), 1000),
+                                new SequentialCommandGroup(
+                                        new InstantCommand(() -> robot.intake.depositTurret()),
+                                        new InstantCommand(() -> robot.intake.newProfile(-5, 800, 3000)),
+                                        new WaitUntilCommand(() -> robot.lift.getPos() < 10),
+                                        new WaitUntilCommand(() -> robot.intake.getPos() < 10),
+                                        new InstantCommand(() -> robot.intake.closeForebar())
+                                )
+                        ),
 
                         // deposit
-                        new PurePursuitCommand(depositPath),
 
-                        new AutoCycleCommand(robot, 480, 0.22),
-                        new AutoCycleCommand(robot, 467, 0.19),
-                        new AutoCycleCommand(robot, 474, 0.14),
-                        new AutoCycleCommand(robot, 474, 0.1),
-                        new InstantCommand(() -> robot.lift.newProfile(610, 800, 3000)),
-                        new WaitUntilCommand(() -> robot.lift.getPos() > 580),
-                        new WaitCommand(750),
-                        new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500))
-                    )
+                        new ParallelCommandGroup(
+                                new PositionCommand(drivetrain, localizer, new Pose(0, 60, 4.42), 5000),
+                                new SequentialCommandGroup(
+                                        new WaitCommand(500),
+                                        new AutoCycleCommand(robot, 480, 0.225),
+                                        new AutoCycleCommand(robot, 480, 0.195),
+                                        new AutoCycleCommand(robot, 480, 0.145),
+                                        new AutoCycleCommand(robot, 480, 0.1),
+                                        new InstantCommand(() -> robot.lift.newProfile(615, 800, 3000)),
+                                        new WaitUntilCommand(() -> robot.lift.getPos() > 580),
+                                        new WaitCommand(750),
+                                        new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500))
+                                )
+                        ),
+
+                        new PositionCommand(drivetrain, localizer,
+                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(0, 51, 1.5 * Math.PI) :
+                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(24, 51, 1.5 * Math.PI) :
+                                                new Pose(-24, 51, 1.5 * Math.PI), 2000
+                        )
+                )
         );
 
 
