@@ -162,7 +162,7 @@ public class BlueLeftAuto extends LinearOpMode {
                         new AutoCycleCommand(robot, 474, 0.1),
                         new InstantCommand(() -> robot.lift.newProfile(610, 800, 3000)),
                         new WaitUntilCommand(() -> robot.lift.getPos() > 580),
-                        new WaitCommand(250),
+                        new WaitCommand(750),
                         new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500))
                     )
         );
