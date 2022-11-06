@@ -65,7 +65,7 @@ public class BlueLeftAuto extends LinearOpMode {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        sleeveDetection = new SleeveDetection(new Point(165, 80));
+        sleeveDetection = new SleeveDetection(new Point(180, 80));
 //        sleeveDetection.setBoundingBox(new Point(195, 80));
         camera.setPipeline(sleeveDetection);
 
