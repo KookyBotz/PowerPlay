@@ -42,6 +42,7 @@ public class BlueLeftAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        CommandScheduler.getInstance().reset();
         Robot robot = new Robot(hardwareMap, true);
         Drivetrain drivetrain = robot.drivetrain;
         ElapsedTime timer = new ElapsedTime();
@@ -113,13 +114,13 @@ public class BlueLeftAuto extends LinearOpMode {
 
         PurePursuitPath depositPath = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 0.5),
                 new Waypoint(new Pose(-5, 51, 1.5 * Math.PI), 0),
-                new Waypoint(new Pose(0, 60, 4.42), 0)
+                new Waypoint(new Pose(0, 60, 4.425), 0)
         );
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         // preload
-                        new PurePursuitCommand(preloadPath),
+                        new PositionCommand(drivetrain, localizer, new Pose(0, 63, 0), 1750),
                         new PositionCommand(drivetrain, localizer, new Pose(0, 63, 1.5 * Math.PI), 1250),
                         new InstantCommand(() -> PurePursuitConfig.pCoefficientX = 24),
                         new InstantCommand(() -> PurePursuitConfig.pCoefficientY = 24),
@@ -151,7 +152,7 @@ public class BlueLeftAuto extends LinearOpMode {
                         new WaitCommand(500),
 
                         new ParallelCommandGroup(
-                                new PositionCommand(drivetrain, localizer, new Pose(0, 60, 4.42), 1000),
+                                new PositionCommand(drivetrain, localizer, new Pose(-0.5, 60, 4.425), 1000),
                                 new SequentialCommandGroup(
                                         new InstantCommand(() -> robot.intake.depositTurret()),
                                         new InstantCommand(() -> robot.intake.newProfile(-5, 800, 3000)),
@@ -164,7 +165,7 @@ public class BlueLeftAuto extends LinearOpMode {
                         // deposit
 
                         new ParallelCommandGroup(
-                                new PositionCommand(drivetrain, localizer, new Pose(0, 60, 4.42), 5000),
+                                new PositionCommand(drivetrain, localizer, new Pose(-0.5, 60, 4.425), 5000),
                                 new SequentialCommandGroup(
                                         new WaitCommand(500),
                                         new AutoCycleCommand(robot, 480, 0.225),
