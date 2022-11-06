@@ -40,7 +40,7 @@ public class CycleCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> robot.intake.closeForebar()),
                 new WaitCommand(250),
                 new InstantCommand(() -> robot.intake.openClaw()),
-                new WaitCommand(250),
+                new WaitCommand(400),
                 new InstantCommand(() -> robot.intake.transitionFourbar()),
                 new WaitCommand(400)
         );
