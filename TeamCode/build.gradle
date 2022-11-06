@@ -20,9 +20,13 @@ android {
 }
 
 dependencies {
+    // Thank you so much to graham.
+    // Without him we never would've been able to compete in this season
+    // Our hearts will forever go out to him.
+    // FTC#5356 <3
     implementation project(':FtcRobotController')
     implementation 'org.ftclib.ftclib:core:2.0.1'
-    implementation 'org.openftc:easyopencv:1.5.1'
+    implementation 'org.openftc:easyopencv:1.5.2'
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'com.acmerobotics.roadrunner:core:0.5.5'
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')

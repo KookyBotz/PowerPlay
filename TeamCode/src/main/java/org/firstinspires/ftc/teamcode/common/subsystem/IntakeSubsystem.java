@@ -187,7 +187,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setSlideFactor(double factor) {
         double slideAddition =  10 * factor;
         double newPosition = intakePosition + slideAddition;
-        if (curState.getV() == 0 && newPosition >= -15 && newPosition <= 405) {
+        if (curState.getV() == 0 && newPosition >= -15 && newPosition <= 485) {
             targetPosition = newPosition;
         }
 

@@ -6,22 +6,18 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstraints;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymmetricMotionProfile;
 
-public class CycleCommand extends SequentialCommandGroup {
-    public CycleCommand(Robot robot) {
+public class AutoCycleCommand extends SequentialCommandGroup {
+    public AutoCycleCommand(Robot robot, int distance, double fourbarPos) {
         super(
-
-                new InstantCommand(() -> robot.intake.newProfile(270, 600, 1500)),
+                new InstantCommand(() -> robot.intake.newProfile(distance, 600, 1500)),
                 new InstantCommand(() -> robot.intake.resetTimer()),
                 new InstantCommand(() -> robot.intake.openClaw()),
-                new InstantCommand(() -> robot.intake.extendForebar()),
+                new InstantCommand(() -> robot.intake.setFourbar(fourbarPos)),
                 new InstantCommand(() -> robot.intake.intakeTurret()),
 
                 new InstantCommand(() -> robot.lift.newProfile(610, 800, 2500)),
 
-                //wait until ready to intake
                 new WaitUntilCommand(() -> robot.intake.getPos() > 260 && robot.lift.getPos() > 580),
                 new WaitCommand(500),
 
@@ -34,7 +30,6 @@ public class CycleCommand extends SequentialCommandGroup {
 
                 new InstantCommand(() -> robot.intake.newProfile(-5, 750, 2500)),
 
-                //transfer
                 new WaitUntilCommand(() -> robot.lift.getPos() < 10),
                 new WaitUntilCommand(() -> robot.intake.getPos() < 10),
                 new InstantCommand(() -> robot.intake.closeForebar()),

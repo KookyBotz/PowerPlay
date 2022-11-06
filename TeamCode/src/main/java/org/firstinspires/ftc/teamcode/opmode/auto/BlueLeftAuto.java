@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PurePursuitCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
@@ -109,47 +110,52 @@ public class BlueLeftAuto extends LinearOpMode {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         // preload
-                        new PurePursuitCommand(preloadPath),
-                        new InstantCommand(() -> PurePursuitConfig.pCoefficientX = 24),
-                        new InstantCommand(() -> PurePursuitConfig.pCoefficientY = 24),
-                        new LiftCommand(robot, 610, 800, 2500),
-                        new WaitUntilCommand(() -> robot.lift.getPos() > 570),
-                        new WaitCommand(500),
-                        new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)),
-                        new WaitUntilCommand(() -> robot.lift.getPos() < 10),
-
-                        // intake
-                        new PurePursuitCommand(intakePath),
-                        new InstantCommand(() -> robot.intake.newProfile(420, 600, 1500)),
-                        new InstantCommand(() -> robot.intake.intakeTurret()),
-                        new InstantCommand(() -> robot.intake.extendForebar(4)),
-                        new InstantCommand(() -> robot.intake.openClaw()),
-                        new WaitUntilCommand(() -> robot.intake.getPos() > 400),
-                        new InstantCommand(() -> robot.intake.closeClaw()),
-                        new WaitCommand(200),
-
-                        // transfer
-                        new InstantCommand(() -> robot.intake.transitionFourbar()),
-                        new WaitCommand(750),
-                        new InstantCommand(() -> robot.intake.depositTurret()),
-                        new InstantCommand(() -> robot.intake.newProfile(-5, 750, 2500)),
-                        new WaitUntilCommand(() -> robot.lift.getPos() < 10),
-                        new WaitUntilCommand(() -> robot.intake.getPos() < 10),
-                        new InstantCommand(() -> robot.intake.closeForebar()),
-
-                        // deposit
-                        new PurePursuitCommand(depositPath),
-                        new WaitCommand(250),
-                        new InstantCommand(() -> robot.intake.openClaw()),
-                        new WaitCommand(250),
-                        new InstantCommand(() -> robot.intake.transitionFourbar()),
-                        new WaitCommand(400),
-
-                        new InstantCommand(() -> robot.lift.newProfile(610, 800, 2500)),
-                        new WaitUntilCommand(() -> robot.lift.getPos() > 570),
-                        new WaitCommand(500),
-                        new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)),
-                        new WaitUntilCommand(() -> robot.lift.getPos() < 10)
+//                        new PurePursuitCommand(preloadPath),
+                        new AutoCycleCommand(robot, 474, 0.32),
+                        new AutoCycleCommand(robot, 474, 0.265),
+                        new AutoCycleCommand(robot, 467, 0.2),
+                        new AutoCycleCommand(robot, 474, 0.15),
+                        new AutoCycleCommand(robot, 474, 0.1)
+//                        new InstantCommand(() -> PurePursuitConfig.pCoefficientX = 24),
+//                        new InstantCommand(() -> PurePursuitConfig.pCoefficientY = 24),
+//                        new LiftCommand(robot, 610, 800, 2500),
+//                        new WaitUntilCommand(() -> robot.lift.getPos() > 570),
+//                        new WaitCommand(500),
+//                        new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)),
+//                        new WaitUntilCommand(() -> robot.lift.getPos() < 10),
+//
+//                        // intake
+//                        new PurePursuitCommand(intakePath),
+//                        new InstantCommand(() -> robot.intake.newProfile(420, 600, 1500)),
+//                        new InstantCommand(() -> robot.intake.intakeTurret()),
+//                        new InstantCommand(() -> robot.intake.extendForebar(4)),
+//                        new InstantCommand(() -> robot.intake.openClaw()),
+//                        new WaitUntilCommand(() -> robot.intake.getPos() > 400),
+//                        new InstantCommand(() -> robot.intake.closeClaw()),
+//                        new WaitCommand(200),
+//
+//                        // transfer
+//                        new InstantCommand(() -> robot.intake.transitionFourbar()),
+//                        new WaitCommand(750),
+//                        new InstantCommand(() -> robot.intake.depositTurret()),
+//                        new InstantCommand(() -> robot.intake.newProfile(-5, 750, 2500)),
+//                        new WaitUntilCommand(() -> robot.lift.getPos() < 10),
+//                        new WaitUntilCommand(() -> robot.intake.getPos() < 10),
+//                        new InstantCommand(() -> robot.intake.closeForebar()),
+//
+//                        // deposit
+//                        new PurePursuitCommand(depositPath),
+//                        new WaitCommand(250),
+//                        new InstantCommand(() -> robot.intake.openClaw()),
+//                        new WaitCommand(250),
+//                        new InstantCommand(() -> robot.intake.transitionFourbar()),
+//                        new WaitCommand(400),
+//
+//                        new InstantCommand(() -> robot.lift.newProfile(610, 800, 2500)),
+//                        new WaitUntilCommand(() -> robot.lift.getPos() > 570),
+//                        new WaitCommand(500),
+//                        new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)),
+//                        new WaitUntilCommand(() -> robot.lift.getPos() < 10)
                 )
         );
 

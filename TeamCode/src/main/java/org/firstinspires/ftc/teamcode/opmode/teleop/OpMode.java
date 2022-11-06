@@ -8,7 +8,6 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -18,7 +17,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomman
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeRetractCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.OpenClawCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.CycleCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.CycleCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
