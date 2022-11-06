@@ -32,7 +32,7 @@ public class LiftSubsystem extends SubsystemBase {
     private double voltage;
     private double liftPosition;
 
-    private double P = 0.03;
+    private double P = 0.020;
     private double I = 0.0;
     private double D = 0.0;
 
@@ -93,8 +93,8 @@ public class LiftSubsystem extends SubsystemBase {
 //        }
 
 
-
         power = controller.calculate(liftPosition, targetPosition) / voltage * 12;
+        power = Math.max(Math.min(power, 0.6), -0.6);
     }
 
     public void read() {

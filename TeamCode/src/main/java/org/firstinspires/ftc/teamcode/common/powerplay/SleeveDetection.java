@@ -62,6 +62,23 @@ public class SleeveDetection extends OpenCvPipeline {
     // Running variable storing the parking position
     private volatile ParkingPosition position = ParkingPosition.LEFT;
 
+    public SleeveDetection(Point NEW_ANCHOR_POINT) {
+        SLEEVE_TOPLEFT_ANCHOR_POINT = NEW_ANCHOR_POINT;
+
+        sleeve_pointA = new Point(
+                SLEEVE_TOPLEFT_ANCHOR_POINT.x,
+                SLEEVE_TOPLEFT_ANCHOR_POINT.y);
+        sleeve_pointB = new Point(
+                SLEEVE_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
+                SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
+    }
+
+    public SleeveDetection() {}
+
+    public void setBoundingBox(Point NEW_ANCHOR_POINT) {
+        SLEEVE_TOPLEFT_ANCHOR_POINT = NEW_ANCHOR_POINT;
+    }
+
     @Override
     public void init(Mat input) {
         yelMat = new Mat();

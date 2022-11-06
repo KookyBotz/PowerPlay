@@ -19,13 +19,14 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> robot.lift.newProfile(610, 800, 2500)),
 
                 new WaitUntilCommand(() -> robot.intake.getPos() > distance - 30 && robot.lift.getPos() > 580),
-                new WaitCommand(500),
+                new WaitCommand(250),
 
                 new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)),
                 //intake
                 new InstantCommand(() -> robot.intake.closeClaw()),
-                new WaitCommand(200),
+                new WaitCommand(250),
                 new InstantCommand(() -> robot.intake.transitionFourbar()),
+                new WaitCommand(400),
                 new InstantCommand(() -> robot.intake.depositTurret()),
 
                 new InstantCommand(() -> robot.intake.newProfile(-5, 750, 2500)),

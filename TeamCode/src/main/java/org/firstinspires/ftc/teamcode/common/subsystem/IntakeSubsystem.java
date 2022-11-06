@@ -39,7 +39,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private double voltage;
     private double intakePosition;
 
-    private double P = 0.05;
+    private double P = 0.03;
     private double I = 0.0;
     private double D = 0.0;
 
@@ -52,11 +52,11 @@ public class IntakeSubsystem extends SubsystemBase {
     public double fourbar_retracted = 0.75;
     public double fourbar_transition = fourbar_retracted - 0.2;
     public double[] fourbar_pickup_position = new double[]{
-            fourbar_extended,
-            fourbar_extended + 0.05,
-            fourbar_extended + 0.10,
-            fourbar_extended + 0.15,
-            fourbar_extended + 0.2
+            .1,
+            .15,
+            .2,
+            .22,
+            .29
     };
 
     private double turret_deposit = 0;
@@ -157,7 +157,7 @@ public class IntakeSubsystem extends SubsystemBase {
         barRight.setPosition(1 - fourbar_extended);
     }
 
-    public void extendForebar(int index){
+    public void extendForebar(int index) {
         barLeft.setPosition(fourbar_pickup_position[index]);
         barRight.setPosition(1 - fourbar_pickup_position[index]);
     }
@@ -185,7 +185,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setSlideFactor(double factor) {
-        double slideAddition =  10 * factor;
+        double slideAddition = 10 * factor;
         double newPosition = intakePosition + slideAddition;
         if (curState.getV() == 0 && newPosition >= -15 && newPosition <= 485) {
             targetPosition = newPosition;

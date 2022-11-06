@@ -11,10 +11,10 @@ public class LiftCommand extends SequentialCommandGroup {
     public LiftCommand(Robot robot, double targetPos, double velocity, double acceleration) {
         super(
                 new InstantCommand(() -> robot.intake.openClaw()),
-                new WaitCommand(500),
+                new WaitCommand(250),
                 new ClearFourbarCommand(robot.intake),
                 new WaitUntilCommand(() -> robot.intake.getFourbarPos() <= robot.intake.fourbar_transition),
-                new WaitCommand(500),
+                new WaitCommand(250),
                 new InstantCommand(() -> robot.lift.newProfile(targetPos, velocity, acceleration)),
                 new InstantCommand(() -> robot.intake.intakeTurret())
         );
