@@ -141,7 +141,7 @@ public class OpMode extends CommandOpMode {
         } else if (gamepad2.y) {
             schedule(new LiftCommand(robot, 610, 700, 3000));
         } else if (gamepad2.b) {
-            schedule(new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)));
+            schedule(new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 7000)));
         }
 
 //        boolean dup = gamepad2.dpad_up;
