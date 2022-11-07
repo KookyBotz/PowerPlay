@@ -101,6 +101,7 @@ public class BlueLeftAuto extends LinearOpMode {
         SleeveDetection.ParkingPosition position = sleeveDetection.getPosition();
 
         waitForStart();
+        camera.stopStreaming();
 
         PurePursuitPath preloadPath = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 0.5),
                 new Waypoint(new Pose(0, 0, 0), 0),
@@ -141,8 +142,8 @@ public class BlueLeftAuto extends LinearOpMode {
                         new InstantCommand(() -> robot.intake.intakeTurret()),
                         new InstantCommand(() -> robot.intake.extendForebar(4)),
                         new InstantCommand(() -> robot.intake.openClaw()),
-                        new WaitUntilCommand(() -> robot.intake.getPos() > 390),
-                        new WaitCommand(500),
+                        new WaitUntilCommand(() -> robot.intake.getPos() > 350),
+                        new WaitCommand(750),
                         new InstantCommand(() -> robot.intake.closeClaw()),
                         new WaitCommand(1000),
 
@@ -163,15 +164,14 @@ public class BlueLeftAuto extends LinearOpMode {
                         ),
 
                         // deposit
-
                         new ParallelCommandGroup(
                                 new PositionCommand(drivetrain, localizer, new Pose(-0.5, 60, 4.425), 5000),
                                 new SequentialCommandGroup(
                                         new WaitCommand(500),
+                                        new AutoCycleCommand(robot, 480, 0.255),
                                         new AutoCycleCommand(robot, 480, 0.225),
-                                        new AutoCycleCommand(robot, 480, 0.195),
-                                        new AutoCycleCommand(robot, 480, 0.145),
-                                        new AutoCycleCommand(robot, 480, 0.1),
+                                        new AutoCycleCommand(robot, 480, 0.175),
+                                        new AutoCycleCommand(robot, 480, 0.13),
                                         new InstantCommand(() -> robot.lift.newProfile(615, 800, 3000)),
                                         new WaitUntilCommand(() -> robot.lift.getPos() > 580),
                                         new WaitCommand(750),
@@ -207,8 +207,6 @@ public class BlueLeftAuto extends LinearOpMode {
 //                .build();
 
         while (opModeIsActive()) {
-            PhotonCore.CONTROL_HUB.clearBulkCache();
-            PhotonCore.EXPANSION_HUB.clearBulkCache();
             robot.read();
             CommandScheduler.getInstance().run();
             robot.intake.loop();
@@ -218,6 +216,8 @@ public class BlueLeftAuto extends LinearOpMode {
             telemetry.addData("current pose", localizer.getPos());
             telemetry.update();
             robot.write();
+            PhotonCore.CONTROL_HUB.clearBulkCache();
+            PhotonCore.EXPANSION_HUB.clearBulkCache();
         }
     }
 }
