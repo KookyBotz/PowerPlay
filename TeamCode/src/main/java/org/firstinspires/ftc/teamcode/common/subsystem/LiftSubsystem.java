@@ -53,7 +53,7 @@ public class LiftSubsystem extends SubsystemBase {
 
     private enum liftState {
         HIGH,
-        MEDIUM,
+        MIDDLE,
         LOW,
         RETRACTED
     }
@@ -105,7 +105,7 @@ public class LiftSubsystem extends SubsystemBase {
             case LOW:
                 profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(150, 0), 400, 1500);
                 resetTimer();
-            case MEDIUM:
+            case MIDDLE:
                 profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(385, 0), 400, 1500);
                 resetTimer();
             case HIGH:
