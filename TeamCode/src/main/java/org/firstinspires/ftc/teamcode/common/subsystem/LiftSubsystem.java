@@ -58,6 +58,8 @@ public class LiftSubsystem extends SubsystemBase {
         RETRACTED
     }
 
+    private boolean moving = false;
+
     // thanks aabhas <3
     public LiftSubsystem(HardwareMap hardwareMap, boolean isAuto) {
         this.lift = new MotorEx(hardwareMap, "lift");
@@ -84,21 +86,10 @@ public class LiftSubsystem extends SubsystemBase {
             voltageTimer.reset();
         }
 
-//        double target = profile.update(timer.time())[0];
-//        if (distance < 0) {
-//            target += startPosition;
-//        }
         curState = profile.get(timer.time());
         if (curState.getV() != 0) {
             targetPosition = curState.getX();
         }
-//        power = controller.calculate(liftPosition, target) / voltage * 12;
-//        lift.set(power);
-//        curState = profile.calculate(timer.time());
-//        if (curState.v != 0) {
-//            targetPosition = curState.x;
-//        }
-
 
         power = controller.calculate(liftPosition, targetPosition) / voltage * 12;
         power = Math.max(Math.min(power, 0.6), -0.6);
@@ -110,11 +101,6 @@ public class LiftSubsystem extends SubsystemBase {
 
     public void write() {
         lift.set(power);
-    }
-
-    public void setPos(int pos) {
-        lift.setTargetPosition(pos);
-        resetTimer();
     }
 
     public int getPos() {
@@ -133,16 +119,9 @@ public class LiftSubsystem extends SubsystemBase {
         this.distance = d;
         this.maxV = v;
         this.maxA = a;
-//        this.profile = new TrapezoidalMotionProfile(maxV, maxA, distance);
-//        if (d < 0) {
-//            this.startPosition = Math.abs(d);
-//        } else {
-//            this.startPosition = 0;
-//        }
     }
 
     public void setMotionProfile(AsymmetricMotionProfile profile) {
-        //this.profile = profile;
         resetTimer();
     }
 
