@@ -97,12 +97,20 @@ public class LiftSubsystem extends SubsystemBase {
 
     public void update(liftState newState) {
         // TODO: retune positions
+        // TODO: add checks for fourbar positions, claw positions, etc
         switch(newState) {
             case RETRACTED:
                 profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(0, 0), 3500, 7500);
                 resetTimer();
             case LOW:
-
+                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(150, 0), 400, 1500);
+                resetTimer();
+            case MEDIUM:
+                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(385, 0), 400, 1500);
+                resetTimer();
+            case HIGH:
+                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(610, 0), 700, 3000);
+                resetTimer();
         }
     }
 
