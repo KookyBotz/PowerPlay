@@ -30,9 +30,6 @@ public class OpMode extends CommandOpMode {
     private ElapsedTime timer;
     private double loopTime = 0;
 
-    public static double extensionPower = 0.1;
-    public static double liftPower = 0.1;
-
     boolean pDup = false;
     boolean pDLB = false;
     boolean pDRB = false;

@@ -51,6 +51,13 @@ public class LiftSubsystem extends SubsystemBase {
     public double power = 0.0;
     public double targetPosition = 0.0;
 
+    private enum liftState {
+        HIGH,
+        MEDIUM,
+        LOW,
+        RETRACTED
+    }
+
     // thanks aabhas <3
     public LiftSubsystem(HardwareMap hardwareMap, boolean isAuto) {
         this.lift = new MotorEx(hardwareMap, "lift");

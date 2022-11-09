@@ -59,7 +59,6 @@ public class Robot {
 
         intake = new IntakeSubsystem(hardwareMap, isAuto);
 
-        //DcMotorEx liftM = hardwareMap.get(DcMotorEx.class, "lift");
         lift = new LiftSubsystem(hardwareMap, isAuto);
     }
 
