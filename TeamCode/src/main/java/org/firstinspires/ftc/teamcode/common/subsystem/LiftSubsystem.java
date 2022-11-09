@@ -95,6 +95,17 @@ public class LiftSubsystem extends SubsystemBase {
         power = Math.max(Math.min(power, 0.6), -0.6);
     }
 
+    public void update(liftState newState) {
+        // TODO: retune positions
+        switch(newState) {
+            case RETRACTED:
+                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(0, 0), 3500, 7500);
+                resetTimer();
+            case LOW:
+
+        }
+    }
+
     public void read() {
         liftPosition = lift.encoder.getPosition();
     }
