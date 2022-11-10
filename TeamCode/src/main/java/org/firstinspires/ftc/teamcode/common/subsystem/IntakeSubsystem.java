@@ -91,7 +91,7 @@ public class IntakeSubsystem extends SubsystemBase {
         //
         // AnalogInput claw = hardwareMap.get(AnalogInput.class, "clawName");
         //
-        // mult by 360/33.33
+        // multiply by 360/33.33
     }
 
     public void read() {
