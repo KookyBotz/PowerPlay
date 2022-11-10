@@ -111,7 +111,7 @@ public class OpMode extends CommandOpMode {
         boolean dRB = gamepad2.right_bumper;
         if (dLB && !pDLB) {
             schedule(new InstantCommand(() -> robot.intake.intakeTurret()),
-                    new InstantCommand(() -> robot.intake.extendForebar()),
+                    new InstantCommand(() -> robot.intake.extendFourbar()),
                     new InstantCommand(() -> robot.intake.openClaw()));
         } else if (dRB && !pDRB) {
 //            if (robot.lift.getPos() < 10 && robot.intake.getPos() < 10) {

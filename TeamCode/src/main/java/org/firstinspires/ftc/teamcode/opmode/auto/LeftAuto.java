@@ -51,7 +51,7 @@ public class LeftAuto extends LinearOpMode {
                 robot::getAngle
         );
         robot.localizer = localizer;
-        robot.intake.closeForebar();
+        robot.intake.closeFourbar();
         robot.intake.closeClaw();
 //        SleeveDetection sleeveDetection;
 //        OpenCvCamera camera;
@@ -138,7 +138,7 @@ public class LeftAuto extends LinearOpMode {
                         new PositionCommand(drivetrain, localizer, new Pose(-5, 51, 1.5 * Math.PI), 1250),
                         new InstantCommand(() -> robot.intake.newProfile(405, 800, 3000)),
                         new InstantCommand(() -> robot.intake.intakeTurret()),
-                        new InstantCommand(() -> robot.intake.extendForebar(4)),
+                        new InstantCommand(() -> robot.intake.extendFourbar(4)),
                         new InstantCommand(() -> robot.intake.openClaw()),
                         new WaitUntilCommand(() -> robot.intake.getPos() > 350),
                         new WaitCommand(750),
@@ -157,7 +157,7 @@ public class LeftAuto extends LinearOpMode {
                                         new InstantCommand(() -> robot.intake.newProfile(-5, 800, 3000)),
                                         new WaitUntilCommand(() -> robot.lift.getPos() < 10),
                                         new WaitUntilCommand(() -> robot.intake.getPos() < 10),
-                                        new InstantCommand(() -> robot.intake.closeForebar())
+                                        new InstantCommand(() -> robot.intake.closeFourbar())
                                 )
                         ),
 
@@ -176,7 +176,7 @@ public class LeftAuto extends LinearOpMode {
                                         new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500))
                                 )
                         ),
-                        new InstantCommand(() -> robot.intake.closeForebar()),
+                        new InstantCommand(() -> robot.intake.closeFourbar()),
 
                         new PositionCommand(drivetrain, localizer,
                                 position == SleeveDetection.ParkingPosition.CENTER ? new Pose(0, 51, 1.5 * Math.PI) :
