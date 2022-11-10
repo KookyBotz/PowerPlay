@@ -12,9 +12,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstraints;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymmetricMotionProfile;
-
 @Config
 public class IntakeSubsystem extends SubsystemBase {
     public final MotorEx extension;
@@ -49,8 +46,8 @@ public class IntakeSubsystem extends SubsystemBase {
             .32
     };
 
-    private double turret_deposit = 0;
-    private double turret_intake = 0.62;
+    private final double turret_deposit = 0;
+    private final double turret_intake = 0.62;
 
     public double power = 0.0;
     public double targetPosition = 0.0;
@@ -66,7 +63,6 @@ public class IntakeSubsystem extends SubsystemBase {
         this.claw = hardwareMap.get(Servo.class, "claw");
         this.turret = hardwareMap.get(Servo.class, "turret");
 
-//        this.profile = new AsymmetricMotionProfile(0, 0, new MotionConstraints(0, 0, 0));
         this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
 
         this.timer = new ElapsedTime();
@@ -106,11 +102,6 @@ public class IntakeSubsystem extends SubsystemBase {
         extension.set(power);
     }
 
-    public void setMotionProfile(AsymmetricMotionProfile profile) {
-//        this.profile = profile;
-        resetTimer();
-    }
-
     public void setPos(int pos) {
         this.targetPosition = pos;
     }
@@ -140,19 +131,24 @@ public class IntakeSubsystem extends SubsystemBase {
         claw.setPosition(claw_pos_open);
     }
 
-    public void extendForebar() {
+    public void extendFourbar() {
         barLeft.setPosition(fourbar_extended);
         barRight.setPosition(1 - fourbar_extended);
     }
 
-    public void extendForebar(int index) {
+    public void extendFourbar(int index) {
         barLeft.setPosition(fourbar_pickup_position[index]);
         barRight.setPosition(1 - fourbar_pickup_position[index]);
     }
 
-    public void closeForebar() {
+    public void closeFourbar() {
         barLeft.setPosition(fourbar_retracted);
         barRight.setPosition(1 - fourbar_retracted);
+    }
+
+    public void transitionFourbar() {
+        barLeft.setPosition(fourbar_transition);
+        barRight.setPosition(1 - fourbar_transition);
     }
 
     public void setFourbarFactor(double factor) {
@@ -179,11 +175,6 @@ public class IntakeSubsystem extends SubsystemBase {
             targetPosition = newPosition;
         }
 
-    }
-
-    public void transitionFourbar() {
-        barLeft.setPosition(fourbar_transition);
-        barRight.setPosition(1 - fourbar_transition);
     }
 
     public void intakeTurret() {
