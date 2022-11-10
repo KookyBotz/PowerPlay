@@ -6,12 +6,7 @@ import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.outoftheboxrobotics.photoncore.PhotonLynxModule;
-import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.AnalogSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -20,8 +15,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstraints;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymmetricMotionProfile;
 
-import java.util.concurrent.TimeUnit;
-
 @Config
 public class IntakeSubsystem extends SubsystemBase {
     public final MotorEx extension;
@@ -29,7 +22,6 @@ public class IntakeSubsystem extends SubsystemBase {
     private final Servo claw, turret;
 
     public MotionProfile profile;
-    public MotionConstraints constraints;
     public MotionState curState;
     private final ElapsedTime timer;
     private final ElapsedTime voltageTimer;
@@ -39,9 +31,9 @@ public class IntakeSubsystem extends SubsystemBase {
     private double voltage;
     private double intakePosition;
 
-    private double P = 0.025;
-    private double I = 0.0;
-    private double D = 0.0;
+    private final double P = 0.025;
+    private final double I = 0.0;
+    private final double D = 0.0;
 
     private final double claw_pos_open = 0.2;
     private final double claw_pos_closed = 0.37;

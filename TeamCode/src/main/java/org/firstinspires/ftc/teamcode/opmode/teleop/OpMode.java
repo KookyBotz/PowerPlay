@@ -83,13 +83,7 @@ public class OpMode extends CommandOpMode {
         }
 
         boolean dDL = gamepad2.dpad_left;
-        boolean dDR = gamepad2.dpad_right;
-        if (dDL && !pDDL) {
-            schedule(new CycleCommand(robot));
-        } else if (dDR && !pDDR) {
-            schedule(new InstantCommand(() -> robot.intake.setClaw(robot.intake.new_claw_pos)));
-        }
-        pDDR = dDR;
+        if (dDL && !pDDL) schedule(new CycleCommand(robot));
         pDDL = dDL;
 
         if (gamepad2.left_trigger > 0.3) {
