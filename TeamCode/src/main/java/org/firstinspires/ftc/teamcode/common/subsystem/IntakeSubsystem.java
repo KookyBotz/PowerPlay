@@ -43,15 +43,13 @@ public class IntakeSubsystem extends SubsystemBase {
     private double I = 0.0;
     private double D = 0.0;
 
-    public static int intake_out_pos = 400;
-    public static double new_claw_pos = 0.3;
-    private double claw_pos_open = 0.2;
-    private double claw_pos_closed = 0.37;
+    private final double claw_pos_open = 0.2;
+    private final double claw_pos_closed = 0.37;
 
-    private double fourbar_extended = 0.15;
-    public double fourbar_retracted = 0.83;
-    public double fourbar_transition = fourbar_retracted - 0.2;
-    public double[] fourbar_pickup_position = new double[]{
+    private final double fourbar_extended = 0.15;
+    private final double fourbar_retracted = 0.83;
+    public final double fourbar_transition = fourbar_retracted - 0.2;
+    private final double[] fourbar_pickup_position = new double[]{
             .15,
             .17,
             .22,
@@ -61,8 +59,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private double turret_deposit = 0;
     private double turret_intake = 0.62;
-
-    private final double FOURBAR_LENGTH = 9.842;
 
     public double power = 0.0;
     public double targetPosition = 0.0;
