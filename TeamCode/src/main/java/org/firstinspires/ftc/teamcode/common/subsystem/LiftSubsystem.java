@@ -130,10 +130,6 @@ public class LiftSubsystem extends SubsystemBase {
         timer.reset();
     }
 
-    public void setPID(double P, double I, double D) {
-        controller.setPID(P, I, D);
-    }
-
     public void setDVA(double d, double v, double a) {
         this.distance = d;
         this.maxV = v;
