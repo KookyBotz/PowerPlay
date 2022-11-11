@@ -33,7 +33,7 @@ public class AutoCycleCommand extends SequentialCommandGroup {
 
                 new WaitUntilCommand(() -> robot.lift.getPos() < 10),
                 new WaitUntilCommand(() -> robot.intake.getPos() < 10),
-                new InstantCommand(() -> robot.intake.closeForebar()),
+                new InstantCommand(() -> robot.intake.closeFourbar()),
                 new WaitCommand(250),
                 new InstantCommand(() -> robot.intake.openClaw()),
                 new WaitCommand(250),

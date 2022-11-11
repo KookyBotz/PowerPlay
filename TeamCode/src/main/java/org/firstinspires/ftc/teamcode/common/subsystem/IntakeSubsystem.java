@@ -6,21 +6,11 @@ import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.outoftheboxrobotics.photoncore.PhotonLynxModule;
-import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.AnalogSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstraints;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymmetricMotionProfile;
-
-import java.util.concurrent.TimeUnit;
 
 @Config
 public class IntakeSubsystem extends SubsystemBase {
@@ -29,7 +19,6 @@ public class IntakeSubsystem extends SubsystemBase {
     private final Servo claw, turret;
 
     public MotionProfile profile;
-    public MotionConstraints constraints;
     public MotionState curState;
     private final ElapsedTime timer;
     private final ElapsedTime voltageTimer;
@@ -39,19 +28,17 @@ public class IntakeSubsystem extends SubsystemBase {
     private double voltage;
     private double intakePosition;
 
-    private double P = 0.025;
-    private double I = 0.0;
-    private double D = 0.0;
+    private final double P = 0.025;
+    private final double I = 0.0;
+    private final double D = 0.0;
 
-    public static int intake_out_pos = 400;
-    public static double new_claw_pos = 0.3;
-    private double claw_pos_open = 0.2;
-    private double claw_pos_closed = 0.37;
+    private final double claw_pos_open = 0.2;
+    private final double claw_pos_closed = 0.37;
 
-    private double fourbar_extended = 0.15;
-    public double fourbar_retracted = 0.83;
-    public double fourbar_transition = fourbar_retracted - 0.2;
-    public double[] fourbar_pickup_position = new double[]{
+    private final double fourbar_extended = 0.15;
+    private final double fourbar_retracted = 0.83;
+    public final double fourbar_transition = fourbar_retracted - 0.2;
+    private final double[] fourbar_pickup_position = new double[]{
             .15,
             .17,
             .22,
@@ -59,10 +46,8 @@ public class IntakeSubsystem extends SubsystemBase {
             .32
     };
 
-    private double turret_deposit = 0;
-    private double turret_intake = 0.62;
-
-    private final double FOURBAR_LENGTH = 9.842;
+    private final double turret_deposit = 0;
+    private final double turret_intake = 0.62;
 
     public double power = 0.0;
     public double targetPosition = 0.0;
@@ -78,7 +63,6 @@ public class IntakeSubsystem extends SubsystemBase {
         this.claw = hardwareMap.get(Servo.class, "claw");
         this.turret = hardwareMap.get(Servo.class, "turret");
 
-//        this.profile = new AsymmetricMotionProfile(0, 0, new MotionConstraints(0, 0, 0));
         this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
 
         this.timer = new ElapsedTime();
@@ -107,7 +91,7 @@ public class IntakeSubsystem extends SubsystemBase {
         //
         // AnalogInput claw = hardwareMap.get(AnalogInput.class, "clawName");
         //
-        // mult by 360/33.33
+        // multiply by 360/33.33
     }
 
     public void read() {
@@ -116,11 +100,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void write() {
         extension.set(power);
-    }
-
-    public void setMotionProfile(AsymmetricMotionProfile profile) {
-//        this.profile = profile;
-        resetTimer();
     }
 
     public void setPos(int pos) {
@@ -152,19 +131,24 @@ public class IntakeSubsystem extends SubsystemBase {
         claw.setPosition(claw_pos_open);
     }
 
-    public void extendForebar() {
+    public void extendFourbar() {
         barLeft.setPosition(fourbar_extended);
         barRight.setPosition(1 - fourbar_extended);
     }
 
-    public void extendForebar(int index) {
+    public void extendFourbar(int index) {
         barLeft.setPosition(fourbar_pickup_position[index]);
         barRight.setPosition(1 - fourbar_pickup_position[index]);
     }
 
-    public void closeForebar() {
+    public void closeFourbar() {
         barLeft.setPosition(fourbar_retracted);
         barRight.setPosition(1 - fourbar_retracted);
+    }
+
+    public void transitionFourbar() {
+        barLeft.setPosition(fourbar_transition);
+        barRight.setPosition(1 - fourbar_transition);
     }
 
     public void setFourbarFactor(double factor) {
@@ -191,11 +175,6 @@ public class IntakeSubsystem extends SubsystemBase {
             targetPosition = newPosition;
         }
 
-    }
-
-    public void transitionFourbar() {
-        barLeft.setPosition(fourbar_transition);
-        barRight.setPosition(1 - fourbar_transition);
     }
 
     public void intakeTurret() {

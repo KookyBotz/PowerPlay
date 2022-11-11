@@ -6,8 +6,6 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MotionConstraints;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.profiling.AsymmetricMotionProfile;
 
 public class CycleCommand extends SequentialCommandGroup {
     public CycleCommand(Robot robot) {
@@ -16,7 +14,7 @@ public class CycleCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> robot.intake.newProfile(270, 600, 1500)),
                 new InstantCommand(() -> robot.intake.resetTimer()),
                 new InstantCommand(() -> robot.intake.openClaw()),
-                new InstantCommand(() -> robot.intake.extendForebar()),
+                new InstantCommand(() -> robot.intake.extendFourbar()),
                 new InstantCommand(() -> robot.intake.intakeTurret()),
 
                 new InstantCommand(() -> robot.lift.newProfile(610, 800, 2500)),
@@ -37,7 +35,7 @@ public class CycleCommand extends SequentialCommandGroup {
                 //transfer
                 new WaitUntilCommand(() -> robot.lift.getPos() < 10),
                 new WaitUntilCommand(() -> robot.intake.getPos() < 10),
-                new InstantCommand(() -> robot.intake.closeForebar()),
+                new InstantCommand(() -> robot.intake.closeFourbar()),
                 new WaitCommand(250),
                 new InstantCommand(() -> robot.intake.openClaw()),
                 new WaitCommand(400),

@@ -30,11 +30,9 @@ public class OpMode extends CommandOpMode {
     private ElapsedTime timer;
     private double loopTime = 0;
 
-    boolean pDup = false;
     boolean pDLB = false;
     boolean pDRB = false;
     boolean pDDL = false;
-    boolean pDDR = false;
 
     @Override
     public void initialize() {
@@ -58,9 +56,6 @@ public class OpMode extends CommandOpMode {
         }
 
         robot.read();
-//        double loop = System.nanoTime();
-//        telemetry.addData("READ hz ", 1000000000 / (loop - loopTime));
-//        loopTime = loop;
 
         double speedMultiplier = 1 - 0.75 * gamepad1.right_trigger;
         // Drivetrain
@@ -83,13 +78,7 @@ public class OpMode extends CommandOpMode {
         }
 
         boolean dDL = gamepad2.dpad_left;
-        boolean dDR = gamepad2.dpad_right;
-        if (dDL && !pDDL) {
-            schedule(new CycleCommand(robot));
-        } else if (dDR && !pDDR) {
-            schedule(new InstantCommand(() -> robot.intake.setClaw(robot.intake.new_claw_pos)));
-        }
-        pDDR = dDR;
+        if (dDL && !pDDL) schedule(new CycleCommand(robot));
         pDDL = dDL;
 
         if (gamepad2.left_trigger > 0.3) {
@@ -117,15 +106,9 @@ public class OpMode extends CommandOpMode {
         boolean dRB = gamepad2.right_bumper;
         if (dLB && !pDLB) {
             schedule(new InstantCommand(() -> robot.intake.intakeTurret()),
-                    new InstantCommand(() -> robot.intake.extendForebar()),
+                    new InstantCommand(() -> robot.intake.extendFourbar()),
                     new InstantCommand(() -> robot.intake.openClaw()));
         } else if (dRB && !pDRB) {
-//            if (robot.lift.getPos() < 10 && robot.intake.getPos() < 10) {
-//                schedule(new InstantCommand(() -> robot.intake.closeClaw()),
-//                        new WaitCommand(500),
-//                        new InstantCommand(() -> robot.intake.depositTurret()),
-//                        new InstantCommand(() -> robot.intake.closeForebar()));
-//            }
             schedule(new IntakeRetractCommand(robot));
         }
         pDRB = dRB;
@@ -141,15 +124,6 @@ public class OpMode extends CommandOpMode {
             schedule(new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 7000)));
         }
 
-//        boolean dup = gamepad2.dpad_up;
-//        if (dup && !pDup) {
-//            schedule(new CycleCommand(robot));
-//        }
-//        pDup = dup;
-
-//        loop = System.nanoTime();
-//        telemetry.addData("schedule HZ ", 1000000000 / (loop - loopTime));
-//        loopTime = loop;
 
         robot.drivetrain.set(drive);
         robot.drivetrain.updateModules();
@@ -161,21 +135,12 @@ public class OpMode extends CommandOpMode {
             robot.drivetrain.leftRearModule.setTargetRotation(-PI / 4);
             robot.drivetrain.updateModules();
         }
-//        loop = System.nanoTime();
-//        telemetry.addData("update HZ ", 1000000000 / (loop - loopTime));
-//        loopTime = loop;
 
         robot.intake.loop();
         robot.lift.loop();
         CommandScheduler.getInstance().run();
-//        loop = System.nanoTime();
-//        telemetry.addData("command/loop HZ ", 1000000000 / (loop - loopTime));
-//        loopTime = loop;
 
         robot.write();
-//        loop = System.nanoTime();
-//        telemetry.addData("write HZ ", 1000000000 / (loop - loopTime));
-//        loopTime = loop;
 
         // Telemetry
         telemetry.addData("liftPos:", robot.lift.getPos());

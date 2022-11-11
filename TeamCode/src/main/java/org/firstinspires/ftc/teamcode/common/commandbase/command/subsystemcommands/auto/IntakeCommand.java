@@ -13,7 +13,7 @@ public class IntakeCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> robot.intake.newProfile(300, 400, 2500)),
                 new InstantCommand(() -> robot.intake.resetTimer()),
                 new InstantCommand(() -> robot.intake.openClaw()),
-                new InstantCommand(() -> robot.intake.extendForebar()),
+                new InstantCommand(() -> robot.intake.extendFourbar()),
                 new InstantCommand(() -> robot.intake.intakeTurret()),
 
                 new WaitUntilCommand(() -> robot.intake.getPos() > 340 && robot.lift.getPos() > 580),
@@ -27,7 +27,7 @@ public class IntakeCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> robot.intake.newProfile(0, 300, 2500)),
                 new InstantCommand(() -> robot.intake.resetTimer()),
 
-                new InstantCommand(() -> robot.intake.closeForebar()),
+                new InstantCommand(() -> robot.intake.closeFourbar()),
                 new WaitUntilCommand(() -> robot.intake.getPos() < 10),
                 new WaitCommand(250),
                 new InstantCommand(() -> robot.intake.openClaw()),
