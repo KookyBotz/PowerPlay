@@ -64,8 +64,8 @@ public class SleeveDetection extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
-        Mat colorMat = input.submat(new Rect(sleeve_pointA, sleeve_pointB));
-        Scalar sumColors = Core.sumElems(colorMat);
+        Mat areaMat = input.submat(new Rect(sleeve_pointA, sleeve_pointB));
+        Scalar sumColors = Core.sumElems(areaMat);
 
         double minColor = Math.min(sumColors.val[0], Math.min(sumColors.val[1], sumColors.val[2]));
 
@@ -99,7 +99,7 @@ public class SleeveDetection extends OpenCvPipeline {
             );
         }
 
-        colorMat.release();
+        areaMat.release();
         return input;
     }
 
