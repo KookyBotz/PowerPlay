@@ -42,6 +42,11 @@ public class LiftSubsystem extends SubsystemBase {
         RETRACTED
     }
 
+    private enum latchState {
+        LATCHED,
+        UNLATCHED
+    }
+
     // thanks aabhas <3
     public LiftSubsystem(HardwareMap hardwareMap, boolean isAuto) {
         this.lift = new MotorEx(hardwareMap, "lift");
