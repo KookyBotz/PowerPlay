@@ -54,6 +54,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private TurretState turretState;
     private ClawState clawState;
+    private FourbarState fourbarState;
 
     public enum TurretState {
         INTAKE,
@@ -116,6 +117,22 @@ public class IntakeSubsystem extends SubsystemBase {
         }
 
         clawState = state;
+    }
+
+    public void update(FourbarState state) {
+        switch (state) {
+            case INTAKE:
+                barLeft.setPosition(fourbar_extended);
+                barRight.setPosition(1 - fourbar_extended);
+            case TRANSITION:
+                barLeft.setPosition(fourbar_transition);
+                barRight.setPosition(1 - fourbar_transition);
+            case DEPOSIT:
+                barLeft.setPosition(fourbar_retracted);
+                barRight.setPosition(1 - fourbar_retracted);
+        }
+
+        fourbarState = state;
     }
 
     public void loop() {
