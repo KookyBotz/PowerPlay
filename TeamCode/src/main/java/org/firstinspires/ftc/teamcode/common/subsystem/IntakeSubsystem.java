@@ -52,11 +52,34 @@ public class IntakeSubsystem extends SubsystemBase {
     public double power = 0.0;
     public double targetPosition = 0.0;
 
+    private TurretState turretState;
+    private ClawState clawState;
+    private FourbarState fourbarState;
+
+    public enum TurretState {
+        INTAKE,
+        MANUAL,
+        DEPOSIT
+    }
+
+    public enum ClawState {
+        OPEN,
+        CLOSED
+    }
+
+    public enum FourbarState {
+        INTAKE,
+        MANUAL,
+        TRANSITION,
+        DEPOSIT
+    }
+
     // thanks aabhas <3
     public IntakeSubsystem(HardwareMap hardwareMap, boolean isAuto) {
         this.extension = new MotorEx(hardwareMap, "extension");
         if (isAuto) {
             extension.resetEncoder();
+
         }
         this.barLeft = hardwareMap.get(Servo.class, "fourbarLeft");
         this.barRight = hardwareMap.get(Servo.class, "fourbarRight");
@@ -74,6 +97,44 @@ public class IntakeSubsystem extends SubsystemBase {
         this.voltage = voltageSensor.getVoltage();
     }
 
+    public void update(TurretState state) {
+        switch(state) {
+            case INTAKE:
+                turret.setPosition(turret_intake);
+            case DEPOSIT:
+                turret.setPosition(turret_deposit);
+        }
+
+        turretState = state;
+    }
+
+    public void update(ClawState state) {
+        switch(state) {
+            case OPEN:
+                claw.setPosition(claw_pos_open);
+            case CLOSED:
+                claw.setPosition(claw_pos_closed);
+        }
+
+        clawState = state;
+    }
+
+    public void update(FourbarState state) {
+        switch (state) {
+            case INTAKE:
+                barLeft.setPosition(fourbar_extended);
+                barRight.setPosition(1 - fourbar_extended);
+            case TRANSITION:
+                barLeft.setPosition(fourbar_transition);
+                barRight.setPosition(1 - fourbar_transition);
+            case DEPOSIT:
+                barLeft.setPosition(fourbar_retracted);
+                barRight.setPosition(1 - fourbar_retracted);
+        }
+
+        fourbarState = state;
+    }
+
     public void loop() {
         if (voltageTimer.seconds() > 5) {
             voltage = voltageSensor.getVoltage();
@@ -87,6 +148,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         power = controller.calculate(intakePosition, targetPosition) / voltage * 12;
 
+        // TODO add analog input claw gang
         //AnalogInput sensor = new AnalogInput()
         //
         // AnalogInput claw = hardwareMap.get(AnalogInput.class, "clawName");
@@ -94,6 +156,7 @@ public class IntakeSubsystem extends SubsystemBase {
         // multiply by 360/33.33
     }
 
+    // TODO optimize read/writes for every 1/2 or 1/4 loop
     public void read() {
         intakePosition = extension.encoder.getPosition();
     }
@@ -106,6 +169,7 @@ public class IntakeSubsystem extends SubsystemBase {
         this.targetPosition = pos;
     }
 
+    // TODO get rid of all current setfourbar command/positions to use just update (FSM)
     public void setFourbar(double pos) {
         barLeft.setPosition(pos);
         barRight.setPosition(1 - pos);
