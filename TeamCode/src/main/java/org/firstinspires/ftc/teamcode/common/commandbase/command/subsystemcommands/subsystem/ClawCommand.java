@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands;
+package org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
