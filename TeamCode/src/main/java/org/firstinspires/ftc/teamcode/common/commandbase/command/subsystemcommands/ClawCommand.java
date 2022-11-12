@@ -1,25 +1,15 @@
 package org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands;
 
-import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
 
-public class ClawCommand extends CommandBase {
-    private IntakeSubsystem intake;
-    private double pos;
-
-    public ClawCommand(IntakeSubsystem intake, double pos) {
-        this.intake = intake;
-        this.pos = pos;
-    }
-
-    @Override
-    public void execute() {
-        intake.setClaw(pos);
-    }
-
-    @Override
-    public boolean isFinished() {
-        return true;
+public class ClawCommand extends SequentialCommandGroup {
+    public ClawCommand(Robot robot, IntakeSubsystem.ClawState state) {
+        super(
+                new InstantCommand(() -> robot.intake.update(state))
+        );
     }
 }

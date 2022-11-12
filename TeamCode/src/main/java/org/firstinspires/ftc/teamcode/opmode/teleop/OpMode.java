@@ -13,6 +13,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.ClawCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.CloseClawCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeRetractCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommand;
@@ -21,6 +22,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomman
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
+import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
 
 @Config
 @TeleOp(name = "OpMode👌👌😍🎶🎶😎😶‍🌫️😈👺")
@@ -82,9 +84,9 @@ public class OpMode extends CommandOpMode {
         pDDL = dDL;
 
         if (gamepad2.left_trigger > 0.3) {
-            schedule(new OpenClawCommand(robot));
+            schedule(new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN));
         } else if (gamepad2.right_trigger > 0.3) {
-            schedule(new CloseClawCommand(robot));
+            schedule(new ClawCommand(robot, IntakeSubsystem.ClawState.CLOSED));
         }
 
         double gamepad2_left_stick_y = gamepad2.left_stick_y;
