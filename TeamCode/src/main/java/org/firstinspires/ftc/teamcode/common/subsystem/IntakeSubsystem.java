@@ -52,11 +52,26 @@ public class IntakeSubsystem extends SubsystemBase {
     public double power = 0.0;
     public double targetPosition = 0.0;
 
+    private TurretState turretState;
+    private ClawState clawState;
+
+    public enum TurretState {
+        INTAKE,
+        MANUAL,
+        DEPOSIT
+    }
+
+    public enum ClawState {
+        OPEN,
+        CLOSED
+    }
+
     // thanks aabhas <3
     public IntakeSubsystem(HardwareMap hardwareMap, boolean isAuto) {
         this.extension = new MotorEx(hardwareMap, "extension");
         if (isAuto) {
             extension.resetEncoder();
+
         }
         this.barLeft = hardwareMap.get(Servo.class, "fourbarLeft");
         this.barRight = hardwareMap.get(Servo.class, "fourbarRight");
@@ -72,6 +87,30 @@ public class IntakeSubsystem extends SubsystemBase {
         this.controller = new PIDController(P, I, D);
         this.voltageSensor = hardwareMap.voltageSensor.iterator().next();
         this.voltage = voltageSensor.getVoltage();
+    }
+
+    public void update(TurretState state) {
+        switch(state) {
+            case INTAKE:
+                turret.setPosition(turret_intake);
+            case DEPOSIT:
+                turret.setPosition(turret_deposit);
+            // don't need to add a thing for manual here,
+            // will just automatically update the state
+        }
+
+        turretState = state;
+    }
+
+    public void update(ClawState state) {
+        switch(state) {
+            case OPEN:
+                claw.setPosition(claw_pos_open);
+            case CLOSED:
+                claw.setPosition(claw_pos_closed);
+        }
+
+        clawState = state;
     }
 
     public void loop() {
