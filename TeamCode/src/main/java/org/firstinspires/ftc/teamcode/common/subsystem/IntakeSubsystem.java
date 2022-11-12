@@ -66,6 +66,13 @@ public class IntakeSubsystem extends SubsystemBase {
         CLOSED
     }
 
+    public enum FourbarState {
+        INTAKE,
+        MANUAL,
+        TRANSITION,
+        DEPOSIT
+    }
+
     // thanks aabhas <3
     public IntakeSubsystem(HardwareMap hardwareMap, boolean isAuto) {
         this.extension = new MotorEx(hardwareMap, "extension");
@@ -95,8 +102,6 @@ public class IntakeSubsystem extends SubsystemBase {
                 turret.setPosition(turret_intake);
             case DEPOSIT:
                 turret.setPosition(turret_deposit);
-            // don't need to add a thing for manual here,
-            // will just automatically update the state
         }
 
         turretState = state;
@@ -126,6 +131,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         power = controller.calculate(intakePosition, targetPosition) / voltage * 12;
 
+        // TODO add analog input claw gang
         //AnalogInput sensor = new AnalogInput()
         //
         // AnalogInput claw = hardwareMap.get(AnalogInput.class, "clawName");
@@ -133,6 +139,7 @@ public class IntakeSubsystem extends SubsystemBase {
         // multiply by 360/33.33
     }
 
+    // TODO optimize read/writes for every 1/2 or 1/4 loop
     public void read() {
         intakePosition = extension.encoder.getPosition();
     }
@@ -145,6 +152,7 @@ public class IntakeSubsystem extends SubsystemBase {
         this.targetPosition = pos;
     }
 
+    // TODO get rid of all current setfourbar command/positions to use just update (FSM)
     public void setFourbar(double pos) {
         barLeft.setPosition(pos);
         barRight.setPosition(1 - pos);
