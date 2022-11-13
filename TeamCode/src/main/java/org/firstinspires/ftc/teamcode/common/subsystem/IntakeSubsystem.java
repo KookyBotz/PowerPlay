@@ -164,10 +164,6 @@ public class IntakeSubsystem extends SubsystemBase {
         extension.set(power);
     }
 
-    public void setPos(int pos) {
-        this.targetPosition = pos;
-    }
-
     // TODO get rid of all current setfourbar command/positions to use just update (FSM)
     public void setFourbar(double pos) {
         barLeft.setPosition(pos);
@@ -182,23 +178,9 @@ public class IntakeSubsystem extends SubsystemBase {
         return barLeft.getPosition();
     }
 
-    public void closeClaw() {
-        claw.setPosition(claw_pos_closed);
-    }
-
     public void extendFourbar(int index) {
         barLeft.setPosition(fourbar_pickup_position[index]);
         barRight.setPosition(1 - fourbar_pickup_position[index]);
-    }
-
-    public void closeFourbar() {
-        barLeft.setPosition(fourbar_retracted);
-        barRight.setPosition(1 - fourbar_retracted);
-    }
-
-    public void transitionFourbar() {
-        barLeft.setPosition(fourbar_transition);
-        barRight.setPosition(1 - fourbar_transition);
     }
 
     public void setFourbarFactor(double factor) {
@@ -224,15 +206,6 @@ public class IntakeSubsystem extends SubsystemBase {
         if (curState.getV() == 0 && newPosition >= -15 && newPosition <= 485) {
             targetPosition = newPosition;
         }
-
-    }
-
-    public void intakeTurret() {
-        turret.setPosition(turret_intake);
-    }
-
-    public void depositTurret() {
-        turret.setPosition(turret_deposit);
     }
 
     public void resetTimer() {
