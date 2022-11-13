@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomma
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
 
 public class ClearFourbarCommand extends CommandBase {
