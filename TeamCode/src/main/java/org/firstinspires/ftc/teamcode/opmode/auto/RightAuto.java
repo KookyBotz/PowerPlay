@@ -1,16 +1,19 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
@@ -76,6 +79,32 @@ public class RightAuto extends LinearOpMode {
             PhotonCore.CONTROL_HUB.clearBulkCache();
             PhotonCore.EXPANSION_HUB.clearBulkCache();
             robot.write();
+        }
+
+        SleeveDetection.ParkingPosition position = sleeveDetection.getPosition();
+
+        waitForStart();
+        camera.stopStreaming();
+
+        CommandScheduler.getInstance().schedule(
+                new SequentialCommandGroup(
+                        new PositionCommand(drivetrain, localizer, new Pose(0, 63, 0), 1750),
+                        new PositionCommand(drivetrain, localizer, new Pose(0, 63, 1.5 * Math.PI), 1250)
+                )
+        );
+
+        while (opModeIsActive()) {
+            robot.read();
+            CommandScheduler.getInstance().run();
+            robot.intake.loop();
+            robot.lift.loop();
+            robot.drivetrain.updateModules();
+            localizer.periodic();
+            telemetry.addData("current pose", localizer.getPos());
+            telemetry.update();
+            robot.write();
+            PhotonCore.CONTROL_HUB.clearBulkCache();
+            PhotonCore.EXPANSION_HUB.clearBulkCache();
         }
     }
 }

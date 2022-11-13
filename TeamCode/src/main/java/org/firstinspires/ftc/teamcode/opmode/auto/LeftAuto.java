@@ -54,8 +54,8 @@ public class LeftAuto extends LinearOpMode {
                 robot::getAngle
         );
         robot.localizer = localizer;
-        robot.intake.closeFourbar();
-        robot.intake.closeClaw();
+        robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT);
+        robot.intake.update(IntakeSubsystem.ClawState.CLOSED);
 
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
