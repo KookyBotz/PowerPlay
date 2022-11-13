@@ -186,15 +186,6 @@ public class IntakeSubsystem extends SubsystemBase {
         claw.setPosition(claw_pos_closed);
     }
 
-    public void openClaw() {
-        claw.setPosition(claw_pos_open);
-    }
-
-    public void extendFourbar() {
-        barLeft.setPosition(fourbar_extended);
-        barRight.setPosition(1 - fourbar_extended);
-    }
-
     public void extendFourbar(int index) {
         barLeft.setPosition(fourbar_pickup_position[index]);
         barRight.setPosition(1 - fourbar_pickup_position[index]);
