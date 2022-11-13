@@ -17,6 +17,8 @@ import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomman
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeRetractCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.CycleCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.FourbarCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
@@ -105,9 +107,9 @@ public class OpMode extends CommandOpMode {
         boolean dLB = gamepad2.left_bumper;
         boolean dRB = gamepad2.right_bumper;
         if (dLB && !pDLB) {
-            schedule(new InstantCommand(() -> robot.intake.intakeTurret()),
-                    new InstantCommand(() -> robot.intake.extendFourbar()),
-                    new InstantCommand(() -> robot.intake.openClaw()));
+            schedule(new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
+                     new FourbarCommand(robot, IntakeSubsystem.FourbarState.INTAKE),
+                     new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN));
         } else if (dRB && !pDRB) {
             schedule(new IntakeRetractCommand(robot));
         }
@@ -123,7 +125,6 @@ public class OpMode extends CommandOpMode {
         } else if (gamepad2.b) {
             schedule(new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 7000)));
         }
-
 
         robot.drivetrain.set(drive);
         robot.drivetrain.updateModules();
@@ -143,14 +144,14 @@ public class OpMode extends CommandOpMode {
         robot.write();
 
         // Telemetry
-        telemetry.addData("liftPos:", robot.lift.getPos());
-        telemetry.addData("liftPow:", robot.lift.power);
-        telemetry.addData("intakePos:", robot.intake.getPos());
-        telemetry.addData("intakePow:", robot.intake.power);
-        telemetry.addData("intakeTarget:", robot.intake.targetPosition);
-        telemetry.addData("velocity:", robot.intake.curState.getV());
-        telemetry.addData("state:", robot.intake.curState.getV() == 0);
-        telemetry.addData("speed multiplier:", speedMultiplier);
+//        telemetry.addData("liftPos:", robot.lift.getPos());
+//        telemetry.addData("liftPow:", robot.lift.power);
+//        telemetry.addData("intakePos:", robot.intake.getPos());
+//        telemetry.addData("intakePow:", robot.intake.power);
+//        telemetry.addData("intakeTarget:", robot.intake.targetPosition);
+//        telemetry.addData("velocity:", robot.intake.curState.getV());
+//        telemetry.addData("state:", robot.intake.curState.getV() == 0);
+//        telemetry.addData("speed multiplier:", speedMultiplier);
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
