@@ -12,7 +12,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.ClearFourbarCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.ClawCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
@@ -98,26 +100,12 @@ public class RightAuto extends LinearOpMode {
                         // TODO: change these positions to work with right side
                         new PositionCommand(drivetrain, localizer, new Pose(0, 63, 0), 1750),
                         new PositionCommand(drivetrain, localizer, new Pose(0, 63, 1.5 * Math.PI), 1250),
-                        new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
-                        new WaitCommand(250),
-                        new ClearFourbarCommand(robot.intake),
-                        new WaitCommand(500),
-                        new InstantCommand(() -> robot.lift.newProfile(615, 800, 3000)),
-                        new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
-                        new WaitUntilCommand(() -> robot.lift.getPos() > 570),
-                        new WaitCommand(500),
-                        new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)),
-                        new WaitUntilCommand(() -> robot.lift.getPos() < 10),
-
-                        // intake
-                        new InstantCommand(() -> robot.intake.newProfile(405, 800, 3000)),
-                        new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
-                        new InstantCommand(() -> robot.intake.extendFourbar(4)),
-                        new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
-                        new WaitUntilCommand(() -> robot.intake.getPos() > 350),
-                        new WaitCommand(750),
-                        new ClawCommand(robot, IntakeSubsystem.ClawState.CLOSED),
-                        new WaitCommand(1000)
+                        new AutoCycleCommand(robot, 0, 0),
+                        new AutoCycleCommand(robot, 0, 0),
+                        new AutoCycleCommand(robot, 0, 0),
+                        new AutoCycleCommand(robot, 0, 0),
+                        new AutoCycleCommand(robot, 0, 0)
+                        // go to other side alliance spot
                 )
         );
 
