@@ -36,7 +36,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "BlueLeftAuto")
+@Autonomous(name = "LeftAuto")
 public class LeftAuto extends LinearOpMode {
 
     SleeveDetection sleeveDetection = new SleeveDetection();
@@ -87,7 +87,7 @@ public class LeftAuto extends LinearOpMode {
             robot.drivetrain.updateModules();
 
             telemetry.addData("Sleeve Position", sleeveDetection.getPosition());
-            telemetry.addLine("RUNNING BLUE 5 CYCLE");
+            telemetry.addLine("RUNNING LEFT 5 CYCLE");
             telemetry.update();
 
             PhotonCore.CONTROL_HUB.clearBulkCache();
@@ -100,20 +100,20 @@ public class LeftAuto extends LinearOpMode {
         waitForStart();
         camera.stopStreaming();
 
-        PurePursuitPath preloadPath = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 0.5),
-                new Waypoint(new Pose(0, 0, 0), 0),
-                new Waypoint(new Pose(0, 63, 0), 0)
-        );
-
-        PurePursuitPath intakePath = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 0.5),
-                new Waypoint(new Pose(0, 64, 1.5 * Math.PI), 0),
-                new Waypoint(new Pose(-5, 51, 1.5 * Math.PI), 0)
-        );
-
-        PurePursuitPath depositPath = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 0.5),
-                new Waypoint(new Pose(-5, 51, 1.5 * Math.PI), 0),
-                new Waypoint(new Pose(0, 60, 4.425), 0)
-        );
+//        PurePursuitPath preloadPath = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 0.5),
+//                new Waypoint(new Pose(0, 0, 0), 0),
+//                new Waypoint(new Pose(0, 63, 0), 0)
+//        );
+//
+//        PurePursuitPath intakePath = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 0.5),
+//                new Waypoint(new Pose(0, 64, 1.5 * Math.PI), 0),
+//                new Waypoint(new Pose(-5, 51, 1.5 * Math.PI), 0)
+//        );
+//
+//        PurePursuitPath depositPath = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 0.5),
+//                new Waypoint(new Pose(-5, 51, 1.5 * Math.PI), 0),
+//                new Waypoint(new Pose(0, 60, 4.425), 0)
+//        );
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
