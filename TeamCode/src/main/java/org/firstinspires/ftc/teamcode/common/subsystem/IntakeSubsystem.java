@@ -174,10 +174,6 @@ public class IntakeSubsystem extends SubsystemBase {
         barRight.setPosition(1 - pos);
     }
 
-    public void setClaw(double position) {
-        claw.setPosition(position);
-    }
-
     public int getPos() {
         return (int) intakePosition;
     }
