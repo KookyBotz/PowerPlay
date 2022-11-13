@@ -17,6 +17,8 @@ import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomman
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.ClawCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.FourbarCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
@@ -120,12 +122,12 @@ public class LeftAuto extends LinearOpMode {
                         new PositionCommand(drivetrain, localizer, new Pose(0, 63, 1.5 * Math.PI), 1250),
                         new InstantCommand(() -> PurePursuitConfig.pCoefficientX = 24),
                         new InstantCommand(() -> PurePursuitConfig.pCoefficientY = 24),
-                        new InstantCommand(() -> robot.intake.openClaw()),
+                        new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
                         new WaitCommand(250),
                         new ClearFourbarCommand(robot.intake),
                         new WaitCommand(500),
                         new InstantCommand(() -> robot.lift.newProfile(615, 800, 3000)),
-                        new InstantCommand(() -> robot.intake.intakeTurret()),
+                        new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
                         new WaitUntilCommand(() -> robot.lift.getPos() > 570),
                         new WaitCommand(500),
                         new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)),
@@ -134,27 +136,27 @@ public class LeftAuto extends LinearOpMode {
                         // intake
                         new PositionCommand(drivetrain, localizer, new Pose(-5, 51, 1.5 * Math.PI), 1250),
                         new InstantCommand(() -> robot.intake.newProfile(405, 800, 3000)),
-                        new InstantCommand(() -> robot.intake.intakeTurret()),
+                        new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
                         new InstantCommand(() -> robot.intake.extendFourbar(4)),
-                        new InstantCommand(() -> robot.intake.openClaw()),
+                        new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
                         new WaitUntilCommand(() -> robot.intake.getPos() > 350),
                         new WaitCommand(750),
-                        new InstantCommand(() -> robot.intake.closeClaw()),
+                        new ClawCommand(robot, IntakeSubsystem.ClawState.CLOSED),
                         new WaitCommand(1000),
 
                         // transfer
-                        new InstantCommand(() -> robot.intake.transitionFourbar()),
+                        new FourbarCommand(robot, IntakeSubsystem.FourbarState.TRANSITION),
 
                         new WaitCommand(500),
 
                         new ParallelCommandGroup(
                                 new PositionCommand(drivetrain, localizer, new Pose(-0.5, 60, 4.425), 1000),
                                 new SequentialCommandGroup(
-                                        new InstantCommand(() -> robot.intake.depositTurret()),
+                                        new TurretCommand(robot, IntakeSubsystem.TurretState.DEPOSIT),
                                         new InstantCommand(() -> robot.intake.newProfile(-5, 800, 3000)),
                                         new WaitUntilCommand(() -> robot.lift.getPos() < 10),
                                         new WaitUntilCommand(() -> robot.intake.getPos() < 10),
-                                        new InstantCommand(() -> robot.intake.closeFourbar())
+                                        new FourbarCommand(robot, IntakeSubsystem.FourbarState.DEPOSIT)
                                 )
                         ),
 
@@ -173,7 +175,7 @@ public class LeftAuto extends LinearOpMode {
                                         new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500))
                                 )
                         ),
-                        new InstantCommand(() -> robot.intake.closeFourbar()),
+                        new FourbarCommand(robot, IntakeSubsystem.FourbarState.DEPOSIT),
 
                         new PositionCommand(drivetrain, localizer,
                                 position == SleeveDetection.ParkingPosition.CENTER ? new Pose(0, 51, 1.5 * Math.PI) :
