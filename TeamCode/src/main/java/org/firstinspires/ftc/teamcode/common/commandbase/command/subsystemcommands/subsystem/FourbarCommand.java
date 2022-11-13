@@ -6,10 +6,10 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
 
-public class FourbarCommand extends InstantCommand {
+public class FourbarCommand extends SequentialCommandGroup {
     public FourbarCommand(Robot robot, IntakeSubsystem.FourbarState state) {
         super(
-                () -> robot.intake.update(state)
+                new InstantCommand(() -> robot.intake.update(state))
         );
     }
 }
