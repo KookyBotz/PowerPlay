@@ -5,16 +5,19 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.ClawCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
+import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
 
 public class AutoCycleCommand extends SequentialCommandGroup {
     public AutoCycleCommand(Robot robot, int distance, double fourbarPos) {
         super(
                 new InstantCommand(() -> robot.intake.newProfile(distance, 600, 1500)),
                 new InstantCommand(() -> robot.intake.resetTimer()),
-                new InstantCommand(() -> robot.intake.openClaw()),
+                new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
                 new InstantCommand(() -> robot.intake.setFourbar(fourbarPos)),
-                new InstantCommand(() -> robot.intake.intakeTurret()),
+                new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
 
                 new InstantCommand(() -> robot.lift.newProfile(615, 800, 2500)),
 
