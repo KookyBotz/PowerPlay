@@ -124,7 +124,6 @@ public class OpMode extends CommandOpMode {
             schedule(new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 7000)));
         }
 
-
         robot.drivetrain.set(drive);
         robot.drivetrain.updateModules();
 
@@ -143,14 +142,14 @@ public class OpMode extends CommandOpMode {
         robot.write();
 
         // Telemetry
-        telemetry.addData("liftPos:", robot.lift.getPos());
-        telemetry.addData("liftPow:", robot.lift.power);
-        telemetry.addData("intakePos:", robot.intake.getPos());
-        telemetry.addData("intakePow:", robot.intake.power);
-        telemetry.addData("intakeTarget:", robot.intake.targetPosition);
-        telemetry.addData("velocity:", robot.intake.curState.getV());
-        telemetry.addData("state:", robot.intake.curState.getV() == 0);
-        telemetry.addData("speed multiplier:", speedMultiplier);
+//        telemetry.addData("liftPos:", robot.lift.getPos());
+//        telemetry.addData("liftPow:", robot.lift.power);
+//        telemetry.addData("intakePos:", robot.intake.getPos());
+//        telemetry.addData("intakePow:", robot.intake.power);
+//        telemetry.addData("intakeTarget:", robot.intake.targetPosition);
+//        telemetry.addData("velocity:", robot.intake.curState.getV());
+//        telemetry.addData("state:", robot.intake.curState.getV() == 0);
+//        telemetry.addData("speed multiplier:", speedMultiplier);
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
