@@ -17,6 +17,8 @@ import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomman
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.ClawCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.FourbarCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
@@ -34,7 +36,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "BlueLeftAuto")
+@Autonomous(name = "LeftAuto")
 public class LeftAuto extends LinearOpMode {
 
     SleeveDetection sleeveDetection = new SleeveDetection();
@@ -52,8 +54,8 @@ public class LeftAuto extends LinearOpMode {
                 robot::getAngle
         );
         robot.localizer = localizer;
-        robot.intake.closeFourbar();
-        robot.intake.closeClaw();
+        robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT);
+        robot.intake.update(IntakeSubsystem.ClawState.CLOSED);
 
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
@@ -85,7 +87,7 @@ public class LeftAuto extends LinearOpMode {
             robot.drivetrain.updateModules();
 
             telemetry.addData("Sleeve Position", sleeveDetection.getPosition());
-            telemetry.addLine("RUNNING BLUE 5 CYCLE");
+            telemetry.addLine("RUNNING LEFT 5 CYCLE");
             telemetry.update();
 
             PhotonCore.CONTROL_HUB.clearBulkCache();
@@ -98,34 +100,19 @@ public class LeftAuto extends LinearOpMode {
         waitForStart();
         camera.stopStreaming();
 
-        PurePursuitPath preloadPath = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 0.5),
-                new Waypoint(new Pose(0, 0, 0), 0),
-                new Waypoint(new Pose(0, 63, 0), 0)
-        );
-
-        PurePursuitPath intakePath = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 0.5),
-                new Waypoint(new Pose(0, 64, 1.5 * Math.PI), 0),
-                new Waypoint(new Pose(-5, 51, 1.5 * Math.PI), 0)
-        );
-
-        PurePursuitPath depositPath = new PurePursuitPath(drivetrain, localizer, true, new RisingMotionProfile(0.5, 0.5),
-                new Waypoint(new Pose(-5, 51, 1.5 * Math.PI), 0),
-                new Waypoint(new Pose(0, 60, 4.425), 0)
-        );
-
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         // preload
                         new PositionCommand(drivetrain, localizer, new Pose(0, 63, 0), 1750),
                         new PositionCommand(drivetrain, localizer, new Pose(0, 63, 1.5 * Math.PI), 1250),
-                        new InstantCommand(() -> PurePursuitConfig.pCoefficientX = 24),
-                        new InstantCommand(() -> PurePursuitConfig.pCoefficientY = 24),
-                        new InstantCommand(() -> robot.intake.openClaw()),
+//                        new InstantCommand(() -> PurePursuitConfig.pCoefficientX = 24),
+//                        new InstantCommand(() -> PurePursuitConfig.pCoefficientY = 24),
+                        new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
                         new WaitCommand(250),
                         new ClearFourbarCommand(robot.intake),
                         new WaitCommand(500),
                         new InstantCommand(() -> robot.lift.newProfile(615, 800, 3000)),
-                        new InstantCommand(() -> robot.intake.intakeTurret()),
+                        new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
                         new WaitUntilCommand(() -> robot.lift.getPos() > 570),
                         new WaitCommand(500),
                         new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)),
@@ -134,27 +121,27 @@ public class LeftAuto extends LinearOpMode {
                         // intake
                         new PositionCommand(drivetrain, localizer, new Pose(-5, 51, 1.5 * Math.PI), 1250),
                         new InstantCommand(() -> robot.intake.newProfile(405, 800, 3000)),
-                        new InstantCommand(() -> robot.intake.intakeTurret()),
+                        new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
                         new InstantCommand(() -> robot.intake.extendFourbar(4)),
-                        new InstantCommand(() -> robot.intake.openClaw()),
+                        new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
                         new WaitUntilCommand(() -> robot.intake.getPos() > 350),
                         new WaitCommand(750),
-                        new InstantCommand(() -> robot.intake.closeClaw()),
+                        new ClawCommand(robot, IntakeSubsystem.ClawState.CLOSED),
                         new WaitCommand(1000),
 
                         // transfer
-                        new InstantCommand(() -> robot.intake.transitionFourbar()),
+                        new FourbarCommand(robot, IntakeSubsystem.FourbarState.TRANSITION),
 
                         new WaitCommand(500),
 
                         new ParallelCommandGroup(
                                 new PositionCommand(drivetrain, localizer, new Pose(-0.5, 60, 4.425), 1000),
                                 new SequentialCommandGroup(
-                                        new InstantCommand(() -> robot.intake.depositTurret()),
+                                        new TurretCommand(robot, IntakeSubsystem.TurretState.DEPOSIT),
                                         new InstantCommand(() -> robot.intake.newProfile(-5, 800, 3000)),
                                         new WaitUntilCommand(() -> robot.lift.getPos() < 10),
                                         new WaitUntilCommand(() -> robot.intake.getPos() < 10),
-                                        new InstantCommand(() -> robot.intake.closeFourbar())
+                                        new FourbarCommand(robot, IntakeSubsystem.FourbarState.DEPOSIT)
                                 )
                         ),
 
@@ -173,7 +160,7 @@ public class LeftAuto extends LinearOpMode {
                                         new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500))
                                 )
                         ),
-                        new InstantCommand(() -> robot.intake.closeFourbar()),
+                        new FourbarCommand(robot, IntakeSubsystem.FourbarState.DEPOSIT),
 
                         new PositionCommand(drivetrain, localizer,
                                 position == SleeveDetection.ParkingPosition.CENTER ? new Pose(0, 51, 1.5 * Math.PI) :
