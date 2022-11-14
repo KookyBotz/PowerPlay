@@ -54,7 +54,6 @@ public class LiftSubsystem extends SubsystemBase {
             lift.resetEncoder();
         }
         lift.motor.setDirection(DcMotorSimple.Direction.REVERSE);
-
         this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
         this.timer = new ElapsedTime();
         timer.reset();
