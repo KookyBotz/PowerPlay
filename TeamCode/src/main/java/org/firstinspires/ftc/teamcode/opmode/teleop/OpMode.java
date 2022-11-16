@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
 
 @Config
-@TeleOp(name = "OpMode👌👌😍🎶🎶😎😶‍🌫️😈👺")
+@TeleOp(name = "OpMode👌👌😍🎶🎶😎😶‍🌫️😈👺😈😊😶‍🌫️😶‍🌫️😘👺😍")
 public class OpMode extends CommandOpMode {
     private Robot robot;
 
