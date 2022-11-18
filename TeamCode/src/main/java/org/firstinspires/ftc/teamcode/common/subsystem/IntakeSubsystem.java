@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -79,7 +80,7 @@ public class IntakeSubsystem extends SubsystemBase {
         this.extension = new MotorEx(hardwareMap, "extension");
         if (isAuto) {
             extension.resetEncoder();
-        }
+        }   
         this.barLeft = hardwareMap.get(Servo.class, "fourbarLeft");
         this.barRight = hardwareMap.get(Servo.class, "fourbarRight");
         this.claw = hardwareMap.get(Servo.class, "claw");

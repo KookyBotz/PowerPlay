@@ -9,12 +9,14 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
 public class LiftSubsystem extends SubsystemBase {
     public final MotorEx lift;
+    public final Servo latch;
 
     private MotionProfile profile;
     public MotionState curState;
@@ -50,6 +52,7 @@ public class LiftSubsystem extends SubsystemBase {
     // thanks aabhas <3
     public LiftSubsystem(HardwareMap hardwareMap, boolean isAuto) {
         this.lift = new MotorEx(hardwareMap, "lift");
+        this.latch = hardwareMap.get(Servo.class, "latch");
         if (isAuto) {
             lift.resetEncoder();
         }
