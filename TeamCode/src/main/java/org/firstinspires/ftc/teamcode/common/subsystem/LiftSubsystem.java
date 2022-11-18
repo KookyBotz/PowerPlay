@@ -105,6 +105,15 @@ public class LiftSubsystem extends SubsystemBase {
         }
     }
 
+    public void update(latchState newState) {
+        switch(newState) {
+            case LATCHED:
+                latch.setPosition(0);
+            case UNLATCHED:
+                latch.setPosition(1);
+        }
+    }
+
     public void read() {
         liftPosition = lift.encoder.getPosition();
     }
