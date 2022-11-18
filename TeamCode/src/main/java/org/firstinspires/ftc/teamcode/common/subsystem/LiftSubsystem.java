@@ -86,10 +86,10 @@ public class LiftSubsystem extends SubsystemBase {
         power = Math.max(Math.min(power, 0.6), -0.6);
     }
 
-    public void update(liftState newState) {
-        // TODO: retune positions
-        // TODO: add checks for fourbar positions, claw positions, etc
-        switch(newState) {
+    public void update(liftState state) {
+        // TODO: Add checks for fourbar positions
+        // TODO: Retune values with new slides
+        switch(state) {
             case RETRACTED:
                 profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(0, 0), 3500, 7500);
                 resetTimer();
@@ -105,8 +105,8 @@ public class LiftSubsystem extends SubsystemBase {
         }
     }
 
-    public void update(latchState newState) {
-        switch(newState) {
+    public void update(latchState state) {
+        switch(state) {
             case LATCHED:
                 latch.setPosition(0);
             case UNLATCHED:

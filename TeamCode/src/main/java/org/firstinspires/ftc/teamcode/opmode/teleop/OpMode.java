@@ -116,6 +116,7 @@ public class OpMode extends CommandOpMode {
         pDRB = dRB;
         pDLB = dLB;
 
+        // TODO: Add latch stuff here for LiftCommand
         if (gamepad2.a) {
             schedule(new LiftCommand(robot, 150, 400, 1500));
         } else if (gamepad2.x) {

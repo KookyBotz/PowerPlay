@@ -25,6 +25,7 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModu
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.TwoWheelLocalizer;
+import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
 import org.opencv.core.Point;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -95,13 +96,14 @@ public class LeftAuto extends LinearOpMode {
         waitForStart();
         camera.stopStreaming();
 
+        // TODO: Alter the cycling commands to use the new latch
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         // preload
                         new PositionCommand(drivetrain, localizer, new Pose(0, 63, 0), 1750),
                         new PositionCommand(drivetrain, localizer, new Pose(0, 63, 1.5 * Math.PI), 1250),
-//                        new InstantCommand(() -> PurePursuitConfig.pCoefficientX = 24),
-//                        new InstantCommand(() -> PurePursuitConfig.pCoefficientY = 24),
+                        new InstantCommand(() -> PurePursuitConfig.pCoefficientX = 24),
+                        new InstantCommand(() -> PurePursuitConfig.pCoefficientY = 24),
                         new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
                         new WaitCommand(250),
                         new ClearFourbarCommand(robot.intake),
