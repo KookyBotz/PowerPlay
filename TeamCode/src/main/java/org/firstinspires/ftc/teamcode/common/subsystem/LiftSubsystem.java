@@ -40,14 +40,14 @@ public class LiftSubsystem extends SubsystemBase {
     private LiftState liftState;
     private LatchState latchState;
 
-    private enum LiftState {
+    public enum LiftState {
         HIGH,
         MIDDLE,
         LOW,
         RETRACTED
     }
 
-    private enum LatchState {
+    public enum LatchState {
         LATCHED,
         UNLATCHED
     }
