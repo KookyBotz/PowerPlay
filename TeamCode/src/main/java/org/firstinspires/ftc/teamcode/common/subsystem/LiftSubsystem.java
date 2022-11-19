@@ -56,6 +56,10 @@ public class LiftSubsystem extends SubsystemBase {
     public LiftSubsystem(HardwareMap hardwareMap, boolean isAuto) {
         this.lift = new MotorEx(hardwareMap, "lift");
         this.latch = hardwareMap.get(Servo.class, "latch");
+
+        this.timer = new ElapsedTime();
+        timer.reset();
+
         if (isAuto) {
             lift.resetEncoder();
             update(LatchState.LATCHED);
@@ -66,8 +70,7 @@ public class LiftSubsystem extends SubsystemBase {
         update(LiftState.RETRACTED);
 
         this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
-        this.timer = new ElapsedTime();
-        timer.reset();
+
 
         this.voltageTimer = new ElapsedTime();
         voltageTimer.reset();
@@ -119,7 +122,7 @@ public class LiftSubsystem extends SubsystemBase {
     public void update(LatchState state) {
         switch(state) {
             case LATCHED:
-                latch.setPosition(0.77);
+                latch.setPosition(0.85);
             case UNLATCHED:
                 latch.setPosition(0.27);
         }

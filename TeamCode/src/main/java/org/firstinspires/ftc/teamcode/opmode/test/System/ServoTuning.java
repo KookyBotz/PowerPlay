@@ -11,33 +11,35 @@ import org.firstinspires.ftc.teamcode.opmode.teleop.OpMode;
 @TeleOp(name = "ServoTuning")
 public class ServoTuning extends OpMode {
 //    Servo claw, turret, barLeft, barRight;
-    Servo latch;
+    Servo claw;
+    Servo turret;
+//    Servo latch;
 
-//    public static double clawPos1, clawPos2;
-//    public static double turretPos1, turretPos2;
+    public static double clawPos1, clawPos2;
+    public static double turretPos1, turretPos2;
 //
 //    public static double fourbarPos1, fourbarPos2;
 
-    public static double latchOutPosition, latchInPosition;
+//    public static double latchOutPosition, latchInPosition;
 
     @Override
     public void initialize() {
 //        barLeft = hardwareMap.get(Servo.class, "fourbarLeft");
 //        barRight = hardwareMap.get(Servo.class, "fourbarRight");
-//        claw = hardwareMap.get(Servo.class, "claw");
-//        turret = hardwareMap.get(Servo.class, "turret");
-        latch = hardwareMap.get(Servo.class, "latch");
+        claw = hardwareMap.get(Servo.class, "claw");
+        turret = hardwareMap.get(Servo.class, "turret");
+//        latch = hardwareMap.get(Servo.class, "latch");
     }
 
     @Override
     public void run() {
-        if (gamepad1.x) {
-            latch.setPosition(latchOutPosition);
-        }
-
-        if (gamepad1.y) {
-            latch.setPosition(latchInPosition);
-        }
+//        if (gamepad1.x) {
+//            latch.setPosition(latchOutPosition);
+//        }
+//
+//        if (gamepad1.y) {
+//            latch.setPosition(latchInPosition);
+//        }
 //        if (gamepad1.a) {
 //            barLeft.setPosition(fourbarPos1);
 //            barRight.setPosition(1 - fourbarPos1);
@@ -48,20 +50,20 @@ public class ServoTuning extends OpMode {
 //            barRight.setPosition(1 - fourbarPos2);
 //        }
 //
-//        if (gamepad1.x) {
-//            claw.setPosition(clawPos1);
-//        }
-//
-//        if (gamepad1.y) {
-//            claw.setPosition(clawPos2);
-//        }
-//
-//        if (gamepad1.right_bumper) {
-//            turret.setPosition(turretPos1);
-//        }
-//
-//        if (gamepad1.left_bumper) {
-//            turret.setPosition(turretPos2);
-//        }
+        if (gamepad1.x) {
+            claw.setPosition(clawPos1);
+        }
+
+        if (gamepad1.y) {
+            claw.setPosition(clawPos2);
+        }
+
+        if (gamepad1.right_bumper) {
+            turret.setPosition(turretPos1);
+        }
+
+        if (gamepad1.left_bumper) {
+            turret.setPosition(turretPos2);
+        }
     }
 }
