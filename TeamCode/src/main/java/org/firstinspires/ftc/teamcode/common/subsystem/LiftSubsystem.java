@@ -37,6 +37,9 @@ public class LiftSubsystem extends SubsystemBase {
 
     private boolean moving = false;
 
+    private LiftState liftState;
+    private LatchState latchState;
+
     private enum LiftState {
         HIGH,
         MIDDLE,
@@ -55,15 +58,23 @@ public class LiftSubsystem extends SubsystemBase {
         this.latch = hardwareMap.get(Servo.class, "latch");
         if (isAuto) {
             lift.resetEncoder();
+            update(LatchState.LATCHED);
+        } else {
+            update(LatchState.UNLATCHED);
         }
         lift.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        update(LiftState.RETRACTED);
+
         this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
         this.timer = new ElapsedTime();
         timer.reset();
+
         this.voltageTimer = new ElapsedTime();
         voltageTimer.reset();
+
         this.controller = new PIDController(P, I, D);
         controller.setPID(P, I, D);
+
         this.voltageSensor = hardwareMap.voltageSensor.iterator().next();
         this.voltage = voltageSensor.getVoltage();
     }
@@ -87,8 +98,6 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void update(LiftState state) {
-        // TODO: Add checks for fourbar positions
-        // TODO: Retune values with new slides
         switch(state) {
             case RETRACTED:
                 profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(0, 0), 3500, 7500);
@@ -103,15 +112,19 @@ public class LiftSubsystem extends SubsystemBase {
                 profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(610, 0), 700, 3000);
                 resetTimer();
         }
+
+        liftState = state;
     }
 
     public void update(LatchState state) {
         switch(state) {
             case LATCHED:
-                latch.setPosition(0);
+                latch.setPosition(0.77);
             case UNLATCHED:
-                latch.setPosition(1);
+                latch.setPosition(0.27);
         }
+
+        latchState = state;
     }
 
     public void read() {

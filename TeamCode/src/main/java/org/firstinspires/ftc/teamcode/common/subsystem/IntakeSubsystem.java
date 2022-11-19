@@ -80,10 +80,10 @@ public class IntakeSubsystem extends SubsystemBase {
         this.extension = new MotorEx(hardwareMap, "extension");
         if (isAuto) {
             extension.resetEncoder();
-            turretState = TurretState.DEPOSIT;
-            clawState = ClawState.CLOSED;
-            fourbarState = FourbarState.DEPOSIT;
-        }   
+        }
+        turretState = TurretState.DEPOSIT;
+        clawState = ClawState.CLOSED;
+        fourbarState = FourbarState.DEPOSIT;
         this.barLeft = hardwareMap.get(Servo.class, "fourbarLeft");
         this.barRight = hardwareMap.get(Servo.class, "fourbarRight");
         this.claw = hardwareMap.get(Servo.class, "claw");
