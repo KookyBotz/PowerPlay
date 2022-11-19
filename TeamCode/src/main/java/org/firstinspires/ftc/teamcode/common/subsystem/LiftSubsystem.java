@@ -37,14 +37,14 @@ public class LiftSubsystem extends SubsystemBase {
 
     private boolean moving = false;
 
-    private enum liftState {
+    private enum LiftState {
         HIGH,
         MIDDLE,
         LOW,
         RETRACTED
     }
 
-    private enum latchState {
+    private enum LatchState {
         LATCHED,
         UNLATCHED
     }
@@ -86,7 +86,7 @@ public class LiftSubsystem extends SubsystemBase {
         power = Math.max(Math.min(power, 0.6), -0.6);
     }
 
-    public void update(liftState state) {
+    public void update(LiftState state) {
         // TODO: Add checks for fourbar positions
         // TODO: Retune values with new slides
         switch(state) {
@@ -105,7 +105,7 @@ public class LiftSubsystem extends SubsystemBase {
         }
     }
 
-    public void update(latchState state) {
+    public void update(LatchState state) {
         switch(state) {
             case LATCHED:
                 latch.setPosition(0);
