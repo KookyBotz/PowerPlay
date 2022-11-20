@@ -34,7 +34,8 @@ public class EncoderTest extends OpMode {
 //        telemetry.addData("mod2volt", mod2.getVoltage());
 //        telemetry.addData("mod3volt", mod3.getVoltage());
 //        telemetry.addData("mod4volt", mod4.getVoltage());
-        telemetry.addData("liftPOs", robot.lift.getPos());
+        telemetry.addData("liftPos", robot.lift.getPos());
+        telemetry.addData("intakePos", robot.intake.getPos());
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));

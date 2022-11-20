@@ -153,11 +153,12 @@ public class OpMode extends CommandOpMode {
         robot.write();
 
         // Telemetry
-//        telemetry.addData("liftPos:", robot.lift.getPos());
-//        telemetry.addData("liftPow:", robot.lift.power);
-//        telemetry.addData("intakePos:", robot.intake.getPos());
-//        telemetry.addData("intakePow:", robot.intake.power);
-//        telemetry.addData("intakeTarget:", robot.intake.targetPosition);
+        telemetry.addData("liftPos:", robot.lift.getPos());
+        telemetry.addData("liftPow:", robot.lift.power);
+        telemetry.addData("liftTarget:", robot.lift.targetPosition);
+        telemetry.addData("intakePos:", robot.intake.getPos());
+        telemetry.addData("intakePow:", robot.intake.power);
+        telemetry.addData("intakeTarget:", robot.intake.targetPosition);
 //        telemetry.addData("velocity:", robot.intake.curState.getV());
 //        telemetry.addData("state:", robot.intake.curState.getV() == 0);
 //        telemetry.addData("speed multiplier:", speedMultiplier);
