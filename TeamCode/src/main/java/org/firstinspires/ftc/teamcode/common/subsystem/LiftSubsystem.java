@@ -26,7 +26,7 @@ public class LiftSubsystem extends SubsystemBase {
     private final VoltageSensor voltageSensor;
 
     private double voltage;
-    private double liftPosition;
+    private int liftPosition;
 
     private final double P = 0.0375;
     private final double I = 0.0;
@@ -145,7 +145,7 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public int getPos() {
-        return lift.encoder.getPosition();
+        return liftPosition;
     }
 
     public void resetTimer() {
