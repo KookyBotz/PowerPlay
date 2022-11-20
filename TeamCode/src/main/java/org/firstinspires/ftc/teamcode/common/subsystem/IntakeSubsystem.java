@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -32,8 +33,8 @@ public class IntakeSubsystem extends SubsystemBase {
     private final double I = 0.0;
     private final double D = 0.0;
 
-    private final double claw_pos_open = 0.2;
-    private final double claw_pos_closed = 0.37;
+    public static double claw_pos_open = 0.2;
+    public static double claw_pos_closed = 0.37;
 
     private final double fourbar_extended = 0.15;
     private final double fourbar_retracted = 0.83;
@@ -80,6 +81,9 @@ public class IntakeSubsystem extends SubsystemBase {
         if (isAuto) {
             extension.resetEncoder();
         }
+        turretState = TurretState.DEPOSIT;
+        clawState = ClawState.CLOSED;
+        fourbarState = FourbarState.DEPOSIT;
         this.barLeft = hardwareMap.get(Servo.class, "fourbarLeft");
         this.barRight = hardwareMap.get(Servo.class, "fourbarRight");
         this.claw = hardwareMap.get(Servo.class, "claw");
@@ -100,8 +104,10 @@ public class IntakeSubsystem extends SubsystemBase {
         switch(state) {
             case INTAKE:
                 turret.setPosition(turret_intake);
+                break;
             case DEPOSIT:
                 turret.setPosition(turret_deposit);
+                break;
         }
 
         turretState = state;
@@ -111,8 +117,10 @@ public class IntakeSubsystem extends SubsystemBase {
         switch(state) {
             case OPEN:
                 claw.setPosition(claw_pos_open);
+                break;
             case CLOSED:
                 claw.setPosition(claw_pos_closed);
+                break;
         }
 
         clawState = state;
@@ -121,14 +129,14 @@ public class IntakeSubsystem extends SubsystemBase {
     public void update(FourbarState state) {
         switch (state) {
             case INTAKE:
-                barLeft.setPosition(fourbar_extended);
-                barRight.setPosition(1 - fourbar_extended);
+                setFourbar(fourbar_extended);
+                break;
             case TRANSITION:
-                barLeft.setPosition(fourbar_transition);
-                barRight.setPosition(1 - fourbar_transition);
+                setFourbar(fourbar_transition);
+                break;
             case DEPOSIT:
-                barLeft.setPosition(fourbar_retracted);
-                barRight.setPosition(1 - fourbar_retracted);
+                setFourbar(fourbar_retracted);
+                break;
         }
 
         fourbarState = state;
@@ -201,7 +209,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setSlideFactor(double factor) {
-        double slideAddition = 10 * factor;
+        double slideAddition = 20 * factor;
         double newPosition = intakePosition + slideAddition;
         if (curState.getV() == 0 && newPosition >= -15 && newPosition <= 485) {
             targetPosition = newPosition;

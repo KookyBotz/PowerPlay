@@ -21,6 +21,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.common.hardware.AbsoluteAnalogEncoder;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Kinematics;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MathUtils;
 
 import java.util.Locale;
@@ -47,8 +48,9 @@ public class SwerveModule {
     private boolean wheelFlipped = false;
     private double target = 0.0;
     private double position = 0.0;
-
-    public SwerveModule(DcMotorEx m, CRServo s, AbsoluteAnalogEncoder e) {
+    private double offset = 0;
+    public SwerveModule(DcMotorEx m, CRServo s, AbsoluteAnalogEncoder e, double servoOffset) {
+        offset = servoOffset;
         motor = m;
         MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
         motorConfigurationType.setAchieveableMaxRPMFraction(MAX_MOTOR);
@@ -56,17 +58,17 @@ public class SwerveModule {
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         servo = s;
-        ((CRServoImplEx) servo).setPwmRange(new PwmControl.PwmRange(500, 2500));
+        ((CRServoImplEx) servo).setPwmRange(new PwmControl.PwmRange(500, 2500, 5000));
 
         encoder = e;
         rotationController = new PIDFController(P, I, D, 0);
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public SwerveModule(HardwareMap hardwareMap, String mName, String sName, String eName) {
+    public SwerveModule(HardwareMap hardwareMap, String mName, String sName, String eName, double servoOffset) {
         this(hardwareMap.get(DcMotorEx.class, mName),
                 hardwareMap.get(CRServo.class, sName),
-                new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, eName)));
+                new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, eName)), servoOffset);
     }
 
     public void read() {
@@ -78,28 +80,32 @@ public class SwerveModule {
         rotationController.setPIDF(P, I, D, 0);
         double target = getTargetRotation(), current = getModuleRotation();
 
-        double error = normalizeRadians(target - current);
-        if (MOTOR_FLIPPING && Math.abs(error) > Math.PI / 2) {
-            target = normalizeRadians(target - Math.PI);
-            wheelFlipped = true;
-        } else {
-            wheelFlipped = false;
-        }
 
-        error = normalizeRadians(target - current);
+//        double error = normalizeRadians(target - current);
+//        if (MOTOR_FLIPPING && Math.abs(error) > Math.PI / 2) {
+//            target = normalizeRadians(target - Math.PI);
+//            wheelFlipped = true;
+//        } else {
+//            wheelFlipped = false;
+//        }
+//        if(error > Math.PI) target-=Math.PI*2;
+//        else if(error < -Math.PI) target+=Math.PI*2;
 
-        double power = Range.clip(rotationController.calculate(0, error), -MAX_SERVO, MAX_SERVO);
-        if (Double.isNaN(power)) power = 0;
-        servo.setPower(power + (Math.abs(error) > 0.02 ? K_STATIC : 0) * Math.signum(power));
-
+        servo.setPower(Kinematics.map(target, -Math.PI, Math.PI, -1, 1));
+//
+//        error = normalizeRadians(target - current);
+//
+//        double power = Range.clip(rotationController.calculate(0, error), -MAX_SERVO, MAX_SERVO);
+//        if (Double.isNaN(power)) power = 0;
+//        servo.setPower(power + (Math.abs(error) > 0.02 ? K_STATIC : 0) * Math.signum(power));
     }
 
     public double getTargetRotation() {
-        return normalizeRadians(target - Math.PI);
+        return normalizeRadians(target);
     }
 
     public double getModuleRotation() {
-        return normalizeRadians(position - Math.PI);
+        return normalizeRadians(position);
     }
 
     public void setMotorPower(double power) {
@@ -109,7 +115,7 @@ public class SwerveModule {
     }
 
     public void setTargetRotation(double target) {
-        this.target = normalizeRadians(target);
+        this.target = normalizeRadians(target-offset);
     }
 
     public String getTelemetry(String name) {
