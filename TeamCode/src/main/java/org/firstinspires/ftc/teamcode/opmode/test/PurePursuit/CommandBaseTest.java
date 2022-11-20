@@ -1,17 +1,28 @@
 package org.firstinspires.ftc.teamcode.opmode.test.PurePursuit;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.outoftheboxrobotics.photoncore.PhotonCore;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 //import org.firstinspires.ftc.teamcode.common.freightfrenzy.Alliance;
 //import org.firstinspires.ftc.teamcode.common.freightfrenzy.CommandBaseRobot;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.ClawCommand;
+import org.firstinspires.ftc.teamcode.common.hardware.Robot;
+import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
+
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
-@Disabled
-@TeleOp
+@Config
+@TeleOp(name = "CommandBaseTest")
 public class CommandBaseTest extends CommandOpMode {
 //    private CommandBaseRobot robot;
 //    private boolean intake = true;
@@ -41,10 +52,49 @@ public class CommandBaseTest extends CommandOpMode {
 //        if (gamepad1.a) {
 //            schedule(new SharedCommand(robot, Alliance.RED, outtake, linkage, arm, done));
 //        }
-//    }
-    @Override
-    public void initialize() {}
+//    }a
+    Robot robot;
+
+    private ElapsedTime timer;
+    private double loopTime = 0;
+
+    boolean pDLB = false;
+    boolean pDRB = false;
 
     @Override
-    public void run() {}
+    public void initialize() {
+        CommandScheduler.getInstance().reset();
+        robot = new Robot(hardwareMap, false);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+        PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+        PhotonCore.experimental.setMaximumParallelCommands(8);
+        PhotonCore.enable();
+    }
+
+    @Override
+    public void run() {
+        if (timer == null) {
+            timer = new ElapsedTime();
+            robot.reset();
+        }
+
+        robot.read();
+
+        boolean dLB = gamepad1.left_bumper;
+        if (dLB && !pDLB) {
+            schedule(
+                    new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN)
+            );
+        }
+        pDLB = dLB;
+
+        boolean dRB = gamepad1.right_bumper;
+        if (dRB && !pDRB) {
+            schedule(
+                    new ClawCommand(robot, IntakeSubsystem.ClawState.CLOSED)
+            );
+        }
+        pDRB = dRB;
+    }
 }

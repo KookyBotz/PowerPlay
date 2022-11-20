@@ -35,13 +35,15 @@ public class OpMode extends CommandOpMode {
     boolean pDLB = false;
     boolean pDRB = false;
     boolean pDDL = false;
+    boolean pDRT = false;
+    boolean pDLT = false;
 
     @Override
     public void initialize() {
         CommandScheduler.getInstance().reset();
         robot = new Robot(hardwareMap, false);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        robot.intake.setFourbar(0.6);
+//        robot.intake.setFourbar(0.6);
         robot.intake.extension.set(-0.3);
         robot.lift.lift.set(-0.3);
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
@@ -83,9 +85,11 @@ public class OpMode extends CommandOpMode {
         if (dDL && !pDDL) schedule(new CycleCommand(robot));
         pDDL = dDL;
 
-        if (gamepad2.left_trigger > 0.3) {
+        boolean dLT = (gamepad2.left_trigger > 0.3);
+        boolean dRT = (gamepad2.right_trigger > 0.3);
+        if (dLT && ! pDLT) {
             schedule(new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN));
-        } else if (gamepad2.right_trigger > 0.3) {
+        } else if (dRT && !pDRT) {
             schedule(new ClawCommand(robot, IntakeSubsystem.ClawState.CLOSED));
         }
 
