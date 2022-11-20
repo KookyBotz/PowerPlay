@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -84,7 +85,7 @@ public class CommandBaseTest extends CommandOpMode {
         boolean dLB = gamepad1.left_bumper;
         if (dLB && !pDLB) {
             schedule(
-                    new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN)
+                    new ClawCommand(robot, IntakeSubsystem.ClawState.CLOSED)
             );
         }
         pDLB = dLB;
@@ -92,9 +93,19 @@ public class CommandBaseTest extends CommandOpMode {
         boolean dRB = gamepad1.right_bumper;
         if (dRB && !pDRB) {
             schedule(
-                    new ClawCommand(robot, IntakeSubsystem.ClawState.CLOSED)
+                    new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN)
             );
         }
         pDRB = dRB;
+
+        CommandScheduler.getInstance().run();
+
+        double loop = System.nanoTime();
+        telemetry.addData("hz ", 1000000000 / (loop - loopTime));
+        loopTime = loop;
+        telemetry.update();
+
+        PhotonCore.EXPANSION_HUB.clearBulkCache();
+        PhotonCore.CONTROL_HUB.clearBulkCache();
     }
 }

@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.LiftSubsystem;
 
 public class LiftCommand extends SequentialCommandGroup {
-    public LiftCommand(Robot robot, double targetPos, double velocity, double acceleration) {
+    public LiftCommand(Robot robot, LiftSubsystem.LiftState state) {
         super(
                 new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
                 new WaitCommand(250),
@@ -21,7 +21,8 @@ public class LiftCommand extends SequentialCommandGroup {
                 new ClearFourbarCommand(robot.intake),
                 new WaitUntilCommand(() -> robot.intake.getFourbarPos() <= robot.intake.fourbar_transition),
                 new WaitCommand(250),
-                new InstantCommand(() -> robot.lift.newProfile(targetPos, velocity, acceleration)),
+                new InstantCommand(() -> robot.lift.update(state)),
+//                new InstantCommand(() -> robot.lift.newProfile(targetPos, velocity, acceleration)),
                 new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE)
         );
     }

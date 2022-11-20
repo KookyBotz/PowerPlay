@@ -33,8 +33,8 @@ public class IntakeSubsystem extends SubsystemBase {
     private final double I = 0.0;
     private final double D = 0.0;
 
-    private final double claw_pos_open = 0.2;
-    private final double claw_pos_closed = 0.37;
+    public static double claw_pos_open = 0.2;
+    public static double claw_pos_closed = 0.37;
 
     private final double fourbar_extended = 0.15;
     private final double fourbar_retracted = 0.83;
@@ -101,47 +101,45 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void update(TurretState state) {
-        if (state != turretState) {
-            switch(state) {
-                case INTAKE:
-                    turret.setPosition(turret_intake);
-                case DEPOSIT:
-                    turret.setPosition(turret_deposit);
-            }
-
-            turretState = state;
+        switch(state) {
+            case INTAKE:
+                turret.setPosition(turret_intake);
+                break;
+            case DEPOSIT:
+                turret.setPosition(turret_deposit);
+                break;
         }
+
+        turretState = state;
     }
 
     public void update(ClawState state) {
-        if (state != clawState) {
-            switch(state) {
-                case OPEN:
-                    claw.setPosition(claw_pos_open);
-                case CLOSED:
-                    claw.setPosition(claw_pos_closed);
-            }
-
-            clawState = state;
+        switch(state) {
+            case OPEN:
+                claw.setPosition(claw_pos_open);
+                break;
+            case CLOSED:
+                claw.setPosition(claw_pos_closed);
+                break;
         }
+
+        clawState = state;
     }
 
     public void update(FourbarState state) {
-//        if (state != fourbarState) {
-//            switch (state) {
-//                case INTAKE:
-//                    barLeft.setPosition(fourbar_extended);
-//                    barRight.setPosition(1 - fourbar_extended);
-//                case TRANSITION:
-//                    barLeft.setPosition(fourbar_transition);
-//                    barRight.setPosition(1 - fourbar_transition);
-//                case DEPOSIT:
-//                    barLeft.setPosition(fourbar_retracted);
-//                    barRight.setPosition(1 - fourbar_retracted);
-//            }
-//
-//            fourbarState = state;
-//        }
+        switch (state) {
+            case INTAKE:
+                setFourbar(fourbar_extended);
+                break;
+            case TRANSITION:
+                setFourbar(fourbar_transition);
+                break;
+            case DEPOSIT:
+                setFourbar(fourbar_retracted);
+                break;
+        }
+
+        fourbarState = state;
     }
 
     public void loop() {

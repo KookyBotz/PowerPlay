@@ -105,15 +105,19 @@ public class LiftSubsystem extends SubsystemBase {
             case RETRACTED:
                 profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(0, 0), 3500, 7500);
                 resetTimer();
+                break;
             case LOW:
                 profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(150, 0), 400, 1500);
                 resetTimer();
+                break;
             case MIDDLE:
                 profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(385, 0), 400, 1500);
                 resetTimer();
+                break;
             case HIGH:
                 profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(610, 0), 700, 3000);
                 resetTimer();
+                break;
         }
 
         liftState = state;
@@ -123,8 +127,10 @@ public class LiftSubsystem extends SubsystemBase {
         switch(state) {
             case LATCHED:
                 latch.setPosition(0.85);
+                break;
             case UNLATCHED:
                 latch.setPosition(0.27);
+                break;
         }
 
         latchState = state;
