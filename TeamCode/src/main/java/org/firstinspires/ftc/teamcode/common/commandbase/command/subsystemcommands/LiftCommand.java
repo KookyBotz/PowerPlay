@@ -20,7 +20,7 @@ public class LiftCommand extends SequentialCommandGroup {
                 new LatchCommand(robot, LiftSubsystem.LatchState.LATCHED),
                 new ClearFourbarCommand(robot.intake),
                 new WaitUntilCommand(() -> robot.intake.getFourbarPos() <= robot.intake.fourbar_transition),
-                new WaitCommand(250),
+//                new WaitCommand(250),
                 new InstantCommand(() -> robot.lift.update(state)),
 //                new InstantCommand(() -> robot.lift.newProfile(targetPos, velocity, acceleration)),
                 new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE)
