@@ -13,10 +13,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.ClearFourbarCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.ClawCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.FourbarCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftRetractCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
@@ -27,6 +29,7 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.common.subsystem.LiftSubsystem;
 import org.opencv.core.Point;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -108,11 +111,14 @@ public class LeftAuto extends LinearOpMode {
                         new WaitCommand(250),
                         new ClearFourbarCommand(robot.intake),
                         new WaitCommand(500),
-                        new InstantCommand(() -> robot.lift.newProfile(615, 800, 3000)),
+                        new LiftCommand(robot, LiftSubsystem.LiftState.HIGH),
+//                        new InstantCommand(() -> robot.lift.newProfile(615, 800, 3000)),
                         new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
                         new WaitUntilCommand(() -> robot.lift.getPos() > 570),
                         new WaitCommand(500),
-                        new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)),
+                        new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED),
+//                        new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)),
+                        new LiftRetractCommand(robot),
                         new WaitUntilCommand(() -> robot.lift.getPos() < 10),
 
                         // intake
@@ -151,10 +157,12 @@ public class LeftAuto extends LinearOpMode {
                                         new AutoCycleCommand(robot, 480, 0.225),
                                         new AutoCycleCommand(robot, 480, 0.175),
                                         new AutoCycleCommand(robot, 480, 0.13),
-                                        new InstantCommand(() -> robot.lift.newProfile(615, 800, 3000)),
+//                                        new InstantCommand(() -> robot.lift.newProfile(615, 800, 3000)),
+                                        new LiftCommand(robot, LiftSubsystem.LiftState.HIGH),
                                         new WaitUntilCommand(() -> robot.lift.getPos() > 580),
                                         new WaitCommand(750),
-                                        new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500))
+                                        new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED)
+//                                        new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500))
                                 )
                         ),
                         new FourbarCommand(robot, IntakeSubsystem.FourbarState.DEPOSIT),

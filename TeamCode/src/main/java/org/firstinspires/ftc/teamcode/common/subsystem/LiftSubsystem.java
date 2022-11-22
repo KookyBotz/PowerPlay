@@ -107,19 +107,19 @@ public class LiftSubsystem extends SubsystemBase {
     public void update(LiftState state) {
         switch(state) {
             case RETRACTED:
-                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(0, 0), 3500, 7500);
+                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(0, 0), 3000, 7500);
                 resetTimer();
                 break;
             case LOW:
-                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(150, 0), 3500, 7500);
+                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(150, 0), 3000, 7500);
                 resetTimer();
                 break;
             case MIDDLE:
-                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(385, 0), 3500, 7500);
+                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(385, 0), 3000, 7500);
                 resetTimer();
                 break;
             case HIGH:
-                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(610, 0), 3500, 7500);
+                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(610, 0), 3000, 7500);
                 resetTimer();
                 break;
         }

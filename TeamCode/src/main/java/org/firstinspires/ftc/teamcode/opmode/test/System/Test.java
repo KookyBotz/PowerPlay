@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.test.System;
 
+import com.arcrobotics.ftclib.controller.wpilibcontroller.ProfiledPIDController;
+import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -45,5 +47,7 @@ public class Test extends OpMode {
             robot.drivetrain.rightRearModule.setMotorPower(0);
             robot.drivetrain.rightRearModule.setTargetRotation(1);
         }
+//        ProfiledPIDController controller = new ProfiledPIDController(0.25, 0, 0, new TrapezoidProfile.Constraints(1.0, 1.0));
+//        double speed = controller.calculate(0, 20);
     }
 }

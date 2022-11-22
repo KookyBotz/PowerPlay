@@ -7,18 +7,17 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommandGeneric;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.ClawCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeRetractCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.CycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.FourbarCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftRetractCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
@@ -124,13 +123,13 @@ public class OpMode extends CommandOpMode {
 
         // TODO: Add latch stuff here for LiftCommand
         if (gamepad2.a) {
-            schedule(new LiftCommand(robot, LiftSubsystem.LiftState.LOW));
+            schedule(new LiftCommandGeneric(robot, LiftSubsystem.LiftState.LOW));
         } else if (gamepad2.x) {
-            schedule(new LiftCommand(robot, LiftSubsystem.LiftState.MIDDLE));
+            schedule(new LiftCommandGeneric(robot, LiftSubsystem.LiftState.MIDDLE));
         } else if (gamepad2.y) {
-            schedule(new LiftCommand(robot, LiftSubsystem.LiftState.HIGH));
+            schedule(new LiftCommandGeneric(robot, LiftSubsystem.LiftState.HIGH));
         } else if (gamepad2.b) {
-            schedule(new LiftRetractCommand(robot));
+            schedule(new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED));
 //                    new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 7000)),
 //                    new InstantCommand(() -> robot.lift.update(LiftSubsystem.LiftState.RETRACTED)));
         }
