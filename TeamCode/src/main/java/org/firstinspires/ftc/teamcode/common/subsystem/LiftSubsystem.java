@@ -13,9 +13,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.common.hardware.Encoder;
+
 @Config
 public class LiftSubsystem extends SubsystemBase {
     public final MotorEx lift;
+    public final MotorEx liftEncoder;
     public final Servo latch;
 
     private MotionProfile profile;
@@ -55,8 +58,9 @@ public class LiftSubsystem extends SubsystemBase {
     // thanks aabhas <3
     public LiftSubsystem(HardwareMap hardwareMap, boolean isAuto) {
         this.lift = new MotorEx(hardwareMap, "lift");
+        // TODO find the exact config name troll
+        this.liftEncoder = new MotorEx(hardwareMap, "leftRearMotor");
         this.latch = hardwareMap.get(Servo.class, "latch");
-
         this.timer = new ElapsedTime();
         timer.reset();
 
@@ -70,7 +74,6 @@ public class LiftSubsystem extends SubsystemBase {
         update(LiftState.RETRACTED);
 
         this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
-
 
         this.voltageTimer = new ElapsedTime();
         voltageTimer.reset();
@@ -137,7 +140,7 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void read() {
-        liftPosition = lift.encoder.getPosition();
+        liftPosition = liftEncoder.encoder.getPosition();
     }
 
     public void write() {

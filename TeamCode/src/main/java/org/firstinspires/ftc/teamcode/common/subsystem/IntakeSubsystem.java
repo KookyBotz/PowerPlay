@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Config
 public class IntakeSubsystem extends SubsystemBase {
     public final MotorEx extension;
+    public final MotorEx extensionEncoder;
     private final Servo barLeft, barRight;
     private final Servo claw, turret;
 
@@ -78,6 +79,7 @@ public class IntakeSubsystem extends SubsystemBase {
     // thanks aabhas <3
     public IntakeSubsystem(HardwareMap hardwareMap, boolean isAuto) {
         this.extension = new MotorEx(hardwareMap, "extension");
+        this.extensionEncoder = new MotorEx(hardwareMap, "rightFrontMotor");
         if (isAuto) {
             extension.resetEncoder();
         }
@@ -165,7 +167,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // TODO optimize read/writes for every 1/2 or 1/4 loop
     public void read() {
-        intakePosition = extension.encoder.getPosition();
+        intakePosition = extensionEncoder.encoder.getPosition();
     }
 
     public void write() {
