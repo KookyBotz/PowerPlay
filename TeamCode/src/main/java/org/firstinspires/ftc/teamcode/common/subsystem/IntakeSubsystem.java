@@ -37,8 +37,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double claw_pos_open = 0.2;
     public static double claw_pos_closed = 0.37;
 
-    private final double fourbar_extended = 0.15;
-    private final double fourbar_retracted = 0.83;
+    public static double fourbar_extended = 0.15;
+    public static double fourbar_retracted = 0.83;
     public final double fourbar_transition = fourbar_retracted - 0.2;
     private final double[] fourbar_pickup_position = new double[]{
             .15,
@@ -79,7 +79,7 @@ public class IntakeSubsystem extends SubsystemBase {
     // thanks aabhas <3
     public IntakeSubsystem(HardwareMap hardwareMap, boolean isAuto) {
         this.extension = new MotorEx(hardwareMap, "extension");
-        this.extensionEncoder = new MotorEx(hardwareMap, "rightFrontMotor");
+        this.extensionEncoder = new MotorEx(hardwareMap, "rightRearMotor");
         if (isAuto) {
             extensionEncoder.resetEncoder();
         }

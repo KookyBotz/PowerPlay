@@ -71,6 +71,7 @@ public class LiftSubsystem extends SubsystemBase {
             update(LatchState.UNLATCHED);
         }
         liftEncoder.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        lift.motor.setDirection(DcMotorSimple.Direction.REVERSE);
         update(LiftState.RETRACTED);
 
         this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
@@ -100,7 +101,7 @@ public class LiftSubsystem extends SubsystemBase {
         }
 
         power = controller.calculate(liftPosition, targetPosition) / voltage * 12;
-        power = Math.max(Math.min(power, 0.6), -0.6);
+//        power = Math.max(Math.min(power, 0.6), -0.6);
     }
 
     public void update(LiftState state) {
@@ -110,15 +111,15 @@ public class LiftSubsystem extends SubsystemBase {
                 resetTimer();
                 break;
             case LOW:
-                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(150, 0), 400, 1500);
+                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(150, 0), 3500, 7500);
                 resetTimer();
                 break;
             case MIDDLE:
-                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(385, 0), 400, 1500);
+                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(385, 0), 3500, 7500);
                 resetTimer();
                 break;
             case HIGH:
-                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(610, 0), 700, 3000);
+                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(610, 0), 3500, 7500);
                 resetTimer();
                 break;
         }
