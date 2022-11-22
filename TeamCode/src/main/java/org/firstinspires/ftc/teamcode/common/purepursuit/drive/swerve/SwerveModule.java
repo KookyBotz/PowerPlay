@@ -47,8 +47,9 @@ public class SwerveModule {
     private boolean wheelFlipped = false;
     private double target = 0.0;
     private double position = 0.0;
+    private double offset;
 
-    public SwerveModule(DcMotorEx m, CRServo s, AbsoluteAnalogEncoder e) {
+    public SwerveModule(DcMotorEx m, CRServo s, AbsoluteAnalogEncoder e, double offset) {
         motor = m;
         MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
         motorConfigurationType.setAchieveableMaxRPMFraction(MAX_MOTOR);
@@ -56,17 +57,13 @@ public class SwerveModule {
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         servo = s;
-        ((CRServoImplEx) servo).setPwmRange(new PwmControl.PwmRange(500, 2500));
+        ((CRServoImplEx) servo).setPwmRange(new PwmControl.PwmRange(515, 2485));
 
         encoder = e;
         rotationController = new PIDFController(P, I, D, 0);
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    }
 
-    public SwerveModule(HardwareMap hardwareMap, String mName, String sName, String eName) {
-        this(hardwareMap.get(DcMotorEx.class, mName),
-                hardwareMap.get(CRServo.class, sName),
-                new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, eName)));
+        this.offset = offset;
     }
 
     public void read() {
@@ -75,22 +72,24 @@ public class SwerveModule {
 
 
     public void update() {
-        rotationController.setPIDF(P, I, D, 0);
-        double target = getTargetRotation(), current = getModuleRotation();
+//        rotationController.setPIDF(P, I, D, 0);
+//        double target = getTargetRotation(), current = getModuleRotation();
+//
+//        double error = normalizeRadians(target - current);
+//        if (MOTOR_FLIPPING && Math.abs(error) > Math.PI / 2) {
+//            target = normalizeRadians(target - Math.PI);
+//            wheelFlipped = true;
+//        } else {
+//            wheelFlipped = false;
+//        }
+//
+//        error = normalizeRadians(target - current);
+//
+//        double power = Range.clip(rotationController.calculate(0, error), -MAX_SERVO, MAX_SERVO);
+//        if (Double.isNaN(power)) power = 0;
+//        servo.setPower(power + (Math.abs(error) > 0.02 ? K_STATIC : 0) * Math.signum(power));
 
-        double error = normalizeRadians(target - current);
-        if (MOTOR_FLIPPING && Math.abs(error) > Math.PI / 2) {
-            target = normalizeRadians(target - Math.PI);
-            wheelFlipped = true;
-        } else {
-            wheelFlipped = false;
-        }
-
-        error = normalizeRadians(target - current);
-
-        double power = Range.clip(rotationController.calculate(0, error), -MAX_SERVO, MAX_SERVO);
-        if (Double.isNaN(power)) power = 0;
-        servo.setPower(power + (Math.abs(error) > 0.02 ? K_STATIC : 0) * Math.signum(power));
+        servo.setPower(AngleUnit.normalizeRadians(getTargetRotation() + offset) / Math.PI);
 
     }
 
@@ -99,7 +98,7 @@ public class SwerveModule {
     }
 
     public double getModuleRotation() {
-        return normalizeRadians(position - Math.PI);
+        return normalizeRadians(servo.getPower() * Math.PI - offset);
     }
 
     public void setMotorPower(double power) {
