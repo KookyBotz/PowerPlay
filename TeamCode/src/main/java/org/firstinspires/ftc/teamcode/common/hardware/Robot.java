@@ -51,8 +51,8 @@ public class Robot {
     }
 
     public void reset() {
-        lift.lift.resetEncoder();
-        intake.extension.resetEncoder();
+        lift.liftEncoder.resetEncoder();
+        intake.extensionEncoder.resetEncoder();
     }
 
     public void read() {

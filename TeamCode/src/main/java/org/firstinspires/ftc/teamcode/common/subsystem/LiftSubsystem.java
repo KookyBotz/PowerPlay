@@ -65,12 +65,12 @@ public class LiftSubsystem extends SubsystemBase {
         timer.reset();
 
         if (isAuto) {
-            lift.resetEncoder();
+            liftEncoder.resetEncoder();
             update(LatchState.LATCHED);
         } else {
             update(LatchState.UNLATCHED);
         }
-        lift.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftEncoder.motor.setDirection(DcMotorSimple.Direction.REVERSE);
         update(LiftState.RETRACTED);
 
         this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
