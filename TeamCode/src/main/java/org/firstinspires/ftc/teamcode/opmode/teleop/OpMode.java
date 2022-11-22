@@ -48,7 +48,7 @@ public class OpMode extends CommandOpMode {
 //        robot.intake.setFourbar(0.6);
         robot.intake.extension.set(-0.3);
         robot.lift.lift.set(-0.3);
-        PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+//        PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
@@ -66,9 +66,9 @@ public class OpMode extends CommandOpMode {
         double speedMultiplier = 1 - 0.75 * gamepad1.right_trigger;
         // Drivetrain
         Pose drive = new Pose(
-                new Point(Math.pow(Math.abs(gamepad1.left_stick_y) > 0.02 ? gamepad1.left_stick_y : 0, 3),
-                        Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3)).rotate(0),
-                Math.pow(-gamepad1.right_stick_x, 3)
+                new Point((Math.pow(Math.abs(gamepad1.left_stick_y) > 0.02 ? gamepad1.left_stick_y : 0, 3) * speedMultiplier),
+                        (Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3)) * speedMultiplier).rotate(0),
+                (Math.pow(-gamepad1.right_stick_x, 3)) * speedMultiplier
         );
 
         if (gamepad1.left_bumper) {
@@ -168,7 +168,7 @@ public class OpMode extends CommandOpMode {
         loopTime = loop;
         telemetry.update();
 
-        PhotonCore.EXPANSION_HUB.clearBulkCache();
+//        PhotonCore.EXPANSION_HUB.clearBulkCache();
         PhotonCore.CONTROL_HUB.clearBulkCache();
     }
 
