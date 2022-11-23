@@ -35,10 +35,10 @@ public class IntakeSubsystem extends SubsystemBase {
     private final double D = 0.0;
 
     public static double claw_pos_open = 0.2;
-    public static double claw_pos_closed = 0.37;
+    public static double claw_pos_closed = 0.45;
 
-    public static double fourbar_extended = 0.15;
-    public static double fourbar_retracted = 0.83;
+    public static double fourbar_extended = 0.18;
+    public static double fourbar_retracted = 0.89;
     public final double fourbar_transition = fourbar_retracted - 0.2;
     private final double[] fourbar_pickup_position = new double[]{
             .15,

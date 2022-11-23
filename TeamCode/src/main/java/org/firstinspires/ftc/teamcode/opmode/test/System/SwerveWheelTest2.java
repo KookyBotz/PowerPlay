@@ -19,10 +19,10 @@ public class SwerveWheelTest2 extends OpMode {
         b = hardwareMap.get(CRServo.class, "rightRearServo");
         c = hardwareMap.get(CRServo.class, "leftFrontServo");
         d = hardwareMap.get(CRServo.class, "leftRearServo");
-        ((CRServoImplEx) a).setPwmRange(new PwmControl.PwmRange(510, 2490, 5000));
-        ((CRServoImplEx) b).setPwmRange(new PwmControl.PwmRange(510, 2490, 5000));
-        ((CRServoImplEx) c).setPwmRange(new PwmControl.PwmRange(510, 2490, 5000));
-        ((CRServoImplEx) d).setPwmRange(new PwmControl.PwmRange(510, 2490, 5000));
+        ((CRServoImplEx) a).setPwmRange(new PwmControl.PwmRange(450, 2550, 5000));
+        ((CRServoImplEx) b).setPwmRange(new PwmControl.PwmRange(450, 2550, 5000));
+        ((CRServoImplEx) c).setPwmRange(new PwmControl.PwmRange(450, 2550, 5000));
+        ((CRServoImplEx) d).setPwmRange(new PwmControl.PwmRange(450, 2550, 5000));
 
 
         mA = hardwareMap.get(DcMotorEx.class, "rightFrontMotor");
