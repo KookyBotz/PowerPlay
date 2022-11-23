@@ -9,7 +9,7 @@ public class AbsoluteAnalogEncoder {
     public static double DEFAULT_RANGE = 3.3;
     public static boolean VALUE_REJECTION = false;
     private final AnalogInput encoder;
-    public double offset, analogRange;
+    private double offset, analogRange;
     private boolean inverted;
 
     public AbsoluteAnalogEncoder(AnalogInput enc){

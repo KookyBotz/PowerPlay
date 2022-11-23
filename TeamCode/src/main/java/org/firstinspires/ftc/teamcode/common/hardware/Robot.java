@@ -5,8 +5,8 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveDrivetrainGeneric;
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModuleServo;
+import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveDrivetrain;
+import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.LiftSubsystem;
@@ -15,7 +15,7 @@ public class Robot {
 
     public final BNO055IMU imu;
 
-    public SwerveDrivetrainGeneric drivetrain;
+    public SwerveDrivetrain drivetrain;
     public Localizer localizer;
 
     public IntakeSubsystem intake;
@@ -26,7 +26,7 @@ public class Robot {
 //    private int currentModuleIndex = 1;
 
     public Robot(HardwareMap hardwareMap, boolean isAuto) {
-        drivetrain = new SwerveDrivetrainGeneric(hardwareMap);
+        drivetrain = new SwerveDrivetrain(hardwareMap);
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -58,7 +58,7 @@ public class Robot {
     public void read() {
         intake.read();
         lift.read();
-        for (SwerveModuleServo module : drivetrain.modules) {
+        for (SwerveModule module : drivetrain.modules) {
             module.read();
         }
     }

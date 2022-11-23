@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModuleServo;
+import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.BetterSwerveLocalizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 
@@ -25,7 +25,7 @@ public class SwerveRotationalPositionTest extends LinearOpMode {
         PhotonCore.enable();
 
         while (!isStarted()) {
-            for (SwerveModuleServo module : robot.drivetrain.modules) {
+            for (SwerveModule module : robot.drivetrain.modules) {
                 module.setTargetRotation(0);
             }
             robot.drivetrain.updateModules();
