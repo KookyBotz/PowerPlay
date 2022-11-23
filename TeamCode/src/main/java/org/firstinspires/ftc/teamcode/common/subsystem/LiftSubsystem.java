@@ -130,7 +130,7 @@ public class LiftSubsystem extends SubsystemBase {
     public void update(LatchState state) {
         switch(state) {
             case LATCHED:
-                latch.setPosition(0.85);
+                latch.setPosition(0.82);
                 break;
             case UNLATCHED:
                 latch.setPosition(0.27);

@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomman
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.CycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.FourbarCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftRetractCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
@@ -47,11 +48,13 @@ public class OpMode extends CommandOpMode {
 //        robot.intake.setFourbar(0.6);
         robot.intake.extension.set(-0.3);
         robot.lift.lift.set(-0.3);
+        robot.intake.setFourbar(robot.intake.fourbar_transition);
 //        PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
     }
+    double imuoff = 0;
 
     @Override
     public void run() {
@@ -61,18 +64,19 @@ public class OpMode extends CommandOpMode {
         }
 
         robot.read();
-
         double speedMultiplier = 1 - 0.75 * gamepad1.right_trigger;
         // Drivetrain
         Pose drive = new Pose(
                 new Point((Math.pow(Math.abs(gamepad1.left_stick_y) > 0.02 ? gamepad1.left_stick_y : 0, 3) * speedMultiplier),
-                        (Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3)) * speedMultiplier).rotate(0),
+                        (Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3)) * speedMultiplier).rotate(robot.getAngle()-imuoff),
                 (Math.pow(-gamepad1.right_stick_x, 3)) * speedMultiplier
         );
 
         if (gamepad1.left_bumper) {
+            imuoff = robot.getAngle();
             robot.intake.extension.resetEncoder();
             robot.lift.lift.resetEncoder();
+
         }
 
         // Gamepad2
@@ -129,7 +133,7 @@ public class OpMode extends CommandOpMode {
         } else if (gamepad2.y) {
             schedule(new LiftCommandGeneric(robot, LiftSubsystem.LiftState.HIGH));
         } else if (gamepad2.b) {
-            schedule(new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED));
+            schedule(new LiftRetractCommand(robot));
 //                    new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 7000)),
 //                    new InstantCommand(() -> robot.lift.update(LiftSubsystem.LiftState.RETRACTED)));
         }
