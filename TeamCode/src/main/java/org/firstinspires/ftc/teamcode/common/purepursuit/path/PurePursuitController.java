@@ -10,6 +10,24 @@ public class PurePursuitController {
         return target.subtract(robot);
     }
 
+    public static Pose goToPosition(Pose robotPose, Pose targetPose) {
+        Pose deltaPose = relDistanceToTarget(robotPose, targetPose);
+//        System.out.println("error = " + deltaPose.toString());
+        Pose powers = new Pose(
+                PurePursuitConfig.xController.calculate(0, deltaPose.x),
+                PurePursuitConfig.yController.calculate(0, deltaPose.y),
+                PurePursuitConfig.hController.calculate(0, deltaPose.heading)
+        );
+        double x_rotated = powers.x * Math.cos(robotPose.heading) - powers.y * Math.sin(robotPose.heading);
+        double y_rotated = powers.x * Math.sin(robotPose.heading) + powers.y * Math.cos(robotPose.heading);
+        double x_power = -x_rotated < -PurePursuitConfig.max_power ? -PurePursuitConfig.max_power :
+                Math.min(-x_rotated, PurePursuitConfig.max_power);
+        double y_power = -y_rotated < -PurePursuitConfig.max_power ? -PurePursuitConfig.max_power :
+                Math.min(-y_rotated, PurePursuitConfig.max_power);
+        double heading_power = powers.heading;
+        return new Pose(x_power, y_power, heading_power);
+    }
+
     public static Pose goToPosition(Pose robotPose, Pose targetPose, Pose pCoefficients) {
         Pose deltaPose = relDistanceToTarget(robotPose, targetPose);
         System.out.println("error = " + deltaPose.toString());
