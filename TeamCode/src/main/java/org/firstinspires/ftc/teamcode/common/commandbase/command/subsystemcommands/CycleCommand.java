@@ -19,7 +19,7 @@ public class CycleCommand extends SequentialCommandGroup {
         super(
 //                new FourbarCommand(robot, IntakeSubsystem.FourbarState.TRANSITION),
 
-                new InstantCommand(() -> robot.intake.newProfile(270, 600, 1500)),
+                new InstantCommand(() -> robot.intake.newProfile(270, 750, 1500)),
                 new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
                 new FourbarCommand(robot, IntakeSubsystem.FourbarState.INTAKE),
                 new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
@@ -35,7 +35,9 @@ public class CycleCommand extends SequentialCommandGroup {
                 new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED),
 //                new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)),
                 //intake
+
                 new WaitUntilCommand(() -> robot.intake.getPos() > 260),
+                new WaitCommand(50),
                 new ClawCommand(robot, IntakeSubsystem.ClawState.CLOSED),
                 new WaitCommand(200),
 //                new FourbarCommand(robot, IntakeSubsystem.FourbarState.TRANSITION),

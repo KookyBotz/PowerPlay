@@ -23,11 +23,8 @@ public class PurePursuitConfig {
     public static double hD = 0.0;
     public static double hF = 0.0;
 
-    public static PIDFController xController = new PIDFController(xP, 0.0,xD, xF);
+    public static PIDFController xController = new PIDFController(xP, 0.0, xD, xF);
     public static PIDFController yController = new PIDFController(yP, 0.0, yD, yF);
     public static PIDFController hController = new PIDFController(hP, 0.0, hD, hF);
-//    public static int pCoefficientX = 28;
-//    public static int pCoefficientY = 28;
-//    public static double pCoefficientH = -Math.PI/1.7;
     public static double max_power = 0.7;
 }
