@@ -25,6 +25,9 @@ public class PurePursuitController {
         double y_power = -y_rotated < -PurePursuitConfig.max_power ? -PurePursuitConfig.max_power :
                 Math.min(-y_rotated, PurePursuitConfig.max_power);
         double heading_power = powers.heading;
+        System.out.println("x-power: " + x_power);
+        System.out.println("y-power: " + y_power);
+        System.out.println("h-power: " + heading_power + "\n");
         return new Pose(x_power, y_power, heading_power);
     }
 
