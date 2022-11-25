@@ -6,8 +6,8 @@ import com.arcrobotics.ftclib.controller.PIDFController;
 
 @Config
 public class PurePursuitConfig {
-    public static double ALLOWED_TRANSLATIONAL_ERROR = 1.5;
-    public static double ALLOWED_HEADING_ERROR = Math.toRadians(5);
+    public static double ALLOWED_TRANSLATIONAL_ERROR = 0.5;
+    public static double ALLOWED_HEADING_ERROR = Math.toRadians(2);
 
     // 24, 26 for mecanum, -Math.PI / 2.5
     // look into possibly seeing if p values are too aggressive

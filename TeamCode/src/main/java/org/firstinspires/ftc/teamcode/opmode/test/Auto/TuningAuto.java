@@ -63,14 +63,13 @@ public class TuningAuto extends LinearOpMode {
             PhotonCore.EXPANSION_HUB.clearBulkCache();
             robot.write();
         }
-
+        Pose targetPose = new Pose(0, 10, 0);
 
         waitForStart();
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(0, 10, 0), 1750)
-
+                        new PositionCommand(drivetrain, localizer, targetPose, 1750)
                 ) // test
         );
 
@@ -82,6 +81,9 @@ public class TuningAuto extends LinearOpMode {
             robot.drivetrain.updateModules();
             localizer.periodic();
             telemetry.addData("current pose", localizer.getPos());
+            telemetry.addData("current y", localizer.getPos().y);
+            telemetry.addData("error", localizer.getPos().subtract(targetPose).y);
+            telemetry.addData("final", targetPose.y);
             telemetry.update();
             robot.write();
             PhotonCore.CONTROL_HUB.clearBulkCache();
