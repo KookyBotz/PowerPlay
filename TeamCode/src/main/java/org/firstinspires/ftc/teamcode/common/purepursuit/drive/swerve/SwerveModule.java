@@ -28,7 +28,7 @@ import java.util.Locale;
 
 @Config
 public class SwerveModule {
-    public static double P = 0.2, I = 0, D = 0.03;
+    public static double P = 0.5, I = 0, D = 0.1;
     public static double K_STATIC = 0.04;
 
     public static double MAX_SERVO = 1, MAX_MOTOR = 1;
@@ -56,7 +56,7 @@ public class SwerveModule {
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         servo = s;
-        ((CRServoImplEx) servo).setPwmRange(new PwmControl.PwmRange(500, 2500));
+        ((CRServoImplEx) servo).setPwmRange(new PwmControl.PwmRange(500, 2500, 5000));
 
         encoder = e;
         rotationController = new PIDFController(P, I, D, 0);
