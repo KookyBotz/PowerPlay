@@ -71,7 +71,7 @@ public class TuningAuto extends LinearOpMode {
                 new SequentialCommandGroup(
                         new PositionCommand(drivetrain, localizer, new Pose(0, 10, 0), 1750)
 
-                )
+                ) // test
         );
 
         while (opModeIsActive()) {
