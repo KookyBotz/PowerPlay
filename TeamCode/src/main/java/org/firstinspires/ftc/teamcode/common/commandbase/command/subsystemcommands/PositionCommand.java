@@ -35,13 +35,17 @@ public class PositionCommand extends CommandBase {
         if(timer == null){
             timer = new ElapsedTime();
         }
-//        drivetrain.set(PurePursuitController.goToPosition(localizer.getPos(), targetPose, new Pose(pCoefficientX, pCoefficientY, pCoefficientH)));
         drivetrain.set(PurePursuitController.goToPosition(localizer.getPos(), targetPose));
     }
 
     @Override
     public boolean isFinished() {
-        return timer.milliseconds() > ms;
+        Pose error = targetPose.subtract(localizer.getPos());
+
+        if (((Math.hypot(error.x, error.y) < PurePursuitConfig.ALLOWED_TRANSLATIONAL_ERROR) && (Math.abs(error.heading) < PurePursuitConfig.ALLOWED_HEADING_ERROR)) || (timer.milliseconds() > ms)) {
+            return true;
+        }
+        return false;
     }
 
     @Override

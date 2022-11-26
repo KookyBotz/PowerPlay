@@ -107,7 +107,7 @@ public class LeftAuto extends LinearOpMode {
 //                        new InstantCommand(() -> PurePursuitConfig.pCoefficientY = 26),
                         // preload
                         new PositionCommand(drivetrain, localizer, new Pose(-3.19, 58.13, 0), 1750),
-//                        new PositionCommand(drivetrain, localizer, new Pose(-5, 51, 1.5 * Math.PI), 1250),
+                        new PositionCommand(drivetrain, localizer, new Pose(-5, 51, 1.5 * Math.PI), 1250),
 //                        new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
 //                        new WaitCommand(250),
 //                        new ClearFourbarCommand(robot.intake),
