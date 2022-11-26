@@ -13,6 +13,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.KinematicState;
+
 @Config
 public class IntakeSubsystem extends SubsystemBase {
     public final MotorEx extension;
@@ -24,7 +26,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public MotionState curState;
     private final ElapsedTime timer;
     private final ElapsedTime voltageTimer;
-    private final PIDController controller;
+    private PIDController controller;
     private final VoltageSensor voltageSensor;
 
     private double voltage;
@@ -46,6 +48,14 @@ public class IntakeSubsystem extends SubsystemBase {
             .22,
             .24,
             .32
+    };
+
+    public final KinematicState[] kinematicStates = {
+            new KinematicState(545, 0.42, 0.65),
+            new KinematicState(532, 0.37, 0.6),
+            new KinematicState(526, 0.31, 0.51),
+            new KinematicState(520, 0.26, 0.46),
+            new KinematicState(517, 0.22, 0.22)
     };
 
     private final double turret_deposit = 0;
@@ -145,6 +155,9 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void loop() {
+        // TODO: Remove
+        controller = new PIDController(P, I, D);
+
         if (voltageTimer.seconds() > 5) {
             voltage = voltageSensor.getVoltage();
             voltageTimer.reset();

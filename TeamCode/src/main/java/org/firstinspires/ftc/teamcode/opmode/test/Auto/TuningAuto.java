@@ -99,23 +99,28 @@ public class TuningAuto extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(1.6, 57.6, 0), 25000),
-                        new PositionCommand(drivetrain, localizer, new Pose(1.6, 57.6, 4.48), 2500),
+//                        new PositionCommand(drivetrain, localizer, new Pose(1.6, 57.6, 0), 25000),
+//                        new PositionCommand(drivetrain, localizer, new Pose(1.6, 57.6, 4.48), 2500),
                         new WaitCommand(1000),
-                        new AutoCycleCommand(robot, 545, 0.42),
-                        new AutoCycleCommand(robot, 532, 0.37),
-                        new AutoCycleCommand(robot, 526, 0.31),
-                        new AutoCycleCommand(robot, 520, 0.26),
-                        new AutoCycleCommand(robot, 517, 0.22),
-                        new LiftCommandGeneric(robot, LiftSubsystem.LiftState.HIGH),
-                        new WaitCommand(2000),
-                        new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED),
-                        new WaitCommand(2000),
-                        new PositionCommand(drivetrain, localizer,
-                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(0, 51, 1.5 * Math.PI) :
-                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(26, 48, 1.5 * Math.PI) :
-                                                new Pose(-26, 48, 1.5 * Math.PI), 2000
-                        )
+                        new AutoCycleCommand(robot, robot.intake.kinematicStates[0]),
+                        new AutoCycleCommand(robot, robot.intake.kinematicStates[1]),
+                        new AutoCycleCommand(robot, robot.intake.kinematicStates[2]),
+                        new AutoCycleCommand(robot, robot.intake.kinematicStates[3]),
+                        new AutoCycleCommand(robot, robot.intake.kinematicStates[4])
+//                        new AutoCycleCommand(robot, 545, 0.42),
+//                        new AutoCycleCommand(robot, 532, 0.37),
+//                        new AutoCycleCommand(robot, 526, 0.31),
+//                        new AutoCycleCommand(robot, 520, 0.26),
+//                        new AutoCycleCommand(robot, 517, 0.22),
+//                        new LiftCommandGeneric(robot, LiftSubsystem.LiftState.HIGH),
+//                        new WaitCommand(2000),
+//                        new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED),
+//                        new WaitCommand(2000),
+//                        new PositionCommand(drivetrain, localizer,
+//                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(0, 51, 1.5 * Math.PI) :
+//                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(26, 48, 1.5 * Math.PI) :
+//                                                new Pose(-26, 48, 1.5 * Math.PI), 2000
+//                        )
                 )
         );
 

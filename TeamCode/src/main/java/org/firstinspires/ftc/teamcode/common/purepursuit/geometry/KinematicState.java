@@ -10,8 +10,10 @@ public class KinematicState {
     public final double fourbarStartPos;
     public final double fourbarEndPos;
 
+    public double time = 0;
+
     private final double DEGREES_PER_TICK = 360 / 2.04;
-    private final double ROTATIONS_PER_SECOND = 1.19;
+    private final double ROTATIONS_PER_SECOND = 1.76;
     private final double TICKS_TO_INCHES = 23.5;
     private final double C2C_DISTANCE = 225 / 25.4;
 

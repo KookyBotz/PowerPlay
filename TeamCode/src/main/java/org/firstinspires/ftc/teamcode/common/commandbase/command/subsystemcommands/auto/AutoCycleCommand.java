@@ -11,15 +11,20 @@ import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomman
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
+import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.KinematicState;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.LiftSubsystem;
 
 public class AutoCycleCommand extends SequentialCommandGroup {
-    public AutoCycleCommand(Robot robot, int distance, double fourbarPos) {
+    public AutoCycleCommand(Robot robot, int pos, double amog) {
+
+    }
+
+    public AutoCycleCommand(Robot robot, KinematicState state) {
         super(
-                new InstantCommand(() -> robot.intake.newProfile(distance + 15, 900, 2500)),
+                new InstantCommand(() -> robot.intake.newProfile(state.intakeStartingPos, 900, 2500)),
                 new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
-                new InstantCommand(() -> robot.intake.setFourbar(fourbarPos)),
+                new InstantCommand(() -> robot.intake.setFourbar(state.fourbarStartPos)),
 //                new FourbarCommand(robot, IntakeSubsystem.FourbarState.INTAKE),
                 new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
                 new LatchCommand(robot, LiftSubsystem.LatchState.LATCHED),
@@ -34,12 +39,12 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                 new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED),
 //                new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)),
                 //intake
-                new WaitUntilCommand(() -> robot.intake.getPos() > distance - 10),
+                new WaitUntilCommand(() -> robot.intake.getPos() > state.intakeStartingPos - 5),
                 new ClawCommand(robot, IntakeSubsystem.ClawState.CLOSED),
                 new WaitCommand(200),
-                new FourbarCommand(robot, IntakeSubsystem.FourbarState.TRANSITION),
-                new InstantCommand(() -> robot.intake.newProfile(distance + 30, 900, 2500)),
-                new WaitCommand(1000),
+                // KINEMATICS COMMAND
+                new KinematicCommand(robot, state),
+                // END KINEMATICS COMMAND
                 new TurretCommand(robot, IntakeSubsystem.TurretState.DEPOSIT),
                 new InstantCommand(() -> robot.intake.newProfile(15, 1500, 4000)),
 
