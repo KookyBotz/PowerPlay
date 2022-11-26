@@ -26,7 +26,7 @@ public class KinematicState {
         double deltaTheta = DEGREES_PER_TICK * (this.fourbarEndPos - this.fourbarStartPos);
         double time = deltaTheta / ROTATIONS_PER_SECOND;
 
-        int deltaPosition = (int)((Math.cos(deltaTheta) * C2C_DISTANCE) * TICKS_TO_INCHES);
+        int deltaPosition = (int)(Math.abs((Math.cos(Math.toRadians(deltaTheta)) * C2C_DISTANCE) * TICKS_TO_INCHES));
 
         this.intakeEndPos = this.intakeStartingPos + deltaPosition;
 

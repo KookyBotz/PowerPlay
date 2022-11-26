@@ -131,6 +131,8 @@ public class TuningAuto extends LinearOpMode {
             robot.lift.loop();
             robot.drivetrain.updateModules();
             localizer.periodic();
+            telemetry.addData("targetPos", robot.intake.targetPosition);
+            telemetry.addData("intakePos", robot.intake.getPos());
             telemetry.addData("current pose", localizer.getPos());
             telemetry.update();
             robot.write();

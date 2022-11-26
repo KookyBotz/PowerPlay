@@ -32,24 +32,26 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                 new LiftCommand(robot, LiftSubsystem.LiftState.HIGH),
 
                 //wait until ready to intake
-                new WaitUntilCommand(() -> robot.lift.getPos() > 580),
+                //new WaitUntilCommand(() -> robot.lift.getPos() > 580),
                 new WaitCommand(200),
 
                 new LatchCommand(robot, LiftSubsystem.LatchState.UNLATCHED),
                 new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED),
 //                new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)),
                 //intake
-                new WaitUntilCommand(() -> robot.intake.getPos() > state.intakeStartingPos - 5),
+                new WaitUntilCommand(() -> robot.intake.getPos() > state.intakeStartingPos - 7),
                 new ClawCommand(robot, IntakeSubsystem.ClawState.CLOSED),
                 new WaitCommand(200),
                 // KINEMATICS COMMAND
                 new KinematicCommand(robot, state),
+                new WaitCommand(2000),
+//                new WaitUntilCommand(() -> robot.intake.getPos() > state.intakeEndPos - 7),
                 // END KINEMATICS COMMAND
                 new TurretCommand(robot, IntakeSubsystem.TurretState.DEPOSIT),
                 new InstantCommand(() -> robot.intake.newProfile(15, 1500, 4000)),
 
                 //transfer
-                new WaitUntilCommand(() -> robot.lift.getPos() < 10),
+                //new WaitUntilCommand(() -> robot.lift.getPos() < 10),
                 new WaitUntilCommand(() -> robot.intake.getPos() < 25),
                 new FourbarCommand(robot, IntakeSubsystem.FourbarState.DEPOSIT),
                 new WaitCommand(250),

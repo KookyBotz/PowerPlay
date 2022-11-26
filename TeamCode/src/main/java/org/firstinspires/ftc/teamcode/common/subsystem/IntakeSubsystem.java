@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -26,15 +27,16 @@ public class IntakeSubsystem extends SubsystemBase {
     public MotionState curState;
     private final ElapsedTime timer;
     private final ElapsedTime voltageTimer;
-    private PIDController controller;
+    private PIDFController controller;
     private final VoltageSensor voltageSensor;
 
     private double voltage;
     private double intakePosition;
 
-    private final double P = 0.025;
-    private final double I = 0.0;
-    private final double D = 0.0;
+    public static double P = 0.06;
+    public static double I = 0.013;
+    public static double D = 0.0;
+    public static double F = 0.0001;
 
     public static double claw_pos_open = 0.2;
     public static double claw_pos_closed = 0.45;
@@ -55,7 +57,7 @@ public class IntakeSubsystem extends SubsystemBase {
             new KinematicState(532, 0.37, 0.6),
             new KinematicState(526, 0.31, 0.51),
             new KinematicState(520, 0.26, 0.46),
-            new KinematicState(517, 0.22, 0.22)
+            new KinematicState(517, 0.22, 0.42)
     };
 
     private final double turret_deposit = 0;
@@ -107,7 +109,7 @@ public class IntakeSubsystem extends SubsystemBase {
         timer.reset();
         this.voltageTimer = new ElapsedTime();
         voltageTimer.reset();
-        this.controller = new PIDController(P, I, D);
+        this.controller = new PIDFController(P, I, D, F);
         this.voltageSensor = hardwareMap.voltageSensor.iterator().next();
         this.voltage = voltageSensor.getVoltage();
     }
@@ -156,7 +158,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void loop() {
         // TODO: Remove
-        controller = new PIDController(P, I, D);
+        controller = new PIDFController(P, I, D, F);
 
         if (voltageTimer.seconds() > 5) {
             voltage = voltageSensor.getVoltage();
@@ -167,6 +169,7 @@ public class IntakeSubsystem extends SubsystemBase {
         if (curState.getV() != 0) {
             targetPosition = curState.getX();
         }
+
 
         power = controller.calculate(intakePosition, targetPosition) / voltage * 12;
 
