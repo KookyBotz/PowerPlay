@@ -23,9 +23,12 @@ public class Robot {
 
     public Motor.Encoder horizontalEncoder, lateralEncoder;
 
+    private boolean isAuto = false;
+
 //    private int currentModuleIndex = 1;
 
     public Robot(HardwareMap hardwareMap, boolean isAuto) {
+        this.isAuto = isAuto;
         drivetrain = new SwerveDrivetrain(hardwareMap);
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
@@ -69,6 +72,10 @@ public class Robot {
 //        drivetrain.write(currentModuleIndex - 1);
 //        currentModuleIndex %= 4;
 //        currentModuleIndex++;
-        drivetrain.write();
+        if (this.isAuto) {
+            drivetrain.writeAuto();
+        } else {
+            drivetrain.write();
+        }
     }
 }

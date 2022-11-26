@@ -103,6 +103,8 @@ public class LeftAuto extends LinearOpMode {
         // TODO: Alter the cycling commands to use the new latch
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
+                        new PositionCommand(drivetrain, localizer, new Pose(1.6, 57.6, 0), 25000),
+                        new PositionCommand(drivetrain, localizer, new Pose(1.6, 57.6, 4.5), 25000),
 //                        new InstantCommand(() -> PurePursuitConfig.pCoefficientX = 34),
 //                        new InstantCommand(() -> PurePursuitConfig.pCoefficientY = 26),
                         // preload
