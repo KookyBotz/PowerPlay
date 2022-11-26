@@ -38,6 +38,7 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                 new ClawCommand(robot, IntakeSubsystem.ClawState.CLOSED),
                 new WaitCommand(200),
                 new FourbarCommand(robot, IntakeSubsystem.FourbarState.TRANSITION),
+                new InstantCommand(() -> robot.intake.newProfile(distance + 30, 900, 2500)),
                 new WaitCommand(1000),
                 new TurretCommand(robot, IntakeSubsystem.TurretState.DEPOSIT),
                 new InstantCommand(() -> robot.intake.newProfile(15, 1500, 4000)),

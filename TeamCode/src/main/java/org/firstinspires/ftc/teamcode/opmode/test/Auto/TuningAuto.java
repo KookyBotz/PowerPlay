@@ -100,7 +100,7 @@ public class TuningAuto extends LinearOpMode {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         new PositionCommand(drivetrain, localizer, new Pose(1.6, 57.6, 0), 25000),
-                        new PositionCommand(drivetrain, localizer, new Pose(1.6, 57.6, 4.5), 2500),
+                        new PositionCommand(drivetrain, localizer, new Pose(1.6, 57.6, 4.48), 2500),
                         new WaitCommand(1000),
                         new AutoCycleCommand(robot, 545, 0.42),
                         new AutoCycleCommand(robot, 532, 0.37),

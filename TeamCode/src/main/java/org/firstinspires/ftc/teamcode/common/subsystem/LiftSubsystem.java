@@ -100,7 +100,8 @@ public class LiftSubsystem extends SubsystemBase {
             moving = true;
         }
 
-        power = controller.calculate(liftPosition, targetPosition) / voltage * 12;
+        power = 0;
+        //power = controller.calculate(liftPosition, targetPosition) / voltage * 12;
 //        power = Math.max(Math.min(power, 0.6), -0.6);
     }
 
