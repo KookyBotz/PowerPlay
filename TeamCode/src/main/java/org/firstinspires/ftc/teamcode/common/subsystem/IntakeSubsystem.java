@@ -53,11 +53,11 @@ public class IntakeSubsystem extends SubsystemBase {
     };
 
     public final KinematicState[] kinematicStates = {
-            new KinematicState(545, 0.42, 0.65),
-            new KinematicState(532, 0.37, 0.6),
-            new KinematicState(526, 0.31, 0.51),
-            new KinematicState(520, 0.26, 0.46),
-            new KinematicState(517, 0.22, 0.42)
+            new KinematicState(487, 0.4, 0.65),
+            new KinematicState(475, 0.35, 0.6),
+            new KinematicState(466, 0.31, 0.51),
+            new KinematicState(462, 0.2, 0.46),
+            new KinematicState(460, 0.2, 0.42)
     };
 
     private final double turret_deposit = 0;

@@ -28,8 +28,8 @@ public class KinematicState {
         double fourbarStartPosRad = Math.toRadians((fourbarStartPos - 0.24) * DEGREES_PER_TICK);
         double fourbarEndPosRad = Math.toRadians((fourbarEndPos - 0.24) * DEGREES_PER_TICK);
 
-        double deltaTheta = DEGREES_PER_TICK * (this.fourbarEndPos - this.fourbarStartPos);
-        double time = deltaTheta / ROTATIONS_PER_SECOND;
+//        double deltaTheta = DEGREES_PER_TICK * (this.fourbarEndPos - this.fourbarStartPos);
+//        double time = deltaTheta / ROTATIONS_PER_SECOND;
 
         double fourbarStartX = Math.cos(fourbarStartPosRad) * C2C_DISTANCE;
         double fourbarEndX = Math.cos(fourbarEndPosRad) * C2C_DISTANCE;
@@ -39,8 +39,13 @@ public class KinematicState {
         this.intakeEndPos = Range.clip(this.intakeStartingPos + deltaPosition, 0, 560);
 
 //        this.intakeVelo = (this.intakeEndPos - this.intakeStartingPos) / time;
-        this.intakeVelo = 1500;
+        this.intakeVelo = 500;
 //        this.intakeAccel = intakeVelo / time;
-        this.intakeAccel = 4000;
+        this.intakeAccel = 1000;
+    }
+
+    public void update(Pose robotPose, Pose targetPose) {
+
+        // CONE POSE: -35.25, 51.63
     }
 }

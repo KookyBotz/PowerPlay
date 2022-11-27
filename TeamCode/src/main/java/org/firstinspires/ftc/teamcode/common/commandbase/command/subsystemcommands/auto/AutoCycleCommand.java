@@ -22,7 +22,8 @@ public class AutoCycleCommand extends SequentialCommandGroup {
 
     public AutoCycleCommand(Robot robot, KinematicState state) {
         super(
-                new InstantCommand(() -> robot.intake.newProfile(state.intakeStartingPos, 900, 2500)),
+                // TODO replace -0.2 with a target parameter
+                new InstantCommand(() -> robot.intake.newProfile(state.intakeStartingPos +((-0.2-robot.localizer.getPos().x)/(Math.sin(robot.localizer.getPos().heading))*23.5), 1500, 1500)),
                 new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
                 new InstantCommand(() -> robot.intake.setFourbar(state.fourbarStartPos)),
 //                new FourbarCommand(robot, IntakeSubsystem.FourbarState.INTAKE),
@@ -32,7 +33,7 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                 new LiftCommand(robot, LiftSubsystem.LiftState.HIGH),
 
                 //wait until ready to intake
-                //new WaitUntilCommand(() -> robot.lift.getPos() > 580),
+                new WaitUntilCommand(() -> robot.lift.getPos() > 580),
                 new WaitCommand(200),
 
                 new LatchCommand(robot, LiftSubsystem.LatchState.UNLATCHED),
@@ -46,13 +47,13 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                 new KinematicCommand(robot, state),
                 new WaitUntilCommand(() -> robot.intake.getPos() > state.intakeEndPos - 5),
 //                new WaitCommand(2000),
-//                new WaitUntilCommand(() -> robot.intake.getPos() > state.intakeEndPos - 7),
+                new WaitUntilCommand(() -> robot.intake.getPos() > state.intakeEndPos - 7),
                 // END KINEMATICS COMMAND
                 new TurretCommand(robot, IntakeSubsystem.TurretState.DEPOSIT),
                 new InstantCommand(() -> robot.intake.newProfile(15, 1500, 4000)),
 
                 //transfer
-                //new WaitUntilCommand(() -> robot.lift.getPos() < 10),
+                new WaitUntilCommand(() -> robot.lift.getPos() < 10),
                 new WaitUntilCommand(() -> robot.intake.getPos() < 25),
                 new FourbarCommand(robot, IntakeSubsystem.FourbarState.DEPOSIT),
                 new WaitCommand(250),

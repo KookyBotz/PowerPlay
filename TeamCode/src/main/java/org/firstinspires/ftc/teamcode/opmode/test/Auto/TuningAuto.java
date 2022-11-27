@@ -4,7 +4,10 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
+import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
@@ -15,6 +18,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommandGeneric;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionLockCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
@@ -99,28 +103,28 @@ public class TuningAuto extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(-0.2, 57.98, 0), 2500),
-                        new PositionCommand(drivetrain, localizer, new Pose(-0.2, 57.98, 4.52), 2500),
-                        new WaitCommand(1000),
+                        new PositionCommand(drivetrain, localizer, new Pose(-0.2, 57.98, 0), 3000),
+                        new PositionCommand(drivetrain, localizer, new Pose(-0.2, 57.98, 4.51), 1000),
+                        // sin of heading times 23.7
+                        // x error times sin of heading times 23.4
+                        // error will be negative for left side auto
+                        // subtract from slide position
+                        // x error / sin of heading times 23.4
+                        // subtract slide pos from error in x
+                        // generate a pose for where the cones are
+                        // set extension to magnitude of that length - a certain offset * times per inches
+                        new WaitCommand(100),
                         new AutoCycleCommand(robot, robot.intake.kinematicStates[0]),
                         new AutoCycleCommand(robot, robot.intake.kinematicStates[1]),
                         new AutoCycleCommand(robot, robot.intake.kinematicStates[2]),
                         new AutoCycleCommand(robot, robot.intake.kinematicStates[3]),
-                        new AutoCycleCommand(robot, robot.intake.kinematicStates[4])
-//                        new AutoCycleCommand(robot, 545, 0.42),
-//                        new AutoCycleCommand(robot, 532, 0.37),
-//                        new AutoCycleCommand(robot, 526, 0.31),
-//                        new AutoCycleCommand(robot, 520, 0.26),
-//                        new AutoCycleCommand(robot, 517, 0.22),
-//                        new LiftCommandGeneric(robot, LiftSubsystem.LiftState.HIGH),
-//                        new WaitCommand(2000),
-//                        new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED),
-//                        new WaitCommand(2000),
-//                        new PositionCommand(drivetrain, localizer,
-//                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(0, 51, 1.5 * Math.PI) :
-//                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(26, 48, 1.5 * Math.PI) :
-//                                                new Pose(-26, 48, 1.5 * Math.PI), 2000
-//                        )
+                        new AutoCycleCommand(robot, robot.intake.kinematicStates[4]),
+                        new PositionCommand(drivetrain, localizer,
+                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(0, 51, 1.5 * Math.PI) :
+                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(26, 48, 1.5 * Math.PI) :
+                                                new Pose(-26, 48, 1.5 * Math.PI), 2000
+                        ),
+                        new InstantCommand(this::requestOpModeStop)
                 )
         );
 
