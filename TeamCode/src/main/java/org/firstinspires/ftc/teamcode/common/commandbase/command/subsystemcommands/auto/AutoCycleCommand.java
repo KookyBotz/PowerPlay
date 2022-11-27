@@ -44,7 +44,8 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                 new WaitCommand(200),
                 // KINEMATICS COMMAND
                 new KinematicCommand(robot, state),
-                new WaitCommand(2000),
+                new WaitUntilCommand(() -> robot.intake.getPos() > state.intakeEndPos - 5),
+//                new WaitCommand(2000),
 //                new WaitUntilCommand(() -> robot.intake.getPos() > state.intakeEndPos - 7),
                 // END KINEMATICS COMMAND
                 new TurretCommand(robot, IntakeSubsystem.TurretState.DEPOSIT),

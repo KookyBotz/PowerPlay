@@ -9,8 +9,9 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.KinematicState
 public class KinematicCommand extends SequentialCommandGroup {
     public KinematicCommand(Robot robot, KinematicState state) {
         super(
-                new InstantCommand(() -> robot.intake.newProfile(state.intakeEndPos, state.intakeVelo, state.intakeAccel)),
-                new InstantCommand(() -> robot.intake.setFourbar(state.fourbarEndPos))
-        );
+                new InstantCommand(() -> robot.intake.setFourbar(state.fourbarEndPos)),
+                new InstantCommand(() -> robot.intake.newProfile(state.intakeEndPos, state.intakeVelo, state.intakeAccel))
+
+            );
     }
 }

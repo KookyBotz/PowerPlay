@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.common.purepursuit.geometry;
 
+import com.qualcomm.robotcore.util.Range;
+
 public class KinematicState {
     public final int intakeStartingPos;
     public final int intakeEndPos;
@@ -14,7 +16,7 @@ public class KinematicState {
 
     private final double DEGREES_PER_TICK = 360 / 2.04;
     private final double ROTATIONS_PER_SECOND = 1.76;
-    private final double TICKS_TO_INCHES = 23.5;
+    private final double TICKS_PER_INCH = 23.5;
     private final double C2C_DISTANCE = 225 / 25.4;
 
     public KinematicState(int intakeStartingPos, double fourbarStartPos, double fourbarEndPos) {
@@ -23,14 +25,22 @@ public class KinematicState {
         this.fourbarStartPos = fourbarStartPos;
         this.fourbarEndPos = fourbarEndPos;
 
+        double fourbarStartPosRad = Math.toRadians((fourbarStartPos - 0.24) * DEGREES_PER_TICK);
+        double fourbarEndPosRad = Math.toRadians((fourbarEndPos - 0.24) * DEGREES_PER_TICK);
+
         double deltaTheta = DEGREES_PER_TICK * (this.fourbarEndPos - this.fourbarStartPos);
         double time = deltaTheta / ROTATIONS_PER_SECOND;
 
-        int deltaPosition = (int)(Math.abs((Math.cos(Math.toRadians(deltaTheta)) * C2C_DISTANCE) * TICKS_TO_INCHES));
+        double fourbarStartX = Math.cos(fourbarStartPosRad) * C2C_DISTANCE;
+        double fourbarEndX = Math.cos(fourbarEndPosRad) * C2C_DISTANCE;
 
-        this.intakeEndPos = this.intakeStartingPos + deltaPosition;
+        int deltaPosition = (int)(Math.abs(fourbarEndX - fourbarStartX) * TICKS_PER_INCH);
 
-        this.intakeVelo = (this.intakeEndPos - this.intakeStartingPos) / time;
-        this.intakeAccel = intakeVelo / time;
+        this.intakeEndPos = Range.clip(this.intakeStartingPos + deltaPosition, 0, 560);
+
+//        this.intakeVelo = (this.intakeEndPos - this.intakeStartingPos) / time;
+        this.intakeVelo = 1500;
+//        this.intakeAccel = intakeVelo / time;
+        this.intakeAccel = 4000;
     }
 }
