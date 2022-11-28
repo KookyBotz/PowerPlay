@@ -46,11 +46,11 @@ public class IntakeSubsystem extends SubsystemBase {
     public final double fourbar_transition = fourbar_retracted - 0.2;
 
     public final KinematicState[] kinematicStates = {
-            new KinematicState(487, 0.4, 0.68),
-            new KinematicState(475, 0.35, 0.6),
-            new KinematicState(466, 0.31, 0.51),
-            new KinematicState(462, 0.26, 0.46),
-            new KinematicState(460, 0.21, 0.42)
+            new KinematicState(550, 0.42, 0.7),
+            new KinematicState(538, 0.37, 0.62),
+            new KinematicState(529, 0.33, 0.55),
+            new KinematicState(520, 0.28, 0.48),
+            new KinematicState(515, 0.24, 0.44)
     };
 
     private final double turret_deposit = 0;

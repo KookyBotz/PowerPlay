@@ -11,7 +11,7 @@ public class KinematicCommand extends SequentialCommandGroup {
     public KinematicCommand(Robot robot, KinematicState state) {
         super(
                 new InstantCommand(() -> robot.intake.newProfile(state.intakeEndPos, state.intakeVelo, state.intakeAccel)),
-                new WaitCommand(100),
+                new WaitCommand(250),
                 new InstantCommand(() -> robot.intake.setFourbar(state.fourbarEndPos))
         );
     }

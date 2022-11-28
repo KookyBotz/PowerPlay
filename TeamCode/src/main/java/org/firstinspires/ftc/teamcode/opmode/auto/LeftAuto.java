@@ -1,8 +1,13 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
+import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
@@ -12,13 +17,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.ClearFourbarCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommandGeneric;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionLockCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.ClawCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.FourbarCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftRetractCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LatchCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
@@ -27,7 +32,6 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModu
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.TwoWheelLocalizer;
-import org.firstinspires.ftc.teamcode.common.purepursuit.path.PurePursuitConfig;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.LiftSubsystem;
 import org.opencv.core.Point;
@@ -35,7 +39,8 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "LeftAuto")
+@Autonomous(name = "TuningAuto")
+@Config
 public class LeftAuto extends LinearOpMode {
 
     SleeveDetection sleeveDetection = new SleeveDetection();
@@ -46,6 +51,7 @@ public class LeftAuto extends LinearOpMode {
         CommandScheduler.getInstance().reset();
         Robot robot = new Robot(hardwareMap, true);
         Drivetrain drivetrain = robot.drivetrain;
+//        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         Localizer localizer = new TwoWheelLocalizer(
                 () -> robot.horizontalEncoder.getPosition(),
@@ -86,7 +92,6 @@ public class LeftAuto extends LinearOpMode {
             }
             robot.drivetrain.updateModules();
 
-            telemetry.addData("Sleeve Position", sleeveDetection.getPosition());
             telemetry.addLine("RUNNING LEFT 5 CYCLE");
             telemetry.update();
 
@@ -100,88 +105,52 @@ public class LeftAuto extends LinearOpMode {
         waitForStart();
         camera.stopStreaming();
 
-        // TODO: Alter the cycling commands to use the new latch
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(1.6, 57.6, 0), 25000),
-                        new PositionCommand(drivetrain, localizer, new Pose(1.6, 57.6, 4.5), 25000),
-//                        new InstantCommand(() -> PurePursuitConfig.pCoefficientX = 34),
-//                        new InstantCommand(() -> PurePursuitConfig.pCoefficientY = 26),
-                        // preload
-                        new PositionCommand(drivetrain, localizer, new Pose(-3.19, 58.13, 0), 1750),
-                        new PositionCommand(drivetrain, localizer, new Pose(-5, 51, 1.5 * Math.PI), 1250),
-//                        new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
-//                        new WaitCommand(250),
-//                        new ClearFourbarCommand(robot.intake),
-//                        new WaitCommand(500),
-//                        new LiftCommand(robot, LiftSubsystem.LiftState.HIGH),
-////                        new InstantCommand(() -> robot.lift.newProfile(615, 800, 3000)),
-//                        new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
-//                        new WaitUntilCommand(() -> robot.lift.getPos() > 570),
-//                        new WaitCommand(500),
-//                        new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED),
-////                        new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)),
-//                        new LiftRetractCommand(robot),
-//                        new WaitUntilCommand(() -> robot.lift.getPos() < 10),
-//
-//                        // intake
-//                        new InstantCommand(() -> robot.intake.newProfile(405, 800, 3000)),
-//                        new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
-//                        new InstantCommand(() -> robot.intake.extendFourbar(4)),
-//                        new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
-//                        new WaitUntilCommand(() -> robot.intake.getPos() > 350),
-//                        new WaitCommand(750),
-//                        new ClawCommand(robot, IntakeSubsystem.ClawState.CLOSED),
-//                        new WaitCommand(1000),
-//
-//                        // transfer
-//                        new FourbarCommand(robot, IntakeSubsystem.FourbarState.TRANSITION),
-//
-//                        new WaitCommand(500),
-//
-//                        new ParallelCommandGroup(
-//                                new PositionCommand(drivetrain, localizer, new Pose(-0.5, 60, 4.425), 1000),
-//                                new SequentialCommandGroup(
-//                                        new TurretCommand(robot, IntakeSubsystem.TurretState.DEPOSIT),
-//                                        new InstantCommand(() -> robot.intake.newProfile(-5, 800, 3000)),
-//                                        new WaitUntilCommand(() -> robot.lift.getPos() < 10),
-//                                        new WaitUntilCommand(() -> robot.intake.getPos() < 10),
-//                                        new FourbarCommand(robot, IntakeSubsystem.FourbarState.DEPOSIT)
-//                                )
-//                        ),
+                        new PositionCommand(drivetrain, localizer, new Pose(0.8, 57.98, 0), 3000),
+                        new PositionCommand(drivetrain, localizer, new Pose(0.8, 57.98, 4.49), 2000),
+                        // sin of heading times 23.7
+                        // x error times sin of heading times 23.4
+                        // error will be negative for left side auto
+                        // subtract from slide position
+                        // x error / sin of heading times 23.4
+                        // subtract slide pos from error in x
+                        // generate a pose for where the cones are
+                        // set extension to magnitude of that length - a certain offset * times per inches
+                        new WaitCommand(100),
+                        new AutoCycleCommand(robot, robot.intake.kinematicStates[0]),
+                        new AutoCycleCommand(robot, robot.intake.kinematicStates[1]),
+                        new AutoCycleCommand(robot, robot.intake.kinematicStates[2]),
+                        new AutoCycleCommand(robot, robot.intake.kinematicStates[3]),
+                        new AutoCycleCommand(robot, robot.intake.kinematicStates[4]),
 
-                        // deposit
-                        new WaitCommand(7500),
-                        new ParallelCommandGroup( // more heading equals going to the right
-                                new PositionCommand(drivetrain, localizer, new Pose(-3.19, 58.13, 4.4), 5000) // add , here
-//                                new SequentialCommandGroup(
-//                                        new WaitCommand(10000),
-//                                // 463,
-//                                // 451,
-//                                // 438,
-//                                // 436,
-//                                // 434, 0.2
-//                                        new AutoCycleCommand(robot, 463, 0.4),
-//                                        new AutoCycleCommand(robot, 451, 0.36),
-//                                        new AutoCycleCommand(robot, 438, 0.3),
-//                                        new AutoCycleCommand(robot, 436, 0.25),
-////                                        new InstantCommand(() -> robot.lift.newProfile(615, 800, 3000)),
-//                                        new LiftCommand(robot, LiftSubsystem.LiftState.HIGH),
-//                                        new WaitUntilCommand(() -> robot.lift.getPos() > 580),
-//                                        new WaitCommand(200),
-//                                        new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED)
-////                                        new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500))
-////                                )
-//                        ), // add comma here
-//                        new FourbarCommand(robot, IntakeSubsystem.FourbarState.DEPOSIT),
-//
-//                        new PositionCommand(drivetrain, localizer,
-//                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(0, 51, 1.5 * Math.PI) :
-//                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(26, 48, 1.5 * Math.PI) :
-//                                                new Pose(-26, 48, 1.5 * Math.PI), 2000
-//                        )
+                        new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
+                        new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_transition)),
+                        new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
+
+                        new WaitCommand(250),
+                        new LatchCommand(robot, LiftSubsystem.LatchState.LATCHED),
+
+                        new LiftCommand(robot, LiftSubsystem.LiftState.HIGH),
+
+                        //wait until ready to intake
+                        new WaitUntilCommand(() -> robot.lift.getPos() > 580),
+                        new WaitCommand(750),
+
+                        new LatchCommand(robot, LiftSubsystem.LatchState.UNLATCHED),
+                        new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED),
+
+                        new WaitUntilCommand(() -> robot.lift.getPos() < 100),
+
+
+                        new PositionCommand(drivetrain, localizer,
+                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(0, 51, 1.5 * Math.PI) :
+                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(26, 48, 1.5 * Math.PI) :
+                                                new Pose(-26, 48, 1.5 * Math.PI), 2000
+                        ),
+                        new InstantCommand(this::requestOpModeStop)
                 )
-        ));
+        );
 
         while (opModeIsActive()) {
             robot.read();
@@ -190,6 +159,8 @@ public class LeftAuto extends LinearOpMode {
             robot.lift.loop();
             robot.drivetrain.updateModules();
             localizer.periodic();
+            telemetry.addData("targetPos", robot.intake.targetPosition);
+            telemetry.addData("intakePos", robot.intake.getPos());
             telemetry.addData("current pose", localizer.getPos());
             telemetry.update();
             robot.write();

@@ -8,7 +8,7 @@ public class KinematicState {
 
     public final double intakeVelo;
     public final double intakeAccel;
-    
+
     public final double fourbarStartPos;
     public final double fourbarEndPos;
 
@@ -34,14 +34,16 @@ public class KinematicState {
         double fourbarStartX = Math.cos(fourbarStartPosRad) * C2C_DISTANCE;
         double fourbarEndX = Math.cos(fourbarEndPosRad) * C2C_DISTANCE;
 
-        int deltaPosition = (int)(Math.abs(fourbarEndX - fourbarStartX) * TICKS_PER_INCH);
+        int deltaPosition = (int) (Math.abs(fourbarEndX - fourbarStartX) * TICKS_PER_INCH);
 
-        this.intakeEndPos = Range.clip(this.intakeStartingPos + deltaPosition, 0, 560);
+        this.intakeEndPos = Range.clip(this.intakeStartingPos + deltaPosition, 0, 570);
 
 //        this.intakeVelo = (this.intakeEndPos - this.intakeStartingPos) / time;
         this.intakeVelo = 500;
 //        this.intakeAccel = intakeVelo / time;
         this.intakeAccel = 1000;
+
+        System.out.println("end pos: " + intakeEndPos);
     }
 
     public void update(Pose robotPose, Pose targetPose) {
