@@ -23,7 +23,8 @@ public class AutoCycleCommand extends SequentialCommandGroup {
     public AutoCycleCommand(Robot robot, KinematicState state) {
         super(
                 // TODO replace -0.2 with a target parameter
-                new InstantCommand(() -> robot.intake.newProfile(state.intakeStartingPos + ((0.8 - robot.localizer.getPos().x) / (Math.sin(robot.localizer.getPos().heading)) * 23.5), 1500, 1500)),
+//                new InstantCommand(() -> robot.intake.newProfile(state.intakeStartingPos + ((0.8 - robot.localizer.getPos().x) / (Math.sin(robot.localizer.getPos().heading)) * 23.5), 1500, 1500)),
+                new InstantCommand(() -> robot.intake.newProfile(state.intakeStartingPos, 1500, 1500)),
                 new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
                 new InstantCommand(() -> robot.intake.setFourbar(state.fourbarStartPos)),
 //                new FourbarCommand(robot, IntakeSubsystem.FourbarState.INTAKE),
