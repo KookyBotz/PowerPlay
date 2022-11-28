@@ -27,7 +27,7 @@ import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.LiftSubsystem;
 
 @Config
-@TeleOp(name = "OpMode👌👌😍🎶🎶😎😶‍🌫️😈👺😈😊😶‍🌫️😶‍🌫️😘👺😍")
+@TeleOp(name = "OpMode👌👌😍🎶🎶😎")
 public class OpMode extends CommandOpMode {
     private Robot robot;
 

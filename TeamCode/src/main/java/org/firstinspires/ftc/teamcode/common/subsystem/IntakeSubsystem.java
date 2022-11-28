@@ -44,20 +44,13 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double fourbar_extended = 0.18;
     public static double fourbar_retracted = 0.89;
     public final double fourbar_transition = fourbar_retracted - 0.2;
-    private final double[] fourbar_pickup_position = new double[]{
-            .15,
-            .17,
-            .22,
-            .24,
-            .32
-    };
 
     public final KinematicState[] kinematicStates = {
-            new KinematicState(487, 0.4, 0.65),
+            new KinematicState(487, 0.4, 0.68),
             new KinematicState(475, 0.35, 0.6),
             new KinematicState(466, 0.31, 0.51),
-            new KinematicState(462, 0.2, 0.46),
-            new KinematicState(460, 0.2, 0.42)
+            new KinematicState(462, 0.26, 0.46),
+            new KinematicState(460, 0.21, 0.42)
     };
 
     private final double turret_deposit = 0;
@@ -204,10 +197,6 @@ public class IntakeSubsystem extends SubsystemBase {
         return barLeft.getPosition();
     }
 
-    public void extendFourbar(int index) {
-        barLeft.setPosition(fourbar_pickup_position[index]);
-        barRight.setPosition(1 - fourbar_pickup_position[index]);
-    }
 
     public void setFourbarFactor(double factor) {
         double fourbarAddition = -0.007 * factor;
