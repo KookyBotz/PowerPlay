@@ -143,12 +143,13 @@ public class LeftAuto extends LinearOpMode {
 
                         new WaitUntilCommand(() -> robot.lift.getPos() < 100),
 
-
                         new PositionCommand(drivetrain, localizer,
                                 position == SleeveDetection.ParkingPosition.CENTER ? new Pose(0, 51, 1.5 * Math.PI) :
                                         position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(26, 48, 1.5 * Math.PI) :
                                                 new Pose(-26, 48, 1.5 * Math.PI), 2000
                         ),
+                        new InstantCommand(() -> robot.intake.setFourbar(IntakeSubsystem.fourbar_retracted)),
+                        new WaitCommand(500),
                         new InstantCommand(this::requestOpModeStop)
                 )
         );
