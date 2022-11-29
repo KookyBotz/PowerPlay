@@ -20,7 +20,7 @@ public class AutoCycleCommand extends SequentialCommandGroup {
 
     }
 
-    public AutoCycleCommand(Robot robot, KinematicState state) {
+    public AutoCycleCommand(Robot robot, KinematicState state, boolean noDelay) {
         super(
                 // TODO replace -0.2 with a target parameter
 //                new InstantCommand(() -> robot.intake.newProfile(state.intakeStartingPos + ((0.8 - robot.localizer.getPos().x) / (Math.sin(robot.localizer.getPos().heading)) * 23.5), 1500, 1500)),
@@ -47,7 +47,8 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                 new ClawCommand(robot, IntakeSubsystem.ClawState.CLOSED),
                 new WaitCommand(200),
                 // KINEMATICS COMMAND
-                new KinematicCommand(robot, state),
+                new KinematicCommand(robot, state, noDelay),
+                new WaitCommand(noDelay ? 500 : 0),
                 new WaitUntilCommand(() -> robot.intake.getPos() > state.intakeEndPos - 10),
                 // END KINEMATICS COMMAND
                 new WaitCommand(350),

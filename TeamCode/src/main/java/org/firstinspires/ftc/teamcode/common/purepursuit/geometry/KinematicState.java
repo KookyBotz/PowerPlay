@@ -36,7 +36,7 @@ public class KinematicState {
 
         int deltaPosition = (int) (Math.abs(fourbarEndX - fourbarStartX) * TICKS_PER_INCH);
 
-        this.intakeEndPos = Range.clip(this.intakeStartingPos + deltaPosition, 0, 570);
+        this.intakeEndPos = Range.clip(this.intakeStartingPos + deltaPosition, 0, 575);
 
 //        this.intakeVelo = (this.intakeEndPos - this.intakeStartingPos) / time;
         this.intakeVelo = 500;

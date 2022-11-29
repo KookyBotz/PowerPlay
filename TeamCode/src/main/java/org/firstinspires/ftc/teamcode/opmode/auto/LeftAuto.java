@@ -107,8 +107,8 @@ public class LeftAuto extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(0.8, 57.98, 0), 3000),
-                        new PositionCommand(drivetrain, localizer, new Pose(0.8, 57.98, 4.49), 2000),
+                        new PositionCommand(drivetrain, localizer, new Pose(0.5, 57.98, 0), 3000),
+                        new PositionCommand(drivetrain, localizer, new Pose(0.5, 57.98, 4.49), 2000),
                         // sin of heading times 23.7
                         // x error times sin of heading times 23.4
                         // error will be negative for left side auto
@@ -117,12 +117,13 @@ public class LeftAuto extends LinearOpMode {
                         // subtract slide pos from error in x
                         // generate a pose for where the cones are
                         // set extension to magnitude of that length - a certain offset * times per inches
+                        // or not
                         new WaitCommand(100),
-                        new AutoCycleCommand(robot, robot.intake.kinematicStates[0]),
-                        new AutoCycleCommand(robot, robot.intake.kinematicStates[1]),
-                        new AutoCycleCommand(robot, robot.intake.kinematicStates[2]),
-                        new AutoCycleCommand(robot, robot.intake.kinematicStates[3]),
-                        new AutoCycleCommand(robot, robot.intake.kinematicStates[4]),
+                        new AutoCycleCommand(robot, robot.intake.kinematicStates[0], true),
+                        new AutoCycleCommand(robot, robot.intake.kinematicStates[1], false),
+                        new AutoCycleCommand(robot, robot.intake.kinematicStates[2], false),
+                        new AutoCycleCommand(robot, robot.intake.kinematicStates[3], false),
+                        new AutoCycleCommand(robot, robot.intake.kinematicStates[4], false),
 
                         new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
                         new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_transition)),
