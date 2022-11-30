@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.util.Range;
 
 public class KinematicState {
     public final int intakeStartingPos;
-    public int intakeEndPos;
+    public final int intakeEndPos;
 
     public final double intakeVelo;
     public final double intakeAccel;
@@ -44,10 +44,5 @@ public class KinematicState {
         this.intakeAccel = 1000;
 
         System.out.println("end pos: " + intakeEndPos);
-    }
-
-    public void update(int newPos) {
-        this.intakeEndPos = Range.clip(newPos, 0, 560);
-        // CONE POSE: -35.25, 51.63
     }
 }
