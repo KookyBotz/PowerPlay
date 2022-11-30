@@ -1,13 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
-import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
@@ -17,9 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommandGeneric;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionLockCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.ClawCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LatchCommand;
@@ -39,9 +32,9 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "LeftAuto")
+@Autonomous(name = "RightAuto")
 @Config
-public class LeftAuto extends LinearOpMode {
+public class RightAuto extends LinearOpMode {
 
     SleeveDetection sleeveDetection = new SleeveDetection();
     OpenCvCamera camera;
@@ -70,6 +63,7 @@ public class LeftAuto extends LinearOpMode {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        // TODO: Tune this
         sleeveDetection = new SleeveDetection(new Point(180, 80));
         camera.setPipeline(sleeveDetection);
 
@@ -92,7 +86,7 @@ public class LeftAuto extends LinearOpMode {
             }
             robot.drivetrain.updateModules();
 
-            telemetry.addLine("RUNNING LEFT 5 CYCLE");
+            telemetry.addLine("RUNNING RIGHT 5 CYCLE");
             telemetry.update();
 
             PhotonCore.CONTROL_HUB.clearBulkCache();
@@ -107,8 +101,8 @@ public class LeftAuto extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(0.5, 57.98, 0), 3000),
-                        new PositionCommand(drivetrain, localizer, new Pose(0.5, 57.98, 4.49), 2000),
+                        new PositionCommand(drivetrain, localizer, new Pose(-0.5, 57.98, 0), 3000),
+                        new PositionCommand(drivetrain, localizer, new Pose(-0.5, 57.98, 1.79), 2000),
                         // sin of heading times 23.7
                         // x error times sin of heading times 23.4
                         // error will be negative for left side auto
