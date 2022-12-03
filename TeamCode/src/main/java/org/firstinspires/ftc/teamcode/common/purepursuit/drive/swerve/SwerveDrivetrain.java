@@ -33,6 +33,7 @@ public class SwerveDrivetrain implements Drivetrain {
     double[] wa = new double[4];
     double max = 0.0;
     public static double minPow = 0.07;
+    public static double imuOff = 0.0;
 
     public SwerveDrivetrain(HardwareMap hardwareMap) {
         leftFrontModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "leftFrontMotor"), hardwareMap.get(CRServo.class, "leftFrontServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "leftFrontEncoder"), 2.3).zero(frontLeftOffset));

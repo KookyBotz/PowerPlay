@@ -17,30 +17,27 @@ import org.firstinspires.ftc.teamcode.common.subsystem.LiftSubsystem;
 public class CycleCommand extends SequentialCommandGroup {
     public CycleCommand(Robot robot) {
         super(
-//                new FourbarCommand(robot, IntakeSubsystem.FourbarState.TRANSITION),
-
+                // deposit/intake movements
                 new InstantCommand(() -> robot.intake.newProfile(270, 750, 1500)),
                 new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
-                new FourbarCommand(robot, IntakeSubsystem.FourbarState.INTAKE),
                 new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
-                new LatchCommand(robot, LiftSubsystem.LatchState.LATCHED),
 
+                new LatchCommand(robot, LiftSubsystem.LatchState.LATCHED),
                 new LiftCommand(robot, LiftSubsystem.LiftState.HIGH),
 
-                //wait until ready to intake
+                new WaitUntilCommand(() -> robot.intake.getPos() > 75),
+                new FourbarCommand(robot, IntakeSubsystem.FourbarState.INTAKE),
                 new WaitUntilCommand(() -> robot.lift.getPos() > 580),
                 new WaitCommand(200),
 
                 new LatchCommand(robot, LiftSubsystem.LatchState.UNLATCHED),
                 new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED),
-//                new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 8500)),
                 //intake
 
                 new WaitUntilCommand(() -> robot.intake.getPos() > 260),
                 new WaitCommand(50),
                 new ClawCommand(robot, IntakeSubsystem.ClawState.CLOSED),
                 new WaitCommand(200),
-//                new FourbarCommand(robot, IntakeSubsystem.FourbarState.TRANSITION),
                 new TurretCommand(robot, IntakeSubsystem.TurretState.DEPOSIT),
                 new FourbarCommand(robot, IntakeSubsystem.FourbarState.DEPOSIT),
 

@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomman
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftRetractCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
+import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
@@ -54,7 +55,6 @@ public class OpMode extends CommandOpMode {
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
     }
-    double imuoff = 0;
 
     @Override
     public void run() {
@@ -68,12 +68,12 @@ public class OpMode extends CommandOpMode {
         // Drivetrain
         Pose drive = new Pose(
                 new Point((Math.pow(Math.abs(gamepad1.left_stick_y) > 0.02 ? gamepad1.left_stick_y : 0, 3) * speedMultiplier),
-                        (Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3)) * speedMultiplier).rotate(robot.getAngle()-imuoff),
+                        (Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3)) * speedMultiplier).rotate(robot.getAngle()- SwerveDrivetrain.imuOff),
                 (Math.pow(-gamepad1.right_stick_x, 3)) * speedMultiplier
         );
 
         if (gamepad1.left_bumper) {
-            imuoff = robot.getAngle();
+            SwerveDrivetrain.imuOff = robot.getAngle();
             robot.intake.extension.resetEncoder();
             robot.lift.lift.resetEncoder();
 
