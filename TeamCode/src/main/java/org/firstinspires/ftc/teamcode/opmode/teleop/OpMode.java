@@ -105,7 +105,7 @@ public class OpMode extends CommandOpMode {
         }
 
         double gamepad2_left_stick_x = gamepad2.left_stick_x;
-        if (Math.abs(gamepad2_left_stick_x) > 0.15) {
+        if (Math.abs(gamepad2_left_stick_x) > 0.01) {
             robot.intake.setSlideFactor(Math.pow(gamepad2_left_stick_x, 3));
         }
 
