@@ -26,7 +26,7 @@ public class CycleCommand extends SequentialCommandGroup {
                 new LatchCommand(robot, LiftSubsystem.LatchState.LATCHED),
                 new LiftCommand(robot, LiftSubsystem.LiftState.HIGH),
 
-                new WaitUntilCommand(() -> robot.intake.getPos() > 75),
+                new WaitUntilCommand(() -> robot.intake.getPos() > 50),
                 new FourbarCommand(robot, IntakeSubsystem.FourbarState.INTAKE),
                 new WaitUntilCommand(() -> robot.lift.getPos() > 580),
                 new WaitCommand(200),
