@@ -151,7 +151,6 @@ public class LeftAuto extends LinearOpMode {
                         ),
                         new InstantCommand(() -> robot.intake.setFourbar(IntakeSubsystem.fourbar_retracted)),
                         new WaitCommand(500),
-                        new InstantCommand(() -> SwerveDrivetrain.imuOff = robot.getAngle()),
                         new InstantCommand(this::requestOpModeStop)
                 )
         );
@@ -163,6 +162,7 @@ public class LeftAuto extends LinearOpMode {
             robot.lift.loop();
             robot.drivetrain.updateModules();
             localizer.periodic();
+            SwerveDrivetrain.imuOff = robot.getAngle();
             telemetry.addData("targetPos", robot.intake.targetPosition);
             telemetry.addData("intakePos", robot.intake.getPos());
             telemetry.addData("current pose", localizer.getPos());
