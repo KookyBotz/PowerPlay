@@ -47,7 +47,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public final KinematicState[] kinematicStates = {
             new KinematicState(530, 0.42, 0.89),
-            new KinematicState(515, 0.37, 0.62),
+            new KinematicState(515, 0.38, 0.62),
             new KinematicState(500, 0.33, 0.55),
             new KinematicState(500, 0.28, 0.48),
             new KinematicState(500, 0.24, 0.44)

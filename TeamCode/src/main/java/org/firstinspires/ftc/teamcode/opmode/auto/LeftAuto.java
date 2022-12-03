@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomman
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionLockCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.AutoCycleCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.SwerveXCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.ClawCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LatchCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftCommand;
@@ -120,29 +121,37 @@ public class LeftAuto extends LinearOpMode {
                         // set extension to magnitude of that length - a certain offset * times per inches
                         // or not
                         new WaitCommand(100),
-                        new AutoCycleCommand(robot, robot.intake.kinematicStates[0], true),
-                        new AutoCycleCommand(robot, robot.intake.kinematicStates[1], false),
-                        new AutoCycleCommand(robot, robot.intake.kinematicStates[2], false),
-                        new AutoCycleCommand(robot, robot.intake.kinematicStates[3], false),
-                        new AutoCycleCommand(robot, robot.intake.kinematicStates[4], false),
 
-                        new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
-                        new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_transition)),
-                        new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
+                        new ParallelCommandGroup(
+                                new SequentialCommandGroup(
+                                        new AutoCycleCommand(robot, robot.intake.kinematicStates[0], true),
+                                        new AutoCycleCommand(robot, robot.intake.kinematicStates[1], false),
+                                        new AutoCycleCommand(robot, robot.intake.kinematicStates[2], false),
+                                        new AutoCycleCommand(robot, robot.intake.kinematicStates[3], false),
+                                        new AutoCycleCommand(robot, robot.intake.kinematicStates[4], false),
 
-                        new WaitCommand(250),
-                        new LatchCommand(robot, LiftSubsystem.LatchState.LATCHED),
+                                        new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
+                                        new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_transition)),
+                                        new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
 
-                        new LiftCommand(robot, LiftSubsystem.LiftState.HIGH),
+                                        new WaitCommand(250),
+                                        new LatchCommand(robot, LiftSubsystem.LatchState.LATCHED),
 
-                        //wait until ready to intake
-                        new WaitUntilCommand(() -> robot.lift.getPos() > 580),
-                        new WaitCommand(750),
+                                        new LiftCommand(robot, LiftSubsystem.LiftState.HIGH),
 
-                        new LatchCommand(robot, LiftSubsystem.LatchState.UNLATCHED),
-                        new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED),
+                                        //wait until ready to intake
+                                        new WaitUntilCommand(() -> robot.lift.getPos() > 580),
+                                        new WaitCommand(750),
 
-                        new WaitUntilCommand(() -> robot.lift.getPos() < 100),
+                                        new LatchCommand(robot, LiftSubsystem.LatchState.UNLATCHED),
+                                        new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED),
+
+                                        new WaitUntilCommand(() -> robot.lift.getPos() < 100)
+
+
+                                ),
+                                new SwerveXCommand(robot.drivetrain)
+                        ),
 
                         new PositionCommand(drivetrain, localizer,
                                 position == SleeveDetection.ParkingPosition.CENTER ? new Pose(0, 51, 1.5 * Math.PI) :

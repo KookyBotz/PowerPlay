@@ -49,10 +49,10 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                 // KINEMATICS COMMAND
                 new KinematicCommand(robot, state, noDelay),
                 new WaitCommand(noDelay ? 500 : 0),
-                new WaitUntilCommand(() -> robot.intake.getPos() > state.intakeEndPos - 10),
+                new WaitUntilCommand(() -> robot.intake.getPos() > state.intakeEndPos - 15),
                 // END KINEMATICS COMMAND
                 new WaitCommand(350),
-                new InstantCommand(() -> robot.intake.newProfile(15, 1500, 4000)),
+                new InstantCommand(() -> robot.intake.newProfile(10, 1500, 4000)),
                 new WaitCommand(100),
                 new TurretCommand(robot, IntakeSubsystem.TurretState.DEPOSIT),
                 //transfer
