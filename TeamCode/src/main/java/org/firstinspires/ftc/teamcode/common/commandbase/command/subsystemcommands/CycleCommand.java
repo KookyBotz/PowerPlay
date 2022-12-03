@@ -21,6 +21,7 @@ public class CycleCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> robot.intake.newProfile(270, 750, 1500)),
                 new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
                 new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
+                new FourbarCommand(robot, IntakeSubsystem.FourbarState.TRANSITION),
 
                 new LatchCommand(robot, LiftSubsystem.LatchState.LATCHED),
                 new LiftCommand(robot, LiftSubsystem.LiftState.HIGH),

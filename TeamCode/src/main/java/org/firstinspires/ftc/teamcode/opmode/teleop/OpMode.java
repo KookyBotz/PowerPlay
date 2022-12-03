@@ -54,6 +54,7 @@ public class OpMode extends CommandOpMode {
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
+        IntakeSubsystem.fourbar_extended = 0.2;
     }
 
     @Override
@@ -100,17 +101,17 @@ public class OpMode extends CommandOpMode {
 
         double gamepad2_left_stick_y = gamepad2.left_stick_y;
         if (Math.abs(gamepad2_left_stick_y) > 0.15) {
-            robot.intake.setFourbarFactor(gamepad2_left_stick_y);
+            robot.intake.setFourbarFactor(Math.pow(gamepad2_left_stick_y, 3));
         }
 
         double gamepad2_left_stick_x = gamepad2.left_stick_x;
         if (Math.abs(gamepad2_left_stick_x) > 0.15) {
-            robot.intake.setSlideFactor(gamepad2_left_stick_x);
+            robot.intake.setSlideFactor(Math.pow(gamepad2_left_stick_x, 3));
         }
 
         double gamepad2_right_stick = gamepad2.right_stick_x;
         if (Math.abs(gamepad2_right_stick) > 0.15) {
-            robot.intake.setTurretFactor(gamepad2_right_stick);
+            robot.intake.setTurretFactor(Math.pow(gamepad2_right_stick, 3));
         }
 
         boolean dLB = gamepad2.left_bumper;

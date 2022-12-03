@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands;
 
+import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -18,6 +19,7 @@ public class LiftCommandGeneric extends SequentialCommandGroup {
                 new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
                 new WaitCommand(250),
                 new LatchCommand(robot, LiftSubsystem.LatchState.LATCHED),
+                new WaitCommand(state == LiftSubsystem.LiftState.LOW ? 400 : 0),
                 new ClearFourbarCommand(robot.intake),
                 new WaitUntilCommand(() -> robot.intake.getFourbarPos() <= robot.intake.fourbar_transition),
 //                new WaitCommand(250),

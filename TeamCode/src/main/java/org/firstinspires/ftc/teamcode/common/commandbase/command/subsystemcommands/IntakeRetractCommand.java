@@ -15,8 +15,8 @@ public class IntakeRetractCommand extends SequentialCommandGroup {
     public IntakeRetractCommand(Robot robot) {
         super(
             new ClawCommand(robot, IntakeSubsystem.ClawState.CLOSED),
-            new InstantCommand(() -> robot.intake.newProfile(-5, 750, 2500)),
-            new WaitUntilCommand(() -> robot.intake.getPos() < 10),
+            new InstantCommand(() -> robot.intake.newProfile(15, 750, 2500)),
+            new WaitUntilCommand(() -> robot.intake.getPos() < 20),
             new WaitUntilCommand(() -> robot.lift.getPos() < 10),
             new TurretCommand(robot, IntakeSubsystem.TurretState.DEPOSIT),
             new FourbarCommand(robot, IntakeSubsystem.FourbarState.DEPOSIT)

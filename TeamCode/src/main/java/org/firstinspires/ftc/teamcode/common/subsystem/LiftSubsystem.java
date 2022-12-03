@@ -112,11 +112,11 @@ public class LiftSubsystem extends SubsystemBase {
                 resetTimer();
                 break;
             case LOW:
-                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(150, 0), 3000, 7500);
+                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(145, 0), 3000, 5000);
                 resetTimer();
                 break;
             case MIDDLE:
-                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(385, 0), 3000, 7500);
+                profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(350, 0), 3000, 5000);
                 resetTimer();
                 break;
             case HIGH:
