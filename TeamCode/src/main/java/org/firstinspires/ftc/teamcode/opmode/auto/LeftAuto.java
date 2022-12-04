@@ -119,7 +119,7 @@ public class LeftAuto extends LinearOpMode {
                 new SequentialCommandGroup(
 //                        new FourbarCommand(robot, IntakeSubsystem.FourbarState.INTAKE),
                         new PositionCommand(drivetrain, localizer, new Pose(-4.5, 57.98, 0), 2500),
-                        new PositionCommand(drivetrain, localizer, new Pose(-4.5, 57.98, 4.49), 2500),
+                        new PositionCommand(drivetrain, localizer, new Pose(-4.5, 57.98, 4.49), 3000),
                         // sin of heading times 23.7
                         // x error times sin of heading times 23.4
                         // error will be negative for left side auto
@@ -139,23 +139,29 @@ public class LeftAuto extends LinearOpMode {
                                         new AutoCycleCommand(robot, robot.intake.kinematicStates[3], false),
                                         new AutoCycleCommand(robot, robot.intake.kinematicStates[4], false),
 
-                                        new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
-                                        new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_transition)),
-                                        new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
+                                        new ParallelCommandGroup(
+                                                new SequentialCommandGroup(
+                                                        new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
+                                                        new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_transition)),
+                                                        new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
 
-                                        new WaitCommand(250),
-                                        new LatchCommand(robot, LiftSubsystem.LatchState.LATCHED),
+                                                        new WaitCommand(250),
+                                                        new LatchCommand(robot, LiftSubsystem.LatchState.LATCHED),
 
-                                        new LiftCommand(robot, LiftSubsystem.LiftState.HIGH),
+                                                        new LiftCommand(robot, LiftSubsystem.LiftState.HIGH),
 
-                                        //wait until ready to intake
-                                        new WaitUntilCommand(() -> robot.lift.getPos() > 580),
-                                        new WaitCommand(750),
+                                                        //wait until ready to intake
+                                                        new WaitUntilCommand(() -> robot.lift.getPos() > 580),
+                                                        new WaitCommand(750),
 
-                                        new LatchCommand(robot, LiftSubsystem.LatchState.UNLATCHED),
-                                        new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED),
+                                                        new LatchCommand(robot, LiftSubsystem.LatchState.UNLATCHED),
+                                                        new LiftCommand(robot, LiftSubsystem.LiftState.RETRACTED),
 
-                                        new WaitUntilCommand(() -> robot.lift.getPos() < 100)
+                                                        new WaitUntilCommand(() -> robot.lift.getPos() < 100)
+                                                ),
+                                                new PositionCommand(drivetrain, localizer, new Pose(-1, 57.98, 4.49), 1000)
+                                        )
+
 
 
                                 ),

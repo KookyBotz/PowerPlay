@@ -30,8 +30,8 @@ public class AutoCycleCommand extends SequentialCommandGroup {
 //                new FourbarCommand(robot, IntakeSubsystem.FourbarState.INTAKE),
                 new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
 
-                new WaitCommand(250),
                 new LatchCommand(robot, LiftSubsystem.LatchState.LATCHED),
+                new WaitCommand(250),
 
                 new LiftCommand(robot, LiftSubsystem.LiftState.HIGH),
 
