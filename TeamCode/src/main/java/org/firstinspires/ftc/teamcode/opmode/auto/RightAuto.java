@@ -23,6 +23,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomman
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.SwerveXCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.ClawCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.FourbarCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LatchCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.TurretCommand;
@@ -61,9 +62,10 @@ public class RightAuto extends LinearOpMode {
                 robot::getAngle
         );
         robot.localizer = localizer;
-        robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT);
+        robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION);
         robot.intake.update(IntakeSubsystem.ClawState.CLOSED);
-        robot.lift.update(LiftSubsystem.LatchState.UNLATCHED);
+        robot.lift.update(LiftSubsystem.LatchState.LATCHED);
+        robot.intake.update(IntakeSubsystem.ClawState.OPEN);
 
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
@@ -72,7 +74,7 @@ public class RightAuto extends LinearOpMode {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        sleeveDetection = new SleeveDetection(new Point(180, 80));
+        sleeveDetection = new SleeveDetection(new Point(90, 80));
         camera.setPipeline(sleeveDetection);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
@@ -95,7 +97,6 @@ public class RightAuto extends LinearOpMode {
             robot.drivetrain.updateModules();
 
             telemetry.addLine("RUNNING RIGHT 5 CYCLE");
-            telemetry.addData("POSITION", sleeveDetection.getPosition());
             telemetry.update();
 
             PhotonCore.CONTROL_HUB.clearBulkCache();
@@ -110,8 +111,9 @@ public class RightAuto extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
+//                        new FourbarCommand(robot, IntakeSubsystem.FourbarState.INTAKE),
                         new PositionCommand(drivetrain, localizer, new Pose(5.5, 57.98, 0), 2500),
-                        new PositionCommand(drivetrain, localizer, new Pose(5.5 , 57.98, -4.49), 2000),
+                        new PositionCommand(drivetrain, localizer, new Pose(5.5, 57.98, -4.49), 2000),
                         // sin of heading times 23.7
                         // x error times sin of heading times 23.4
                         // error will be negative for left side auto
@@ -153,11 +155,11 @@ public class RightAuto extends LinearOpMode {
                                 ),
                                 new SwerveXCommand(robot.drivetrain)
                         ),
-                        // TODO add 5
+
                         new PositionCommand(drivetrain, localizer,
-                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(0, 51, 1.5 * Math.PI) :
-                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(26, 48, 1.5 * Math.PI) :
-                                                new Pose(-26, 48, 1.5 * Math.PI), 2000
+                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(5, 51, 1.5 * Math.PI) :
+                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(31, 48, 1.5 * Math.PI) :
+                                                new Pose(-21, 48, 1.5 * Math.PI), 2000
                         ),
                         new InstantCommand(() -> robot.intake.setFourbar(IntakeSubsystem.fourbar_retracted)),
                         new WaitCommand(500),
