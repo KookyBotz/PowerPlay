@@ -49,6 +49,8 @@ public class LeftAuto extends LinearOpMode {
     SleeveDetection sleeveDetection = new SleeveDetection();
     OpenCvCamera camera;
 
+    boolean start = true;
+
     @Override
     public void runOpMode() throws InterruptedException {
         CommandScheduler.getInstance().reset();
@@ -61,6 +63,7 @@ public class LeftAuto extends LinearOpMode {
                 () -> robot.lateralEncoder.getPosition(),
                 robot::getAngle
         );
+
         robot.localizer = localizer;
         robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION);
         robot.intake.update(IntakeSubsystem.ClawState.CLOSED);
@@ -99,6 +102,9 @@ public class LeftAuto extends LinearOpMode {
             telemetry.addLine("RUNNING LEFT 5 CYCLE");
             telemetry.update();
 
+//            robot.lift.lift.set(-0.3);
+//            robot.intake.extension.set(-0.4);
+
             PhotonCore.CONTROL_HUB.clearBulkCache();
             PhotonCore.EXPANSION_HUB.clearBulkCache();
             robot.write();
@@ -113,7 +119,7 @@ public class LeftAuto extends LinearOpMode {
                 new SequentialCommandGroup(
 //                        new FourbarCommand(robot, IntakeSubsystem.FourbarState.INTAKE),
                         new PositionCommand(drivetrain, localizer, new Pose(-4.5, 57.98, 0), 2500),
-                        new PositionCommand(drivetrain, localizer, new Pose(-4.5, 57.98, 4.49), 2000),
+                        new PositionCommand(drivetrain, localizer, new Pose(-4.5, 57.98, 4.49), 2500),
                         // sin of heading times 23.7
                         // x error times sin of heading times 23.4
                         // error will be negative for left side auto
@@ -168,6 +174,10 @@ public class LeftAuto extends LinearOpMode {
         );
 
         while (opModeIsActive()) {
+            if (start) {
+                start = false;
+                robot.reset();
+            }
             robot.read();
             CommandScheduler.getInstance().run();
             robot.intake.loop();
