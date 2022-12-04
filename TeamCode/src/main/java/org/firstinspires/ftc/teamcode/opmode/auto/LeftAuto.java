@@ -23,6 +23,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcomman
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.SwerveXCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.ClawCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.FourbarCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LatchCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.TurretCommand;
@@ -61,9 +62,10 @@ public class LeftAuto extends LinearOpMode {
                 robot::getAngle
         );
         robot.localizer = localizer;
-        robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT);
+        robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION);
         robot.intake.update(IntakeSubsystem.ClawState.CLOSED);
-        robot.lift.update(LiftSubsystem.LatchState.UNLATCHED);
+        robot.lift.update(LiftSubsystem.LatchState.LATCHED);
+        robot.intake.update(IntakeSubsystem.ClawState.OPEN);
 
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
@@ -72,7 +74,7 @@ public class LeftAuto extends LinearOpMode {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        sleeveDetection = new SleeveDetection(new Point(180, 80));
+        sleeveDetection = new SleeveDetection(new Point(90, 80));
         camera.setPipeline(sleeveDetection);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
@@ -109,7 +111,8 @@ public class LeftAuto extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(-4.5, 57.98, 0), 3000),
+//                        new FourbarCommand(robot, IntakeSubsystem.FourbarState.INTAKE),
+                        new PositionCommand(drivetrain, localizer, new Pose(-4.5, 57.98, 0), 2500),
                         new PositionCommand(drivetrain, localizer, new Pose(-4.5, 57.98, 4.49), 2000),
                         // sin of heading times 23.7
                         // x error times sin of heading times 23.4
