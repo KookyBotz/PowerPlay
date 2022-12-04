@@ -18,7 +18,7 @@ public class CycleCommand extends SequentialCommandGroup {
     public CycleCommand(Robot robot) {
         super(
                 // deposit/intake movements
-                new InstantCommand(() -> robot.intake.newProfile(270, 750, 1500)),
+                new InstantCommand(() -> robot.intake.newProfile(270, 750, 1000)),
                 new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN),
                 new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
                 new FourbarCommand(robot, IntakeSubsystem.FourbarState.TRANSITION),

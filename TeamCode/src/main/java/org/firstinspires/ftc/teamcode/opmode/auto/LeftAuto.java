@@ -109,8 +109,8 @@ public class LeftAuto extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(0.5, 57.98, 0), 3000),
-                        new PositionCommand(drivetrain, localizer, new Pose(0.5, 57.98, 4.49), 2000),
+                        new PositionCommand(drivetrain, localizer, new Pose(-4.5, 57.98, 0), 3000),
+                        new PositionCommand(drivetrain, localizer, new Pose(-4.5, 57.98, 4.49), 2000),
                         // sin of heading times 23.7
                         // x error times sin of heading times 23.4
                         // error will be negative for left side auto
@@ -154,9 +154,9 @@ public class LeftAuto extends LinearOpMode {
                         ),
 
                         new PositionCommand(drivetrain, localizer,
-                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(0, 51, 1.5 * Math.PI) :
-                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(26, 48, 1.5 * Math.PI) :
-                                                new Pose(-26, 48, 1.5 * Math.PI), 2000
+                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 51, 1.5 * Math.PI) :
+                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 48, 1.5 * Math.PI) :
+                                                new Pose(-31, 48, 1.5 * Math.PI), 2000
                         ),
                         new InstantCommand(() -> robot.intake.setFourbar(IntakeSubsystem.fourbar_retracted)),
                         new WaitCommand(500),

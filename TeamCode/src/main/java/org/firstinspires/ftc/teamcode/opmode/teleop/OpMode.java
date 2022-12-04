@@ -35,6 +35,9 @@ public class OpMode extends CommandOpMode {
     private ElapsedTime timer;
     private double loopTime = 0;
 
+    boolean xLock = false;
+    boolean pDRS = false;
+
     boolean pDLB = false;
     boolean pDRB = false;
     boolean pDDL = false;
@@ -142,7 +145,13 @@ public class OpMode extends CommandOpMode {
         robot.drivetrain.set(drive);
         robot.drivetrain.updateModules();
 
-        if (gamepad1.right_stick_button) {
+        boolean dRS = gamepad1.right_stick_button;
+        if (dRS && !pDRS) {
+            xLock = !xLock;
+        }
+        pDRS = dRS;
+
+        if (xLock) {
             robot.drivetrain.leftFrontModule.setTargetRotation(PI / 4);
             robot.drivetrain.rightFrontModule.setTargetRotation(-PI / 4);
             robot.drivetrain.rightRearModule.setTargetRotation(PI / 4);
