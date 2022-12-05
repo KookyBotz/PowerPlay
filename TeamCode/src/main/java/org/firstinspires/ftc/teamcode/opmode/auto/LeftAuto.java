@@ -1,13 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
-import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
@@ -17,16 +13,15 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommandGeneric;
+import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.FileWriteCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.PositionLockCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.auto.SwerveXCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.ClawCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.FourbarCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LatchCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.TurretCommand;
+import org.firstinspires.ftc.teamcode.common.hardware.FileInterface;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
@@ -56,7 +51,6 @@ public class LeftAuto extends LinearOpMode {
         CommandScheduler.getInstance().reset();
         Robot robot = new Robot(hardwareMap, true);
         Drivetrain drivetrain = robot.drivetrain;
-//        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         Localizer localizer = new TwoWheelLocalizer(
                 () -> robot.horizontalEncoder.getPosition(),
@@ -102,9 +96,6 @@ public class LeftAuto extends LinearOpMode {
             telemetry.addLine("RUNNING LEFT 5 CYCLE");
             telemetry.update();
 
-//            robot.lift.lift.set(-0.3);
-//            robot.intake.extension.set(-0.4);
-
             PhotonCore.CONTROL_HUB.clearBulkCache();
             PhotonCore.EXPANSION_HUB.clearBulkCache();
             robot.write();
@@ -117,7 +108,6 @@ public class LeftAuto extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-//                        new FourbarCommand(robot, IntakeSubsystem.FourbarState.INTAKE),
                         new PositionCommand(drivetrain, localizer, new Pose(-4.5, 57.98, 0), 2500),
                         new PositionCommand(drivetrain, localizer, new Pose(-4.5, 57.98, 4.49), 3000),
                         // sin of heading times 23.7
@@ -161,9 +151,6 @@ public class LeftAuto extends LinearOpMode {
                                                 ),
                                                 new PositionCommand(drivetrain, localizer, new Pose(-1, 57.98, 4.49), 1000)
                                         )
-
-
-
                                 ),
                                 new SwerveXCommand(robot.drivetrain)
                         ),
@@ -175,6 +162,9 @@ public class LeftAuto extends LinearOpMode {
                         ),
                         new InstantCommand(() -> robot.intake.setFourbar(IntakeSubsystem.fourbar_retracted)),
                         new WaitCommand(500),
+                        new FileWriteCommand(FileInterface.INTAKE, robot.intake.getPos()),
+                        new FileWriteCommand(FileInterface.LIFT, robot.lift.getPos()),
+                        new FileWriteCommand(FileInterface.IMU, robot.getAngle()),
                         new InstantCommand(this::requestOpModeStop)
                 )
         );
@@ -190,7 +180,6 @@ public class LeftAuto extends LinearOpMode {
             robot.lift.loop();
             robot.drivetrain.updateModules();
             localizer.periodic();
-            SwerveDrivetrain.imuOff = robot.getAngle();
             telemetry.addData("targetPos", robot.intake.targetPosition);
             telemetry.addData("intakePos", robot.intake.getPos());
             telemetry.addData("current pose", localizer.getPos());

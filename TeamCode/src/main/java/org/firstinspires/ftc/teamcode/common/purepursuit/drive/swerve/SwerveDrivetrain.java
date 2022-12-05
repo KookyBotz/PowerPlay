@@ -15,8 +15,6 @@ import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.MathUtils;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 
-import java.util.Locale;
-
 @Config
 public class SwerveDrivetrain implements Drivetrain {
 
@@ -32,6 +30,7 @@ public class SwerveDrivetrain implements Drivetrain {
     double[] ws = new double[4];
     double[] wa = new double[4];
     double max = 0.0;
+
     public static double minPow = 0.07;
     public static double imuOff = 0.0;
 
@@ -60,7 +59,6 @@ public class SwerveDrivetrain implements Drivetrain {
             double r = Math.hypot(x, y);
             x = x / r * maxPower;
             y = y / r * maxPower;
-
         }
 
         double a = x - head * (WHEEL_BASE / R),
