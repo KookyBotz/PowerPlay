@@ -22,9 +22,7 @@ public class LiftCommandGeneric extends SequentialCommandGroup {
                 new WaitCommand(state == LiftSubsystem.LiftState.LOW ? 400 : 0),
                 new ClearFourbarCommand(robot.intake),
                 new WaitUntilCommand(() -> robot.intake.getFourbarPos() <= robot.intake.fourbar_transition),
-//                new WaitCommand(250),
                 new InstantCommand(() -> robot.lift.update(state)),
-//                new InstantCommand(() -> robot.lift.newProfile(targetPos, velocity, acceleration)),
                 new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE)
         );
     }

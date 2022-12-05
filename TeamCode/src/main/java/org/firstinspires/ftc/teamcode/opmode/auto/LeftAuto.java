@@ -25,7 +25,6 @@ import org.firstinspires.ftc.teamcode.common.hardware.FileInterface;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.Drivetrain;
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
 import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;

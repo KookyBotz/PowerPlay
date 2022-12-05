@@ -25,8 +25,6 @@ public class Robot {
 
     private boolean isAuto = false;
 
-//    private int currentModuleIndex = 1;
-
     public Robot(HardwareMap hardwareMap, boolean isAuto) {
         this.isAuto = isAuto;
         drivetrain = new SwerveDrivetrain(hardwareMap);
