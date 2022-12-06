@@ -5,11 +5,11 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveDrivetrain;
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveModule;
-import org.firstinspires.ftc.teamcode.common.purepursuit.localizer.Localizer;
-import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.common.subsystem.LiftSubsystem;
+import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
+import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveModule;
+import org.firstinspires.ftc.teamcode.common.drive.localizer.Localizer;
+import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 
 public class Robot {
 
@@ -67,9 +67,6 @@ public class Robot {
     public void write() {
         intake.write();
         lift.write();
-//        drivetrain.write(currentModuleIndex - 1);
-//        currentModuleIndex %= 4;
-//        currentModuleIndex++;
         if (this.isAuto) {
             drivetrain.writeAuto();
         } else {

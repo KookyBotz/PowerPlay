@@ -7,27 +7,17 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.LiftCommandGeneric;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.ClawCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.IntakeRetractCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.CycleCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.FourbarCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.LiftRetractCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.command.subsystemcommands.subsystem.TurretCommand;
-import org.firstinspires.ftc.teamcode.common.hardware.FileInterface;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
-import org.firstinspires.ftc.teamcode.common.purepursuit.drive.swerve.SwerveDrivetrain;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Point;
-import org.firstinspires.ftc.teamcode.common.purepursuit.geometry.Pose;
-import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.common.subsystem.LiftSubsystem;
+import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
+import org.firstinspires.ftc.teamcode.common.drive.geometry.Point;
+import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
+import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 
 @Config
 @TeleOp(name = "OpMode👌👌😍🎶🎶😎")
@@ -53,14 +43,10 @@ public class OpMode extends CommandOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         robot.intake.extension.set(-0.4);
         robot.lift.lift.set(-0.3);
-         FileInterface.read(FileInterface.INTAKE);
-         FileInterface.read(FileInterface.LIFT);
-         FileInterface.read(FileInterface.IMU);
         robot.intake.setFourbar(robot.intake.fourbar_transition);
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
-        IntakeSubsystem.fourbar_extended = 0.2;
     }
 
     @Override
@@ -75,7 +61,7 @@ public class OpMode extends CommandOpMode {
         // Drivetrain
         Pose drive = new Pose(
                 new Point((Math.pow(Math.abs(gamepad1.left_stick_y) > 0.02 ? gamepad1.left_stick_y : 0, 3) * speedMultiplier),
-                        (Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3)) * speedMultiplier).rotate(robot.getAngle()- SwerveDrivetrain.imuOff),
+                        (Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3)) * speedMultiplier).rotate(robot.getAngle() - SwerveDrivetrain.imuOff),
                 (Math.pow(-gamepad1.right_stick_x, 3)) * speedMultiplier
         );
 
@@ -94,15 +80,15 @@ public class OpMode extends CommandOpMode {
         }
 
         boolean dDL = gamepad2.dpad_left;
-        if (dDL && !pDDL) schedule(new CycleCommand(robot));
+        if (dDL && !pDDL) schedule(); // TODO: Add back teleop cycle command
         pDDL = dDL;
 
         boolean dLT = (gamepad2.left_trigger > 0.3);
         boolean dRT = (gamepad2.right_trigger > 0.3);
-        if (dLT && ! pDLT) {
-            schedule(new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN));
+        if (dLT && !pDLT) {
+            schedule(); // TODO: Open Claw
         } else if (dRT && !pDRT) {
-            schedule(new ClawCommand(robot, IntakeSubsystem.ClawState.CLOSED));
+            schedule(); // TODO: Close Claw
         }
 
         double gamepad2_left_stick_y = gamepad2.left_stick_y;
@@ -123,26 +109,22 @@ public class OpMode extends CommandOpMode {
         boolean dLB = gamepad2.left_bumper;
         boolean dRB = gamepad2.right_bumper;
         if (dLB && !pDLB) {
-            schedule(new TurretCommand(robot, IntakeSubsystem.TurretState.INTAKE),
-                     new FourbarCommand(robot, IntakeSubsystem.FourbarState.INTAKE),
-                     new ClawCommand(robot, IntakeSubsystem.ClawState.OPEN));
+            schedule(); // TODO: Go to grab position
         } else if (dRB && !pDRB) {
-            schedule(new IntakeRetractCommand(robot));
+            schedule(); // TODO: Go to transfer position
         }
         pDRB = dRB;
         pDLB = dLB;
 
-        // TODO: Add latch stuff here for LiftCommand
+        //TODO: these need to all be ra detectors lmfao
         if (gamepad2.a) {
-            schedule(new LiftCommandGeneric(robot, LiftSubsystem.LiftState.LOW));
+            schedule(); // TODO: LOW
         } else if (gamepad2.x) {
-            schedule(new LiftCommandGeneric(robot, LiftSubsystem.LiftState.MIDDLE));
+            schedule(); // TODO: Medium
         } else if (gamepad2.y) {
-            schedule(new LiftCommandGeneric(robot, LiftSubsystem.LiftState.HIGH));
+            schedule(); // TODO: High
         } else if (gamepad2.b) {
-            schedule(new LiftRetractCommand(robot));
-//                    new InstantCommand(() -> robot.lift.newProfile(-10, 3500, 7000)),
-//                    new InstantCommand(() -> robot.lift.update(LiftSubsystem.LiftState.RETRACTED)));
+            schedule(); // TODO: Retract
         }
 
         robot.drivetrain.set(drive);
@@ -175,16 +157,13 @@ public class OpMode extends CommandOpMode {
         telemetry.addData("intakePos:", robot.intake.getPos());
         telemetry.addData("intakePow:", robot.intake.power);
         telemetry.addData("intakeTarget:", robot.intake.targetPosition);
-//        telemetry.addData("velocity:", robot.intake.curState.getV());
-//        telemetry.addData("state:", robot.intake.curState.getV() == 0);
-//        telemetry.addData("speed multiplier:", speedMultiplier);
+
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
         loopTime = loop;
         telemetry.update();
 
-//        PhotonCore.EXPANSION_HUB.clearBulkCache();
         PhotonCore.CONTROL_HUB.clearBulkCache();
     }
 
