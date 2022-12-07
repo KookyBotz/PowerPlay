@@ -9,22 +9,21 @@ import org.firstinspires.ftc.teamcode.common.commandbase.commands.IntakePosition
 import org.firstinspires.ftc.teamcode.common.commandbase.commands.LiftPositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
+import org.firstinspires.ftc.teamcode.common.drive.geometry.KinematicState;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 
-import java.util.function.Consumer;
-
-public class
-TeleopCycleCommand extends SequentialCommandGroup {
-    public TeleopCycleCommand(Robot robot, Consumer<Boolean> busy) {
+// TODO: Test this, I just copied TeleopCycleCommand lmao
+public class AutoCycleCommand extends SequentialCommandGroup {
+    public AutoCycleCommand(Robot robot, KinematicState state) {
         super(
                 // in parallel
                 new ParallelCommandGroup(
                         // extend intake slides, grab, and transfer
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
-                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.INTAKE)),
+                                new InstantCommand(() -> robot.intake.setFourbar(state.fourbarStartPos)),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE)),
-                                new IntakePositionCommand(robot.intake, 270, 750, 1500, 10, 2000, IntakeSubsystem.STATE.EXTEND),
+                                new IntakePositionCommand(robot.intake, state.intakeStartingPos, 750, 1500, 10, 3000, IntakeSubsystem.STATE.EXTEND),
 
                                 // wait for stuff to stabilize
                                 new WaitCommand(50),
@@ -32,6 +31,11 @@ TeleopCycleCommand extends SequentialCommandGroup {
                                 // grab
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)),
                                 new WaitCommand(200),
+
+                                //move up
+                                new InstantCommand(() -> robot.intake.setFourbar(state.fourbarEndPos)),
+                                new WaitCommand(100),
+                                new IntakePositionCommand(robot.intake, state.intakeEndPos, 750, 1500, 10, 2000, IntakeSubsystem.STATE.EXTEND),
 
                                 // transfer position
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
@@ -51,9 +55,7 @@ TeleopCycleCommand extends SequentialCommandGroup {
                                 new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)),
                                 new LiftPositionCommand(robot.lift, 0, 3000, 7500, 10, 2000, LiftSubsystem.STATE.RETRACT)
                         )
-                ),
-
-                new InstantCommand(() -> busy.accept(false))
+                )
         );
     }
 }

@@ -34,6 +34,8 @@ public class IntakePositionCommand extends CommandBase {
             timer = new ElapsedTime();
             intake.newProfile(position, max_v, max_a);
         }
+
+        // didnt reach extension in the allotted time, so set the subsystem to the error state specified
         if (timer.milliseconds() > timeout) {
             intake.state = errorState;
         }

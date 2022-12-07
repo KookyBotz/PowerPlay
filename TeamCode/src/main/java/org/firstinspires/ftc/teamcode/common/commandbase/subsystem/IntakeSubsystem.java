@@ -17,6 +17,8 @@ import org.firstinspires.ftc.teamcode.common.drive.geometry.KinematicState;
 @Config
 public class IntakeSubsystem extends SubsystemBase {
 
+    // stores the state of the subsystem
+    // anything other than GOOD means it goofed
     public STATE state = STATE.GOOD;
 
     public final MotorEx extension;

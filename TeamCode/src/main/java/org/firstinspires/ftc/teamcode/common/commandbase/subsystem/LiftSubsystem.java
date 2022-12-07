@@ -15,6 +15,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
 public class LiftSubsystem extends SubsystemBase {
+
+    // stores the state of the subsystem
+    // anything other than GOOD means it goofed
     public LiftSubsystem.STATE state = LiftSubsystem.STATE.GOOD;
 
     public final MotorEx lift;
