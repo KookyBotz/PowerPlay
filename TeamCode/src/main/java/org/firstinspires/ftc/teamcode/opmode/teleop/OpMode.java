@@ -7,17 +7,20 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopCycleCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.commands.LiftPositionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 
 @Config
 @TeleOp(name = "OpMode👌👌😍🎶🎶😎")
@@ -27,14 +30,16 @@ public class OpMode extends CommandOpMode {
     private ElapsedTime timer;
     private double loopTime = 0;
 
-    boolean xLock = false;
-    boolean pDRS = false;
+    private boolean xLock = false;
+    private boolean pDRS = false;
 
-    boolean pDLB = false;
-    boolean pDRB = false;
-    boolean pDDL = false;
-    boolean pDRT = false;
-    boolean pDLT = false;
+    private boolean pDLB = false;
+    private boolean pDRB = false;
+    private boolean pDDL = false;
+    private boolean pDRT = false;
+    private boolean pDLT = false;
+
+    private boolean busy = false;
 
     @Override
     public void initialize() {
@@ -79,16 +84,17 @@ public class OpMode extends CommandOpMode {
             robot.lift.setSlideFactor(-1);
         }
 
-        boolean dDL = gamepad2.dpad_left;
-        if (dDL && !pDDL) schedule(); // TODO: Add back teleop cycle command
-        pDDL = dDL;
+        if (gamepad2.dpad_left && !busy) {
+            busy = true;
+            CommandScheduler.getInstance().schedule(new TeleopCycleCommand(robot, (b) -> busy = b));
+        }
 
         boolean dLT = (gamepad2.left_trigger > 0.3);
         boolean dRT = (gamepad2.right_trigger > 0.3);
         if (dLT && !pDLT) {
-            schedule(); // TODO: Open Claw
+            schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)));
         } else if (dRT && !pDRT) {
-            schedule(); // TODO: Close Claw
+            schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)));
         }
 
         double gamepad2_left_stick_y = gamepad2.left_stick_y;
@@ -124,7 +130,7 @@ public class OpMode extends CommandOpMode {
         } else if (gamepad2.y) {
             schedule(); // TODO: High
         } else if (gamepad2.b) {
-            schedule(); // TODO: Retract
+            schedule(new LiftPositionCommand(robot.lift, 0, 3000, 7500, 10, 2000, LiftSubsystem.STATE.RETRACT));
         }
 
         robot.drivetrain.set(drive);
