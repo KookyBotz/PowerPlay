@@ -52,8 +52,6 @@ public class OpMode extends CommandOpMode {
         CommandScheduler.getInstance().reset();
         robot = new Robot(hardwareMap, false);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        robot.intake.extension.set(-0.4);
-        robot.lift.lift.set(-0.3);
         robot.intake.setFourbar(robot.intake.fourbar_transition);
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
@@ -104,13 +102,13 @@ public class OpMode extends CommandOpMode {
         }
 
         double gamepad2_left_stick_y = gamepad2.left_stick_y;
-        if (Math.abs(gamepad2_left_stick_y) > 0.15) {
-            robot.intake.setSlideFactor(Math.pow(gamepad2_left_stick_y, 3));
+        if (Math.abs(gamepad2_left_stick_y) > 0.1) {
+            robot.intake.setFourbarFactor(Math.pow(gamepad2_left_stick_y, 3));
         }
 
         double gamepad2_left_stick_x = gamepad2.left_stick_x;
-        if (Math.abs(gamepad2_left_stick_x) > 0.015) {
-            robot.intake.setFourbarFactor(Math.pow(gamepad2_left_stick_x, 3));
+        if (Math.abs(gamepad2_left_stick_x) > 0.01) {
+            robot.intake.setSlideFactor(Math.pow(-gamepad2_left_stick_x, 3));
         }
 
         double gamepad2_right_stick = gamepad2.right_stick_x;
