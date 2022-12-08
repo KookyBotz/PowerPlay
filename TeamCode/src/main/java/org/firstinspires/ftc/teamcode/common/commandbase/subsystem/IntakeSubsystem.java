@@ -48,7 +48,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public final double fourbar_retracted = 0.89;
     public final double fourbar_transition = fourbar_retracted - 0.2;
 
-    public final KinematicState[] CYCLE_GRAB_POSITIONS = {
+    private final KinematicState[] CYCLE_GRAB_POSITIONS = {
             new KinematicState(515, 0.405, 0.89),
             new KinematicState(505, 0.375, 0.62),
             new KinematicState(495, 0.325, 0.55),

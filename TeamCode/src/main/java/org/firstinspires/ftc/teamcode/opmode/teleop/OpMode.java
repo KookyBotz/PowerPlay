@@ -14,7 +14,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopCycleCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.commands.LiftPositionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopIntakeCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopLiftCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopTransferCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
@@ -35,9 +37,13 @@ public class OpMode extends CommandOpMode {
 
     private boolean pDLB = false;
     private boolean pDRB = false;
-    private boolean pDDL = false;
     private boolean pDRT = false;
     private boolean pDLT = false;
+
+    private boolean pDBA = false;
+    private boolean pDBX = false;
+    private boolean pDBY = false;
+    private boolean pDBB = false;
 
     private boolean busy = false;
 
@@ -99,12 +105,12 @@ public class OpMode extends CommandOpMode {
 
         double gamepad2_left_stick_y = gamepad2.left_stick_y;
         if (Math.abs(gamepad2_left_stick_y) > 0.15) {
-            robot.intake.setFourbarFactor(Math.pow(gamepad2_left_stick_y, 3));
+            robot.intake.setSlideFactor(Math.pow(gamepad2_left_stick_y, 3));
         }
 
         double gamepad2_left_stick_x = gamepad2.left_stick_x;
-        if (Math.abs(gamepad2_left_stick_x) > 0.01) {
-            robot.intake.setSlideFactor(Math.pow(gamepad2_left_stick_x, 3));
+        if (Math.abs(gamepad2_left_stick_x) > 0.015) {
+            robot.intake.setFourbarFactor(Math.pow(gamepad2_left_stick_x, 3));
         }
 
         double gamepad2_right_stick = gamepad2.right_stick_x;
@@ -115,22 +121,25 @@ public class OpMode extends CommandOpMode {
         boolean dLB = gamepad2.left_bumper;
         boolean dRB = gamepad2.right_bumper;
         if (dLB && !pDLB) {
-            schedule(); // TODO: Go to grab position
+            schedule(new TeleopIntakeCommand(robot));
         } else if (dRB && !pDRB) {
-            schedule(); // TODO: Go to transfer position
+            schedule(new TeleopTransferCommand(robot));
         }
         pDRB = dRB;
         pDLB = dLB;
 
-        //TODO: these need to all be ra detectors lmfao
-        if (gamepad2.a) {
-            schedule(); // TODO: LOW
-        } else if (gamepad2.x) {
-            schedule(); // TODO: Medium
-        } else if (gamepad2.y) {
-            schedule(); // TODO: High
-        } else if (gamepad2.b) {
-            schedule(new LiftPositionCommand(robot.lift, 0, 3000, 7500, 10, 2000, LiftSubsystem.STATE.RETRACT));
+        boolean dBA = gamepad2.a;
+        boolean dBX = gamepad2.x;
+        boolean dBY = gamepad2.y;
+        boolean dBB = gamepad2.b;
+        if (dBA && !pDBA) {
+            schedule(new TeleopLiftCommand(robot, 125, LiftSubsystem.STATE.EXTEND));
+        } else if (dBX && !pDBX) {
+            schedule(new TeleopLiftCommand(robot, 375, LiftSubsystem.STATE.EXTEND));
+        } else if (dBY && !pDBY) {
+            schedule(new TeleopLiftCommand(robot, 610, LiftSubsystem.STATE.EXTEND));
+        } else if (dBB && !pDBB) {
+            schedule(new TeleopLiftCommand(robot, 0, LiftSubsystem.STATE.RETRACT));
         }
 
         robot.drivetrain.set(drive);
