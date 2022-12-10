@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.common.commandbase.auto.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.SwerveXCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.commands.LiftPositionCommand;
-import org.firstinspires.ftc.teamcode.common.drive.geometry.KinematicState;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
@@ -30,6 +29,8 @@ import org.opencv.core.Point;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+
+import static org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem.CYCLE_GRAB_POSITIONS;
 
 @Autonomous(name = "LeftAuto")
 @Config
@@ -107,11 +108,11 @@ public class LeftAuto extends LinearOpMode {
                     // start cycling
                     new ParallelCommandGroup(
                             new SequentialCommandGroup(
-                                    new AutoCycleCommand(robot, robot.intake.CYCLE_GRAB_POSITIONS[0]),
-                                    new AutoCycleCommand(robot, robot.intake.CYCLE_GRAB_POSITIONS[1]),
-                                    new AutoCycleCommand(robot, robot.intake.CYCLE_GRAB_POSITIONS[2]),
-                                    new AutoCycleCommand(robot, robot.intake.CYCLE_GRAB_POSITIONS[3]),
-                                    new AutoCycleCommand(robot, robot.intake.CYCLE_GRAB_POSITIONS[4]),
+                                    new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0]),
+                                    new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1]),
+                                    new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2]),
+                                    new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3]),
+                                    new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4]),
 
                                     new ParallelCommandGroup(
                                             new SequentialCommandGroup(
@@ -127,7 +128,9 @@ public class LeftAuto extends LinearOpMode {
                                                     new WaitCommand(750),
 
                                                     new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)),
-                                                    new LiftPositionCommand(robot.lift, 0, 3000, 7500, 10, 2000, LiftSubsystem.STATE.RETRACT)
+                                                    new LiftPositionCommand(robot.lift, 0, 3000, 7500, 10, 2000, LiftSubsystem.STATE.RETRACT),
+
+                                                    new WaitCommand(250)
                                             ),
                                             new PositionCommand(drivetrain, localizer, new Pose(-1, 57.98, 4.49), 1000)
                                     )
