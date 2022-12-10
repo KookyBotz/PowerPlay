@@ -45,7 +45,10 @@ public class OpMode extends CommandOpMode {
     private boolean pDBY = false;
     private boolean pDBB = false;
 
+    private boolean pCone = false;
+
     private boolean busy = false;
+    private boolean busyCone = false;
 
     @Override
     public void initialize() {
@@ -78,7 +81,6 @@ public class OpMode extends CommandOpMode {
             SwerveDrivetrain.imuOff = robot.getAngle();
             robot.intake.extension.resetEncoder();
             robot.lift.lift.resetEncoder();
-
         }
 
         // Gamepad2
@@ -95,11 +97,19 @@ public class OpMode extends CommandOpMode {
 
         boolean dLT = (gamepad2.left_trigger > 0.3);
         boolean dRT = (gamepad2.right_trigger > 0.3);
+        boolean hasCone = robot.intake.hasCone();
         if (dLT && !pDLT) {
             schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)));
         } else if (dRT && !pDRT) {
             schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)));
+        } else if (hasCone && !pCone && !busyCone) {
+            busyCone = true;
+            schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)));
         }
+        telemetry.addData("busyCone", busyCone);
+        telemetry.addData("pCone", pCone);
+        telemetry.addData("hasCone", hasCone);
+        pCone = hasCone;
 
         double gamepad2_left_stick_y = gamepad2.left_stick_y;
         if (Math.abs(gamepad2_left_stick_y) > 0.1) {
@@ -120,6 +130,7 @@ public class OpMode extends CommandOpMode {
         boolean dRB = gamepad2.right_bumper;
         if (dLB && !pDLB) {
             schedule(new TeleopIntakeCommand(robot));
+            busyCone = false;
         } else if (dRB && !pDRB) {
             schedule(new TeleopTransferCommand(robot));
         }
@@ -170,6 +181,7 @@ public class OpMode extends CommandOpMode {
         telemetry.addData("intakePos:", robot.intake.getPos());
         telemetry.addData("intakePow:", robot.intake.power);
         telemetry.addData("intakeTarget:", robot.intake.targetPosition);
+        telemetry.addData("distance:", robot.intake.getDistance());
 
 
         double loop = System.nanoTime();

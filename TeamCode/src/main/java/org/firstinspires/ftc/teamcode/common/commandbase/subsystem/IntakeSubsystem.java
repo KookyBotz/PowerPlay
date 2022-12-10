@@ -40,6 +40,8 @@ public class IntakeSubsystem extends SubsystemBase {
     private double voltage;
     private double intakePosition;
 
+    private boolean coneChecking = true;
+
     public static double P = 0.06;
     public static double I = 0.013;
     public static double D = 0.0;
@@ -51,6 +53,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public final double fourbar_extended = 0.19;
     public final double fourbar_retracted = 0.89;
     public final double fourbar_transition = fourbar_retracted - 0.2;
+
+    public static double distanceThreshold = 5;
 
     private final KinematicState[] CYCLE_GRAB_POSITIONS = {
             new KinematicState(515, 0.405, 0.89),
@@ -183,7 +187,13 @@ public class IntakeSubsystem extends SubsystemBase {
         return (int) intakePosition;
     }
 
-    public boolean hasCone() {return distanceSensor.getDistance(DistanceUnit.INCH) < 3;}
+    public boolean hasCone() {
+        return distanceSensor.getDistance(DistanceUnit.CM) < distanceThreshold;
+    }
+
+    public double getDistance() {
+        return distanceSensor.getDistance(DistanceUnit.CM);
+    }
 
     public void setFourbarFactor(double factor) {
         double fourbarAddition = -0.007 * factor;
