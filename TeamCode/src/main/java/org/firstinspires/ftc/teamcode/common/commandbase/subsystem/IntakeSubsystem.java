@@ -7,11 +7,14 @@ import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.outoftheboxrobotics.photoncore.Neutrino.Rev2MSensor.Rev2mDistanceSensorEx;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.KinematicState;
 
 @Config
@@ -25,6 +28,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public final MotorEx extensionEncoder;
     private final Servo barLeft, barRight;
     private final Servo claw, turret;
+    private final Rev2mDistanceSensorEx distanceSensor;
 
     public MotionProfile profile;
     public MotionState curState;
@@ -94,6 +98,10 @@ public class IntakeSubsystem extends SubsystemBase {
         this.barRight = hardwareMap.get(Servo.class, "fourbarRight");
         this.claw = hardwareMap.get(Servo.class, "claw");
         this.turret = hardwareMap.get(Servo.class, "turret");
+
+        Rev2mDistanceSensor ds = hardwareMap.get(Rev2mDistanceSensor.class, "distanceSensor");
+        this.distanceSensor = new Rev2mDistanceSensorEx(ds.getDeviceClient());
+
 
         this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
 
@@ -174,6 +182,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public int getPos() {
         return (int) intakePosition;
     }
+
+    public boolean hasCone() {return distanceSensor.getDistance(DistanceUnit.INCH) < 3;}
 
     public void setFourbarFactor(double factor) {
         double fourbarAddition = -0.007 * factor;
