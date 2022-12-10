@@ -2,12 +2,22 @@ package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.AutoCycleCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.SwerveXCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.commands.LiftPositionCommand;
+import org.firstinspires.ftc.teamcode.common.drive.geometry.KinematicState;
+import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 import org.firstinspires.ftc.teamcode.common.drive.drive.Drivetrain;
@@ -89,7 +99,50 @@ public class LeftAuto extends LinearOpMode {
         camera.stopStreaming();
 
         CommandScheduler.getInstance().schedule(
+            new SequentialCommandGroup(
+                    // get to cycle position
+                    new PositionCommand(drivetrain, localizer, new Pose(-4.5, 57.98, 0), 2500),
+                    new PositionCommand(drivetrain, localizer, new Pose(-4.5, 57.98, 4.49), 3000),
 
+                    // start cycling
+                    new ParallelCommandGroup(
+                            new SequentialCommandGroup(
+                                    new AutoCycleCommand(robot, robot.intake.CYCLE_GRAB_POSITIONS[0]),
+                                    new AutoCycleCommand(robot, robot.intake.CYCLE_GRAB_POSITIONS[1]),
+                                    new AutoCycleCommand(robot, robot.intake.CYCLE_GRAB_POSITIONS[2]),
+                                    new AutoCycleCommand(robot, robot.intake.CYCLE_GRAB_POSITIONS[3]),
+                                    new AutoCycleCommand(robot, robot.intake.CYCLE_GRAB_POSITIONS[4]),
+
+                                    new ParallelCommandGroup(
+                                            new SequentialCommandGroup(
+                                                    new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
+                                                    new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_transition)),
+                                                    new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE)),
+
+                                                    new WaitCommand(250),
+                                                    new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
+
+                                                    new LiftPositionCommand(robot.lift, 610, 3000, 7500, 30, 3000, LiftSubsystem.STATE.EXTEND),
+
+                                                    new WaitCommand(750),
+
+                                                    new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)),
+                                                    new LiftPositionCommand(robot.lift, 0, 3000, 7500, 10, 2000, LiftSubsystem.STATE.RETRACT)
+                                            ),
+                                            new PositionCommand(drivetrain, localizer, new Pose(-1, 57.98, 4.49), 1000)
+                                    )
+                            ),
+                            new SwerveXCommand(robot.drivetrain)
+                    ),
+                    new PositionCommand(drivetrain, localizer,
+                            position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 51, 1.5 * Math.PI) :
+                                    position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 48, 1.5 * Math.PI) :
+                                            new Pose(-31, 48, 1.5 * Math.PI), 2000
+                    ),
+                    new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_retracted)),
+                    new WaitCommand(500),
+                    new InstantCommand(this::requestOpModeStop)
+            )
         );
 
         robot.reset();

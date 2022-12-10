@@ -17,10 +17,10 @@ public class LiftPositionCommand extends CommandBase {
 
     private ElapsedTime timer;
 
-    public LiftPositionCommand(LiftSubsystem intake, double position, double v, double a, double allowed_error, double timeout, LiftSubsystem.STATE error) {
+    public LiftPositionCommand(LiftSubsystem lift, double position, double v, double a, double allowed_error, double timeout, LiftSubsystem.STATE error) {
         this.position = position;
         this.timeout = timeout;
-        this.lift = intake;
+        this.lift = lift;
         this.max_v = v;
         this.max_a = a;
         this.allowed_error = allowed_error;
