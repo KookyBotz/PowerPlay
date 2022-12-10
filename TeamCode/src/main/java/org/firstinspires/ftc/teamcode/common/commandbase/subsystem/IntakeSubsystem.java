@@ -40,8 +40,6 @@ public class IntakeSubsystem extends SubsystemBase {
     private double voltage;
     private double intakePosition;
 
-    private boolean coneChecking = true;
-
     public static double P = 0.06;
     public static double I = 0.013;
     public static double D = 0.0;
@@ -189,10 +187,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public boolean hasCone() {
         return distanceSensor.getDistance(DistanceUnit.CM) < distanceThreshold;
-    }
-
-    public double getDistance() {
-        return distanceSensor.getDistance(DistanceUnit.CM);
     }
 
     public void setFourbarFactor(double factor) {

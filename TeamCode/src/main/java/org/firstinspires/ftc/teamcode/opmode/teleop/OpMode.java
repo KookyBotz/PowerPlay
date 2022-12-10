@@ -8,6 +8,8 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -37,7 +39,6 @@ public class OpMode extends CommandOpMode {
 
     private boolean pDLB = false;
     private boolean pDRB = false;
-    private boolean pDRT = false;
     private boolean pDLT = false;
 
     private boolean pDBA = false;
@@ -98,17 +99,18 @@ public class OpMode extends CommandOpMode {
         boolean dLT = (gamepad2.left_trigger > 0.3);
         boolean dRT = (gamepad2.right_trigger > 0.3);
         boolean hasCone = robot.intake.hasCone();
+        boolean pDRT = false;
         if (dLT && !pDLT) {
             schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)));
         } else if (dRT && !pDRT) {
             schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)));
         } else if (hasCone && !pCone && !busyCone) {
             busyCone = true;
-            schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)));
+            schedule(new SequentialCommandGroup(
+                    new WaitCommand(200),
+                    new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)))
+            );
         }
-        telemetry.addData("busyCone", busyCone);
-        telemetry.addData("pCone", pCone);
-        telemetry.addData("hasCone", hasCone);
         pCone = hasCone;
 
         double gamepad2_left_stick_y = gamepad2.left_stick_y;
@@ -181,8 +183,6 @@ public class OpMode extends CommandOpMode {
         telemetry.addData("intakePos:", robot.intake.getPos());
         telemetry.addData("intakePow:", robot.intake.power);
         telemetry.addData("intakeTarget:", robot.intake.targetPosition);
-        telemetry.addData("distance:", robot.intake.getDistance());
-
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
