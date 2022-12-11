@@ -50,16 +50,16 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public final double fourbar_extended = 0.2;
     public final double fourbar_retracted = 0.93;
-    public final double fourbar_transition = fourbar_retracted - 0.2;
+    public final double fourbar_transition = fourbar_retracted - 0.15;
 
     public static double distanceThreshold = 5;
 
     public static final KinematicState[] CYCLE_GRAB_POSITIONS = {
-            new KinematicState(515, 0.425, 0.73),
-            new KinematicState(505, 0.38, 0.62),
-            new KinematicState(495, 0.335, 0.55),
-            new KinematicState(495, 0.27, 0.48),
-            new KinematicState(495, 0.23, 0.44)
+            new KinematicState(515, 0.425, 0.83),
+            new KinematicState(505, 0.375, 0.62),
+            new KinematicState(495, 0.33, 0.55),
+            new KinematicState(495, 0.265, 0.48),
+            new KinematicState(495, 0.225, 0.44)
     };
 
     private final double turret_deposit = 0;
@@ -70,8 +70,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public enum STATE {
         GOOD,
-        EXTEND,
-        RETRACT
+        FAILED_EXTEND,
+        FAILED_RETRACT
     }
 
     public enum TurretState {

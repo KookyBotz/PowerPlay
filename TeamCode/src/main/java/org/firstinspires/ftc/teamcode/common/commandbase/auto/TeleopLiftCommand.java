@@ -13,8 +13,8 @@ public class TeleopLiftCommand extends ParallelCommandGroup {
         super(
                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
-                new InstantCommand(() -> robot.lift.update((state.equals(LiftSubsystem.STATE.EXTEND) ? LiftSubsystem.LatchState.LATCHED : LiftSubsystem.LatchState.UNLATCHED))),
-                new LiftPositionCommand(robot.lift, position, 3000, 7500, state.equals(LiftSubsystem.STATE.EXTEND) ? 30 : 10, state.equals(LiftSubsystem.STATE.EXTEND) ? 3000 : 2000, state)
+                new InstantCommand(() -> robot.lift.update((state.equals(LiftSubsystem.STATE.FAILED_EXTEND) ? LiftSubsystem.LatchState.LATCHED : LiftSubsystem.LatchState.UNLATCHED))),
+                new LiftPositionCommand(robot.lift, position, 3000, 7500, state.equals(LiftSubsystem.STATE.FAILED_EXTEND) ? 30 : 10, state.equals(LiftSubsystem.STATE.FAILED_EXTEND) ? 3000 : 2000, state)
         );
     }
 }

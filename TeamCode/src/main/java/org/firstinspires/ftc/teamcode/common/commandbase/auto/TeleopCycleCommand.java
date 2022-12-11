@@ -24,7 +24,7 @@ TeleopCycleCommand extends SequentialCommandGroup {
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.INTAKE)),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE)),
-                                new IntakePositionCommand(robot.intake, 270, 3000, 3000, 10, 2000, IntakeSubsystem.STATE.EXTEND),
+                                new IntakePositionCommand(robot.intake, 270, 3000, 3000, 10, 2000, IntakeSubsystem.STATE.FAILED_EXTEND),
 
                                 // wait for stuff to stabilize
                                 new WaitCommand(250),
@@ -36,7 +36,7 @@ TeleopCycleCommand extends SequentialCommandGroup {
                                 // transfer position
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.DEPOSIT)),
-                                new IntakePositionCommand(robot.intake, 15, 3000, 3000, 10, 3000, IntakeSubsystem.STATE.RETRACT),
+                                new IntakePositionCommand(robot.intake, 15, 3000, 3000, 10, 3000, IntakeSubsystem.STATE.FAILED_RETRACT),
 
                                 // transfer
                                 new WaitCommand(250),
@@ -48,9 +48,9 @@ TeleopCycleCommand extends SequentialCommandGroup {
                         // and deposit previous cone
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
-                                new LiftPositionCommand(robot.lift, 610, 3000, 7500, 30, 3000, LiftSubsystem.STATE.EXTEND),
+                                new LiftPositionCommand(robot.lift, 610, 3000, 7500, 30, 3000, LiftSubsystem.STATE.FAILED_EXTEND),
                                 new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)),
-                                new LiftPositionCommand(robot.lift, 0, 3000, 7500, 10, 2000, LiftSubsystem.STATE.RETRACT)
+                                new LiftPositionCommand(robot.lift, 0, 3000, 7500, 10, 2000, LiftSubsystem.STATE.FAILED_RETRACT)
                         )
                 ),
 

@@ -43,8 +43,8 @@ public class LiftSubsystem extends SubsystemBase {
 
     public enum STATE {
         GOOD,
-        EXTEND,
-        RETRACT
+        FAILED_EXTEND,
+        FAILED_RETRACT
     }
 
     public enum LatchState {

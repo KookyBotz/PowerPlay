@@ -100,58 +100,70 @@ public class LeftAuto extends LinearOpMode {
         camera.stopStreaming();
 
         CommandScheduler.getInstance().schedule(
-            new SequentialCommandGroup(
-                    // get to cycle position
-                    new PositionCommand(drivetrain, localizer, new Pose(-5, 57.98, 0), 2500),
-                    new PositionCommand(drivetrain, localizer, new Pose(-5, 57.98, 4.49), 3000),
+                new SequentialCommandGroup(
+                        // get to cycle position
+                        new PositionCommand(drivetrain, localizer, new Pose(-5.5, 57.98, 0), 2500),
+                        new PositionCommand(drivetrain, localizer, new Pose(-5.5, 57.98, 4.49), 3000),
 
-                    // start cycling
-                    new ParallelCommandGroup(
-                            new SequentialCommandGroup(
-                                    new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0]),
-                                    new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1]),
-                                    new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2]),
-                                    new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3]),
-                                    new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4]),
+                        // start cycling
+                        new ParallelCommandGroup(
+                                new SequentialCommandGroup(
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0]),
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1]),
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2]),
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3]),
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4]),
 
-                                    new ParallelCommandGroup(
-                                            new SequentialCommandGroup(
-                                                    new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
-                                                    new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_transition)),
-                                                    new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE)),
+                                        new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
+                                        new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_transition)),
+                                        new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE)),
 
-                                                    new WaitCommand(250),
-                                                    new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
+                                        new WaitCommand(250),
 
-                                                    new LiftPositionCommand(robot.lift, 610, 3000, 7500, 30, 3000, LiftSubsystem.STATE.EXTEND),
+                                        new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
+                                        new LiftPositionCommand(robot.lift, 610, 3000, 7500, 30, 3000, LiftSubsystem.STATE.FAILED_EXTEND),
+                                        new WaitCommand(500),
+                                        new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)),
+                                        new LiftPositionCommand(robot.lift, 0, 3000, 7500, 10, 2000, LiftSubsystem.STATE.FAILED_RETRACT)
 
-                                                    new WaitCommand(750),
+                                ),
+                                new SequentialCommandGroup(
+                                        new SwerveXCommand(robot.drivetrain),
+                                        new PositionCommand(drivetrain, localizer, new Pose(-2.5, 55, 4), 1500)
+                                )
 
-                                                    new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)),
-                                                    new LiftPositionCommand(robot.lift, 0, 3000, 7500, 10, 2000, LiftSubsystem.STATE.RETRACT),
-
-                                                    new WaitCommand(250)
-                                            ),
-                                            new PositionCommand(drivetrain, localizer, new Pose(-1, 57.98, 4.49), 1000)
-                                    )
-                            ),
-                            new SwerveXCommand(robot.drivetrain)
-                    ),
-                    new PositionCommand(drivetrain, localizer,
-                            position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 51, 1.5 * Math.PI) :
-                                    position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 48, 1.5 * Math.PI) :
-                                            new Pose(-31, 48, 1.5 * Math.PI), 2000
-                    ),
-                    new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_retracted)),
-                    new WaitCommand(500),
-                    new InstantCommand(this::requestOpModeStop)
-            )
+                        ),
+                        new PositionCommand(drivetrain, localizer,
+                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 51, 1.5 * Math.PI) :
+                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 48, 1.5 * Math.PI) :
+                                                new Pose(-31, 48, 1.5 * Math.PI), 2000
+                        ),
+                        new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_retracted)),
+                        new WaitCommand(500),
+                        new InstantCommand(this::requestOpModeStop)
+                )
         );
 
         robot.reset();
 
         while (opModeIsActive()) {
             robot.read();
+
+            if (robot.intake.state == IntakeSubsystem.STATE.FAILED_RETRACT || robot.lift.state == LiftSubsystem.STATE.FAILED_RETRACT) {
+                CommandScheduler.getInstance().reset();
+                CommandScheduler.getInstance().schedule(
+                        new SequentialCommandGroup(
+                                new PositionCommand(drivetrain, localizer,
+                                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 51, 1.5 * Math.PI) :
+                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 48, 1.5 * Math.PI) :
+                                                        new Pose(-31, 48, 1.5 * Math.PI), 2000
+                                ),
+                                new InstantCommand(this::requestOpModeStop)
+                        )
+                );
+            }
+
+
             CommandScheduler.getInstance().run();
             robot.intake.loop();
             robot.lift.loop();

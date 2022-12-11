@@ -144,13 +144,13 @@ public class OpMode extends CommandOpMode {
         boolean dBY = gamepad2.y;
         boolean dBB = gamepad2.b;
         if (dBA && !pDBA) {
-            schedule(new TeleopLiftCommand(robot, 125, LiftSubsystem.STATE.EXTEND));
+            schedule(new TeleopLiftCommand(robot, 125, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBX && !pDBX) {
-            schedule(new TeleopLiftCommand(robot, 375, LiftSubsystem.STATE.EXTEND));
+            schedule(new TeleopLiftCommand(robot, 375, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBY && !pDBY) {
-            schedule(new TeleopLiftCommand(robot, 610, LiftSubsystem.STATE.EXTEND));
+            schedule(new TeleopLiftCommand(robot, 610, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBB && !pDBB) {
-            schedule(new TeleopLiftCommand(robot, 0, LiftSubsystem.STATE.RETRACT));
+            schedule(new TeleopLiftCommand(robot, 0, LiftSubsystem.STATE.FAILED_RETRACT));
         }
 
         robot.drivetrain.set(drive);
