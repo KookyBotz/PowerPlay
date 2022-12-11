@@ -24,10 +24,10 @@ TeleopCycleCommand extends SequentialCommandGroup {
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.INTAKE)),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE)),
-                                new IntakePositionCommand(robot.intake, 270, 750, 1500, 10, 2000, IntakeSubsystem.STATE.EXTEND),
+                                new IntakePositionCommand(robot.intake, 270, 3000, 3000, 10, 2000, IntakeSubsystem.STATE.EXTEND),
 
                                 // wait for stuff to stabilize
-                                new WaitCommand(50),
+                                new WaitCommand(250),
 
                                 // grab
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)),
@@ -36,11 +36,12 @@ TeleopCycleCommand extends SequentialCommandGroup {
                                 // transfer position
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.DEPOSIT)),
-                                new IntakePositionCommand(robot.intake, 15, 1500, 4000, 10, 3000, IntakeSubsystem.STATE.RETRACT),
+                                new IntakePositionCommand(robot.intake, 15, 3000, 3000, 10, 3000, IntakeSubsystem.STATE.RETRACT),
 
                                 // transfer
                                 new WaitCommand(250),
-                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN))
+                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
+                                new WaitCommand(250)
 
                         ),
 
