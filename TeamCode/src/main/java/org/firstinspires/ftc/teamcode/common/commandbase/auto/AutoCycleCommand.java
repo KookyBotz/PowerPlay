@@ -23,27 +23,28 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                                 new InstantCommand(() -> robot.intake.setFourbar(state.fourbarStartPos)),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE)),
-                                new IntakePositionCommand(robot.intake, state.intakeStartingPos, 750, 1500, 10, 3000, IntakeSubsystem.STATE.EXTEND),
+                                new IntakePositionCommand(robot.intake, state.intakeStartingPos, 3000, 3000, 20, 3000, IntakeSubsystem.STATE.EXTEND),
 
                                 // wait for stuff to stabilize
-                                new WaitCommand(50),
+                                new WaitCommand(300),
 
                                 // grab
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)),
-                                new WaitCommand(200),
+                                new WaitCommand(600),
 
                                 //move up
                                 new InstantCommand(() -> robot.intake.setFourbar(state.fourbarEndPos)),
-                                new WaitCommand(100),
-                                new IntakePositionCommand(robot.intake, state.intakeEndPos, 750, 1500, 10, 2000, IntakeSubsystem.STATE.EXTEND),
-
+                                new IntakePositionCommand(robot.intake, state.intakeEndPos, 750, Integer.MAX_VALUE, 10, 2000, IntakeSubsystem.STATE.EXTEND),
+                                new WaitCommand(250),
                                 // transfer position
-                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
+                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.DEPOSIT)),
-                                new IntakePositionCommand(robot.intake, 15, 1500, 4000, 10, 3000, IntakeSubsystem.STATE.RETRACT),
+                                new IntakePositionCommand(robot.intake, 15, 3000, 3000, 10, 3000, IntakeSubsystem.STATE.RETRACT),
+                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
+
 
                                 // transfer
-                                new WaitCommand(250),
+                                new WaitCommand(750),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN))
 
                         ),
@@ -52,6 +53,7 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
                                 new LiftPositionCommand(robot.lift, 610, 3000, 7500, 30, 3000, LiftSubsystem.STATE.EXTEND),
+                                new WaitCommand(500),
                                 new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)),
                                 new LiftPositionCommand(robot.lift, 0, 3000, 7500, 10, 2000, LiftSubsystem.STATE.RETRACT)
                         )

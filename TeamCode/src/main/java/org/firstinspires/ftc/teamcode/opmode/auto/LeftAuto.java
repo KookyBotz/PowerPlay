@@ -102,8 +102,8 @@ public class LeftAuto extends LinearOpMode {
         CommandScheduler.getInstance().schedule(
             new SequentialCommandGroup(
                     // get to cycle position
-                    new PositionCommand(drivetrain, localizer, new Pose(-4.5, 57.98, 0), 2500),
-                    new PositionCommand(drivetrain, localizer, new Pose(-4.5, 57.98, 4.49), 3000),
+                    new PositionCommand(drivetrain, localizer, new Pose(-5, 57.98, 0), 2500),
+                    new PositionCommand(drivetrain, localizer, new Pose(-5, 57.98, 4.49), 3000),
 
                     // start cycling
                     new ParallelCommandGroup(
@@ -157,6 +157,9 @@ public class LeftAuto extends LinearOpMode {
             robot.lift.loop();
             robot.drivetrain.updateModules();
             localizer.periodic();
+
+            telemetry.addData("STATE: ", robot.intake.state);
+            telemetry.addData("STATE: ", robot.lift.state);
             telemetry.addData("targetPos", robot.intake.targetPosition);
             telemetry.addData("intakePos", robot.intake.getPos());
             telemetry.addData("current pose", localizer.getPos());

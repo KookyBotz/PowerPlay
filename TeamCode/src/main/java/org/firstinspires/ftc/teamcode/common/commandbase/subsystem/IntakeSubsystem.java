@@ -48,18 +48,18 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double claw_pos_open = 0.23;
     public static double claw_pos_closed = 0.45;
 
-    public final double fourbar_extended = 0.19;
-    public final double fourbar_retracted = 0.89;
+    public final double fourbar_extended = 0.2;
+    public final double fourbar_retracted = 0.93;
     public final double fourbar_transition = fourbar_retracted - 0.2;
 
     public static double distanceThreshold = 5;
 
     public static final KinematicState[] CYCLE_GRAB_POSITIONS = {
-            new KinematicState(515, 0.405, 0.89),
-            new KinematicState(505, 0.375, 0.62),
-            new KinematicState(495, 0.325, 0.55),
-            new KinematicState(495, 0.265, 0.48),
-            new KinematicState(495, 0.22, 0.44)
+            new KinematicState(515, 0.425, 0.73),
+            new KinematicState(505, 0.38, 0.62),
+            new KinematicState(495, 0.335, 0.55),
+            new KinematicState(495, 0.27, 0.48),
+            new KinematicState(495, 0.23, 0.44)
     };
 
     private final double turret_deposit = 0;
