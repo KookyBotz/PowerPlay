@@ -49,7 +49,7 @@ public class OpMode extends CommandOpMode {
     private boolean pCone = false;
 
     private boolean busy = false;
-    private boolean busyCone = false;
+//    private boolean busyCone = false;
 
     @Override
     public void initialize() {
@@ -98,20 +98,21 @@ public class OpMode extends CommandOpMode {
 
         boolean dLT = (gamepad2.left_trigger > 0.3);
         boolean dRT = (gamepad2.right_trigger > 0.3);
-        boolean hasCone = robot.intake.hasCone();
+//        boolean hasCone = robot.intake.hasCone();
         boolean pDRT = false;
         if (dLT && !pDLT) {
             schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)));
         } else if (dRT && !pDRT) {
             schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)));
-        } else if (hasCone && !pCone && !busyCone) {
-            busyCone = true;
-            schedule(new SequentialCommandGroup(
-                    new WaitCommand(200),
-                    new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)))
-            );
         }
-        pCone = hasCone;
+            //        } else if (hasCone && !pCone && !busyCone) {
+////            busyCone = true;
+////            schedule(new SequentialCommandGroup(
+////                    new WaitCommand(200),
+////                    new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)))
+////            );
+//        }
+//        pCone = hasCone;
 
         double gamepad2_left_stick_y = gamepad2.left_stick_y;
         if (Math.abs(gamepad2_left_stick_y) > 0.1) {
@@ -132,7 +133,7 @@ public class OpMode extends CommandOpMode {
         boolean dRB = gamepad2.right_bumper;
         if (dLB && !pDLB) {
             schedule(new TeleopIntakeCommand(robot));
-            busyCone = false;
+//            busyCone = false;
         } else if (dRB && !pDRB) {
             schedule(new TeleopTransferCommand(robot));
         }
@@ -146,7 +147,7 @@ public class OpMode extends CommandOpMode {
         if (dBA && !pDBA) {
             schedule(new TeleopLiftCommand(robot, 125, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBX && !pDBX) {
-            schedule(new TeleopLiftCommand(robot, 375, LiftSubsystem.STATE.FAILED_EXTEND));
+            schedule(new TeleopLiftCommand(robot, 360, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBY && !pDBY) {
             schedule(new TeleopLiftCommand(robot, 610, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBB && !pDBB) {

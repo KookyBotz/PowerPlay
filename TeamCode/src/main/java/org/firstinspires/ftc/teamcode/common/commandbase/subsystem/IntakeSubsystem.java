@@ -28,7 +28,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public final MotorEx extensionEncoder;
     private final Servo barLeft, barRight;
     private final Servo claw, turret;
-    private final Rev2mDistanceSensorEx distanceSensor;
+//    private final Rev2mDistanceSensorEx distanceSensor;
 
     public MotionProfile profile;
     public MotionState curState;
@@ -45,10 +45,10 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double D = 0.0;
     public static double F = 0.0001;
 
-    public static double claw_pos_open = 0.23;
+    public static double claw_pos_open = 0.27;
     public static double claw_pos_closed = 0.45;
 
-    public final double fourbar_extended = 0.2;
+    public final double fourbar_extended = 0.18;
     public final double fourbar_retracted = 0.93;
     public final double fourbar_transition = fourbar_retracted - 0.15;
 
@@ -101,8 +101,9 @@ public class IntakeSubsystem extends SubsystemBase {
         this.claw = hardwareMap.get(Servo.class, "claw");
         this.turret = hardwareMap.get(Servo.class, "turret");
 
-        Rev2mDistanceSensor ds = hardwareMap.get(Rev2mDistanceSensor.class, "distanceSensor");
-        this.distanceSensor = new Rev2mDistanceSensorEx(ds.getDeviceClient());
+//        Rev2mDistanceSensor ds = hardwareMap.get(Rev2mDistanceSensor.class, "distanceSensor");
+//        this.distanceSensor = new Rev2mDistanceSensorEx(ds.getDeviceClient());
+//        this.distanceSensor.setRangingProfile(Rev2mDistanceSensorEx.RANGING_PROFILE.HIGH_SPEED);
 
 
         this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
@@ -185,9 +186,9 @@ public class IntakeSubsystem extends SubsystemBase {
         return (int) intakePosition;
     }
 
-    public boolean hasCone() {
-        return distanceSensor.getDistance(DistanceUnit.CM) < distanceThreshold;
-    }
+//    public boolean hasCone() {
+//        return distanceSensor.getDistance(DistanceUnit.CM) < distanceThreshold;
+//    }
 
     public void setFourbarFactor(double factor) {
         double fourbarAddition = -0.007 * factor;
