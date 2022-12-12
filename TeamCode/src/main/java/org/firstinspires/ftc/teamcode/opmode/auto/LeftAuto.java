@@ -163,7 +163,6 @@ public class LeftAuto extends LinearOpMode {
                 );
             }
 
-
             CommandScheduler.getInstance().run();
             robot.intake.loop();
             robot.lift.loop();
