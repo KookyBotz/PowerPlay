@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.opmode.teleop;
 
 import static java.lang.Math.PI;
 
+import android.os.Environment;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -20,11 +22,15 @@ import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopIntakeComman
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopLiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopTransferCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
+import org.firstinspires.ftc.teamcode.common.hardware.FileInterface;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
+
+import java.io.File;
+import java.io.IOException;
 
 @Config
 @TeleOp(name = "OpMode👌👌😍🎶🎶😎")
@@ -55,6 +61,18 @@ public class OpMode extends CommandOpMode {
     @Override
     public void initialize() {
         CommandScheduler.getInstance().reset();
+
+        File file = new File(Environment.getExternalStorageDirectory().getPath() + "/FIRST/data.json");
+        try {
+            file.createNewFile();
+
+        } catch (IOException e) {
+            System.out.println("amogus squared");
+        }
+        FileInterface.write(FileInterface.IMU, "169.3");
+        FileInterface.write(FileInterface.LIFT, "15");
+        FileInterface.write(FileInterface.INTAKE, "amogus");
+
         robot = new Robot(hardwareMap, false);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         robot.intake.setFourbar(robot.intake.fourbar_transition);
@@ -186,6 +204,9 @@ public class OpMode extends CommandOpMode {
         telemetry.addData("intakePos:", robot.intake.getPos());
         telemetry.addData("intakePow:", robot.intake.power);
         telemetry.addData("intakeTarget:", robot.intake.targetPosition);
+        telemetry.addData("imu", FileInterface.read(FileInterface.IMU));
+        telemetry.addData("intake", FileInterface.read(FileInterface.INTAKE));
+        telemetry.addData("lift", FileInterface.read(FileInterface.LIFT));
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
