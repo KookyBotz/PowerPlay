@@ -62,16 +62,15 @@ public class OpMode extends CommandOpMode {
     public void initialize() {
         CommandScheduler.getInstance().reset();
 
-        File file = new File(Environment.getExternalStorageDirectory().getPath() + "/FIRST/data.json");
+        File file = new File(Environment.getExternalStorageDirectory().getPath() + "/FIRST/data.txt");
         try {
             file.createNewFile();
-
+            FileInterface.write(FileInterface.IMU, "169.3");
+            FileInterface.write(FileInterface.LIFT, "15");
+            FileInterface.write(FileInterface.INTAKE, "amogus");
         } catch (IOException e) {
             System.out.println("amogus squared");
         }
-        FileInterface.write(FileInterface.IMU, "169.3");
-        FileInterface.write(FileInterface.LIFT, "15");
-        FileInterface.write(FileInterface.INTAKE, "amogus");
 
         robot = new Robot(hardwareMap, false);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
