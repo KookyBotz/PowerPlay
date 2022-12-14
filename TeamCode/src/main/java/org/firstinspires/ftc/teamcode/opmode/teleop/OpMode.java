@@ -33,7 +33,7 @@ import java.io.File;
 import java.io.IOException;
 
 @Config
-@TeleOp(name = "OpMode👌👌😍🎶🎶😎")
+@TeleOp(name = "OpMode👌👌😍🎶🎶😎😜😭🥰😈👺👺🤣🤣😕😜😭🥰🥰😘")
 public class OpMode extends CommandOpMode {
     private Robot robot;
 
