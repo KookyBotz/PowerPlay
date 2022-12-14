@@ -58,7 +58,7 @@ public class IntakeSubsystem extends SubsystemBase {
             new KinematicState(515, 0.425, 0.83),
             new KinematicState(505, 0.375, 0.62),
             new KinematicState(495, 0.33, 0.55),
-            new KinematicState(495, 0.265, 0.48),
+            new KinematicState(495, 0.275, 0.48),
             new KinematicState(495, 0.225, 0.44)
     };
 

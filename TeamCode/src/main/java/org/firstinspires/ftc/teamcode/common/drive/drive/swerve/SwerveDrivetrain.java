@@ -23,9 +23,9 @@ public class SwerveDrivetrain implements Drivetrain {
 
     public static double TRACK_WIDTH = 9, WHEEL_BASE = 9;
     private final double R;
-    public static double frontLeftOffset = 1.1, frontRightOffset = 0.07, rearLeftOffset = 0.421592653589793, rearRightOffset = 1.39;
+    public static double frontLeftOffset = Math.PI, frontRightOffset = 0, rearLeftOffset = 0.65, rearRightOffset = 1.95;
 
-    public static double K_STATIC = 0.04;
+    public static double K_STATIC = 0.03;
 
     double[] ws = new double[4];
     double[] wa = new double[4];
@@ -35,7 +35,7 @@ public class SwerveDrivetrain implements Drivetrain {
     public static double imuOff = 0.0;
 
     public SwerveDrivetrain(HardwareMap hardwareMap) {
-        leftFrontModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "leftFrontMotor"), hardwareMap.get(CRServo.class, "leftFrontServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "leftFrontEncoder"), 2.3).zero(frontLeftOffset));
+        leftFrontModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "leftFrontMotor"), hardwareMap.get(CRServo.class, "leftFrontServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "leftFrontEncoder"), -2.3).zero(frontLeftOffset));
         leftRearModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "leftRearMotor"), hardwareMap.get(CRServo.class, "leftRearServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "leftRearEncoder"), 3.3).zero(rearLeftOffset));
         rightRearModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "rightRearMotor"), hardwareMap.get(CRServo.class, "rightRearServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "rightRearEncoder"), 3.3).zero(rearRightOffset));
         rightFrontModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "rightFrontMotor"), hardwareMap.get(CRServo.class, "rightFrontServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "rightFrontEncoder"), 2.3).zero(frontRightOffset));
