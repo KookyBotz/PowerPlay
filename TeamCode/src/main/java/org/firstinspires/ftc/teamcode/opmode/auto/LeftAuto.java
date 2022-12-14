@@ -141,6 +141,7 @@ public class LeftAuto extends LinearOpMode {
                         ),
                         new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_retracted)),
                         new WaitCommand(500),
+                        new InstantCommand(() -> robot.writeFile()),
                         new InstantCommand(this::requestOpModeStop)
                 )
         );

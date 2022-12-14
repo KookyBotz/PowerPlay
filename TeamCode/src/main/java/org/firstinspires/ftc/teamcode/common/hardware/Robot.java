@@ -102,4 +102,17 @@ public class Robot {
             drivetrain.write();
         }
     }
+
+    public void writeFile() {
+        FileInterface.clear();
+        FileInterface.write(FileInterface.IMU, String.valueOf(getAngle()));
+        FileInterface.write(FileInterface.INTAKE, String.valueOf(intake.getPos()));
+        FileInterface.write(FileInterface.LIFT, String.valueOf(lift.getPos()));
+    }
+
+    public void readFile() {
+        intake.offset = Integer.parseInt(FileInterface.read(FileInterface.INTAKE));
+        lift.offset = Integer.parseInt(FileInterface.read(FileInterface.LIFT));
+        SwerveDrivetrain.imuOff = Float.parseFloat(FileInterface.read(FileInterface.IMU));
+    }
 }

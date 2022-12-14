@@ -62,17 +62,8 @@ public class OpMode extends CommandOpMode {
     public void initialize() {
         CommandScheduler.getInstance().reset();
 
-        File file = new File(Environment.getExternalStorageDirectory().getPath() + "/FIRST/data.txt");
-        try {
-            file.createNewFile();
-            FileInterface.write(FileInterface.IMU, "169.3");
-            FileInterface.write(FileInterface.LIFT, "15");
-            FileInterface.write(FileInterface.INTAKE, "amogus");
-        } catch (IOException e) {
-            System.out.println("amogus squared");
-        }
-
         robot = new Robot(hardwareMap, false);
+        robot.readFile();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         robot.intake.setFourbar(robot.intake.fourbar_transition);
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
@@ -98,8 +89,6 @@ public class OpMode extends CommandOpMode {
 
         if (gamepad1.left_bumper) {
             SwerveDrivetrain.imuOff = robot.getAngle();
-            robot.intake.extension.resetEncoder();
-            robot.lift.lift.resetEncoder();
         }
 
         // Gamepad2

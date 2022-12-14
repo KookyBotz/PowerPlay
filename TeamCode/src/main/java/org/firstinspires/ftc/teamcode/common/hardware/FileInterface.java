@@ -37,6 +37,7 @@ public class FileInterface {
                     return nextLine.substring(key.length() + 1);
                 }
             }
+            sc.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,13 +48,19 @@ public class FileInterface {
         File f = new File(Environment.getExternalStorageDirectory().getPath() + "/FIRST/data.txt");
         try {
             f.createNewFile();
-            PrintWriter pw = new PrintWriter(f);
+            PrintWriter pw = new PrintWriter(new FileWriter(f, true));
             pw.print(key + " " + value + "\n");
+            pw.flush();
             pw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return "KEY/VALUE_NOT_FOUND_WRITE_" + key;
+    }
+
+    public static void clear() {
+        File f = new File(Environment.getExternalStorageDirectory().getPath() + "/FIRST/data.txt");
+        f.delete();
     }
 }
 

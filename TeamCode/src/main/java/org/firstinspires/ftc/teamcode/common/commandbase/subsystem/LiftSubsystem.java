@@ -41,6 +41,8 @@ public class LiftSubsystem extends SubsystemBase {
     public double power = 0.0;
     public double targetPosition = 0.0;
 
+    public int offset = 0;
+
     public enum STATE {
         GOOD,
         FAILED_EXTEND,
@@ -107,7 +109,7 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void read() {
-        liftPosition = liftEncoder.encoder.getPosition();
+        liftPosition = liftEncoder.encoder.getPosition() - offset;
     }
 
     public void write() {
