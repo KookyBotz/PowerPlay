@@ -63,7 +63,13 @@ public class OpMode extends CommandOpMode {
         CommandScheduler.getInstance().reset();
 
         robot = new Robot(hardwareMap, false);
-        robot.readFile();
+        robot.reset();
+        if (!gamepad1.a) {
+//            robot.readFile();
+            telemetry.addLine("File has been read.");
+            telemetry.addData("g1a", gamepad1.a);
+            telemetry.update();
+        }
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         robot.intake.setFourbar(robot.intake.fourbar_transition);
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
@@ -75,7 +81,7 @@ public class OpMode extends CommandOpMode {
     public void run() {
         if (timer == null) {
             timer = new ElapsedTime();
-            robot.reset();
+//            robot.reset();
         }
 
         robot.read();
@@ -192,7 +198,7 @@ public class OpMode extends CommandOpMode {
         telemetry.addData("intakePos:", robot.intake.getPos());
         telemetry.addData("intakePow:", robot.intake.power);
         telemetry.addData("intakeTarget:", robot.intake.targetPosition);
-        telemetry.addData("imu", FileInterface.read(FileInterface.IMU));
+        telemetry.addData("imu", SwerveDrivetrain.imuOff);
         telemetry.addData("intake", FileInterface.read(FileInterface.INTAKE));
         telemetry.addData("lift", FileInterface.read(FileInterface.LIFT));
 

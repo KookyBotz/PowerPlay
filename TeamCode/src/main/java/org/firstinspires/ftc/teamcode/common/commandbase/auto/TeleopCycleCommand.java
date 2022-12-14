@@ -36,12 +36,13 @@ TeleopCycleCommand extends SequentialCommandGroup {
                                 // transfer position
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.DEPOSIT)),
-                                new IntakePositionCommand(robot.intake, 15, 3000, 3000, 10, 3000, IntakeSubsystem.STATE.FAILED_RETRACT),
+                                new IntakePositionCommand(robot.intake, 0, 3000, 3000, 10, 3000, IntakeSubsystem.STATE.FAILED_RETRACT),
 
                                 // transfer
                                 new WaitCommand(250),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
-                                new WaitCommand(250)
+                                new WaitCommand(250),
+                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION))
 
                         ),
 

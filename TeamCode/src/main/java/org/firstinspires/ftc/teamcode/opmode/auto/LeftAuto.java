@@ -103,8 +103,8 @@ public class LeftAuto extends LinearOpMode {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         // get to cycle position
-                        new PositionCommand(drivetrain, localizer, new Pose(-5.5, 57.98, 0), 2500),
-                        new PositionCommand(drivetrain, localizer, new Pose(-5.5, 57.98, 4.49), 3000),
+                        new PositionCommand(drivetrain, localizer, new Pose(-6, 57.98, 0), 2500),
+                        new PositionCommand(drivetrain, localizer, new Pose(-6, 57.98, 4.49), 3000),
 
                         // start cycling
                         new ParallelCommandGroup(
@@ -141,7 +141,7 @@ public class LeftAuto extends LinearOpMode {
                         ),
                         new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_retracted)),
                         new WaitCommand(500),
-                        new InstantCommand(() -> robot.writeFile()),
+                        new InstantCommand(robot::writeFile),
                         new InstantCommand(this::requestOpModeStop)
                 )
         );

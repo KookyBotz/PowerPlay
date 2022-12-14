@@ -103,6 +103,10 @@ public class Robot {
         }
     }
 
+    /**
+     * Writes to a text file, containing all subsystem encoder positions and the IMU's last angle.
+     * For use in TeleOp, for field centric drive.
+     */
     public void writeFile() {
         FileInterface.clear();
         FileInterface.write(FileInterface.IMU, String.valueOf(getAngle()));
@@ -110,9 +114,13 @@ public class Robot {
         FileInterface.write(FileInterface.LIFT, String.valueOf(lift.getPos()));
     }
 
+    /**
+     * Reads from a text file, containing all subsystem encoder positions and the IMU's last angle.
+     * For use in TeleOp, for field centric drive.
+     */
     public void readFile() {
         intake.offset = Integer.parseInt(FileInterface.read(FileInterface.INTAKE));
         lift.offset = Integer.parseInt(FileInterface.read(FileInterface.LIFT));
-        SwerveDrivetrain.imuOff = Float.parseFloat(FileInterface.read(FileInterface.IMU));
+        SwerveDrivetrain.imuOff = -1.75;
     }
 }

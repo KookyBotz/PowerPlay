@@ -109,7 +109,7 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void read() {
-        liftPosition = liftEncoder.encoder.getPosition() - offset;
+        liftPosition = liftEncoder.encoder.getPosition() + offset;
     }
 
     public void write() {
