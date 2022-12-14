@@ -68,7 +68,7 @@ public class OpMode extends CommandOpMode {
 //            robot.readFile();
             telemetry.addLine("File has been read.");
             telemetry.addData("g1a", gamepad1.a);
-            telemetry.update();
+            telemetry.update(); 
         }
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         robot.intake.setFourbar(robot.intake.fourbar_transition);
