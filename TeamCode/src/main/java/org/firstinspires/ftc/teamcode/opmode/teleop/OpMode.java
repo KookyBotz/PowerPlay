@@ -40,6 +40,7 @@ public class OpMode extends CommandOpMode {
     private boolean pDLB = false;
     private boolean pDRB = false;
     private boolean pDLT = false;
+    private boolean pDRT = false;
 
     private boolean pDBA = false;
     private boolean pDBX = false;
@@ -99,7 +100,6 @@ public class OpMode extends CommandOpMode {
         boolean dLT = (gamepad2.left_trigger > 0.3);
         boolean dRT = (gamepad2.right_trigger > 0.3);
 //        boolean hasCone = robot.intake.hasCone();
-        boolean pDRT = false;
         if (dLT && !pDLT) {
             schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)));
         } else if (dRT && !pDRT) {
@@ -113,6 +113,8 @@ public class OpMode extends CommandOpMode {
 ////            );
 //        }
 //        pCone = hasCone;
+        pDLT = dLT;
+        pDRT = dRT;
 
         double gamepad2_left_stick_y = gamepad2.left_stick_y;
         if (Math.abs(gamepad2_left_stick_y) > 0.1) {
