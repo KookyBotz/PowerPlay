@@ -72,6 +72,8 @@ public class OpMode extends CommandOpMode {
         }
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         robot.intake.setFourbar(robot.intake.fourbar_transition);
+        robot.intake.extension.set(-0.4);
+        robot.lift.lift.set(-0.3);
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
@@ -81,7 +83,7 @@ public class OpMode extends CommandOpMode {
     public void run() {
         if (timer == null) {
             timer = new ElapsedTime();
-//            robot.reset();
+            robot.reset();
         }
 
         robot.read();
@@ -176,6 +178,8 @@ public class OpMode extends CommandOpMode {
             xLock = !xLock;
         }
         pDRS = dRS;
+
+
 
         if (xLock) {
             robot.drivetrain.leftFrontModule.setTargetRotation(PI / 4);
