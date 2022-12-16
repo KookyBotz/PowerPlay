@@ -63,6 +63,7 @@ public class OpMode extends CommandOpMode {
         CommandScheduler.getInstance().reset();
 
         robot = new Robot(hardwareMap, false);
+        robot.startIMUThread(this);
         robot.reset();
         if (!gamepad1.a) {
 //            robot.readFile();
@@ -163,7 +164,7 @@ public class OpMode extends CommandOpMode {
         if (dBA && !pDBA) {
             schedule(new TeleopLiftCommand(robot, 125, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBX && !pDBX) {
-            schedule(new TeleopLiftCommand(robot, 360, LiftSubsystem.STATE.FAILED_EXTEND));
+            schedule(new TeleopLiftCommand(robot, 350, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBY && !pDBY) {
             schedule(new TeleopLiftCommand(robot, 610, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBB && !pDBB) {

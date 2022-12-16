@@ -44,6 +44,7 @@ public class LeftAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         CommandScheduler.getInstance().reset();
         Robot robot = new Robot(hardwareMap, true);
+        robot.startIMUThread(this);
         Drivetrain drivetrain = robot.drivetrain;
 
         Localizer localizer = new TwoWheelLocalizer(

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
@@ -13,12 +14,17 @@ import org.firstinspires.ftc.teamcode.common.drive.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 
+import javax.annotation.concurrent.GuardedBy;
+
 /**
  * The robot class, containing all useful fields and subsystems within the robot.
  */
 public class Robot {
-
+    private final Object imuLock = new Object();
+    @GuardedBy("imuLock")
     public final BNO055IMU imu;
+    private double imuAngle = 0;
+    private Thread imuThread;
 
     public SwerveDrivetrain drivetrain;
     public Localizer localizer;
@@ -40,10 +46,12 @@ public class Robot {
         this.isAuto = isAuto;
         drivetrain = new SwerveDrivetrain(hardwareMap);
 
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-        imu.initialize(parameters);
+        synchronized (imuLock) {
+            imu = hardwareMap.get(BNO055IMU.class, "imu");
+            BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+            parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+            imu.initialize(parameters);
+        }
 
 
         horizontalEncoder = new MotorEx(hardwareMap, "rightFrontMotor").encoder;
@@ -64,11 +72,27 @@ public class Robot {
     }
 
     /**
+     * Starts imu thread
+     * @param opMode our current opMode
+     */
+    public void startIMUThread(LinearOpMode opMode) {
+        imuThread = new Thread(() -> {
+            while (!opMode.isStopRequested() && opMode.opModeIsActive()) {
+                synchronized (imuLock) {
+                    imuAngle = -imu.getAngularOrientation().firstAngle;
+                }
+            }
+        });
+        imuThread.start();
+    }
+
+    /**
      * Gets the current orientation of the robot
+     *
      * @return The imu angle
      */
     public double getAngle() {
-        return -imu.getAngularOrientation().firstAngle;
+        return imuAngle;
     }
 
     /**
