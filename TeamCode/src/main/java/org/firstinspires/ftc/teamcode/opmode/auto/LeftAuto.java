@@ -109,11 +109,11 @@ public class LeftAuto extends LinearOpMode {
                         // start cycling
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0]),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1]),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2]),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3]),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4]),
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0], true),
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1], true),
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2], true),
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3], true),
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4], false),
 
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                                         new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_transition)),

@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 
 // TODO: Test this, I just copied TeleopCycleCommand lmao
 public class AutoCycleCommand extends SequentialCommandGroup {
-    public AutoCycleCommand(Robot robot, KinematicState state) {
+    public AutoCycleCommand(Robot robot, KinematicState state, boolean kinematics) {
         super(
                 // in parallel
                 new ParallelCommandGroup(
@@ -33,9 +33,8 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                                 new WaitCommand(600),
 
                                 //move up
-                                new InstantCommand(() -> robot.intake.setFourbar(state.fourbarEndPos)),
-                                new IntakePositionCommand(robot.intake, state.intakeEndPos, 750, Integer.MAX_VALUE, 10, 2000, IntakeSubsystem.STATE.FAILED_EXTEND),
-                                new WaitCommand(250),
+                                new KinematicCommand(robot, state, kinematics),
+
                                 // transfer position
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
                                 new IntakePositionCommand(robot.intake, 15, 3000, 3000, 10, 3000, IntakeSubsystem.STATE.FAILED_RETRACT)
