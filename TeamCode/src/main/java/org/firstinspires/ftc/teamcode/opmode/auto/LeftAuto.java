@@ -39,12 +39,12 @@ public class LeftAuto extends LinearOpMode {
 
     SleeveDetection sleeveDetection = new SleeveDetection();
     OpenCvCamera camera;
+    private double loopTime;
 
     @Override
     public void runOpMode() throws InterruptedException {
         CommandScheduler.getInstance().reset();
         Robot robot = new Robot(hardwareMap, true);
-        robot.startIMUThread(this);
         Drivetrain drivetrain = robot.drivetrain;
 
         Localizer localizer = new TwoWheelLocalizer(
@@ -64,7 +64,7 @@ public class LeftAuto extends LinearOpMode {
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        int cameraMonitorViewId =   hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         sleeveDetection = new SleeveDetection(new Point(90, 80));
         camera.setPipeline(sleeveDetection);
@@ -100,6 +100,7 @@ public class LeftAuto extends LinearOpMode {
 
         waitForStart();
         camera.stopStreaming();
+        robot.startIMUThread(this);
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
@@ -177,6 +178,10 @@ public class LeftAuto extends LinearOpMode {
             telemetry.addData("targetPos", robot.intake.targetPosition);
             telemetry.addData("intakePos", robot.intake.getPos());
             telemetry.addData("current pose", localizer.getPos());
+
+            double loop = System.nanoTime();
+            telemetry.addData("hz ", 1000000000 / (loop - loopTime));
+            loopTime = loop;
             telemetry.update();
             robot.write();
             PhotonCore.CONTROL_HUB.clearBulkCache();

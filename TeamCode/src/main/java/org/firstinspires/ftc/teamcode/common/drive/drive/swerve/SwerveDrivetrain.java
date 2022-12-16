@@ -52,7 +52,6 @@ public class SwerveDrivetrain implements Drivetrain {
 
     @Override
     public void set(Pose pose, double maxPower) {
-        System.out.println(pose.toString());
         double x = pose.x, y = pose.y, head = pose.heading;
 
         if (maxPower != -1) {
@@ -71,7 +70,6 @@ public class SwerveDrivetrain implements Drivetrain {
 
         max = MathUtils.max(ws);
         //todo integrate motor flipping here
-        System.out.println(max);
     }
 
     public void write() {

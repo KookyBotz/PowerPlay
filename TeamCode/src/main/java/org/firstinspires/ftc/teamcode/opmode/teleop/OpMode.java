@@ -63,14 +63,7 @@ public class OpMode extends CommandOpMode {
         CommandScheduler.getInstance().reset();
 
         robot = new Robot(hardwareMap, false);
-        robot.startIMUThread(this);
         robot.reset();
-        if (!gamepad1.a) {
-//            robot.readFile();
-            telemetry.addLine("File has been read.");
-            telemetry.addData("g1a", gamepad1.a);
-            telemetry.update();
-        }
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         robot.intake.setFourbar(robot.intake.fourbar_transition);
         robot.intake.extension.set(-0.4);
@@ -78,6 +71,7 @@ public class OpMode extends CommandOpMode {
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
+        SwerveDrivetrain.imuOff = -Math.PI / 2;
     }
 
     @Override
@@ -85,6 +79,7 @@ public class OpMode extends CommandOpMode {
         if (timer == null) {
             timer = new ElapsedTime();
             robot.reset();
+            robot.startIMUThread(this);
         }
 
         robot.read();
@@ -120,7 +115,7 @@ public class OpMode extends CommandOpMode {
         } else if (dRT && !pDRT) {
             schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)));
         }
-            //        } else if (hasCone && !pCone && !busyCone) {
+        //        } else if (hasCone && !pCone && !busyCone) {
 ////            busyCone = true;
 ////            schedule(new SequentialCommandGroup(
 ////                    new WaitCommand(200),
@@ -181,7 +176,6 @@ public class OpMode extends CommandOpMode {
         pDRS = dRS;
 
 
-
         if (xLock) {
             robot.drivetrain.leftFrontModule.setTargetRotation(PI / 4);
             robot.drivetrain.rightFrontModule.setTargetRotation(-PI / 4);
@@ -204,8 +198,6 @@ public class OpMode extends CommandOpMode {
         telemetry.addData("intakePow:", robot.intake.power);
         telemetry.addData("intakeTarget:", robot.intake.targetPosition);
         telemetry.addData("imu", SwerveDrivetrain.imuOff);
-        telemetry.addData("intake", FileInterface.read(FileInterface.INTAKE));
-        telemetry.addData("lift", FileInterface.read(FileInterface.LIFT));
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
