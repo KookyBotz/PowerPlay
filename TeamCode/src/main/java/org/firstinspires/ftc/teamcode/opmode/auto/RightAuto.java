@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
+import static org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem.CYCLE_GRAB_POSITIONS;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -9,6 +11,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -16,26 +19,24 @@ import org.firstinspires.ftc.teamcode.common.commandbase.auto.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.SwerveXCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.commands.LiftPositionCommand;
-import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
-import org.firstinspires.ftc.teamcode.common.hardware.FileInterface;
-import org.firstinspires.ftc.teamcode.common.hardware.Robot;
-import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
-import org.firstinspires.ftc.teamcode.common.drive.drive.Drivetrain;
-import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveModule;
-import org.firstinspires.ftc.teamcode.common.drive.localizer.Localizer;
-import org.firstinspires.ftc.teamcode.common.drive.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
+import org.firstinspires.ftc.teamcode.common.drive.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveModule;
+import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
+import org.firstinspires.ftc.teamcode.common.drive.localizer.Localizer;
+import org.firstinspires.ftc.teamcode.common.drive.localizer.TwoWheelLocalizer;
+import org.firstinspires.ftc.teamcode.common.hardware.Robot;
+import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 import org.opencv.core.Point;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-import static org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem.CYCLE_GRAB_POSITIONS;
-
-@Autonomous(name = "⬅️ LeftAuto ⬅️")
+@Autonomous(name = "➡️ RightAuto ➡️")
 @Config
-public class LeftAuto extends LinearOpMode {
+@Disabled
+public class RightAuto extends LinearOpMode {
 
     SleeveDetection sleeveDetection = new SleeveDetection();
     OpenCvCamera camera;
@@ -105,8 +106,8 @@ public class LeftAuto extends LinearOpMode {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         // get to cycle position
-                        new PositionCommand(drivetrain, localizer, new Pose(-6, 57.98, 0), 2500),
-                        new PositionCommand(drivetrain, localizer, new Pose(-6, 57.98, 4.49), 3500),
+                        new PositionCommand(drivetrain, localizer, new Pose(8, 57.98, 0), 2500),
+                        new PositionCommand(drivetrain, localizer, new Pose(8, 57.98, -4.49), 3500),
 
                         // start cycling
                         new ParallelCommandGroup(
@@ -132,14 +133,14 @@ public class LeftAuto extends LinearOpMode {
                                 ),
                                 new SequentialCommandGroup(
                                         new SwerveXCommand(robot.drivetrain),
-                                        new PositionCommand(drivetrain, localizer, new Pose(-2.5, 55, 4), 1500)
+                                        new PositionCommand(drivetrain, localizer, new Pose(2.5, 55, -4), 1500)
                                 )
 
                         ),
                         new PositionCommand(drivetrain, localizer,
-                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 51, 0) :
-                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(18, 48, 0) :
-                                                new Pose(-31, 48, 0), 2000
+                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(7, 51, -0) :
+                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(-16, 48, -0) :
+                                                new Pose(33, 48, -0), 2000
                         ),
                         new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_retracted)),
                         new WaitCommand(500),
@@ -158,9 +159,9 @@ public class LeftAuto extends LinearOpMode {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
                                 new PositionCommand(drivetrain, localizer,
-                                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 51, 0) :
-                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 48, 0) :
-                                                        new Pose(-31, 48, 0), 2000
+                                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(7, 51, -0) :
+                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(-16, 48, -0) :
+                                                        new Pose(33, 48, -0), 2000
                                 ),
                                 new InstantCommand(this::requestOpModeStop)
                         )

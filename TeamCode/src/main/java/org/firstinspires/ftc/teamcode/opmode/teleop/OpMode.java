@@ -71,7 +71,7 @@ public class OpMode extends CommandOpMode {
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
-        SwerveDrivetrain.imuOff = -Math.PI / 2;
+//        SwerveDrivetrain.imuOff = -Math.PI / 2;
     }
 
     @Override
@@ -159,7 +159,7 @@ public class OpMode extends CommandOpMode {
         if (dBA && !pDBA) {
             schedule(new TeleopLiftCommand(robot, 125, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBX && !pDBX) {
-            schedule(new TeleopLiftCommand(robot, 350, LiftSubsystem.STATE.FAILED_EXTEND));
+            schedule(new TeleopLiftCommand(robot, 360, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBY && !pDBY) {
             schedule(new TeleopLiftCommand(robot, 610, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBB && !pDBB) {

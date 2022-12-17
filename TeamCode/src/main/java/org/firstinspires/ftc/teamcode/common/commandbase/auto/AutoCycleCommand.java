@@ -37,7 +37,7 @@ public class AutoCycleCommand extends SequentialCommandGroup {
 
                                 // transfer position
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
-                                new IntakePositionCommand(robot.intake, 15, 3000, 3000, 10, 3000, IntakeSubsystem.STATE.FAILED_RETRACT)
+                                new IntakePositionCommand(robot.intake, 5, 3000, 3000, 10, 3000, IntakeSubsystem.STATE.FAILED_RETRACT)
                                         .alongWith(new WaitCommand(500).andThen(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.DEPOSIT)))),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
 
