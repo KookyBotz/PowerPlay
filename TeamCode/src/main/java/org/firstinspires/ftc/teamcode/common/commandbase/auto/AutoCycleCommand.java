@@ -44,7 +44,8 @@ public class AutoCycleCommand extends SequentialCommandGroup {
 
                                 // transfer
                                 new WaitCommand(750),
-                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN))
+                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
+                                new WaitCommand(100)
 
                         ),
 

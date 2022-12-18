@@ -106,7 +106,7 @@ public class LeftAuto extends LinearOpMode {
                 new SequentialCommandGroup(
                         // get to cycle position
                         new PositionCommand(drivetrain, localizer, new Pose(-6, 57.98, 0), 2500),
-                        new PositionCommand(drivetrain, localizer, new Pose(-6, 57.98, 4.49), 3500),
+                        new PositionCommand(drivetrain, localizer, new Pose(-6, 57.98, 4.48), 4000),
 
                         // start cycling
                         new ParallelCommandGroup(
@@ -137,9 +137,9 @@ public class LeftAuto extends LinearOpMode {
 
                         ),
                         new PositionCommand(drivetrain, localizer,
-                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 51, 0) :
-                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(18, 48, 0) :
-                                                new Pose(-31, 48, 0), 2000
+                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
+                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(18, 51, 0) :
+                                                new Pose(-31, 49, 0), 2000
                         ),
                         new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_retracted)),
                         new WaitCommand(500),
@@ -158,9 +158,9 @@ public class LeftAuto extends LinearOpMode {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
                                 new PositionCommand(drivetrain, localizer,
-                                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 51, 0) :
-                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 48, 0) :
-                                                        new Pose(-31, 48, 0), 2000
+                                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
+                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 51, 0) :
+                                                        new Pose(-31, 49, 0), 2000
                                 ),
                                 new InstantCommand(this::requestOpModeStop)
                         )
