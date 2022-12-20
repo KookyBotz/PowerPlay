@@ -30,7 +30,7 @@ public class AutoCycleCommand extends SequentialCommandGroup {
 
                                 // grab
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)),
-                                new WaitCommand(600),
+                                new WaitCommand(250),
 
                                 //move up
                                 new KinematicCommand(robot, state, kinematics),
@@ -52,7 +52,7 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                         // and deposit previous cone
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
-                                new LiftPositionCommand(robot.lift, 610, 3000, 7500, 30, 3000, LiftSubsystem.STATE.FAILED_EXTEND),
+                                new LiftPositionCommand(robot.lift, 610, 3000, 4000, 30, 3000, LiftSubsystem.STATE.FAILED_EXTEND),
                                 new WaitCommand(500),
                                 new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)),
                                 new LiftPositionCommand(robot.lift, 0, 3000, 7500, 10, 2000, LiftSubsystem.STATE.FAILED_RETRACT)

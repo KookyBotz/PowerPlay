@@ -27,7 +27,7 @@ TeleopCycleCommand extends SequentialCommandGroup {
                                 new IntakePositionCommand(robot.intake, 270, 3000, 2000, 10, 2000, IntakeSubsystem.STATE.FAILED_EXTEND),
 
                                 // wait for stuff to stabilize
-                                new WaitCommand(250),
+                                new WaitCommand(600),
 
                                 // grab
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)),

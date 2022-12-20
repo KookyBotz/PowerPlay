@@ -46,9 +46,9 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double F = 0.0001;
 
     public static double claw_pos_open = 0.3;
-    public static double claw_pos_closed = 0.46;
+    public static double claw_pos_closed = 0.47;
 
-    public final double fourbar_extended = 0.195;
+    public final double fourbar_extended = 0.2;
     public final double fourbar_retracted = 0.92;
     public final double fourbar_transition = fourbar_retracted - 0.15;
 
