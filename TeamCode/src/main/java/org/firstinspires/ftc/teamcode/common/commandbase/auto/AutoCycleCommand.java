@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem
 import org.firstinspires.ftc.teamcode.common.drive.geometry.KinematicState;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 
-// TODO: Test this, I just copied TeleopCycleCommand lmao
+// TODO: tune the velocity and acceleration for the fourbar profiling
 public class AutoCycleCommand extends SequentialCommandGroup {
     public AutoCycleCommand(Robot robot, KinematicState state, boolean kinematics) {
         super(

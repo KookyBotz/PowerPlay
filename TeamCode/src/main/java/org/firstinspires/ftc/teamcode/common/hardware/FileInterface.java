@@ -2,23 +2,10 @@ package org.firstinspires.ftc.teamcode.common.hardware;
 
 import android.os.Environment;
 
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class FileInterface {

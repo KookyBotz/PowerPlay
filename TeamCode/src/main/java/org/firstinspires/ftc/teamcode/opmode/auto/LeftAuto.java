@@ -89,6 +89,7 @@ public class LeftAuto extends LinearOpMode {
             robot.drivetrain.updateModules();
 
             telemetry.addLine("RUNNING LEFT 5 CYCLE");
+            telemetry.addData("PARK", sleeveDetection.getPosition());
             telemetry.update();
 
             PhotonCore.CONTROL_HUB.clearBulkCache();
@@ -143,7 +144,6 @@ public class LeftAuto extends LinearOpMode {
                         ),
                         new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_retracted)),
                         new WaitCommand(500),
-                        new InstantCommand(robot::writeFile),
                         new InstantCommand(this::requestOpModeStop)
                 )
         );
@@ -173,9 +173,9 @@ public class LeftAuto extends LinearOpMode {
             robot.drivetrain.updateModules();
             localizer.periodic();
 
-            telemetry.addData("STATE: ", robot.intake.state);
-            telemetry.addData("STATE: ", robot.lift.state);
-            telemetry.addData("targetPos", robot.intake.targetPosition);
+//            telemetry.addData("STATE: ", robot.intake.state);
+//            telemetry.addData("STATE: ", robot.lift.state);
+            telemetry.addData("targetPos", robot.intake.extensionTargetPosition);
             telemetry.addData("intakePos", robot.intake.getPos());
             telemetry.addData("current pose", localizer.getPos());
 
