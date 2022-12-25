@@ -7,14 +7,11 @@ import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.outoftheboxrobotics.photoncore.Neutrino.Rev2MSensor.Rev2mDistanceSensorEx;
-import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.KinematicState;
 
 @Config
@@ -30,9 +27,12 @@ public class IntakeSubsystem extends SubsystemBase {
     private final Servo claw, turret;
 //    private final Rev2mDistanceSensorEx distanceSensor;
 
-    public MotionProfile profile;
-    public MotionState curState;
-    private final ElapsedTime timer;
+    public MotionProfile extensionProfile;
+    public MotionProfile fourbarProfile;
+    public MotionState extensionState;
+    public MotionState fourbarState;
+    private final ElapsedTime extensionTimer;
+    private final ElapsedTime fourbarTimer;
     private final ElapsedTime voltageTimer;
     private PIDFController controller;
     private final VoltageSensor voltageSensor;
@@ -66,7 +66,8 @@ public class IntakeSubsystem extends SubsystemBase {
     private final double turret_intake = 0.62;
 
     public double power = 0.0;
-    public double targetPosition = 0.0;
+    public double extensionTargetPosition = 0.0;
+    public double fourbarTargetPosition = 0.0;
 
     public int offset = 0;
 
@@ -108,10 +109,13 @@ public class IntakeSubsystem extends SubsystemBase {
 //        this.distanceSensor.setRangingProfile(Rev2mDistanceSensorEx.RANGING_PROFILE.HIGH_SPEED);
 
 
-        this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
+        this.extensionProfile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
+        this.fourbarProfile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
 
-        this.timer = new ElapsedTime();
-        timer.reset();
+        this.extensionTimer = new ElapsedTime();
+        extensionTimer.reset();
+        this.fourbarTimer = new ElapsedTime();
+        fourbarTimer.reset();
         this.voltageTimer = new ElapsedTime();
         voltageTimer.reset();
         this.controller = new PIDFController(P, I, D, F);
@@ -163,12 +167,17 @@ public class IntakeSubsystem extends SubsystemBase {
             voltageTimer.reset();
         }
 
-        curState = profile.get(timer.time());
-        if (curState.getV() != 0) {
-            targetPosition = curState.getX();
+        extensionState = extensionProfile.get(extensionTimer.time());
+        if (extensionState.getV() != 0) {
+            extensionTargetPosition = extensionState.getX();
         }
 
-        power = controller.calculate(intakePosition, targetPosition) / voltage * 12;
+        fourbarState = fourbarProfile.get(fourbarTimer.time());
+        if (fourbarState.getV() != 0) {
+            setFourbar(fourbarState.getX());
+        }
+
+        power = controller.calculate(intakePosition, extensionTargetPosition) / voltage * 12;
     }
 
     public void read() {
@@ -182,6 +191,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setFourbar(double pos) {
         barLeft.setPosition(pos);
         barRight.setPosition(1 - pos);
+        fourbarTargetPosition = pos;
     }
 
     public int getPos() {
@@ -212,18 +222,26 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setSlideFactor(double factor) {
         double slideAddition = 7 * factor;
         double newPosition = intakePosition + slideAddition;
-        if (curState.getV() == 0 && newPosition >= -15 && newPosition <= 485) {
-            targetPosition = newPosition;
+        if (extensionState.getV() == 0 && newPosition >= -15 && newPosition <= 485) {
+            extensionTargetPosition = newPosition;
         }
     }
 
-
-    public void resetTimer() {
-        timer.reset();
+    public void resetExtensionTimer() {
+        extensionTimer.reset();
     }
 
-    public void newProfile(double targetPos, double max_v, double max_a) {
-        profile = MotionProfileGenerator.generateSimpleMotionProfile(new com.acmerobotics.roadrunner.profile.MotionState(getPos(), 0), new com.acmerobotics.roadrunner.profile.MotionState(targetPos, 0), max_v, max_a);
-        resetTimer();
+    public void resetFourbarTimer() {
+        fourbarTimer.reset();
+    }
+
+    public void extensionProfile(double targetPos, double max_v, double max_a) {
+        extensionProfile = MotionProfileGenerator.generateSimpleMotionProfile(new com.acmerobotics.roadrunner.profile.MotionState(getPos(), 0), new com.acmerobotics.roadrunner.profile.MotionState(targetPos, 0), max_v, max_a);
+        resetExtensionTimer();
+    }
+
+    public void fourbarProfile(double targetPos, double max_v, double max_a) {
+        fourbarProfile = MotionProfileGenerator.generateSimpleMotionProfile(new com.acmerobotics.roadrunner.profile.MotionState(fourbarTargetPosition, 0), new com.acmerobotics.roadrunner.profile.MotionState(targetPos, 0), max_v, max_a);
+        resetFourbarTimer();
     }
 }

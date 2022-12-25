@@ -32,7 +32,7 @@ public class IntakePositionCommand extends CommandBase {
     public void execute() {
         if (timer == null) {
             timer = new ElapsedTime();
-            intake.newProfile(position, max_v, max_a);
+            intake.extensionProfile(position, max_v, max_a);
         }
 
         // didnt reach extension in the allotted time, so set the subsystem to the error state specified
