@@ -66,9 +66,13 @@ public class OpMode extends CommandOpMode {
         robot = new Robot(hardwareMap, false);
         robot.reset();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        robot.intake.setFourbar(robot.intake.fourbar_transition);
-        robot.intake.extension.set(-0.4);
-        robot.lift.lift.set(-0.5);
+        robot.intake.setFourbar(IntakeSubsystem.fourbar_transition);
+        robot.intake.update(IntakeSubsystem.PivotState.FLAT);
+        robot.intake.update(IntakeSubsystem.TurretState.INTAKE);
+        robot.intake.update(IntakeSubsystem.ClawState.OPEN);
+
+//        robot.intake.extension.set(-0.4);
+//        robot.lift.lift.set(-0.5);
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();

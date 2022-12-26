@@ -32,5 +32,8 @@ public class EncoderTest extends OpMode {
         loopTime = loop;
         telemetry.update();
         PhotonCore.CONTROL_HUB.clearBulkCache();
+
+        robot.lift.lift.set(gamepad1.left_stick_y);
+        robot.intake.extension.set(gamepad1.right_stick_y);
     }
 }

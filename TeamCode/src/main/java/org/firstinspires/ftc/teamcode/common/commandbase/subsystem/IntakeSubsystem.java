@@ -28,6 +28,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public final MotorEx extensionEncoder;
     private final Servo barLeft, barRight;
     private final Servo claw, turret;
+    private final Servo pivot;
 //    private final Rev2mDistanceSensorEx distanceSensor;
 
     public MotionProfile profile;
@@ -48,11 +49,13 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double claw_pos_open = 0.3;
     public static double claw_pos_closed = 0.47;
 
-    public final double fourbar_extended = 0.2;
-    public final double fourbar_retracted = 0.92;
-    public final double fourbar_transition = fourbar_retracted - 0.15;
+    public static double fourbar_extended = 0.2;
+    public static double fourbar_retracted = 0.92;
+    public static double fourbar_transition = fourbar_retracted - 0.15;
 
-    public static double distanceThreshold = 5;
+    public static double pivot_flat = 0.43;
+    public static double pivot_pitch_up = 0.37;
+
 
     public static final KinematicState[] CYCLE_GRAB_POSITIONS = {
             new KinematicState(515, 0.41, 0.83),
@@ -92,6 +95,10 @@ public class IntakeSubsystem extends SubsystemBase {
         DEPOSIT
     }
 
+    public enum PivotState {
+        FLAT, PITCH_UP
+    }
+
     public IntakeSubsystem(HardwareMap hardwareMap, boolean isAuto) {
         this.extension = new MotorEx(hardwareMap, "extension");
         this.extensionEncoder = new MotorEx(hardwareMap, "rightRearMotor");
@@ -102,6 +109,7 @@ public class IntakeSubsystem extends SubsystemBase {
         this.barRight = hardwareMap.get(Servo.class, "fourbarRight");
         this.claw = hardwareMap.get(Servo.class, "claw");
         this.turret = hardwareMap.get(Servo.class, "turret");
+        this.pivot = hardwareMap.get(Servo.class, "pivot");
 
 //        Rev2mDistanceSensor ds = hardwareMap.get(Rev2mDistanceSensor.class, "distanceSensor");
 //        this.distanceSensor = new Rev2mDistanceSensorEx(ds.getDeviceClient());
@@ -117,6 +125,17 @@ public class IntakeSubsystem extends SubsystemBase {
         this.controller = new PIDFController(P, I, D, F);
         this.voltageSensor = hardwareMap.voltageSensor.iterator().next();
         this.voltage = voltageSensor.getVoltage();
+    }
+
+    public void update(PivotState state) {
+        switch (state) {
+            case FLAT:
+                pivot.setPosition(pivot_flat);
+                break;
+            case PITCH_UP:
+                pivot.setPosition(pivot_pitch_up);
+                break;
+        }
     }
 
     public void update(TurretState state) {
@@ -168,7 +187,7 @@ public class IntakeSubsystem extends SubsystemBase {
             targetPosition = curState.getX();
         }
 
-        power = controller.calculate(intakePosition, targetPosition) / voltage * 12;
+        power = -controller.calculate(intakePosition, targetPosition) / voltage * 12;
     }
 
     public void read() {
