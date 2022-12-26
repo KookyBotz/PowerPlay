@@ -7,4 +7,6 @@ public interface Drivetrain {
     void set(Pose pose);
 
     void set(Pose pose, double maxPower);
+
+    void write();
 }
