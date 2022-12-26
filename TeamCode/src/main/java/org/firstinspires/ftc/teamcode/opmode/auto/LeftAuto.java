@@ -17,7 +17,6 @@ import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.SwerveXCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.commands.LiftPositionCommand;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
-import org.firstinspires.ftc.teamcode.common.hardware.FileInterface;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 import org.firstinspires.ftc.teamcode.common.drive.drive.Drivetrain;
@@ -30,8 +29,6 @@ import org.opencv.core.Point;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-
-import static org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem.CYCLE_GRAB_POSITIONS;
 
 @Autonomous(name = "⬅️ LeftAuto ⬅️")
 @Config
@@ -112,11 +109,11 @@ public class LeftAuto extends LinearOpMode {
                         // start cycling
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0], true),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1], true),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2], true),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3], true),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4], false),
+                                        new AutoCycleCommand(robot, 0.41, 515),
+                                        new AutoCycleCommand(robot, 0.36, 505),
+                                        new AutoCycleCommand(robot, 0.31, 495),
+                                        new AutoCycleCommand(robot, 0.26, 495),
+                                        new AutoCycleCommand(robot, 0.205, 495),
 
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                                         new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_transition)),

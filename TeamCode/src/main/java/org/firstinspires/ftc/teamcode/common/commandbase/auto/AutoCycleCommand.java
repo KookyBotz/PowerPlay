@@ -5,25 +5,25 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.commands.FourbarPositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.commands.IntakePositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.commands.LiftPositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
-import org.firstinspires.ftc.teamcode.common.drive.geometry.KinematicState;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 
-// TODO: tune the velocity and acceleration for the fourbar profiling
 public class AutoCycleCommand extends SequentialCommandGroup {
-    public AutoCycleCommand(Robot robot, KinematicState state, boolean kinematics) {
+    public AutoCycleCommand(Robot robot, double fourbarPos, double intakePos) {
         super(
                 // in parallel
                 new ParallelCommandGroup(
                         // extend intake slides, grab, and transfer
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
-                                new InstantCommand(() -> robot.intake.setFourbar(state.fourbarStartPos)),
+                                // TODO: tune the velocity and acceleration for the fourbar profiling
+                                new FourbarPositionCommand(robot.intake, fourbarPos, 0, 0),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE)),
-                                new IntakePositionCommand(robot.intake, state.intakeStartingPos, 3000, 3000, 20, 3000, IntakeSubsystem.STATE.FAILED_EXTEND),
+                                new IntakePositionCommand(robot.intake, intakePos, 3000, 3000, 20, 3000, IntakeSubsystem.STATE.FAILED_EXTEND),
 
                                 // wait for stuff to stabilize
                                 new WaitCommand(300),
@@ -32,15 +32,13 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)),
                                 new WaitCommand(250),
 
-                                //move up
-                                new KinematicCommand(robot, state, kinematics),
-
                                 // transfer position
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
+                                // TODO: tune the velocity and acceleration for the fourbar profiling
+                                new FourbarPositionCommand(robot.intake, robot.intake.fourbar_transition, 0, 0),
                                 new IntakePositionCommand(robot.intake, 5, 3000, 3000, 10, 3000, IntakeSubsystem.STATE.FAILED_RETRACT)
                                         .alongWith(new WaitCommand(500).andThen(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.DEPOSIT)))),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
-
 
                                 // transfer
                                 new WaitCommand(750),
