@@ -72,7 +72,6 @@ public class OpMode extends CommandOpMode {
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
-//        SwerveDrivetrain.imuOff = -Math.PI / 2;
     }
 
     @Override
@@ -110,20 +109,11 @@ public class OpMode extends CommandOpMode {
 
         boolean dLT = (gamepad2.left_trigger > 0.3);
         boolean dRT = (gamepad2.right_trigger > 0.3);
-//        boolean hasCone = robot.intake.hasCone();
         if (dLT && !pDLT) {
             schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)));
         } else if (dRT && !pDRT) {
             schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)));
         }
-        //        } else if (hasCone && !pCone && !busyCone) {
-////            busyCone = true;
-////            schedule(new SequentialCommandGroup(
-////                    new WaitCommand(200),
-////                    new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)))
-////            );
-//        }
-//        pCone = hasCone;
         pDLT = dLT;
         pDRT = dRT;
 

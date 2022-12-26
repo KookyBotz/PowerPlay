@@ -23,6 +23,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public final MotorEx extensionEncoder;
     private final Servo barLeft, barRight;
     private final Servo claw, turret;
+    private final Servo pitch;
 //    private final Rev2mDistanceSensorEx distanceSensor;
 
     public MotionProfile extensionProfile;
@@ -82,33 +83,34 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public IntakeSubsystem(HardwareMap hardwareMap, boolean isAuto) {
-        this.extension = new MotorEx(hardwareMap, "extension");
-        this.extensionEncoder = new MotorEx(hardwareMap, "rightRearMotor");
+        extension = new MotorEx(hardwareMap, "extension");
+        extensionEncoder = new MotorEx(hardwareMap, "rightRearMotor");
         if (isAuto) {
             extensionEncoder.resetEncoder();
         }
-        this.barLeft = hardwareMap.get(Servo.class, "fourbarLeft");
-        this.barRight = hardwareMap.get(Servo.class, "fourbarRight");
-        this.claw = hardwareMap.get(Servo.class, "claw");
-        this.turret = hardwareMap.get(Servo.class, "turret");
+        barLeft = hardwareMap.get(Servo.class, "fourbarLeft");
+        barRight = hardwareMap.get(Servo.class, "fourbarRight");
+        claw = hardwareMap.get(Servo.class, "claw");
+        turret = hardwareMap.get(Servo.class, "turret");
+        pitch = hardwareMap.get(Servo.class, "pitch");
 
 //        Rev2mDistanceSensor ds = hardwareMap.get(Rev2mDistanceSensor.class, "distanceSensor");
 //        this.distanceSensor = new Rev2mDistanceSensorEx(ds.getDeviceClient());
 //        this.distanceSensor.setRangingProfile(Rev2mDistanceSensorEx.RANGING_PROFILE.HIGH_SPEED);
 
 
-        this.extensionProfile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
-        this.fourbarProfile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
+        extensionProfile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
+        fourbarProfile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
 
-        this.extensionTimer = new ElapsedTime();
+        extensionTimer = new ElapsedTime();
         extensionTimer.reset();
-        this.fourbarTimer = new ElapsedTime();
+        fourbarTimer = new ElapsedTime();
         fourbarTimer.reset();
-        this.voltageTimer = new ElapsedTime();
+        voltageTimer = new ElapsedTime();
         voltageTimer.reset();
-        this.controller = new PIDFController(P, I, D, F);
-        this.voltageSensor = hardwareMap.voltageSensor.iterator().next();
-        this.voltage = voltageSensor.getVoltage();
+        controller = new PIDFController(P, I, D, F);
+        voltageSensor = hardwareMap.voltageSensor.iterator().next();
+        voltage = voltageSensor.getVoltage();
     }
 
     public void update(TurretState state) {
@@ -162,6 +164,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         fourbarState = fourbarProfile.get(fourbarTimer.time());
         if (fourbarState.getV() != 0) {
+            fourbarTargetPosition = fourbarState.getX();
             setFourbar(fourbarState.getX());
         }
 
@@ -185,10 +188,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public int getPos() {
         return (int) intakePosition;
     }
-
-//    public boolean hasCone() {
-//        return distanceSensor.getDistance(DistanceUnit.CM) < distanceThreshold;
-//    }
 
     public void setFourbarFactor(double factor) {
         double fourbarAddition = -0.007 * factor;

@@ -34,7 +34,6 @@ public class LiftPositionCommand extends CommandBase {
             lift.newProfile(position, max_v, max_a);
         }
 
-        // didnt reach extension in the allotted time, so set the subsystem to the error state specified
         if (timer.milliseconds() > timeout) {
             lift.state = errorState;
         }

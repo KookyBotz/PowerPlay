@@ -20,7 +20,6 @@ import org.openftc.easyopencv.OpenCvPipeline;
 @Autonomous(name = "ColorTesting")
 @Disabled
 public class ColorTesting extends LinearOpMode {
-    int width = 320, height = 240;
     OpenCvCamera cam;
     RelocalizerDetection pipeline;
     SleeveDetection pipeline2;
@@ -62,12 +61,6 @@ class RelocalizerDetection extends OpenCvPipeline {
 
     public static int r1 = 0, g1 = 0, b1 = 0;
     public static int r2 = 0, g2 = 0, b2 = 0;
-
-//    private static final Scalar
-//            lower_red_bounds  = new Scalar(COLOR_MIN, 0, 0, 255),
-//            upper_red_bounds  = new Scalar(255, COLOR_MAX, COLOR_MAX, 255);
-//            lower_blue_bounds = new Scalar(0, 0, COLOR_MIN, 255),
-//            upper_blue_bounds = new Scalar(COLOR_MAX, COLOR_MAX, 255, 255);
 
     public static Scalar lower_red = new Scalar(COLOR_MIN, 0, 0, 255);
     public static Scalar upper_red = new Scalar(255, COLOR_MAX, COLOR_MAX, 255);

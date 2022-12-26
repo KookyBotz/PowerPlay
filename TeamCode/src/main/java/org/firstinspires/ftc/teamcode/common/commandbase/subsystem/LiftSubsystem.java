@@ -56,10 +56,10 @@ public class LiftSubsystem extends SubsystemBase {
 
     // thanks aabhas <3
     public LiftSubsystem(HardwareMap hardwareMap, boolean isAuto) {
-        this.lift = new MotorEx(hardwareMap, "lift");
-        this.liftEncoder = new MotorEx(hardwareMap, "leftRearMotor");
-        this.latch = hardwareMap.get(Servo.class, "latch");
-        this.timer = new ElapsedTime();
+        lift = new MotorEx(hardwareMap, "lift");
+        liftEncoder = new MotorEx(hardwareMap, "leftRearMotor");
+        latch = hardwareMap.get(Servo.class, "latch");
+        timer = new ElapsedTime();
         timer.reset();
 
         if (isAuto) {
@@ -71,16 +71,16 @@ public class LiftSubsystem extends SubsystemBase {
         liftEncoder.motor.setDirection(DcMotorSimple.Direction.REVERSE);
         lift.motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
+        profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
 
-        this.voltageTimer = new ElapsedTime();
+        voltageTimer = new ElapsedTime();
         voltageTimer.reset();
 
-        this.controller = new PIDController(P, I, D);
+        controller = new PIDController(P, I, D);
         controller.setPID(P, I, D);
 
-        this.voltageSensor = hardwareMap.voltageSensor.iterator().next();
-        this.voltage = voltageSensor.getVoltage();
+        voltageSensor = hardwareMap.voltageSensor.iterator().next();
+        voltage = voltageSensor.getVoltage();
     }
 
     public void loop() {

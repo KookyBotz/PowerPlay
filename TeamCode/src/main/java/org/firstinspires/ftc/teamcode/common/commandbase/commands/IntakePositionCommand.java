@@ -35,7 +35,6 @@ public class IntakePositionCommand extends CommandBase {
             intake.extensionProfile(position, max_v, max_a);
         }
 
-        // didnt reach extension in the allotted time, so set the subsystem to the error state specified
         if (timer.milliseconds() > timeout) {
             intake.state = errorState;
         }
