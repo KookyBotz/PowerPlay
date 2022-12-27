@@ -57,7 +57,6 @@ public class OpMode extends CommandOpMode {
     private boolean pCone = false;
 
     private boolean busy = false;
-//    private boolean busyCone = false;
 
     @Override
     public void initialize() {
