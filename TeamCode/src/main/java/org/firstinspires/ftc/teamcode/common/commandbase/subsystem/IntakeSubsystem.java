@@ -7,15 +7,12 @@ import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.outoftheboxrobotics.photoncore.Neutrino.Rev2MSensor.Rev2mDistanceSensorEx;
-import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.common.drive.geometry.KinematicState;
+import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
 
 @Config
 public class IntakeSubsystem extends SubsystemBase {
@@ -50,19 +47,20 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double claw_pos_closed = 0.47;
 
     public static double fourbar_extended = 0.2;
-    public static double fourbar_retracted = 0.92;
+    public static double fourbar_retracted = 0.93;
     public static double fourbar_transition = fourbar_retracted - 0.15;
 
     public static double pivot_flat = 0.43;
     public static double pivot_pitch_up = 0.37;
+    public static double pivot_pitch_down = 0.45;
 
 
-    public static final KinematicState[] CYCLE_GRAB_POSITIONS = {
-            new KinematicState(515, 0.41, 0.83),
-            new KinematicState(505, 0.36, 0.62),
-            new KinematicState(495, 0.31, 0.55),
-            new KinematicState(495, 0.26, 0.48),
-            new KinematicState(495, 0.205, 0.44)
+    public static final GrabPosition[] CYCLE_GRAB_POSITIONS = {
+            new GrabPosition(560, 250, 0.43, pivot_pitch_up, 0),
+            new GrabPosition(550, 250, 0.39, pivot_pitch_up, 0),
+            new GrabPosition(530, 250, 0.34, pivot_pitch_up, 0),
+            new GrabPosition(530, 250, 0.29, pivot_pitch_up, 0),
+            new GrabPosition(530, 250, 0.235, pivot_pitch_up, 0)
     };
 
     private final double turret_deposit = 0;
@@ -201,6 +199,10 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setFourbar(double pos) {
         barLeft.setPosition(pos);
         barRight.setPosition(1 - pos);
+    }
+
+    public void setPivot(double pos){
+        pivot.setPosition(pos);
     }
 
     public int getPos() {

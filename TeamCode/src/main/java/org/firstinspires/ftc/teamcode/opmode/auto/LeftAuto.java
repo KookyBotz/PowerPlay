@@ -58,13 +58,15 @@ public class LeftAuto extends LinearOpMode {
         robot.intake.update(IntakeSubsystem.ClawState.CLOSED);
         robot.lift.update(LiftSubsystem.LatchState.LATCHED);
         robot.intake.update(IntakeSubsystem.ClawState.OPEN);
+        robot.intake.update(IntakeSubsystem.PivotState.FLAT);
+        robot.intake.update(IntakeSubsystem.TurretState.INTAKE);
 
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
 
-        int cameraMonitorViewId =   hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         sleeveDetection = new SleeveDetection(new Point(90, 80));
         camera.setPipeline(sleeveDetection);
@@ -105,46 +107,33 @@ public class LeftAuto extends LinearOpMode {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         // get to cycle position
-                        new PositionCommand(drivetrain, localizer, new Pose(-5, 57.98, 0), 2500),
-                        new PositionCommand(drivetrain, localizer, new Pose(-5, 57.98, 4.48), 4000),
-
                         // start cycling
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0], true),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1], true),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2], true),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3], true),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4], false),
-
-                                        new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
-                                        new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_transition)),
-                                        new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE)),
-
-                                        new WaitCommand(250),
-
-                                        new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
-                                        new LiftPositionCommand(robot.lift, 610, 3000, 7500, 30, 3000, LiftSubsystem.STATE.FAILED_EXTEND),
-                                        new WaitCommand(500),
-                                        new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)),
-                                        new LiftPositionCommand(robot.lift, 0, 3000, 7500, 10, 2000, LiftSubsystem.STATE.FAILED_RETRACT)
+                                        new PositionCommand(drivetrain, localizer, new Pose(-3.5, 56.5, 4.49), 500, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        new SwerveXCommand(robot.drivetrain)
 
                                 ),
-                                new SequentialCommandGroup(
-                                        new SwerveXCommand(robot.drivetrain),
-                                        new PositionCommand(drivetrain, localizer, new Pose(-2.5, 55, 4), 1500)
-                                )
 
-                        ),
-                        new PositionCommand(drivetrain, localizer,
-                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
-                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(18, 51, 0) :
-                                                new Pose(-31, 49, 0), 2000
-                        ),
-                        new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_retracted)),
-                        new WaitCommand(500),
-                        new InstantCommand(robot::writeFile),
-                        new InstantCommand(this::requestOpModeStop)
+                                new WaitCommand(1700).andThen(new SequentialCommandGroup(
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0]),
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1]),
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2]),
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3]),
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4]),
+                                        new InstantCommand(this::requestOpModeStop)
+                                ))
+
+                        )
+//                        new PositionCommand(drivetrain, localizer,
+//                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
+//                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(18, 51, 0) :
+//                                                new Pose(-31, 49, 0), 2000
+//                        ),
+//                        new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_retracted)),
+//                        new WaitCommand(500),
+//                        new InstantCommand(robot::writeFile),
+//                        new InstantCommand(this::requestOpModeStop)
                 )
         );
 
@@ -157,11 +146,11 @@ public class LeftAuto extends LinearOpMode {
                 CommandScheduler.getInstance().reset();
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-                                new PositionCommand(drivetrain, localizer,
-                                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
-                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 51, 0) :
-                                                        new Pose(-31, 49, 0), 2000
-                                ),
+//                                new PositionCommand(drivetrain, localizer,
+//                                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
+//                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 51, 0) :
+//                                                        new Pose(-31, 49, 0), 2000
+//                                ),
                                 new InstantCommand(this::requestOpModeStop)
                         )
                 );

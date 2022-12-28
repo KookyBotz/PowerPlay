@@ -7,18 +7,23 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.GrabStackCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 
 @TeleOp(name = "Testing")
-@Disabled
 public class Testing extends OpMode {
     Robot robot;
     private double loopTime = 0;
 
     private boolean busy = false;
+
+    public static long clawDelay = 150;
+    public static double fourbarPos = IntakeSubsystem.fourbar_retracted;
+    public static long upDelay = 0;
+    public static double pivotPos = IntakeSubsystem.pivot_pitch_up;
 
     @Override
     public void init() {
@@ -31,10 +36,11 @@ public class Testing extends OpMode {
 
         robot.intake.extensionEncoder.resetEncoder();
         robot.lift.liftEncoder.resetEncoder();
-        robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION);
+        robot.intake.setFourbar(0.41);
         robot.intake.update(IntakeSubsystem.ClawState.OPEN);
         robot.intake.update(IntakeSubsystem.TurretState.INTAKE);
         robot.lift.update(LiftSubsystem.LatchState.UNLATCHED);
+        robot.intake.update(IntakeSubsystem.PivotState.FLAT);
     }
 
     @Override
@@ -42,7 +48,12 @@ public class Testing extends OpMode {
         boolean a = gamepad1.a;
         if (a && !busy) {
             busy = true;
-            CommandScheduler.getInstance().schedule(new TeleopCycleCommand(robot, (b) -> busy = b));
+//            CommandScheduler.getInstance().schedule(new GrabStackCommand(robot, clawDelay, fourbarPos, pivotPos, upDelay));
+        }
+
+        double gamepad1_left_stick_y = gamepad1.left_stick_y;
+        if (Math.abs(gamepad1_left_stick_y) > 0.1) {
+            robot.intake.setFourbarFactor(Math.pow(gamepad1_left_stick_y, 3));
         }
 
         robot.read();

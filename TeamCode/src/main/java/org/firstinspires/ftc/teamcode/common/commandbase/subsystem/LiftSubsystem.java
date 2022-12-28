@@ -94,7 +94,7 @@ public class LiftSubsystem extends SubsystemBase {
             targetPosition = curState.getX();
         }
 
-        power = -controller.calculate(liftPosition, targetPosition) / voltage * 12;
+        power = -controller.calculate(liftPosition, targetPosition) / voltage * 14;
     }
 
     public void update(LatchState state) {

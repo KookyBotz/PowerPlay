@@ -33,21 +33,27 @@ public class PositionCommand extends CommandBase {
     Drivetrain drivetrain;
     Localizer localizer;
     Pose targetPose;
-    ElapsedTime timer;
+    ElapsedTime deadTimer;
 
     private final double ms;
+    private final double delay;
+    private ElapsedTime delayTimer;
 
-    public PositionCommand(Drivetrain drivetrain, Localizer localizer, Pose targetPose, double ms) {
+    private final double v;
+
+    public PositionCommand(Drivetrain drivetrain, Localizer localizer, Pose targetPose, double delay, double dead, double voltage) {
         this.drivetrain = drivetrain;
         this.localizer = localizer;
         this.targetPose = targetPose;
-        this.ms = ms;
+        this.ms = dead;
+        this.delay = delay;
+        this.v = voltage;
     }
 
     @Override
     public void execute() {
-        if (timer == null) {
-            timer = new ElapsedTime();
+        if (deadTimer == null) {
+            deadTimer = new ElapsedTime();
         }
         drivetrain.set(goToPosition(localizer.getPos(), targetPose));
     }
@@ -56,7 +62,17 @@ public class PositionCommand extends CommandBase {
     public boolean isFinished() {
         Pose error = targetPose.subtract(localizer.getPos());
 
-        return ((Math.hypot(error.x, error.y) < ALLOWED_TRANSLATIONAL_ERROR) && (Math.abs(error.heading) < ALLOWED_HEADING_ERROR)) || (timer.milliseconds() > ms);
+        boolean reached = ((Math.hypot(error.x, error.y) < ALLOWED_TRANSLATIONAL_ERROR) && (Math.abs(error.heading) < ALLOWED_HEADING_ERROR));
+
+        if (reached && delayTimer == null) {
+            delayTimer = new ElapsedTime();
+        }
+        if (!reached && delayTimer != null) {
+            delayTimer.reset();
+        }
+
+        boolean delayed = delayTimer != null && delayTimer.milliseconds() > delay;
+        return (deadTimer.milliseconds() > ms) || delayed;
     }
 
     @Override
@@ -68,7 +84,7 @@ public class PositionCommand extends CommandBase {
         return target.subtract(robot);
     }
 
-    public static Pose goToPosition(Pose robotPose, Pose targetPose) {
+    public Pose goToPosition(Pose robotPose, Pose targetPose) {
         Pose deltaPose = relDistanceToTarget(robotPose, targetPose);
         Pose powers = new Pose(
                 xController.calculate(0, deltaPose.x),
@@ -83,6 +99,6 @@ public class PositionCommand extends CommandBase {
                 Math.min(-y_rotated, max_power);
         double heading_power = powers.heading;
 
-        return new Pose(x_power, y_power, heading_power);
+        return new Pose(x_power/v * 12.8, y_power/v * 12.8, heading_power/v * 12.8);
     }
 }
