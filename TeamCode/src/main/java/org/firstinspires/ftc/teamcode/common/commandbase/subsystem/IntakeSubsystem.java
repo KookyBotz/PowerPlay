@@ -23,11 +23,9 @@ public class IntakeSubsystem extends SubsystemBase {
     public final MotorEx extensionEncoder;
     private final Servo barLeft, barRight;
     private final Servo claw, turret;
-    private final Servo pitch;
 //    private final Rev2mDistanceSensorEx distanceSensor;
 
     public MotionProfile extensionProfile;
-    public MotionProfile fourbarProfile;
     public MotionState extensionState;
     public MotionState fourbarState;
     private final ElapsedTime extensionTimer;
@@ -56,7 +54,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public double power = 0.0;
     public double extensionTargetPosition = 0.0;
-    public double fourbarTargetPosition = 0.0;
 
     public int offset = 0;
 
@@ -92,7 +89,6 @@ public class IntakeSubsystem extends SubsystemBase {
         barRight = hardwareMap.get(Servo.class, "fourbarRight");
         claw = hardwareMap.get(Servo.class, "claw");
         turret = hardwareMap.get(Servo.class, "turret");
-        pitch = hardwareMap.get(Servo.class, "pitch");
 
 //        Rev2mDistanceSensor ds = hardwareMap.get(Rev2mDistanceSensor.class, "distanceSensor");
 //        this.distanceSensor = new Rev2mDistanceSensorEx(ds.getDeviceClient());
@@ -100,7 +96,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
 
         extensionProfile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
-        fourbarProfile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
 
         extensionTimer = new ElapsedTime();
         extensionTimer.reset();
@@ -162,12 +157,6 @@ public class IntakeSubsystem extends SubsystemBase {
             extensionTargetPosition = extensionState.getX();
         }
 
-        fourbarState = fourbarProfile.get(fourbarTimer.time());
-        if (fourbarState.getV() != 0) {
-            fourbarTargetPosition = fourbarState.getX();
-            setFourbar(fourbarState.getX());
-        }
-
         power = controller.calculate(intakePosition, extensionTargetPosition) / voltage * 12;
     }
 
@@ -182,7 +171,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setFourbar(double pos) {
         barLeft.setPosition(pos);
         barRight.setPosition(1 - pos);
-        fourbarTargetPosition = pos;
     }
 
     public int getPos() {
@@ -218,17 +206,8 @@ public class IntakeSubsystem extends SubsystemBase {
         extensionTimer.reset();
     }
 
-    public void resetFourbarTimer() {
-        fourbarTimer.reset();
-    }
-
     public void extensionProfile(double targetPos, double max_v, double max_a) {
         extensionProfile = MotionProfileGenerator.generateSimpleMotionProfile(new com.acmerobotics.roadrunner.profile.MotionState(getPos(), 0), new com.acmerobotics.roadrunner.profile.MotionState(targetPos, 0), max_v, max_a);
         resetExtensionTimer();
-    }
-
-    public void fourbarProfile(double targetPos, double max_v, double max_a) {
-        fourbarProfile = MotionProfileGenerator.generateSimpleMotionProfile(new com.acmerobotics.roadrunner.profile.MotionState(fourbarTargetPosition, 0), new com.acmerobotics.roadrunner.profile.MotionState(targetPos, 0), max_v, max_a);
-        resetFourbarTimer();
     }
 }

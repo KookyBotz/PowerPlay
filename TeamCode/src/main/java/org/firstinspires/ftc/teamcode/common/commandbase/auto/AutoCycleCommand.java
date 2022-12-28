@@ -5,7 +5,6 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.common.commandbase.commands.FourbarPositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.commands.IntakePositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.commands.LiftPositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
@@ -20,8 +19,7 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                         // extend intake slides, grab, and transfer
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
-                                // TODO: tune the velocity and acceleration for the fourbar profiling
-                                new FourbarPositionCommand(robot.intake, fourbarPos, 0, 0),
+                                new InstantCommand(() -> robot.intake.setFourbar(fourbarPos)),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE)),
                                 new IntakePositionCommand(robot.intake, intakePos, 3000, 3000, 20, 3000, IntakeSubsystem.STATE.FAILED_EXTEND),
 
@@ -34,8 +32,6 @@ public class AutoCycleCommand extends SequentialCommandGroup {
 
                                 // transfer position
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
-                                // TODO: tune the velocity and acceleration for the fourbar profiling
-                                new FourbarPositionCommand(robot.intake, robot.intake.fourbar_transition, 0, 0),
                                 new IntakePositionCommand(robot.intake, 5, 3000, 3000, 10, 3000, IntakeSubsystem.STATE.FAILED_RETRACT)
                                         .alongWith(new WaitCommand(500).andThen(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.DEPOSIT)))),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
