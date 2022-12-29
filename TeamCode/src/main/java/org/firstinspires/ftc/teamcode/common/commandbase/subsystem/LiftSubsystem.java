@@ -32,14 +32,14 @@ public class LiftSubsystem extends SubsystemBase {
     private final VoltageSensor voltageSensor;
 
     private double voltage;
-    private int liftPosition;
+
+    private int liftPosition = 0;
+    private int targetPosition = 0;
+    private double power = 0.0;
 
     private final double P = 0.0375;
     private final double I = 0.0;
     private final double D = 0.0;
-
-    private double power = 0.0;
-    private int targetPosition = 0;
 
     public int offset = 0;
 
@@ -139,7 +139,6 @@ public class LiftSubsystem extends SubsystemBase {
     public void resetTimer() {
         timer.reset();
     }
-
 
     public void newProfile(double targetPos, double max_v, double max_a) {
         profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(targetPos, 0), max_v, max_a);

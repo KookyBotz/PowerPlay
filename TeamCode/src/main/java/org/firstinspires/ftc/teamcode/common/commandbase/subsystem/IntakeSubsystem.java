@@ -57,7 +57,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double pivot_pitch_up = 0.37;
     public static double pivot_pitch_down = 0.44;
 
-
     public static final GrabPosition[] CYCLE_GRAB_POSITIONS = {
             new GrabPosition(560, 250, 0.43, pivot_pitch_up, 0),
             new GrabPosition(540, 250, 0.39, pivot_pitch_up, 0),
@@ -112,7 +111,6 @@ public class IntakeSubsystem extends SubsystemBase {
 //        Rev2mDistanceSensor ds = hardwareMap.get(Rev2mDistanceSensor.class, "distanceSensor");
 //        this.distanceSensor = new Rev2mDistanceSensorEx(ds.getDeviceClient());
 //        this.distanceSensor.setRangingProfile(Rev2mDistanceSensorEx.RANGING_PROFILE.HIGH_SPEED);
-
 
         this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
 
@@ -245,7 +243,6 @@ public class IntakeSubsystem extends SubsystemBase {
             targetPosition = (int) newPosition;
         }
     }
-
 
     public void resetTimer() {
         timer.reset();

@@ -90,7 +90,8 @@ public class LeftAuto extends LinearOpMode {
             }
             robot.drivetrain.updateModules();
 
-            telemetry.addLine("RUNNING LEFT 5 CYCLE");
+            telemetry.addLine("RUNNING LEFT 10 CYCLE");
+            telemetry.addData("POSITION:", sleeveDetection.getPosition());
             telemetry.update();
 
             PhotonCore.CONTROL_HUB.clearBulkCache();
