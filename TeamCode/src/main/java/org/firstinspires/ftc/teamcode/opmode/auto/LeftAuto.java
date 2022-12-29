@@ -193,7 +193,7 @@ public class LeftAuto extends LinearOpMode {
 
             telemetry.addData("STATE: ", robot.intake.state);
             telemetry.addData("STATE: ", robot.lift.state);
-            telemetry.addData("targetPos", robot.intake.targetPosition);
+            telemetry.addData("targetPos", robot.intake.getTargetPos());
             telemetry.addData("intakePos", robot.intake.getPos());
             telemetry.addData("current pose", localizer.getPos());
 

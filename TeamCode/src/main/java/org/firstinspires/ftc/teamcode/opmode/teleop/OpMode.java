@@ -197,11 +197,11 @@ public class OpMode extends CommandOpMode {
 
         // Telemetry
         telemetry.addData("liftPos:", robot.lift.getPos());
-        telemetry.addData("liftPow:", robot.lift.power);
-        telemetry.addData("liftTarget:", robot.lift.targetPosition);
+        telemetry.addData("liftTarget:", robot.lift.getTargetPos());
+        telemetry.addData("liftPow:", robot.lift.getPower());
         telemetry.addData("intakePos:", robot.intake.getPos());
-        telemetry.addData("intakePow:", robot.intake.power);
-        telemetry.addData("intakeTarget:", robot.intake.targetPosition);
+        telemetry.addData("intakeTarget:", robot.intake.getTargetPos());
+        telemetry.addData("intakePow:", robot.intake.getPower());
         telemetry.addData("imu", SwerveDrivetrain.imuOff);
 
         double loop = System.nanoTime();

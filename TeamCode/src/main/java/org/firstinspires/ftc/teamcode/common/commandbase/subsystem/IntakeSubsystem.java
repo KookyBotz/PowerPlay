@@ -36,7 +36,10 @@ public class IntakeSubsystem extends SubsystemBase {
     private final VoltageSensor voltageSensor;
 
     private double voltage;
-    private double intakePosition;
+
+    private int intakePosition = 0;
+    private int targetPosition = 0;
+    private double power = 0.0;
 
     public static double P = 0.06;
     public static double I = 0.013;
@@ -65,9 +68,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private final double turret_deposit = 0;
     private final double turret_intake = 0.62;
-
-    public double power = 0.0;
-    public double targetPosition = 0.0;
 
     public int offset = 0;
 
@@ -182,7 +182,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         curState = profile.get(timer.time());
         if (curState.getV() != 0) {
-            targetPosition = curState.getX();
+            targetPosition = (int) curState.getX();
         }
 
         power = -controller.calculate(intakePosition, targetPosition) / voltage * 12;
@@ -206,7 +206,15 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public int getPos() {
-        return (int) intakePosition;
+        return intakePosition;
+    }
+
+    public int getTargetPos() {
+        return targetPosition;
+    }
+
+    public double getPower() {
+        return power;
     }
 
 //    public boolean hasCone() {
@@ -234,7 +242,7 @@ public class IntakeSubsystem extends SubsystemBase {
         double slideAddition = 7 * factor;
         double newPosition = intakePosition + slideAddition;
         if (curState.getV() == 0 && newPosition >= -15 && newPosition <= 485) {
-            targetPosition = newPosition;
+            targetPosition = (int) newPosition;
         }
     }
 

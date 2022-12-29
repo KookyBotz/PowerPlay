@@ -38,8 +38,8 @@ public class LiftSubsystem extends SubsystemBase {
     private final double I = 0.0;
     private final double D = 0.0;
 
-    public double power = 0.0;
-    public double targetPosition = 0.0;
+    private double power = 0.0;
+    private int targetPosition = 0;
 
     public int offset = 0;
 
@@ -91,7 +91,7 @@ public class LiftSubsystem extends SubsystemBase {
 
         curState = profile.get(timer.time());
         if (curState.getV() != 0) {
-            targetPosition = curState.getX();
+            targetPosition = (int) curState.getX();
         }
 
         power = -controller.calculate(liftPosition, targetPosition) / voltage * 14;
@@ -120,12 +120,19 @@ public class LiftSubsystem extends SubsystemBase {
         return liftPosition;
     }
 
+    public int getTargetPos() {
+        return targetPosition;
+    }
+
+    public double getPower() {
+        return power;
+    }
 
     public void setSlideFactor(double factor) {
         double slideAddition = 10 * factor;
         double newPosition = liftPosition + slideAddition;
         if (curState.getV() == 0 && newPosition >= -15 && newPosition <= 405) {
-            targetPosition = newPosition;
+            targetPosition = (int) newPosition;
         }
     }
 
