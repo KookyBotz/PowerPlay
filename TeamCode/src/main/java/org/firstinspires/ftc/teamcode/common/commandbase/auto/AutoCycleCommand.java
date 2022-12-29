@@ -27,16 +27,18 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                                 new IntakePositionCommand(robot.intake, state.intPos, 6000, 4500, 20, 3000, IntakeSubsystem.STATE.FAILED_EXTEND),
 
                                 new GrabStackCommand(robot, state),
-                                new WaitCommand(200),
+                                new WaitCommand(100),
 
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.DEPOSIT)),
-                                new IntakePositionCommand(robot.intake, 0, 6000, 4500, 10, 3000, IntakeSubsystem.STATE.FAILED_RETRACT)
-                                        .alongWith(new WaitCommand(500).andThen(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)))),
+                                new IntakePositionCommand(robot.intake, 5, 6000, 4500, 10, 3000, IntakeSubsystem.STATE.FAILED_RETRACT)
+                                        .alongWith(new WaitCommand(150).andThen(new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_flat)))),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
                                 new WaitCommand(250),
                                 new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
-                                new WaitCommand(100)
+                                new WaitCommand(100),
+                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT))
+
 
                         ),
 
@@ -45,8 +47,8 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                                 new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
                                 new LiftPositionCommand(robot.lift, 610, 6000, 7500, 30, 3000, LiftSubsystem.STATE.FAILED_EXTEND),
                                 new WaitCommand(0),
-                                new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)),
-                                new LiftPositionCommand(robot.lift, 15, 6000, 7500, 10, 2000, LiftSubsystem.STATE.FAILED_RETRACT)
+                                new LiftPositionCommand(robot.lift, 0, 6000, 7500, 10, 2000, LiftSubsystem.STATE.FAILED_RETRACT)
+                                        .alongWith(new WaitCommand(125).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED))))
                         )
                 )
         );

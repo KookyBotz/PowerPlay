@@ -47,18 +47,18 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double claw_pos_closed = 0.47;
 
     public static double fourbar_extended = 0.2;
-    public static double fourbar_retracted = 0.93;
+    public static double fourbar_retracted = 0.952;
     public static double fourbar_transition = fourbar_retracted - 0.15;
 
     public static double pivot_flat = 0.43;
     public static double pivot_pitch_up = 0.37;
-    public static double pivot_pitch_down = 0.45;
+    public static double pivot_pitch_down = 0.44;
 
 
     public static final GrabPosition[] CYCLE_GRAB_POSITIONS = {
             new GrabPosition(560, 250, 0.43, pivot_pitch_up, 0),
-            new GrabPosition(550, 250, 0.39, pivot_pitch_up, 0),
-            new GrabPosition(530, 250, 0.34, pivot_pitch_up, 0),
+            new GrabPosition(540, 250, 0.39, pivot_pitch_up, 0),
+            new GrabPosition(530, 250, 0.335, pivot_pitch_up, 0),
             new GrabPosition(530, 250, 0.29, pivot_pitch_up, 0),
             new GrabPosition(530, 250, 0.235, pivot_pitch_up, 0)
     };

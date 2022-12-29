@@ -27,6 +27,6 @@ public class SwerveXCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return timeout.seconds() > 19;
+        return timeout.seconds() > 9;
     }
 }
