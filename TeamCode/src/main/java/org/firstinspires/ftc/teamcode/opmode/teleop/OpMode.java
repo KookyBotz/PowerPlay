@@ -71,8 +71,8 @@ public class OpMode extends CommandOpMode {
         robot.intake.update(IntakeSubsystem.TurretState.INTAKE);
         robot.intake.update(IntakeSubsystem.ClawState.OPEN);
 
-        robot.intake.extension.set(-0.4);
-        robot.lift.lift.set(-0.4);
+        robot.intake.extension.set(0.4);
+        robot.lift.lift.set(0.4);
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();

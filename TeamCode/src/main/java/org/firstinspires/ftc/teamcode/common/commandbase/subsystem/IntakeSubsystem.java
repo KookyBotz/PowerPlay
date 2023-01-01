@@ -46,13 +46,13 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double claw_pos_open = 0.3;
     public static double claw_pos_closed = 0.47;
 
-    public static double fourbar_extended = 0.2;
+    public static double fourbar_extended = 0.22;
     public static double fourbar_retracted = 0.952;
     public static double fourbar_transition = fourbar_retracted - 0.15;
 
     public static double pivot_flat = 0.43;
     public static double pivot_pitch_up = 0.37;
-    public static double pivot_pitch_down = 0.44;
+    public static double pivot_pitch_down = 0.47;
 
 
     public static final GrabPosition[] CYCLE_GRAB_POSITIONS = {
@@ -214,7 +214,7 @@ public class IntakeSubsystem extends SubsystemBase {
 //    }
 
     public void setFourbarFactor(double factor) {
-        double fourbarAddition = -0.007 * factor;
+        double fourbarAddition = -0.01 * factor;
         double barLeftPos = barLeft.getPosition();
         if (!(barLeftPos + fourbarAddition > fourbar_retracted) || !(barLeftPos - fourbarAddition < fourbar_extended)) {
             barLeft.setPosition(barLeftPos + fourbarAddition);

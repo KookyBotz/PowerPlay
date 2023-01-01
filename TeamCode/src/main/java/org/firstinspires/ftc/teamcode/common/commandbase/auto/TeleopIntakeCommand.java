@@ -14,6 +14,7 @@ public class TeleopIntakeCommand extends ParallelCommandGroup {
         super(
                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)),
                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.INTAKE)),
+                new InstantCommand(()->robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
                 new IntakePositionCommand(robot.intake, 0, 1500, 4000, 10, 3000, IntakeSubsystem.STATE.FAILED_RETRACT),
                 new SequentialCommandGroup(
                         new WaitCommand(100),
