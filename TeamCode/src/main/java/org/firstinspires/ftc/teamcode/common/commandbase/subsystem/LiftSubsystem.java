@@ -40,8 +40,13 @@ public class LiftSubsystem extends SubsystemBase {
 
     public double power = 0.0;
     public double targetPosition = 0.0;
+    private int endPos = 0;
 
     public int offset = 0;
+
+    public int getTargetPos() {
+        return endPos;
+    }
 
     public enum STATE {
         GOOD,
@@ -136,6 +141,7 @@ public class LiftSubsystem extends SubsystemBase {
 
     public void newProfile(double targetPos, double max_v, double max_a) {
         profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(targetPos, 0), max_v, max_a);
+        endPos = (int) targetPos;
         resetTimer();
     }
 }

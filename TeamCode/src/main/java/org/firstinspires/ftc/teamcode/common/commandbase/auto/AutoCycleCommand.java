@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem
 import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 
-// TODO: Test this, I just copied TeleopCycleCommand lmao
 public class AutoCycleCommand extends SequentialCommandGroup {
     public AutoCycleCommand(Robot robot, GrabPosition state) {
         super(
@@ -26,26 +25,26 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
                                 new IntakePositionCommand(robot.intake, state.intPos, 6000, 4500, 20, 3000, IntakeSubsystem.STATE.FAILED_EXTEND),
 
+                                new WaitCommand(200),
                                 new GrabStackCommand(robot, state),
-                                new WaitCommand(100),
 
-                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.DEPOSIT)),
-                                new IntakePositionCommand(robot.intake, 5, 6000, 4500, 10, 3000, IntakeSubsystem.STATE.FAILED_RETRACT)
-                                        .alongWith(new WaitCommand(150).andThen(new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_flat)))),
+                                new IntakePositionCommand(robot.intake, -5, 6000, 4500, 20, 3000, IntakeSubsystem.STATE.FAILED_RETRACT)
+                                        .alongWith(
+                                                new WaitCommand(150)
+                                                        .andThen(new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_auto_transfer)))
+                                                        .andThen(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.DEPOSIT)))
+                                        ),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
+                                new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_flat)),
                                 new WaitCommand(250),
-                                new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
-                                new WaitCommand(100),
-                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT))
-
-
+                                new WaitCommand(100)
                         ),
 
                         // and deposit previous cone
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
-                                new LiftPositionCommand(robot.lift, 610, 6000, 7500, 30, 3000, LiftSubsystem.STATE.FAILED_EXTEND),
+                                new LiftPositionCommand(robot.lift, 610, 6000, 7500, 40, 3000, LiftSubsystem.STATE.FAILED_EXTEND),
                                 new WaitCommand(0),
                                 new LiftPositionCommand(robot.lift, 0, 6000, 7500, 10, 2000, LiftSubsystem.STATE.FAILED_RETRACT)
                                         .alongWith(new WaitCommand(125).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED))))

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.GrabStackCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
@@ -18,7 +19,6 @@ public class Testing extends OpMode {
     Robot robot;
     private double loopTime = 0;
 
-    private boolean busy = false;
 
     public static long clawDelay = 150;
     public static double fourbarPos = IntakeSubsystem.fourbar_retracted;
@@ -46,15 +46,10 @@ public class Testing extends OpMode {
     @Override
     public void loop() {
         boolean a = gamepad1.a;
-        if (a && !busy) {
-            busy = true;
-//            CommandScheduler.getInstance().schedule(new GrabStackCommand(robot, clawDelay, fourbarPos, pivotPos, upDelay));
+        if (a) {
+            CommandScheduler.getInstance().schedule(new AutoCycleCommand(robot, IntakeSubsystem.CYCLE_GRAB_POSITIONS[4]));
         }
 
-        double gamepad1_left_stick_y = gamepad1.left_stick_y;
-        if (Math.abs(gamepad1_left_stick_y) > 0.1) {
-            robot.intake.setFourbarFactor(Math.pow(gamepad1_left_stick_y, 3));
-        }
 
         robot.read();
         CommandScheduler.getInstance().run();
