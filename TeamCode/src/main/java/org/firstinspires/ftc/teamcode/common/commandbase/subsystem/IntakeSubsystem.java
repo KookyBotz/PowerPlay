@@ -44,10 +44,10 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double F = 0.0001;
 
     public static double claw_pos_open = 0.3;
-    public static double claw_pos_closed = 0.47;
+    public static double claw_pos_closed = 0.48;
 
     public static double fourbar_extended = 0.22;
-    public static double fourbar_retracted = 0.947;
+    public static double fourbar_retracted = 0.952;
     public static double fourbar_transition = fourbar_retracted - 0.15;
 
     public static double pivot_flat = 0.43;
@@ -57,11 +57,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
 
     public static final GrabPosition[] CYCLE_GRAB_POSITIONS = {
-            new GrabPosition(560, 150, 0.447, pivot_pitch_up, 0),
-            new GrabPosition(540, 150, 0.407, pivot_pitch_up, 0),
-            new GrabPosition(530, 150, 0.352, pivot_pitch_up, 0),
-            new GrabPosition(530, 150, 0.307, pivot_pitch_up, 0),
-            new GrabPosition(530, 150, 0.252, pivot_pitch_up, 0)
+            new GrabPosition(560, 250, 0.467, pivot_pitch_up, 0),
+            new GrabPosition(540, 250, 0.417, pivot_pitch_up, 0),
+            new GrabPosition(530, 250, 0.365, pivot_pitch_up, 0),
+            new GrabPosition(530, 250, 0.322, pivot_pitch_up, 0),
+            new GrabPosition(530, 250, 0.267 , pivot_pitch_up, 0)
     };
 
     private final double turret_deposit = 0;
@@ -199,7 +199,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void setFourbar(double pos) {
         barLeft.setPosition(pos);
-        barRight.setPosition(1 - pos + 0.02); //fight backlash
+        barRight.setPosition(1 - pos + 0.05); //fight backlash
     }
 
     public void setPivot(double pos){

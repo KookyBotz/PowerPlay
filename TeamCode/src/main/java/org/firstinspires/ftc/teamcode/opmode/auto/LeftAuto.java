@@ -130,7 +130,7 @@ public class LeftAuto extends LinearOpMode {
 
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
-                                        new PositionCommand(drivetrain, localizer, new Pose(66, 60, -4.51), 500, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        new PositionCommand(drivetrain, localizer, new Pose(65, 60, -4.51), 500, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                                         new SwerveXCommand(robot.drivetrain)
                                 ),
 
@@ -142,7 +142,6 @@ public class LeftAuto extends LinearOpMode {
                                         new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4]),
                                         new InstantCommand(()->robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
-                                        new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE)),
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
                                         new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
                                         new LiftPositionCommand(robot.lift, 610, 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND),
