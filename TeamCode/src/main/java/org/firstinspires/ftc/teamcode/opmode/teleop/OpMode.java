@@ -162,7 +162,14 @@ public class OpMode extends CommandOpMode {
         boolean dBY = gamepad2.y;
         boolean dBB = gamepad2.b;
         if (dBA && !pDBA) {
-            schedule(new TeleopLiftCommand(robot, 125, LiftSubsystem.STATE.FAILED_EXTEND));
+//            schedule(new TeleopLiftCommand(robot, 125, LiftSubsystem.STATE.FAILED_EXTEND));
+            // LOW POLE CLAW SCORE
+            schedule(
+                    new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.SCORE)),
+                    new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.SCORE)),
+                    new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)),
+                    new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE))
+            );
         } else if (dBX && !pDBX) {
             schedule(new TeleopLiftCommand(robot, 360, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBY && !pDBY) {
