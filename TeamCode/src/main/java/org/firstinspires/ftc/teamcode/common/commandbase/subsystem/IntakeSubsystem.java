@@ -49,11 +49,13 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double fourbar_extended = 0.22;
     public static double fourbar_retracted = 0.952;
     public static double fourbar_transition = fourbar_retracted - 0.15;
+    public static double fourbar_score = 0.65;
 
     public static double pivot_flat = 0.43;
     public static double pivot_pitch_up = 0.37;
     public static double pivot_pitch_down = 0.47;
     public static double pivot_auto_transfer = 0.52;
+    public static double pivot_pitch_score = 0.3;
 
 
     public static final GrabPosition[] CYCLE_GRAB_POSITIONS = {
@@ -85,17 +87,18 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public enum ClawState {
         OPEN,
-        CLOSED
+        CLOSED,
     }
 
     public enum FourbarState {
         INTAKE,
         TRANSITION,
-        DEPOSIT
+        DEPOSIT,
+        SCORE
     }
 
     public enum PivotState {
-        FLAT, PITCH_UP
+        FLAT, PITCH_UP, SCORE
     }
 
     public IntakeSubsystem(HardwareMap hardwareMap, boolean isAuto) {
@@ -134,6 +137,9 @@ public class IntakeSubsystem extends SubsystemBase {
             case PITCH_UP:
                 pivot.setPosition(pivot_pitch_up);
                 break;
+            case SCORE:
+                pivot.setPosition(pivot_pitch_score);
+                break;
         }
     }
 
@@ -169,6 +175,9 @@ public class IntakeSubsystem extends SubsystemBase {
                 break;
             case DEPOSIT:
                 setFourbar(fourbar_retracted);
+                break;
+            case SCORE:
+                setFourbar(fourbar_score);
                 break;
         }
     }
