@@ -130,6 +130,7 @@ public class LeftAutoFull extends LinearOpMode {
 
                         new PositionCommand(drivetrain, localizer, new Pose(-3.5, 52.5, -1.5 * Math.PI), 500, 1250, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new PositionCommand(drivetrain, localizer, new Pose(65, 52.5, -1.5 * Math.PI), 500, 1500, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new InstantCommand(() -> side_left = ()-> false),
 
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
@@ -147,7 +148,8 @@ public class LeftAutoFull extends LinearOpMode {
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
                                         new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
-                                        new LiftPositionCommand(robot.lift, 610, 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND),
+                                        new LiftPositionCommand(robot.lift, 610, 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND)
+                                                .alongWith(new PositionCommand(drivetrain, localizer, new Pose(63.5, 57.5, -4.6), 500, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage())),
                                         new WaitCommand(0),
                                         new LiftPositionCommand(robot.lift, -5, 6000, 7500, 10, 1000, LiftSubsystem.STATE.FAILED_RETRACT)
                                                 .alongWith(new WaitCommand(50).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)))),
@@ -158,17 +160,6 @@ public class LeftAutoFull extends LinearOpMode {
                         ),
 
                         new InstantCommand(this::requestOpModeStop)
-
-
-//                        new PositionCommand(drivetrain, localizer,
-//                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
-//                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(18, 51, 0) :
-//                                                new Pose(-31, 49, 0), 2000
-//                        ),
-//                        new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_retracted)),
-//                        new WaitCommand(500),
-//                        new InstantCommand(robot::writeFile),
-//                        new InstantCommand(this::requestOpModeStop)
                 )
         );
 

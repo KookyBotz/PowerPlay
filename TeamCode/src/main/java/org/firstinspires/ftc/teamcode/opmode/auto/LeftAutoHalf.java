@@ -124,7 +124,7 @@ public class LeftAutoHalf extends LinearOpMode {
                                         new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
                                         new LiftPositionCommand(robot.lift, 610, 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND)
                                                 // TODO: Tune pose here, this is for moving while scoring the last cone
-                                                .alongWith(new PositionCommand(drivetrain, localizer, new Pose(-3.5, 52.5, 4.49), 500, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage())),
+                                                .alongWith(new PositionCommand(drivetrain, localizer, new Pose(-3.5, 52.5, 4.6), 500, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage())),
                                         new WaitCommand(0),
                                         new LiftPositionCommand(robot.lift, -5, 6000, 7500, 10, 1000, LiftSubsystem.STATE.FAILED_RETRACT)
                                                 .alongWith(new WaitCommand(50).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED))))
