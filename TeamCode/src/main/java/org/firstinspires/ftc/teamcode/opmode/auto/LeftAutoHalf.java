@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
+import static org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem.CYCLE_GRAB_POSITIONS;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -16,26 +18,23 @@ import org.firstinspires.ftc.teamcode.common.commandbase.auto.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.SwerveXCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.commands.LiftPositionCommand;
-import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
-import org.firstinspires.ftc.teamcode.common.hardware.FileInterface;
-import org.firstinspires.ftc.teamcode.common.hardware.Robot;
-import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
-import org.firstinspires.ftc.teamcode.common.drive.drive.Drivetrain;
-import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveModule;
-import org.firstinspires.ftc.teamcode.common.drive.localizer.Localizer;
-import org.firstinspires.ftc.teamcode.common.drive.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
+import org.firstinspires.ftc.teamcode.common.drive.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveModule;
+import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
+import org.firstinspires.ftc.teamcode.common.drive.localizer.Localizer;
+import org.firstinspires.ftc.teamcode.common.drive.localizer.TwoWheelLocalizer;
+import org.firstinspires.ftc.teamcode.common.hardware.Robot;
+import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 import org.opencv.core.Point;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-import static org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem.CYCLE_GRAB_POSITIONS;
-
-@Autonomous(name = "⬅️ LeftAuto ⬅️")
+@Autonomous(name = "⬅️ LeftAuto 1+5 ⬅️")
 @Config
-public class LeftAuto extends LinearOpMode {
+public class LeftAutoHalf extends LinearOpMode {
 
     SleeveDetection sleeveDetection = new SleeveDetection();
     OpenCvCamera camera;
@@ -106,8 +105,6 @@ public class LeftAuto extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        // get to cycle position
-                        // start cycling
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new PositionCommand(drivetrain, localizer, new Pose(-5, 56.5, 4.49), 500, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
@@ -120,52 +117,27 @@ public class LeftAuto extends LinearOpMode {
                                         new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1]),
                                         new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2]),
                                         new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3]),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4])
-                                ))
-
-                        ),
-
-                        new PositionCommand(drivetrain, localizer, new Pose(-3.5, 52.5, -1.5 * Math.PI), 500, 1250, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                        new PositionCommand(drivetrain, localizer, new Pose(65, 52.5, -1.5 * Math.PI), 500, 1500, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-
-                        new ParallelCommandGroup(
-                                new SequentialCommandGroup(
-                                        new PositionCommand(drivetrain, localizer, new Pose(65, 61.5, -4.51), 500, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                                        new SwerveXCommand(robot.drivetrain)
-                                ),
-
-                                new WaitCommand(1200).andThen(new SequentialCommandGroup(
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0]),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1]),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2]),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3]),
                                         new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4]),
                                         new InstantCommand(()->robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
                                         new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
-                                        new LiftPositionCommand(robot.lift, 610, 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND),
+                                        new LiftPositionCommand(robot.lift, 610, 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND)
+                                                // TODO: Tune pose here, this is for moving while scoring the last cone
+                                                .alongWith(new PositionCommand(drivetrain, localizer, new Pose(-3.5, 52.5, 4.6), 500, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage())),
                                         new WaitCommand(0),
                                         new LiftPositionCommand(robot.lift, -5, 6000, 7500, 10, 1000, LiftSubsystem.STATE.FAILED_RETRACT)
-                                                .alongWith(new WaitCommand(50).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)))),
-
-                                        new PositionCommand(drivetrain, localizer, new Pose(66, 52, 0), 500, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage())
+                                                .alongWith(new WaitCommand(50).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED))))
                                 ))
+                        ),
 
+                        new PositionCommand(drivetrain, localizer,
+                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
+                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(18, 51, 0) :
+                                                new Pose(-31, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
                         ),
 
                         new InstantCommand(this::requestOpModeStop)
-
-
-//                        new PositionCommand(drivetrain, localizer,
-//                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
-//                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(18, 51, 0) :
-//                                                new Pose(-31, 49, 0), 2000
-//                        ),
-//                        new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_retracted)),
-//                        new WaitCommand(500),
-//                        new InstantCommand(robot::writeFile),
-//                        new InstantCommand(this::requestOpModeStop)
                 )
         );
 
@@ -178,11 +150,11 @@ public class LeftAuto extends LinearOpMode {
                 CommandScheduler.getInstance().reset();
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-//                                new PositionCommand(drivetrain, localizer,
-//                                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
-//                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 51, 0) :
-//                                                        new Pose(-31, 49, 0), 2000
-//                                ),
+                                new PositionCommand(drivetrain, localizer,
+                                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
+                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(18, 51, 0) :
+                                                        new Pose(-31, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
+                                ),
                                 new InstantCommand(this::requestOpModeStop)
                         )
                 );
