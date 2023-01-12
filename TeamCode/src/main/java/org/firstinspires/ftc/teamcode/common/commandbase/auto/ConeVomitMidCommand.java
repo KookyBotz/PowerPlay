@@ -33,7 +33,6 @@ ConeVomitMidCommand extends SequentialCommandGroup {
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)),
                                         new WaitCommand(150),
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
-
                                         new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_auto_transfer)),
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.DEPOSIT)),
                                         new IntakePositionCommand(robot.intake, -5, 6000, 2500, 20, 3000, IntakeSubsystem.STATE.FAILED_RETRACT),
