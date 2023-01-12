@@ -105,8 +105,6 @@ public class LeftAutoHalf extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        // get to cycle position
-                        // start cycling
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new PositionCommand(drivetrain, localizer, new Pose(-5, 56.5, 4.49), 500, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
@@ -125,7 +123,7 @@ public class LeftAutoHalf extends LinearOpMode {
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
                                         new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
                                         new LiftPositionCommand(robot.lift, 610, 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND)
-                                                // TODO: Tune heading here, this is for moving while scoring the last cone
+                                                // TODO: Tune pose here, this is for moving while scoring the last cone
                                                 .alongWith(new PositionCommand(drivetrain, localizer, new Pose(-3.5, 52.5, 4.49), 500, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage())),
                                         new WaitCommand(0),
                                         new LiftPositionCommand(robot.lift, -5, 6000, 7500, 10, 1000, LiftSubsystem.STATE.FAILED_RETRACT)

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -32,6 +33,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import static org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem.CYCLE_GRAB_POSITIONS;
 
+import java.util.function.BooleanSupplier;
+
 @Autonomous(name = "⬅️ LeftAuto 1+10 ⬅️")
 @Config
 public class LeftAutoFull extends LinearOpMode {
@@ -39,6 +42,7 @@ public class LeftAutoFull extends LinearOpMode {
     SleeveDetection sleeveDetection = new SleeveDetection();
     OpenCvCamera camera;
     private double loopTime;
+    private BooleanSupplier side_left = () -> true;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -177,11 +181,23 @@ public class LeftAutoFull extends LinearOpMode {
                 CommandScheduler.getInstance().reset();
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-//                                new PositionCommand(drivetrain, localizer,
-//                                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
-//                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 51, 0) :
-//                                                        new Pose(-31, 49, 0), 2000
-//                                ),
+                                new ConditionalCommand(
+                                        // left side cycle position
+                                        // -5, 56.5, 4.49
+                                        // park offsets
+                                        // LEFT -31, 49 (-26
+                                        // CENT -5,  49 (0
+                                        // RIGH  18, 49 (23
+                                        new PositionCommand(drivetrain, localizer,
+                                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
+                                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(18, 51, 0) :
+                                                                new Pose(-31, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
+                                        ), new PositionCommand(drivetrain, localizer,
+                                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(39, 49, 0) :
+                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(65, 51, 0) :
+                                                        new Pose(88, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        side_left
+                                ),
                                 new InstantCommand(this::requestOpModeStop)
                         )
                 );
