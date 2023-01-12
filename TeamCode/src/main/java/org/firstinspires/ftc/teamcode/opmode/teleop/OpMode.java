@@ -2,36 +2,28 @@ package org.firstinspires.ftc.teamcode.opmode.teleop;
 
 import static java.lang.Math.PI;
 
-import android.os.Environment;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopCycleCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.ConeVomitHighCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.ConeVomitMidCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopIntakeCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopLiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopTransferCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
-import org.firstinspires.ftc.teamcode.common.hardware.FileInterface;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
-
-import java.io.File
-        ;
-import java.io.IOException;
 
 @Config
 @TeleOp(name = "OpMode👌👌😍🎶🎶😎😜😭🥰😈👺👺🤣🤣😕😜😭🥰🥰😘")
@@ -109,7 +101,11 @@ public class OpMode extends CommandOpMode {
 
         if (gamepad2.dpad_left && !busy) {
             busy = true;
-            CommandScheduler.getInstance().schedule(new TeleopCycleCommand(robot, (b) -> busy = b));
+            CommandScheduler.getInstance().schedule(new ConeVomitHighCommand(robot, (b) -> busy = b));
+        }
+        if (gamepad2.dpad_right && !busy) {
+            busy = true;
+            CommandScheduler.getInstance().schedule(new ConeVomitMidCommand(robot, (b) -> busy = b));
         }
 
         boolean dLT = (gamepad2.left_trigger > 0.3);

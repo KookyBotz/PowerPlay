@@ -90,6 +90,8 @@ public class LeftAutoHalf extends LinearOpMode {
             robot.drivetrain.updateModules();
 
             telemetry.addLine("RUNNING LEFT 5 CYCLE");
+            telemetry.addLine(sleeveDetection.getPosition().toString());
+
             telemetry.update();
 
             PhotonCore.CONTROL_HUB.clearBulkCache();
@@ -107,7 +109,7 @@ public class LeftAutoHalf extends LinearOpMode {
                 new SequentialCommandGroup(
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
-                                        new PositionCommand(drivetrain, localizer, new Pose(-5, 56.5, 4.49), 500, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        new PositionCommand(drivetrain, localizer, new Pose(-3.5, 58, 4.49), 500, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                                         new SwerveXCommand(robot.drivetrain)
 
                                 ),
@@ -118,13 +120,11 @@ public class LeftAutoHalf extends LinearOpMode {
                                         new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2]),
                                         new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3]),
                                         new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4]),
-                                        new InstantCommand(()->robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
+                                        new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
                                         new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
-                                        new LiftPositionCommand(robot.lift, 610, 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND)
-                                                // TODO: Tune pose here, this is for moving while scoring the last cone
-                                                .alongWith(new PositionCommand(drivetrain, localizer, new Pose(-3.5, 52.5, 4.6), 500, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage())),
+                                        new LiftPositionCommand(robot.lift, 610, 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND),
                                         new WaitCommand(0),
                                         new LiftPositionCommand(robot.lift, -5, 6000, 7500, 10, 1000, LiftSubsystem.STATE.FAILED_RETRACT)
                                                 .alongWith(new WaitCommand(50).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED))))
@@ -133,8 +133,8 @@ public class LeftAutoHalf extends LinearOpMode {
 
                         new PositionCommand(drivetrain, localizer,
                                 position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
-                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(18, 51, 0) :
-                                                new Pose(-31, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
+                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 51, 0) :
+                                                new Pose(-25, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
                         ),
 
                         new InstantCommand(this::requestOpModeStop)
@@ -152,8 +152,8 @@ public class LeftAutoHalf extends LinearOpMode {
                         new SequentialCommandGroup(
                                 new PositionCommand(drivetrain, localizer,
                                         position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
-                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(18, 51, 0) :
-                                                        new Pose(-31, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
+                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 51, 0) :
+                                                        new Pose(-25, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
                                 ),
                                 new InstantCommand(this::requestOpModeStop)
                         )
