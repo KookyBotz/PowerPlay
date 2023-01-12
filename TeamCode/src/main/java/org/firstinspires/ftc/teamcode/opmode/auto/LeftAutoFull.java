@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -17,7 +18,6 @@ import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.SwerveXCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.commands.LiftPositionCommand;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
-import org.firstinspires.ftc.teamcode.common.hardware.FileInterface;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 import org.firstinspires.ftc.teamcode.common.drive.drive.Drivetrain;
@@ -33,13 +33,16 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import static org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem.CYCLE_GRAB_POSITIONS;
 
-@Autonomous(name = "⬅️ LeftAuto ⬅️")
+import java.util.function.BooleanSupplier;
+
+@Autonomous(name = "⬅️ LeftAuto 1+10 ⬅️")
 @Config
-public class LeftAuto extends LinearOpMode {
+public class LeftAutoFull extends LinearOpMode {
 
     SleeveDetection sleeveDetection = new SleeveDetection();
     OpenCvCamera camera;
     private double loopTime;
+    private BooleanSupplier side_left = () -> true;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -127,6 +130,7 @@ public class LeftAuto extends LinearOpMode {
 
                         new PositionCommand(drivetrain, localizer, new Pose(-3.5, 52.5, -1.5 * Math.PI), 500, 1250, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new PositionCommand(drivetrain, localizer, new Pose(65, 52.5, -1.5 * Math.PI), 500, 1500, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new InstantCommand(() -> side_left = ()-> false),
 
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
@@ -144,7 +148,8 @@ public class LeftAuto extends LinearOpMode {
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
                                         new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
-                                        new LiftPositionCommand(robot.lift, 610, 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND),
+                                        new LiftPositionCommand(robot.lift, 610, 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND)
+                                                .alongWith(new PositionCommand(drivetrain, localizer, new Pose(63.5, 57.5, -4.6), 500, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage())),
                                         new WaitCommand(0),
                                         new LiftPositionCommand(robot.lift, -5, 6000, 7500, 10, 1000, LiftSubsystem.STATE.FAILED_RETRACT)
                                                 .alongWith(new WaitCommand(50).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)))),
@@ -155,17 +160,6 @@ public class LeftAuto extends LinearOpMode {
                         ),
 
                         new InstantCommand(this::requestOpModeStop)
-
-
-//                        new PositionCommand(drivetrain, localizer,
-//                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
-//                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(18, 51, 0) :
-//                                                new Pose(-31, 49, 0), 2000
-//                        ),
-//                        new InstantCommand(() -> robot.intake.setFourbar(robot.intake.fourbar_retracted)),
-//                        new WaitCommand(500),
-//                        new InstantCommand(robot::writeFile),
-//                        new InstantCommand(this::requestOpModeStop)
                 )
         );
 
@@ -178,11 +172,17 @@ public class LeftAuto extends LinearOpMode {
                 CommandScheduler.getInstance().reset();
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
-//                                new PositionCommand(drivetrain, localizer,
-//                                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
-//                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 51, 0) :
-//                                                        new Pose(-31, 49, 0), 2000
-//                                ),
+                                new ConditionalCommand(
+                                        new PositionCommand(drivetrain, localizer,
+                                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
+                                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(18, 51, 0) :
+                                                                new Pose(-31, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
+                                        ), new PositionCommand(drivetrain, localizer,
+                                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(39, 49, 0) :
+                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(65, 51, 0) :
+                                                        new Pose(88, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        side_left
+                                ),
                                 new InstantCommand(this::requestOpModeStop)
                         )
                 );
