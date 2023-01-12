@@ -173,12 +173,6 @@ public class LeftAutoFull extends LinearOpMode {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
                                 new ConditionalCommand(
-                                        // left side cycle position
-                                        // -5, 56.5, 4.49
-                                        // park offsets
-                                        // LEFT -31, 49 (-26
-                                        // CENT -5,  49 (0
-                                        // RIGH  18, 49 (23
                                         new PositionCommand(drivetrain, localizer,
                                                 position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
                                                         position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(18, 51, 0) :
