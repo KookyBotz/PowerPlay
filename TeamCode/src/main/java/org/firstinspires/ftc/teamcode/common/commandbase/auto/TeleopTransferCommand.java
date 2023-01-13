@@ -23,7 +23,7 @@ public class TeleopTransferCommand extends SequentialCommandGroup {
 
 
                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
-                new WaitCommand(50),
+                new WaitCommand(500),
                 new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_flat)),
                 new WaitCommand(250),
                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN))

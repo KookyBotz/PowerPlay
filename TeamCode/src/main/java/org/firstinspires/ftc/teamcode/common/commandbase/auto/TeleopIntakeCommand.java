@@ -11,7 +11,8 @@ public class TeleopIntakeCommand extends SequentialCommandGroup {
         super(
                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                 new InstantCommand(() -> robot.intake.setFourbar(IntakeSubsystem.fourbar_extended)),
-                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT))
+                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
+                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE))
         );
     }
 }
