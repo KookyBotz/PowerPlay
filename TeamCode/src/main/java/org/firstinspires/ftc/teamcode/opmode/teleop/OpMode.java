@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.auto.ConeVomitMidComman
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopIntakeCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopLiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopTransferCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.commands.IntakePositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
@@ -160,13 +161,14 @@ public class OpMode extends CommandOpMode {
         if (dBA && !pDBA) {
             // LOW POLE CLAW SCORE
             schedule(
+                    new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)),
+                    new IntakePositionCommand(robot.intake, -5, 6000, 2500, 20, 3000, IntakeSubsystem.STATE.FAILED_RETRACT),
                     new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.SCORE)),
                     new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.SCORE)),
-                    new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)),
                     new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE))
             );
         } else if (dBX && !pDBX) {
-            schedule(new TeleopLiftCommand(robot, 360, LiftSubsystem.STATE.FAILED_EXTEND));
+            schedule(new TeleopLiftCommand(robot, 340, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBY && !pDBY) {
             schedule(new TeleopLiftCommand(robot, 610, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBB && !pDBB) {
