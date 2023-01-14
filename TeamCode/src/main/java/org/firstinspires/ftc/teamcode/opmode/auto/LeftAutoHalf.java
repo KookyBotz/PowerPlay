@@ -132,8 +132,8 @@ public class LeftAutoHalf extends LinearOpMode {
                         ),
 
                         new PositionCommand(drivetrain, localizer,
-                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
-                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 51, 0) :
+                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-3, 49, 0) :
+                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(23, 51, 0) :
                                                 new Pose(-25, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
                         ),
 
@@ -151,8 +151,8 @@ public class LeftAutoHalf extends LinearOpMode {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
                                 new PositionCommand(drivetrain, localizer,
-                                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
-                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 51, 0) :
+                                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-3, 49, 0) :
+                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(23, 51, 0) :
                                                         new Pose(-25, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
                                 ),
                                 new InstantCommand(this::requestOpModeStop)
