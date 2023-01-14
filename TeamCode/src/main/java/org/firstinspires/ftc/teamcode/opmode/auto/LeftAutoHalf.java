@@ -125,7 +125,7 @@ public class LeftAutoHalf extends LinearOpMode {
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
                                         new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
                                         new LiftPositionCommand(robot.lift, 610, 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND),
-                                        new WaitCommand(0),
+                                        new WaitCommand(500),
                                         new LiftPositionCommand(robot.lift, -5, 6000, 7500, 10, 1000, LiftSubsystem.STATE.FAILED_RETRACT)
                                                 .alongWith(new WaitCommand(50).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED))))
                                 ))
