@@ -135,7 +135,7 @@ public class LeftAutoFull extends LinearOpMode {
 
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
-                                        new PositionCommand(drivetrain, localizer, new Pose(65, 61.5, -4.51), 500, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        new PositionCommand(drivetrain, localizer, new Pose(66, 61.5, -4.51), 500, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                                         new SwerveXCommand(robot.drivetrain)
                                 ),
 
