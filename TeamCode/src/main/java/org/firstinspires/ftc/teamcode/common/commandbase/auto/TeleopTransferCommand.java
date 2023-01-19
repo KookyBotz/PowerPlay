@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.commands.IntakePositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 
 public class TeleopTransferCommand extends SequentialCommandGroup {
@@ -26,7 +27,9 @@ public class TeleopTransferCommand extends SequentialCommandGroup {
                 new WaitCommand(500),
                 new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_flat)),
                 new WaitCommand(250),
-                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN))
+                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
+                new WaitCommand(200),
+                new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED))
         );
     }
 }
