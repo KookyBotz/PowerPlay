@@ -49,7 +49,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double fourbar_extended = 0.25;
     public static double fourbar_retracted = 0.952;
     public static double fourbar_transition = fourbar_retracted - 0.15;
-    public static double fourbar_score = 0.69;
+    public static double fourbar_score = 0.71;
 
     public static double pivot_flat = 0.43;
     public static double pivot_pitch_up = 0.37;
@@ -241,7 +241,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setSlideFactor(double factor) {
-        double slideAddition = 7 * factor;
+        double slideAddition = 13 * factor;
         double newPosition = intakePosition + slideAddition;
         if (curState.getV() == 0 && newPosition >= -15 && newPosition <= 485) {
             targetPosition = newPosition;
