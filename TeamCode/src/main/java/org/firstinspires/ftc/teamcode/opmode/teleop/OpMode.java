@@ -47,8 +47,6 @@ public class OpMode extends CommandOpMode {
     private boolean pDBY = false;
     private boolean pDBB = false;
 
-    private boolean pCone = false;
-
     private boolean busy = false;
 
 
@@ -69,7 +67,6 @@ public class OpMode extends CommandOpMode {
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
-//        SwerveDrivetrain.imuOff = -Math.PI / 2;
     }
 
     @Override
@@ -111,43 +108,33 @@ public class OpMode extends CommandOpMode {
 
         boolean dLT = (gamepad2.left_trigger > 0.3);
         boolean dRT = (gamepad2.right_trigger > 0.3);
-//        boolean hasCone = robot.intake.hasCone();
         if (dLT && !pDLT) {
             schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)));
         } else if (dRT && !pDRT) {
             schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)));
         }
-        //        } else if (hasCone && !pCone && !busyCone) {
-////            busyCone = true;
-////            schedule(new SequentialCommandGroup(
-////                    new WaitCommand(200),
-////                    new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)))
-////            );
-//        }
-//        pCone = hasCone;
         pDLT = dLT;
         pDRT = dRT;
 
         double gamepad2_left_stick_y = gamepad2.left_stick_y;
-        if (Math.abs(gamepad2_left_stick_y) > 0.1) {
-            robot.intake.setFourbarFactor(Math.pow(gamepad2_left_stick_y, 3));
+        if (Math.abs(gamepad2_left_stick_y) > 0.2) {
+            robot.intake.setFourbarFactor(joystickScalar(gamepad2_left_stick_y, 0.2));
         }
 
         double gamepad2_left_stick_x = gamepad2.left_stick_x;
-        if (Math.abs(gamepad2_left_stick_x) > 0.01) {
-            robot.intake.setSlideFactor(Math.pow(-gamepad2_left_stick_x, 3));
+        if (Math.abs(gamepad2_left_stick_x) > 0.1) {
+            robot.intake.setSlideFactor(joystickScalar(-gamepad2_left_stick_x, 0.1));
         }
 
         double gamepad2_right_stick = gamepad2.right_stick_x;
         if (Math.abs(gamepad2_right_stick) > 0.15) {
-            robot.intake.setTurretFactor(Math.pow(gamepad2_right_stick, 3));
+            robot.intake.setTurretFactor(joystickScalar(gamepad2_right_stick, 0.15));
         }
 
         boolean dLB = gamepad2.left_bumper;
         boolean dRB = gamepad2.right_bumper;
         if (dLB && !pDLB) {
             schedule(new TeleopIntakeCommand(robot));
-//            busyCone = false;
         } else if (dRB && !pDRB) {
             schedule(new TeleopTransferCommand(robot));
         }
@@ -159,7 +146,6 @@ public class OpMode extends CommandOpMode {
         boolean dBY = gamepad2.y;
         boolean dBB = gamepad2.b;
         if (dBA && !pDBA) {
-            // LOW POLE CLAW SCORE
             schedule(
                     new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)),
                     new IntakePositionCommand(robot.intake, -5, 6000, 2500, 20, 3000, IntakeSubsystem.STATE.FAILED_RETRACT),
@@ -223,5 +209,9 @@ public class OpMode extends CommandOpMode {
         robot.intake.extension.set(0);
         robot.lift.lift.resetEncoder();
         robot.lift.lift.set(0);
+    }
+
+    private double joystickScalar(double num, double min) {
+        return Math.signum(num) * min + (1 - min) * Math.pow(Math.abs(num), 3) * Math.signum(num);
     }
 }

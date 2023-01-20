@@ -127,7 +127,7 @@ public class LiftSubsystem extends SubsystemBase {
 
 
     public void setSlideFactor(double factor) {
-        double slideAddition = 10 * factor;
+        double slideAddition = 20 * factor;
         double newPosition = liftPosition + slideAddition;
         if (curState.getV() == 0 && newPosition >= -15 && newPosition <= 405) {
             targetPosition = newPosition;
