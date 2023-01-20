@@ -49,6 +49,9 @@ public class OpMode extends CommandOpMode {
 
     private boolean busy = false;
 
+    private boolean pD1A = false;
+    private boolean pD1Y = false;
+
 
     @Override
     public void initialize() {
@@ -58,6 +61,7 @@ public class OpMode extends CommandOpMode {
         robot.reset();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         robot.intake.setFourbar(IntakeSubsystem.fourbar_transition);
+        robot.intake.offset2 = 0;
         robot.intake.update(IntakeSubsystem.PivotState.FLAT);
         robot.intake.update(IntakeSubsystem.TurretState.INTAKE);
         robot.intake.update(IntakeSubsystem.ClawState.OPEN);
@@ -81,14 +85,26 @@ public class OpMode extends CommandOpMode {
         double speedMultiplier = 1 - 0.75 * gamepad1.right_trigger;
         // Drivetrain
         Pose drive = new Pose(
-                new Point((Math.pow(Math.abs(gamepad1.left_stick_y) > 0.02 ? gamepad1.left_stick_y : 0, 3) * speedMultiplier),
-                        (Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3)) * speedMultiplier).rotate(robot.getAngle() - SwerveDrivetrain.imuOff),
+                new Point((Math.pow(Math.abs(gamepad1.left_stick_y) > 0.02 ? gamepad1.left_stick_y : 0, 3)),
+                        (Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3))).rotate(robot.getAngle() - SwerveDrivetrain.imuOff),
                 (Math.pow(-gamepad1.right_stick_x, 3)) * speedMultiplier
         );
 
         if (gamepad1.left_bumper) {
             SwerveDrivetrain.imuOff = robot.getAngle();
         }
+
+        boolean d1A = gamepad1.a;
+        boolean d1Y = gamepad1.y;
+        if (d1A && !pD1A) {
+            // decrease
+            robot.intake.adjustPivotOffset(-0.03);
+        } else if (d1Y && !pD1Y) {
+            // increase
+            robot.intake.adjustPivotOffset(0.03);
+        }
+        pD1A = d1A;
+        pD1Y = d1Y;
 
         // Gamepad2
         if (gamepad2.dpad_up) {
@@ -156,7 +172,7 @@ public class OpMode extends CommandOpMode {
         } else if (dBX && !pDBX) {
             schedule(new TeleopLiftCommand(robot, 340, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBY && !pDBY) {
-            schedule(new TeleopLiftCommand(robot, 610, LiftSubsystem.STATE.FAILED_EXTEND));
+            schedule(new TeleopLiftCommand(robot, 580, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBB && !pDBB) {
             schedule(new TeleopLiftCommand(robot, 0, LiftSubsystem.STATE.FAILED_RETRACT));
         }

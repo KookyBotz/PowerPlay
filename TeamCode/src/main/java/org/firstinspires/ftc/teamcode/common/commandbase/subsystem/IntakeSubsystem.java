@@ -57,6 +57,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double pivot_auto_transfer = 0.52;
     public static double pivot_pitch_score = 0.3;
 
+    public double offset2 = 0;
 
     public static final GrabPosition[] CYCLE_GRAB_POSITIONS = {
             new GrabPosition(560, 150, 0.462, pivot_pitch_up, 0),
@@ -132,13 +133,13 @@ public class IntakeSubsystem extends SubsystemBase {
     public void update(PivotState state) {
         switch (state) {
             case FLAT:
-                pivot.setPosition(pivot_flat);
+                pivot.setPosition(pivot_flat + offset2);
                 break;
             case PITCH_UP:
-                pivot.setPosition(pivot_pitch_up);
+                pivot.setPosition(pivot_pitch_up + offset2);
                 break;
             case SCORE:
-                pivot.setPosition(pivot_pitch_score);
+                pivot.setPosition(pivot_pitch_score + offset2);
                 break;
         }
     }
@@ -256,5 +257,9 @@ public class IntakeSubsystem extends SubsystemBase {
     public void newProfile(double targetPos, double max_v, double max_a) {
         profile = MotionProfileGenerator.generateSimpleMotionProfile(new com.acmerobotics.roadrunner.profile.MotionState(getPos(), 0), new com.acmerobotics.roadrunner.profile.MotionState(targetPos, 0), max_v, max_a);
         resetTimer();
+    }
+
+    public void adjustPivotOffset(double offset) {
+        this.offset2 += offset;
     }
 }
