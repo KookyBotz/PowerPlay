@@ -33,7 +33,6 @@ public class OpMode extends CommandOpMode {
 
     private ElapsedTime timer;
     private double loopTime = 0;
-    private final double joystick_min = 0.2;
 
     private boolean xLock = false;
     private boolean pDRS = false;
@@ -136,7 +135,6 @@ public class OpMode extends CommandOpMode {
         boolean dRB = gamepad2.right_bumper;
         if (dLB && !pDLB) {
             schedule(new TeleopIntakeCommand(robot));
-//            busyCone = false;
         } else if (dRB && !pDRB) {
             schedule(new TeleopTransferCommand(robot));
         }
