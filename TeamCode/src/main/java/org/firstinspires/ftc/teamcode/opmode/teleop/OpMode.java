@@ -13,6 +13,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.ConeVomitHighCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.ConeVomitMidCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopIntakeCommand;
@@ -52,6 +53,15 @@ public class OpMode extends CommandOpMode {
     private boolean pD1A = false;
     private boolean pD1Y = false;
 
+    private boolean pD1DL = false;
+    private boolean pD1DR = false;
+    private boolean pD1DD = false;
+    private boolean pD1DU = false;
+
+    private boolean pD1BX = false;
+
+    private boolean pD2FlickDown = false;
+    private boolean pD2FlickUp = false;
 
     @Override
     public void initialize() {
@@ -65,6 +75,7 @@ public class OpMode extends CommandOpMode {
         robot.intake.update(IntakeSubsystem.PivotState.FLAT);
         robot.intake.update(IntakeSubsystem.TurretState.INTAKE);
         robot.intake.update(IntakeSubsystem.ClawState.OPEN);
+        robot.lift.update(LiftSubsystem.LatchState.UNLATCHED);
 
         robot.intake.extension.set(0.4);
         robot.lift.lift.set(0.4);
@@ -106,6 +117,26 @@ public class OpMode extends CommandOpMode {
         pD1A = d1A;
         pD1Y = d1Y;
 
+        // left open
+        // right close
+        boolean d1DL = gamepad1.dpad_left;
+        boolean d1DR = gamepad1.dpad_right;
+        if (d1DL && !pD1DL) {
+            // open latch
+            robot.lift.update(LiftSubsystem.LatchState.UNLATCHED);
+        } else if (d1DR && !pD1DR) {
+            // close latch
+            robot.lift.update(LiftSubsystem.LatchState.LATCHED);
+        }
+
+        // zeroing lift and intake
+        boolean d1DD = gamepad1.dpad_down;
+        boolean d1DU = gamepad1.dpad_up;
+        if (d1DD && pD1DD) {
+            robot.lift.liftEncoder.resetEncoder();
+        } else if (d1DU && pD1DU) {
+            robot.intake.extensionEncoder.resetEncoder();
+        }
         // Gamepad2
         if (gamepad2.dpad_up) {
             robot.lift.setSlideFactor(1);
@@ -149,13 +180,17 @@ public class OpMode extends CommandOpMode {
 
         boolean dLB = gamepad2.left_bumper;
         boolean dRB = gamepad2.right_bumper;
-        if (dLB && !pDLB) {
+//        boolean d2FlickUp = (gamepad2.right_stick_y > 0.5);
+//        boolean d2FlickDown = (gamepad2.right_stick_y < -0.5);
+        if ((dLB && !pDLB) /*|| (d2FlickDown && !pD2FlickDown)*/) {
             schedule(new TeleopIntakeCommand(robot));
-        } else if (dRB && !pDRB) {
+        } else if ((dRB && !pDRB) /*|| (d2FlickUp && pD2FlickUp)*/) {
             schedule(new TeleopTransferCommand(robot));
         }
         pDRB = dRB;
         pDLB = dLB;
+//        pD2FlickDown = d2FlickDown;
+//        pD2FlickUp = d2FlickUp;
 
         boolean dBA = gamepad2.a;
         boolean dBX = gamepad2.x;
@@ -172,10 +207,20 @@ public class OpMode extends CommandOpMode {
         } else if (dBX && !pDBX) {
             schedule(new TeleopLiftCommand(robot, 340, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBY && !pDBY) {
-            schedule(new TeleopLiftCommand(robot, 580, LiftSubsystem.STATE.FAILED_EXTEND));
+            schedule(new TeleopLiftCommand(robot, 585, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBB && !pDBB) {
             schedule(new TeleopLiftCommand(robot, 0, LiftSubsystem.STATE.FAILED_RETRACT));
         }
+        pDBA = dBA;
+        pDBX = dBX;
+        pDBY = dBY;
+        pDBB = dBB;
+
+        boolean d1BX = gamepad1.x;
+        if (d1BX && !pD1BX) {
+            robot.intake.update(IntakeSubsystem.FourbarState.UPRIGHT);
+        }
+        pD1BX = d1BX;
 
         robot.drivetrain.set(drive);
         robot.drivetrain.updateModules();
@@ -202,6 +247,7 @@ public class OpMode extends CommandOpMode {
         robot.write();
 
         // Telemetry
+        telemetry.addData("liftCurrent", robot.lift.lift.motorEx.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("liftPos:", robot.lift.getPos());
         telemetry.addData("liftPow:", robot.lift.power);
         telemetry.addData("liftTarget:", robot.lift.targetPosition);

@@ -26,7 +26,7 @@ ConeVomitMidCommand extends SequentialCommandGroup {
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                                         new InstantCommand(() -> robot.intake.setFourbar(IntakeSubsystem.fourbar_extended)),
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
-                                        new IntakePositionCommand(robot.intake, 465, 4000, 2500, 20, 3000, IntakeSubsystem.STATE.FAILED_EXTEND)
+                                        new IntakePositionCommand(robot.intake, 465, 4000, 4000, 20, 3000, IntakeSubsystem.STATE.FAILED_EXTEND)
                                                 .alongWith(new WaitCommand(75).andThen(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE)))),
 
                                         new WaitUntilCommand(() -> robot.lift.getTargetPos() < 20 && robot.lift.getPos() < 563),
@@ -35,7 +35,7 @@ ConeVomitMidCommand extends SequentialCommandGroup {
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
                                         new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_auto_transfer)),
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.DEPOSIT)),
-                                        new IntakePositionCommand(robot.intake, -5, 6000, 2500, 20, 3000, IntakeSubsystem.STATE.FAILED_RETRACT),
+                                        new IntakePositionCommand(robot.intake, -5, 6000, 4000, 20, 3000, IntakeSubsystem.STATE.FAILED_RETRACT),
 
 
                                         new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),

@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 public class TeleopTransferCommand extends SequentialCommandGroup {
     public TeleopTransferCommand(Robot robot) {
         super(
+                new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)),
                 new WaitUntilCommand(() -> robot.lift.getTargetPos() < 20 && robot.lift.getPos() < 563),
                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)),
 //                new WaitCommand(150), optional, likely not needed here
@@ -24,12 +25,15 @@ public class TeleopTransferCommand extends SequentialCommandGroup {
 
 
                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
-                new WaitCommand(500),
+                new WaitCommand(50),
                 new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_flat)),
-                new WaitCommand(250),
-                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                 new WaitCommand(200),
-                new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED))
+                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
+                new WaitCommand(100),
+                new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
+                new WaitCommand(100),
+                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
+                new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_pitch_down))
         );
     }
 }
