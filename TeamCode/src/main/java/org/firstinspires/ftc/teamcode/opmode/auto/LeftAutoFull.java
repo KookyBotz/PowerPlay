@@ -104,6 +104,28 @@ public class LeftAutoFull extends LinearOpMode {
 
         SleeveDetection.ParkingPosition position = sleeveDetection.getPosition();
 
+        SequentialCommandGroup leftEndParkSequence = new SequentialCommandGroup(
+                new PositionCommand(drivetrain, localizer,
+                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-3, 49, 0) :
+                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(23, 51, 0) :
+                                        new Pose(-25, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
+                ),
+                new WaitCommand(1000),
+                new PositionCommand(drivetrain, localizer,
+                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-3, 25, 0) :
+                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(23, 27, 0) :
+                                        new Pose(-25, 25, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
+                ),
+                new InstantCommand(this::requestOpModeStop)
+        );
+
+        SequentialCommandGroup rightEndParkSequence = new SequentialCommandGroup(
+                new PositionCommand(drivetrain, localizer,
+                        position == SleeveDetection.ParkingPosition.LEFT ? new Pose(44, 52, 0) :
+                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(67, 51, 0) :
+                                        new Pose(90, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage())
+        );
+
         waitForStart();
         camera.stopStreaming();
         robot.startIMUThread(this);

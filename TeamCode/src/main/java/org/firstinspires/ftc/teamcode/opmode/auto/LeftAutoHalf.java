@@ -101,6 +101,22 @@ public class LeftAutoHalf extends LinearOpMode {
 
         SleeveDetection.ParkingPosition position = sleeveDetection.getPosition();
 
+        // Lazy code :/ will redo later when i am not busy thinking about bald eagles per football field
+        SequentialCommandGroup leftEndParkSequence = new SequentialCommandGroup(
+                new PositionCommand(drivetrain, localizer,
+                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-3, 49, 0) :
+                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(23, 51, 0) :
+                                        new Pose(-25, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
+                ),
+                new WaitCommand(1000),
+                new PositionCommand(drivetrain, localizer,
+                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-3, 25, 0) :
+                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(23, 27, 0) :
+                                        new Pose(-25, 25, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
+                ),
+                new InstantCommand(this::requestOpModeStop)
+        );
+
         waitForStart();
         camera.stopStreaming();
         robot.startIMUThread(this);
@@ -130,14 +146,7 @@ public class LeftAutoHalf extends LinearOpMode {
                                                 .alongWith(new WaitCommand(50).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED))))
                                 ))
                         ),
-
-                        new PositionCommand(drivetrain, localizer,
-                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-3, 49, 0) :
-                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(23, 51, 0) :
-                                                new Pose(-25, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
-                        ),
-
-                        new InstantCommand(this::requestOpModeStop)
+                        leftEndParkSequence
                 )
         );
 
@@ -149,14 +158,7 @@ public class LeftAutoHalf extends LinearOpMode {
             if (robot.intake.state == IntakeSubsystem.STATE.FAILED_RETRACT || robot.lift.state == LiftSubsystem.STATE.FAILED_RETRACT) {
                 CommandScheduler.getInstance().reset();
                 CommandScheduler.getInstance().schedule(
-                        new SequentialCommandGroup(
-                                new PositionCommand(drivetrain, localizer,
-                                        position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-3, 49, 0) :
-                                                position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(23, 51, 0) :
-                                                        new Pose(-25, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
-                                ),
-                                new InstantCommand(this::requestOpModeStop)
-                        )
+                        leftEndParkSequence
                 );
             }
 
