@@ -114,7 +114,7 @@ public class LeftAutoFull extends LinearOpMode {
                         // start cycling
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
-                                        new PositionCommand(drivetrain, localizer, new Pose(-3.5, 58, 4.49), 500, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        new PositionCommand(drivetrain, localizer, new Pose(-3.5, 56.5, 4.49), 500, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                                         new SwerveXCommand(robot.drivetrain)
 
                                 ),
@@ -135,7 +135,7 @@ public class LeftAutoFull extends LinearOpMode {
 
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
-                                        new PositionCommand(drivetrain, localizer, new Pose(66, 61.5, -4.51), 500, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        new PositionCommand(drivetrain, localizer, new Pose(66, 61, -4.51), 500, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                                         new SwerveXCommand(robot.drivetrain)
                                 ),
 
@@ -149,11 +149,11 @@ public class LeftAutoFull extends LinearOpMode {
                                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
                                                 new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
-                                                new LiftPositionCommand(robot.lift, 610, 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND),
-                                                new WaitCommand(0),
-                                                new LiftPositionCommand(robot.lift, -5, 6000, 7500, 10, 1000, LiftSubsystem.STATE.FAILED_RETRACT)
-                                                        .alongWith(new WaitCommand(50).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)))),
-
+//                                                new LiftPositionCommand(robot.lift, 585, 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND),
+//                                                new WaitCommand(0),
+//                                                new LiftPositionCommand(robot.lift, -5, 6000, 7500, 10, 1000, LiftSubsystem.STATE.FAILED_RETRACT)
+//                                                        .alongWith(new WaitCommand(50).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)))),
+                                                new WaitCommand(200),
                                                 new PositionCommand(drivetrain, localizer,
                                                         position == SleeveDetection.ParkingPosition.LEFT ? new Pose(42, 52, 0) :
                                                                 position == SleeveDetection.ParkingPosition.CENTER ? new Pose(65, 51, 0) :
@@ -178,13 +178,13 @@ public class LeftAutoFull extends LinearOpMode {
                         new SequentialCommandGroup(
                                 new ConditionalCommand(
                                         new PositionCommand(drivetrain, localizer,
-                                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-5, 49, 0) :
-                                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(21, 51, 0) :
+                                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-3, 49, 0) :
+                                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(23, 51, 0) :
                                                                 new Pose(-25, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
                                         ), new PositionCommand(drivetrain, localizer,
-                                        position == SleeveDetection.ParkingPosition.LEFT ? new Pose(42, 52, 0) :
-                                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(65, 51, 0) :
-                                                        new Pose(88, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        position == SleeveDetection.ParkingPosition.LEFT ? new Pose(44, 52, 0) :
+                                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(67, 51, 0) :
+                                                        new Pose(90, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                                         side_left
                                 ),
                                 new InstantCommand(this::requestOpModeStop)
