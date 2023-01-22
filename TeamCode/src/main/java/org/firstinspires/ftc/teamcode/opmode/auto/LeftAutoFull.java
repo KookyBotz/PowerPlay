@@ -199,14 +199,8 @@ public class LeftAutoFull extends LinearOpMode {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
                                 new ConditionalCommand(
-                                        new PositionCommand(drivetrain, localizer,
-                                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(-3, 49, 0) :
-                                                        position == SleeveDetection.ParkingPosition.RIGHT ? new Pose(23, 51, 0) :
-                                                                new Pose(-25, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()
-                                        ), new PositionCommand(drivetrain, localizer,
-                                        position == SleeveDetection.ParkingPosition.LEFT ? new Pose(44, 52, 0) :
-                                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(67, 51, 0) :
-                                                        new Pose(90, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        leftEndParkSequence,
+                                        rightEndParkSequence,
                                         side_left
                                 ),
                                 new InstantCommand(this::requestOpModeStop)
