@@ -214,7 +214,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void setFourbar(double pos) {
         barLeft.setPosition(pos);
-        barRight.setPosition(1 - pos + 0.05); //fight backlash
+        barRight.setPosition(1 - pos + 0.05);
     }
 
     public void setPivot(double pos){
@@ -224,10 +224,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public int getPos() {
         return (int) intakePosition;
     }
-
-//    public boolean hasCone() {
-//        return distanceSensor.getDistance(DistanceUnit.CM) < distanceThreshold;
-//    }
 
     public void setFourbarFactor(double factor) {
         double fourbarAddition = -0.01 * factor;
