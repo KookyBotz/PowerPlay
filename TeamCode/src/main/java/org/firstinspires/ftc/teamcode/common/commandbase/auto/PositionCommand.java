@@ -99,6 +99,8 @@ public class PositionCommand extends CommandBase {
                 Math.min(-y_rotated, max_power);
         double heading_power = powers.heading;
 
-        return new Pose(x_power/v * 12.8, y_power/v * 12.8, heading_power/v * 12.8);
+        heading_power = Math.max(Math.min(0.7, heading_power), -0.7);
+
+        return new Pose(x_power/v * 12.5, y_power/v * 12.5, heading_power/v * 12.5);
     }
 }

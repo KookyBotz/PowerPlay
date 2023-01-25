@@ -46,7 +46,7 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
                                 new LiftPositionCommand(robot.lift, 585, 6000, 7500, 40, 3000, LiftSubsystem.STATE.FAILED_EXTEND),
-                                new WaitCommand(250),
+                                new WaitCommand(100),
                                 new LiftPositionCommand(robot.lift, 0, 6000, 7500, 10, 2000, LiftSubsystem.STATE.FAILED_RETRACT)
                                         .alongWith(new WaitCommand(50).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED))))
                         )
