@@ -11,6 +11,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -34,6 +35,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Autonomous(name = "⬅️ LeftAuto 1+5 ⬅️")
 @Config
+@Disabled
 public class LeftAutoHalf extends LinearOpMode {
 
     SleeveDetection sleeveDetection = new SleeveDetection();

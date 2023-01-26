@@ -61,11 +61,11 @@ public class IntakeSubsystem extends SubsystemBase {
     public double offset2 = 0;
 
     public static final GrabPosition[] CYCLE_GRAB_POSITIONS = {
-            new GrabPosition(560, 150, 0.457, pivot_pitch_up, 0),
-            new GrabPosition(540, 150, 0.402, pivot_pitch_up, 0),
-            new GrabPosition(530, 150, 0.35, pivot_pitch_up, 0),
-            new GrabPosition(530, 150, 0.307, pivot_pitch_up, 0),
-            new GrabPosition(530, 150, 0.252 , pivot_pitch_up, 0)
+            new GrabPosition(550, 150, 0.457, pivot_pitch_up, 0),
+            new GrabPosition(530, 150, 0.402, pivot_pitch_up, 0),
+            new GrabPosition(520, 150, 0.35, pivot_pitch_up, 0),
+            new GrabPosition(520, 150, 0.307, pivot_pitch_up, 0),
+            new GrabPosition(520, 150, 0.252 , pivot_pitch_up, 0)
     };
 
     private final double turret_deposit = 0;

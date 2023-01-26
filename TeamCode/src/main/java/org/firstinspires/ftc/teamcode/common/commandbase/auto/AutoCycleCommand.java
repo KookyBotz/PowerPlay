@@ -25,10 +25,10 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                                 new IntakePositionCommand(robot.intake, state.intPos, 6000, 4500, 20, 3000, IntakeSubsystem.STATE.FAILED_EXTEND)
                                         .alongWith(new WaitCommand(75).andThen(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE)))),
 
-                                new WaitCommand(200),
+//                                new WaitCommand(200),
                                 new GrabStackCommand(robot, state),
 
-                                new IntakePositionCommand(robot.intake, -5, 6000, 4500, 20, 3000, IntakeSubsystem.STATE.FAILED_RETRACT)
+                                new IntakePositionCommand(robot.intake, 0, 6000, 4500, 20, 3000, IntakeSubsystem.STATE.FAILED_RETRACT)
                                         .alongWith(
                                                 new WaitCommand(150)
                                                         .andThen(new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_auto_transfer)))
@@ -37,7 +37,7 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
                                 new WaitCommand(50),
                                 new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_flat)),
-                                new WaitCommand(250),
+                                new WaitCommand(50),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                                 new WaitCommand(100)
                         ),

@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -37,6 +38,7 @@ import java.util.function.BooleanSupplier;
 
 @Autonomous(name = "⬅️ LeftAuto 1+10 ⬅️")
 @Config
+@Disabled
 public class LeftAutoFull extends LinearOpMode {
 
     SleeveDetection sleeveDetection = new SleeveDetection();
