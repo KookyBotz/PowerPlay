@@ -25,7 +25,7 @@ public class SleeveDetection extends OpenCvPipeline {
     }
 
     // TOPLEFT anchor point for the bounding box
-    public static Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(145, 168);
+    public static Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(100, 65);
 
     // Width and height for the bounding box
     public static int REGION_WIDTH = 30;
@@ -63,6 +63,12 @@ public class SleeveDetection extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
+        Point sleeve_pointA = new Point(
+                SLEEVE_TOPLEFT_ANCHOR_POINT.x,
+                SLEEVE_TOPLEFT_ANCHOR_POINT.y);
+        Point sleeve_pointB = new Point(
+                SLEEVE_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
+                SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
         Mat areaMat = input.submat(new Rect(sleeve_pointA, sleeve_pointB));
         Scalar sumColors = Core.sumElems(areaMat);
 

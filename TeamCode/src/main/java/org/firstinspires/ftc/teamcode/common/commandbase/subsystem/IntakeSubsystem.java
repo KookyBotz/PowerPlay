@@ -51,12 +51,16 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double fourbar_transition = fourbar_retracted - 0.15;
     public static double fourbar_score = 0.71;
     public static double fourbar_upright = 0.3;
+    public static double fourbar_down = 0.23;
 
     public static double pivot_flat = 0.43;
     public static double pivot_pitch_up = 0.37;
     public static double pivot_pitch_down = 0.47;
     public static double pivot_auto_transfer = 0.52;
     public static double pivot_pitch_score = 0.3;
+    public static double pivot_pitch_pikcup = 0.25;
+
+    public boolean isExtended = false;
 
     public double offset2 = 0;
 
@@ -97,11 +101,12 @@ public class IntakeSubsystem extends SubsystemBase {
         TRANSITION,
         DEPOSIT,
         SCORE,
-        UPRIGHT
+        UPRIGHT,
+        DOWN
     }
 
     public enum PivotState {
-        FLAT, PITCH_UP, SCORE
+        FLAT, PITCH_UP, SCORE, DOWN
     }
 
     public IntakeSubsystem(HardwareMap hardwareMap, boolean isAuto) {
@@ -142,6 +147,9 @@ public class IntakeSubsystem extends SubsystemBase {
                 break;
             case SCORE:
                 pivot.setPosition(pivot_pitch_score + offset2);
+                break;
+            case DOWN:
+                pivot.setPosition(pivot_pitch_pikcup + offset2);
                 break;
         }
     }
@@ -185,6 +193,9 @@ public class IntakeSubsystem extends SubsystemBase {
             case UPRIGHT:
                 setFourbar(fourbar_upright);
                 break;
+            case DOWN:
+                setFourbar(fourbar_down);
+                break;
         }
     }
 
@@ -200,6 +211,8 @@ public class IntakeSubsystem extends SubsystemBase {
         if (curState.getV() != 0) {
             targetPosition = curState.getX();
         }
+
+        isExtended = (getPos() > 30);
 
         power = -controller.calculate(intakePosition, targetPosition) / voltage * 12;
     }

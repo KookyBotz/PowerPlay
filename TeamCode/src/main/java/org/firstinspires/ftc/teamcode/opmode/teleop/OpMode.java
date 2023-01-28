@@ -98,7 +98,7 @@ public class OpMode extends CommandOpMode {
         Pose drive = new Pose(
                 new Point((Math.pow(Math.abs(gamepad1.left_stick_y) > 0.02 ? gamepad1.left_stick_y : 0, 3)),
                         (Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3))).rotate(robot.getAngle() - SwerveDrivetrain.imuOff),
-                (Math.pow(-gamepad1.right_stick_x, 3)) * speedMultiplier
+                (Math.pow(-gamepad1.right_stick_x, 3)) * speedMultiplier * ((robot.intake.isExtended) ? 0.5 : 1)
         );
 
         if (gamepad1.left_bumper) {
@@ -218,7 +218,8 @@ public class OpMode extends CommandOpMode {
 
         boolean d1BX = gamepad1.x;
         if (d1BX && !pD1BX) {
-            robot.intake.update(IntakeSubsystem.FourbarState.UPRIGHT);
+            robot.intake.update(IntakeSubsystem.PivotState.DOWN);
+            robot.intake.update(IntakeSubsystem.FourbarState.DOWN);
         }
         pD1BX = d1BX;
 

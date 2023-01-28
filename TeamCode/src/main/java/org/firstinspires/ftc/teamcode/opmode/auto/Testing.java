@@ -71,7 +71,7 @@ public class Testing extends LinearOpMode {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        sleeveDetection = new SleeveDetection(new Point(90, 80));
+//        sleeveDetection = new SleeveDetection(new Point(75, 120));
         camera.setPipeline(sleeveDetection);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
@@ -135,12 +135,12 @@ public class Testing extends LinearOpMode {
 
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
-                                        new PositionCommand(drivetrain, localizer, new Pose(52.5, -70.5, 0.19 + Math.PI), 0, 1500, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                                        new PositionCommand(drivetrain, localizer, new Pose(65, -70.5, 0.19 + Math.PI), 250, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        new PositionCommand(drivetrain, localizer, new Pose(52.5, -70.5, 0.19 + Math.PI), 0, 1000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        new PositionCommand(drivetrain, localizer, new Pose(64.5, -70.5, 0.19 + Math.PI), 250, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                                         new SwerveXCommand(robot.drivetrain)
                                 ),
 
-                                new WaitCommand(1500).andThen(new SequentialCommandGroup(
+                                new WaitCommand(2000).andThen(new SequentialCommandGroup(
                                                 new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0]),
                                                 new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1]),
                                                 new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2]),
@@ -154,11 +154,11 @@ public class Testing extends LinearOpMode {
                                                 new WaitCommand(100),
                                                 new LiftPositionCommand(robot.lift, -5, 6000, 7500, 10, 1000, LiftSubsystem.STATE.FAILED_RETRACT)
                                                         .alongWith(new WaitCommand(50).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)))),
-                                                new WaitCommand(200)
-////                                                new PositionCommand(drivetrain, localizer,
-////                                                        position == SleeveDetection.ParkingPosition.LEFT ? new Pose(42, 52, 0) :
-////                                                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(65, 51, 0) :
-////                                                                        new Pose(88, 49, 0), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage())
+                                                new WaitCommand(200),
+                                                new PositionCommand(drivetrain, localizer,
+                                                        position == SleeveDetection.ParkingPosition.LEFT ? new Pose(56.5, -45.5, Math.PI / 2) :
+                                                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(56.5, -70.5, Math.PI / 2) :
+                                                                        new Pose(56.5, -94.5, Math.PI / 2), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage())
                                         )
                                 )
 
