@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem
 import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 
-public class AutoCycleCommand extends SequentialCommandGroup {
-    public AutoCycleCommand(Robot robot, GrabPosition state) {
+public class SlowAutoCycleCommand extends SequentialCommandGroup {
+    public SlowAutoCycleCommand(Robot robot, GrabPosition state) {
         super(
                 // in parallel
                 new ParallelCommandGroup(
@@ -25,7 +25,7 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                                 new IntakePositionCommand(robot.intake, state.intPos, 6000, 4500, 20, 3000, IntakeSubsystem.STATE.FAILED_EXTEND)
                                         .alongWith(new WaitCommand(75).andThen(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE)))),
 
-//                                new WaitCommand(200),
+                                new WaitCommand(500),
                                 new GrabStackCommand(robot, state),
 
                                 new IntakePositionCommand(robot.intake, 0, 6000, 4500, 20, 3000, IntakeSubsystem.STATE.FAILED_RETRACT)
@@ -46,7 +46,7 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
                                 new LiftPositionCommand(robot.lift, 582, 6000, 7500, 40, 3000, LiftSubsystem.STATE.FAILED_EXTEND),
-                                new WaitCommand(175),
+                                new WaitCommand(100),
                                 new LiftPositionCommand(robot.lift, 0, 6000, 7500, 10, 2000, LiftSubsystem.STATE.FAILED_RETRACT)
                                         .alongWith(new WaitCommand(50).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED))))
                         )

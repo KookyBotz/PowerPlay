@@ -66,10 +66,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public static final GrabPosition[] CYCLE_GRAB_POSITIONS = {
             new GrabPosition(550, 150, 0.457, pivot_pitch_up, 0),
-            new GrabPosition(530, 150, 0.402, pivot_pitch_up, 0),
-            new GrabPosition(520, 150, 0.35, pivot_pitch_up, 0),
-            new GrabPosition(520, 150, 0.307, pivot_pitch_up, 0),
-            new GrabPosition(520, 150, 0.252 , pivot_pitch_up, 0)
+            new GrabPosition(530, 150, 0.397, pivot_pitch_up, 0),
+            new GrabPosition(520, 150, 0.345, pivot_pitch_up, 0),
+            new GrabPosition(520, 150, 0.302, pivot_pitch_up, 0),
+            new GrabPosition(520, 150, 0.242, pivot_pitch_up, 0)
     };
 
     private final double turret_deposit = 0;
@@ -79,6 +79,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public double targetPosition = 0.0;
 
     public int offset = 0;
+
+    public PivotState pivotState = PivotState.FLAT;
 
     public enum STATE {
         GOOD,
@@ -106,7 +108,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public enum PivotState {
-        FLAT, PITCH_UP, SCORE, DOWN
+        FLAT, PITCH_UP, SCORE, DOWN, PIVOT_AUTO_TRANSFER
     }
 
     public IntakeSubsystem(HardwareMap hardwareMap, boolean isAuto) {
@@ -138,6 +140,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void update(PivotState state) {
+        pivotState = state;
         switch (state) {
             case FLAT:
                 pivot.setPosition(pivot_flat + offset2);
@@ -150,6 +153,9 @@ public class IntakeSubsystem extends SubsystemBase {
                 break;
             case DOWN:
                 pivot.setPosition(pivot_pitch_pikcup + offset2);
+                break;
+            case PIVOT_AUTO_TRANSFER:
+                pivot.setPosition(pivot_auto_transfer + offset2);
                 break;
         }
     }

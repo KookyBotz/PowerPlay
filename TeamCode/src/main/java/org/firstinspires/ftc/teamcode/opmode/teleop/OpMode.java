@@ -110,9 +110,11 @@ public class OpMode extends CommandOpMode {
         if (d1A && !pD1A) {
             // decrease
             robot.intake.adjustPivotOffset(-0.03);
+            robot.intake.update(robot.intake.pivotState);
         } else if (d1Y && !pD1Y) {
             // increase
             robot.intake.adjustPivotOffset(0.03);
+            robot.intake.update(robot.intake.pivotState);
         }
         pD1A = d1A;
         pD1Y = d1Y;
@@ -205,9 +207,9 @@ public class OpMode extends CommandOpMode {
                     new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE))
             );
         } else if (dBX && !pDBX) {
-            schedule(new TeleopLiftCommand(robot, 340, LiftSubsystem.STATE.FAILED_EXTEND));
+            schedule(new TeleopLiftCommand(robot, 350, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBY && !pDBY) {
-            schedule(new TeleopLiftCommand(robot, 585, LiftSubsystem.STATE.FAILED_EXTEND));
+            schedule(new TeleopLiftCommand(robot, 595, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBB && !pDBB) {
             schedule(new TeleopLiftCommand(robot, 0, LiftSubsystem.STATE.FAILED_RETRACT));
         }
