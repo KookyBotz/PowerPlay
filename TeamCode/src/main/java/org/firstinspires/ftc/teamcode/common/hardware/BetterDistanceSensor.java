@@ -38,7 +38,7 @@ public class BetterDistanceSensor extends Rev2mDistanceSensorEx {
 
     public double request() {
         long current = System.currentTimeMillis();
-        long deltaTime = current - requestRate;
+        long deltaTime = current - time;
         if (deltaTime > requestRate && isActive) {
             this.distance = super.getDistance(metric);
             time = current;
@@ -49,6 +49,10 @@ public class BetterDistanceSensor extends Rev2mDistanceSensorEx {
 
     public void setRequestRate(int requestRate) {
         this.requestRate = requestRate;
+    }
+
+    public int getRequestRate() {
+        return this.requestRate;
     }
 
     public void setDistanceUnit(DistanceUnit metric) {
@@ -66,5 +70,9 @@ public class BetterDistanceSensor extends Rev2mDistanceSensorEx {
 
     public void start() {
         this.isActive = true;
+    }
+
+    public void setMode(boolean mode) {
+        this.isActive = mode;
     }
 }
