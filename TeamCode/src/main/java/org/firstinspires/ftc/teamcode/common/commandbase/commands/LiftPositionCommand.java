@@ -10,6 +10,7 @@ public class LiftPositionCommand extends CommandBase {
     private final double timeout;
     private final double max_v;
     private final double max_a;
+    private final double max_d;
     private final double allowed_error;
 
     private final LiftSubsystem lift;
@@ -23,6 +24,19 @@ public class LiftPositionCommand extends CommandBase {
         this.lift = lift;
         this.max_v = v;
         this.max_a = a;
+        this.max_d = 0;
+        this.allowed_error = allowed_error;
+        this.errorState = error;
+//        this(lift, position, v, a, 0, allowed_error, error);
+    }
+
+    public LiftPositionCommand(LiftSubsystem lift, double position, double v, double a, double d, double allowed_error, double timeout, LiftSubsystem.STATE error) {
+        this.position = position;
+        this.timeout = timeout;
+        this.lift = lift;
+        this.max_v = v;
+        this.max_a = a;
+        this.max_d = d;
         this.allowed_error = allowed_error;
         this.errorState = error;
     }
@@ -31,7 +45,7 @@ public class LiftPositionCommand extends CommandBase {
     public void execute() {
         if (timer == null) {
             timer = new ElapsedTime();
-            lift.newProfile(position, max_v, max_a);
+            lift.newProfile(position, max_v, max_a, max_d);
         }
 
         // didnt reach extension in the allotted time, so set the subsystem to the error state specified

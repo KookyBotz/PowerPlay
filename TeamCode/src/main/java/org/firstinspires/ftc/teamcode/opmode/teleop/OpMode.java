@@ -63,6 +63,11 @@ public class OpMode extends CommandOpMode {
     private boolean pD2FlickDown = false;
     private boolean pD2FlickUp = false;
 
+    public static double targetPos = 10;
+    public static double targetAcc = 0.5;
+    public static double targetDec = 0.25;
+    public static double targetVelo = 1;
+
     @Override
     public void initialize() {
         CommandScheduler.getInstance().reset();
@@ -210,6 +215,7 @@ public class OpMode extends CommandOpMode {
             schedule(new TeleopLiftCommand(robot, 350, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBY && !pDBY) {
             schedule(new TeleopLiftCommand(robot, 595, LiftSubsystem.STATE.FAILED_EXTEND));
+//            robot.lift.newProfile(targetPos, targetVelo, targetAcc, targetDec);
         } else if (dBB && !pDBB) {
             schedule(new TeleopLiftCommand(robot, 0, LiftSubsystem.STATE.FAILED_RETRACT));
         }
@@ -258,6 +264,9 @@ public class OpMode extends CommandOpMode {
         telemetry.addData("intakePow:", robot.intake.power);
         telemetry.addData("intakeTarget:", robot.intake.targetPosition);
         telemetry.addData("imu", SwerveDrivetrain.imuOff);
+        telemetry.addData("targetPos", robot.lift.curState.x);
+        telemetry.addData("targetVelo", robot.lift.curState.v);
+        telemetry.addData("targetAcc", robot.lift.curState.a);
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));

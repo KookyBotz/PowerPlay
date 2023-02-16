@@ -29,7 +29,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final Servo claw, turret;
     private final Servo pivot;
 //    private final Rev2mDistanceSensorEx distanceSensor;
-    private final BetterDistanceSensor distanceSensor;
+//    private final BetterDistanceSensor distanceSensor;
 
     public MotionProfile profile;
     public MotionState curState;
@@ -126,8 +126,8 @@ public class IntakeSubsystem extends SubsystemBase {
         this.turret = hardwareMap.get(Servo.class, "turret");
         this.pivot = hardwareMap.get(Servo.class, "pivot");
 
-        this.distanceSensor = new BetterDistanceSensor(hardwareMap, "distanceSensor", 50, DistanceUnit.CM);
-        distanceSensor.request();
+//        this.distanceSensor = new BetterDistanceSensor(hardwareMap, "distanceSensor", 50, DistanceUnit.CM);
+//        distanceSensor.request();
 //        Rev2mDistanceSensor ds = hardwareMap.get(Rev2mDistanceSensor.class, "distanceSensor");
 //        this.distanceSensor = new Rev2mDistanceSensorEx(ds.getDeviceClient());
 //        this.distanceSensor.setRangingProfile(Rev2mDistanceSensorEx.RANGING_PROFILE.HIGH_SPEED);

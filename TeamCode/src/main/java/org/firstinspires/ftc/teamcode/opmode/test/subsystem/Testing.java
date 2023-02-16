@@ -47,7 +47,6 @@ public class Testing extends OpMode {
             CommandScheduler.getInstance().schedule(new AutoCycleCommand(robot, IntakeSubsystem.CYCLE_GRAB_POSITIONS[4]));
         }
 
-
         robot.read();
         CommandScheduler.getInstance().run();
         robot.intake.loop();
