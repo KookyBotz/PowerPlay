@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.common.drive.geometry;
 
 public class ProfileConstraints {
-    protected double max_velocity;
-    public double acceleration;
-    public double deceleration;
+    public double max_velocity;
+    public double max_acceleration;
+    public double max_deceleration;
 
     public ProfileConstraints(double max_velocity, double acceleration, double deceleration) {
         this.max_velocity = Math.abs(max_velocity);
-        this.acceleration = (acceleration <= 1e-7) ? Double.MAX_VALUE : Math.abs(acceleration);
-        this.deceleration = (deceleration <= 1e-7) ? Double.MAX_VALUE : Math.abs(deceleration);
+        this.max_acceleration = (acceleration == 0) ? 9999999999999999.0 : Math.abs(acceleration);
+        this.max_deceleration = (deceleration == 0) ? -9999999999999999.0 : -Math.abs(deceleration);
     }
 }

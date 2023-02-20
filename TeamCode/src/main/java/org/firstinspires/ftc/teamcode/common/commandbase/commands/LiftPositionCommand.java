@@ -45,7 +45,7 @@ public class LiftPositionCommand extends CommandBase {
     public void execute() {
         if (timer == null) {
             timer = new ElapsedTime();
-            lift.newProfile(position, max_v, max_a, max_d);
+            lift.newProfile(position, max_v, max_a);
         }
 
         // didnt reach extension in the allotted time, so set the subsystem to the error state specified

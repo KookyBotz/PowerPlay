@@ -28,8 +28,8 @@ public class LiftSubsystem extends SubsystemBase {
     public final MotorEx liftEncoder;
     public final Servo latch;
 
-    private AsymmetricMotionProfile profile;
-    public ProfileState curState;
+    private MotionProfile profile;
+    public MotionState curState;
     private final ElapsedTime timer;
     private final ElapsedTime voltageTimer;
     private final PIDController controller;
@@ -80,8 +80,8 @@ public class LiftSubsystem extends SubsystemBase {
         liftEncoder.motor.setDirection(DcMotorSimple.Direction.REVERSE);
         lift.motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-//        this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
-        this.profile = new AsymmetricMotionProfile(0, 1, new ProfileConstraints(0, 0, 0));
+        this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
+//        this.profile = new AsymmetricMotionProfile(0, 1, new ProfileConstraints(0, 0, 0));
 
         this.voltageTimer = new ElapsedTime();
         voltageTimer.reset();
@@ -99,12 +99,12 @@ public class LiftSubsystem extends SubsystemBase {
             voltageTimer.reset();
         }
 
-        curState = profile.calculate(timer.time());
-        if (curState.v != 0) {
-            targetPosition = curState.x;
+        curState = profile.get(timer.time());
+        if (curState.getV() != 0) {
+            targetPosition = curState.getX();
         }
 
-//        power = -controller.calculate(liftPosition, targetPosition) / voltage * 14;
+        power = -controller.calculate(liftPosition, targetPosition) / voltage * 14;
     }
 
     public void update(LatchState state) {
@@ -134,7 +134,7 @@ public class LiftSubsystem extends SubsystemBase {
     public void setSlideFactor(double factor) {
         double slideAddition = 20 * factor;
         double newPosition = liftPosition + slideAddition;
-        if (curState.v == 0 && newPosition >= 0 && newPosition <= 603) {
+        if (curState.getV() == 0 && newPosition >= 0 && newPosition <= 603) {
             targetPosition = newPosition;
         }
     }
@@ -145,16 +145,16 @@ public class LiftSubsystem extends SubsystemBase {
 
 
     public void newProfile(double targetPos, double max_v, double max_a) {
-//        profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(targetPos, 0), max_v, max_a);
+        profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(targetPos, 0), max_v, max_a);
 //        this.profile = new AsymmetricMotionProfile(getPos(), targetPos, new ProfileConstraints(max_v, max_a, max_a));
-//        endPos = (int) targetPos;
-//        resetTimer();
-        this.newProfile(targetPos, max_v, max_a, max_a);
-    }
-
-    public void newProfile(double targetPos, double max_v, double max_a, double max_d) {
-        this.profile = new AsymmetricMotionProfile(0, targetPos, new ProfileConstraints(max_v, max_a, max_d));
         endPos = (int) targetPos;
         resetTimer();
+//        this.newProfile(targetPos, max_v, max_a);
     }
+//
+//    public void newProfile(double targetPos, double max_v, double max_a, double max_d) {
+//        this.profile = new AsymmetricMotionProfile(getPos(), targetPos, new ProfileConstraints(max_v, max_a, max_d));
+//        endPos = (int) targetPos;
+//        resetTimer();
+//    }
 }
