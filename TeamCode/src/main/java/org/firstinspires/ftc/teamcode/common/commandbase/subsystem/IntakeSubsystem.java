@@ -13,7 +13,10 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.common.drive.geometry.AsymmetricMotionProfile;
+import org.firstinspires.ftc.teamcode.common.drive.geometry.Constraints;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
+import org.firstinspires.ftc.teamcode.common.drive.geometry.State;
 import org.firstinspires.ftc.teamcode.common.hardware.BetterDistanceSensor;
 
 @Config
@@ -31,8 +34,8 @@ public class IntakeSubsystem extends SubsystemBase {
 //    private final Rev2mDistanceSensorEx distanceSensor;
 //    private final BetterDistanceSensor distanceSensor;
 
-    public MotionProfile profile;
-    public MotionState curState;
+    public AsymmetricMotionProfile profile;
+    public State curState;
     private final ElapsedTime timer;
     private final ElapsedTime voltageTimer;
     private PIDFController controller;
@@ -133,7 +136,8 @@ public class IntakeSubsystem extends SubsystemBase {
 //        this.distanceSensor.setRangingProfile(Rev2mDistanceSensorEx.RANGING_PROFILE.HIGH_SPEED);
 
 
-        this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
+//        this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
+        this.profile = new AsymmetricMotionProfile(0, 1, new Constraints(0, 0, 0));
 
         this.timer = new ElapsedTime();
         timer.reset();
@@ -218,9 +222,9 @@ public class IntakeSubsystem extends SubsystemBase {
             voltageTimer.reset();
         }
 
-        curState = profile.get(timer.time());
-        if (curState.getV() != 0) {
-            targetPosition = curState.getX();
+        curState = profile.calculate(timer.time());
+        if (curState.v != 0) {
+            targetPosition = curState.x;
         }
 
         isExtended = (getPos() > 30);
@@ -273,7 +277,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setSlideFactor(double factor) {
         double slideAddition = 13 * factor;
         double newPosition = intakePosition + slideAddition;
-        if (curState.getV() == 0 && newPosition >= -15 && newPosition <= 540) {
+        if (curState.v == 0 && newPosition >= -15 && newPosition <= 540) {
             targetPosition = newPosition;
         }
     }
@@ -284,7 +288,11 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void newProfile(double targetPos, double max_v, double max_a) {
-        profile = MotionProfileGenerator.generateSimpleMotionProfile(new com.acmerobotics.roadrunner.profile.MotionState(getPos(), 0), new com.acmerobotics.roadrunner.profile.MotionState(targetPos, 0), max_v, max_a);
+        this.newProfile(targetPos, max_v, max_a, max_a);
+    }
+
+    public void newProfile(double targetPos, double max_v, double max_a, double max_d) {
+        profile = new AsymmetricMotionProfile(getPos(), targetPos, new Constraints(max_v, max_a, max_d));
         resetTimer();
     }
 

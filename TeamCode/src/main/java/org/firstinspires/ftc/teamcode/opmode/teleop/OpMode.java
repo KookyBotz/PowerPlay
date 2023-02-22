@@ -212,12 +212,15 @@ public class OpMode extends CommandOpMode {
                     new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE))
             );
         } else if (dBX && !pDBX) {
-            schedule(new TeleopLiftCommand(robot, 350, LiftSubsystem.STATE.FAILED_EXTEND));
+            robot.lift.targetPosition = 350;
+//            schedule(new TeleopLiftCommand(robot, 350, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBY && !pDBY) {
-            schedule(new TeleopLiftCommand(robot, 595, LiftSubsystem.STATE.FAILED_EXTEND));
+            robot.lift.targetPosition = 595;
+//            schedule(new TeleopLiftCommand(robot, 595, LiftSubsystem.STATE.FAILED_EXTEND));
 //            robot.lift.newProfile(targetPos, targetVelo, targetAcc, targetDec);
         } else if (dBB && !pDBB) {
-            schedule(new TeleopLiftCommand(robot, 0, LiftSubsystem.STATE.FAILED_RETRACT));
+            robot.lift.targetPosition = 0;
+//            schedule(new TeleopLiftCommand(robot, 0, LiftSubsystem.STATE.FAILED_RETRACT));
         }
         pDBA = dBA;
         pDBX = dBX;
@@ -267,6 +270,7 @@ public class OpMode extends CommandOpMode {
 //        telemetry.addData("targetPos", robot.lift.curState.x);
 //        telemetry.addData("targetVelo", robot.lift.curState.v);
 //        telemetry.addData("targetAcc", robot.lift.curState.a);
+        telemetry.addData("liftCurrent", robot.lift.lift.motorEx.getCurrent(CurrentUnit.AMPS));
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));

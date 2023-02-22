@@ -1,81 +1,119 @@
 package org.firstinspires.ftc.teamcode.common.drive.geometry;
 
 public class AsymmetricMotionProfile {
-    public final double initialPosition;
-    public final double finalPosition;
-    public final double distance;
-    public final double totalTime;
-    public final double initialVelocity;
-    public final ProfileConstraints constraints;
+    public double initialPosition;
+    public double finalPosition;
+    public double distance;
+    public double t1, t2, t3;
+    public double totalTime;
+    public double accelStopPosition;
+    public double accelStopVelocity;
+    public boolean flipped = false;
+    public double originalPos = 0;
 
-    public double t1;
-    public double t2;
-    public double t3;
+    public State state = new State();
+    public Constraints constraints;
 
-    public double vA = 0;
-    public double xA = 0;
-
-    private final boolean flipped;
-
-    public AsymmetricMotionProfile(double initialPosition, double finalPosition, final ProfileConstraints constraints) {
-        flipped = initialPosition > finalPosition;
-        if (flipped) {
-            double initPos = initialPosition;
+    public AsymmetricMotionProfile(double initialPosition, double finalPosition, Constraints constraints) {
+        if (finalPosition < initialPosition) {
+            flipped = true;
+            this.originalPos = initialPosition;
+            double temp = initialPosition;
             initialPosition = finalPosition;
-            finalPosition = initPos;
+            finalPosition = temp;
         }
-
         this.initialPosition = initialPosition;
         this.finalPosition = finalPosition;
         this.distance = finalPosition - initialPosition;
-        this.initialVelocity = 0;
         this.constraints = constraints;
 
-        this.t1 = constraints.max_velocity / constraints.max_acceleration;
-        this.t3 = constraints.max_velocity / Math.abs(constraints.max_deceleration);
+        t1 = constraints.velo / constraints.accel;
+        t3 = constraints.velo / constraints.decel;
 
-        this.t2 = (Math.abs(distance) / constraints.max_velocity) - (t1 + t3) / 2;
+        t2 = Math.abs(distance) / constraints.velo - (t1 + t3) / 2;
+
         if (t2 < 0) {
-            this.t2 = 0.0;
+            System.out.println("Non-Max Velocity Profile");
+            this.t2 = 0;
 
-            double a = (constraints.max_acceleration / 2) * (1 - (constraints.max_acceleration / constraints.max_deceleration));
-            double c = -finalPosition;
+            // this math utilizes a negative deceleration constant. either negate from the passed in value,
+            // or just add a negatation symbol prior to the variable.
+            double a = (constraints.accel / 2) * (1 - constraints.accel / -constraints.decel);
+            // System.out.println("a " + a);
+            double c = -distance;
+            // System.out.println("c " + c);
 
-            this.t1 = (Math.sqrt(-4 * a * c)) / (2 * a);
-            this.t3 = -(constraints.max_acceleration * t1) / constraints.max_deceleration;
+            // acceleration phase
+            t1 = Math.sqrt(-4 * a * c) / (2 * a);
+            // System.out.println("t1 " + t1);
+
+            // empty phase
+            // System.out.println("t2 " + t2);
+
+            // deceleration phase
+            t3 = -(constraints.accel * t1) / -constraints.decel;
+            // System.out.println("t3 " + t3);
+
+            // ending accel position (middle peak)
+            accelStopPosition = (constraints.accel * Math.pow(t1, 2)) / 2;
+            // System.out.println("xA " + accelStopPosition);
+
+            // ending accel velocity (middle peak)
+            accelStopVelocity = constraints.accel * t1;
+            // System.out.println("vA " + accelStopVelocity);
+        } else {
+            System.out.println("Max Velocity Profile");
+            // time constants already calculated
+
+            accelStopVelocity = constraints.velo;
+            accelStopPosition = (constraints.velo * t1) / 2;
         }
 
-        xA = initialVelocity + initialVelocity * t1 + (constraints.max_acceleration * Math.pow(t1, 2)) / 2;
-        vA = initialVelocity + constraints.max_acceleration * t1;
+        totalTime = t1 + t2 + t3;
 
-        // constraints.max_velocity = (distance < 0) ? -constraints.max_velocity : constraints.max_velocity;
-
-        this.totalTime = t1 + t2 +t3;
+        log();
     }
 
-    public ProfileState calculate(double time) {
-        double position;
-        double velocity;
-        double acceleration;
-
+    public State calculate(final double time) {
+        double position = 0;
+        double velocity = 0;
+        double acceleration = 0;
         if (time <= t1) {
-            acceleration = constraints.max_acceleration;
-            velocity = time * acceleration;
-            position = initialPosition * initialVelocity + (constraints.max_acceleration * Math.pow(time, 2)) / 2;
+            acceleration = constraints.accel;
+            velocity = time * constraints.accel;
+            position = (constraints.accel * Math.pow(time, 2)) / 2;
         } else if (time <= t1 + t2) {
             acceleration = 0;
-            velocity = constraints.max_velocity;
-            position = xA + constraints.max_velocity * (time - t1);
-        } else if (time <= t1 + t2 + t3) {
-            acceleration = constraints.max_deceleration;
-            velocity = vA - ((time - t1 - t2) * Math.abs(constraints.max_deceleration));
-            position = xA + t2 * vA - (constraints.max_deceleration * Math.pow(time - t1 - t2, 2)) / 2;
+            velocity = constraints.velo;
+            position = accelStopPosition + (time - t1) * constraints.velo;
+        } else if (time <= totalTime) {
+            acceleration = -constraints.decel;
+            velocity = accelStopVelocity - (time - t1 - t2) * constraints.decel;
+            position = accelStopPosition + (t1 * constraints.accel) * (time - t1) - (constraints.decel * Math.pow(time - t1 - t2, 2)) / 2;
         } else {
             acceleration = 0;
             velocity = 0;
             position = finalPosition;
         }
 
-        return new ProfileState((flipped) ? finalPosition - position : position, velocity, acceleration);
+        // state.x = (finalPosition > initialPosition) ? initialPosition + position : initialPosition - position;
+        if (flipped) {
+            state.x = originalPos - position;
+        } else {
+            state.x = initialPosition + position;
+        }
+        state.v = velocity;
+        state.a = acceleration;
+        return this.state;
+    }
+
+    public void log() {
+        System.out.println("TIME FOR ACCELERATION\n" + t1);
+        System.out.println("\nTIME AT MAX VELOCITY\n" + t2);
+        System.out.println("\nTIME FOR DECELERATION\n" + t3);
+        System.out.println("\nACCELERATION STOP POSITION\n" + accelStopPosition);
+        System.out.println("\nACCELERATION STOP VELOCITY\n" + accelStopVelocity);
+        System.out.println("\nDISTANCE\n" + distance);
+        System.out.println("\nTOTAL TIME\n" + totalTime);
     }
 }
