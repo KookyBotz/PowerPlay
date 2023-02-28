@@ -8,6 +8,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -62,11 +63,6 @@ public class OpMode extends CommandOpMode {
 
     private boolean pD2FlickDown = false;
     private boolean pD2FlickUp = false;
-
-    public static double targetPos = 10;
-    public static double targetAcc = 0.5;
-    public static double targetDec = 0.25;
-    public static double targetVelo = 1;
 
     @Override
     public void initialize() {
@@ -163,7 +159,17 @@ public class OpMode extends CommandOpMode {
         boolean dLT = (gamepad2.left_trigger > 0.3);
         boolean dRT = (gamepad2.right_trigger > 0.3);
         if (dLT && !pDLT) {
-            schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)));
+            if (robot.intake.pivotState.equals(IntakeSubsystem.PivotState.SCORE) && robot.intake.fourbarState == (IntakeSubsystem.FourbarState.SCORE)) {
+                schedule(
+                        new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
+                        new WaitCommand(100),
+                        new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
+                        new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
+                        new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE))
+                );
+            } else {
+                schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)));
+            }
         } else if (dRT && !pDRT) {
             schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)));
         }
@@ -171,13 +177,13 @@ public class OpMode extends CommandOpMode {
         pDRT = dRT;
 
         double gamepad2_left_stick_y = gamepad2.left_stick_y;
-        if (Math.abs(gamepad2_left_stick_y) > 0.2) {
-            robot.intake.setFourbarFactor(joystickScalar(gamepad2_left_stick_y, 0.2));
+        if (Math.abs(gamepad2_left_stick_y) > 0.1) {
+            robot.intake.setSlideFactor(joystickScalar(-gamepad2_left_stick_y, 0.1));
         }
 
         double gamepad2_left_stick_x = gamepad2.left_stick_x;
-        if (Math.abs(gamepad2_left_stick_x) > 0.1) {
-            robot.intake.setSlideFactor(joystickScalar(-gamepad2_left_stick_x, 0.1));
+        if (Math.abs(gamepad2_left_stick_x) > 0.4) {
+            robot.intake.setFourbarFactor(joystickScalar(gamepad2_left_stick_x, 0.4));
         }
 
         double gamepad2_right_stick = gamepad2.right_stick_x;
@@ -212,15 +218,15 @@ public class OpMode extends CommandOpMode {
                     new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE))
             );
         } else if (dBX && !pDBX) {
-            robot.lift.targetPosition = 350;
-//            schedule(new TeleopLiftCommand(robot, 350, LiftSubsystem.STATE.FAILED_EXTEND));
+//            robot.lift.targetPosition = 350;
+            schedule(new TeleopLiftCommand(robot, 350, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBY && !pDBY) {
-            robot.lift.targetPosition = 595;
-//            schedule(new TeleopLiftCommand(robot, 595, LiftSubsystem.STATE.FAILED_EXTEND));
+//            robot.lift.targetPosition = 595;
+            schedule(new TeleopLiftCommand(robot, 595, LiftSubsystem.STATE.FAILED_EXTEND));
 //            robot.lift.newProfile(targetPos, targetVelo, targetAcc, targetDec);
         } else if (dBB && !pDBB) {
-            robot.lift.targetPosition = 0;
-//            schedule(new TeleopLiftCommand(robot, 0, LiftSubsystem.STATE.FAILED_RETRACT));
+//            robot.lift.targetPosition = 0;
+            schedule(new TeleopLiftCommand(robot, 0, LiftSubsystem.STATE.FAILED_RETRACT));
         }
         pDBA = dBA;
         pDBX = dBX;

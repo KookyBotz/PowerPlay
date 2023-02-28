@@ -87,6 +87,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public int offset = 0;
 
     public PivotState pivotState = PivotState.FLAT;
+    public FourbarState fourbarState = FourbarState.TRANSITION;
 
     public enum STATE {
         GOOD,
@@ -192,6 +193,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void update(FourbarState state) {
+        fourbarState = state;
         switch (state) {
             case INTAKE:
                 setFourbar(fourbar_extended);
