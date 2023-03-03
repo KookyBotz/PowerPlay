@@ -53,7 +53,6 @@ public class Robot {
             imu.initialize(parameters);
         }
 
-
         horizontalEncoder = new MotorEx(hardwareMap, "rightFrontMotor").encoder;
         lateralEncoder = new MotorEx(hardwareMap, "leftFrontMotor").encoder;
 
@@ -131,20 +130,20 @@ public class Robot {
      * Writes to a text file, containing all subsystem encoder positions and the IMU's last angle.
      * For use in TeleOp, for field centric drive.
      */
-    public void writeFile() {
-        FileInterface.clear();
-        FileInterface.write(FileInterface.IMU, String.valueOf(getAngle()));
-        FileInterface.write(FileInterface.INTAKE, String.valueOf(intake.getPos()));
-        FileInterface.write(FileInterface.LIFT, String.valueOf(lift.getPos()));
-    }
-
-    /**
-     * Reads from a text file, containing all subsystem encoder positions and the IMU's last angle.
-     * For use in TeleOp, for field centric drive.
-     */
-    public void readFile() {
-        intake.offset = Integer.parseInt(FileInterface.read(FileInterface.INTAKE));
-        lift.offset = Integer.parseInt(FileInterface.read(FileInterface.LIFT));
-        SwerveDrivetrain.imuOff = -1.75;
-    }
+//    public void writeFile() {
+//        FileInterface.clear();
+//        FileInterface.write(FileInterface.IMU, String.valueOf(getAngle()));
+//        FileInterface.write(FileInterface.INTAKE, String.valueOf(intake.getPos()));
+//        FileInterface.write(FileInterface.LIFT, String.valueOf(lift.getPos()));
+//    }
+//
+//    /**
+//     * Reads from a text file, containing all subsystem encoder positions and the IMU's last angle.
+//     * For use in TeleOp, for field centric drive.
+//     */
+//    public void readFile() {
+//        intake.offset = Integer.parseInt(FileInterface.read(FileInterface.INTAKE));
+//        lift.offset = Integer.parseInt(FileInterface.read(FileInterface.LIFT));
+//        SwerveDrivetrain.imuOff = -1.75;
+//    }
 }

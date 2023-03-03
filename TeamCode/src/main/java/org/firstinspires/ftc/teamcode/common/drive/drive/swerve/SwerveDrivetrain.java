@@ -45,6 +45,10 @@ public class SwerveDrivetrain implements Drivetrain {
         R = hypot(TRACK_WIDTH, WHEEL_BASE);
     }
 
+    public void setIMUOffset(double offset) {
+        this.imuOff = offset;
+    }
+
     @Override
     public void set(Pose pose) {
         set(pose, -1);

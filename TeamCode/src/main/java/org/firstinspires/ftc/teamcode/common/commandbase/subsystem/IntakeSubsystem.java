@@ -31,8 +31,6 @@ public class IntakeSubsystem extends SubsystemBase {
     private final Servo barLeft, barRight;
     private final Servo claw, turret;
     private final Servo pivot;
-//    private final Rev2mDistanceSensorEx distanceSensor;
-//    private final BetterDistanceSensor distanceSensor;
 
     public AsymmetricMotionProfile profile;
     public State curState;
@@ -231,7 +229,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         isExtended = (getPos() > 30);
 
-        power = -controller.calculate(intakePosition, targetPosition) / voltage * 12;
+//        power = -controller.calculate(intakePosition, targetPosition) / voltage * 12;
     }
 
     public void read() {

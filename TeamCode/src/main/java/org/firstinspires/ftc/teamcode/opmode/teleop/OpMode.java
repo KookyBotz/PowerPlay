@@ -91,6 +91,7 @@ public class OpMode extends CommandOpMode {
             timer = new ElapsedTime();
             robot.reset();
             robot.startIMUThread(this);
+            SwerveDrivetrain.imuOff = -Math.PI / 2;
         }
 
         robot.read();
@@ -103,7 +104,8 @@ public class OpMode extends CommandOpMode {
         );
 
         if (gamepad1.left_bumper) {
-            SwerveDrivetrain.imuOff = robot.getAngle();
+            SwerveDrivetrain.imuOff = robot.getAngle() + Math.PI;
+
         }
 
         boolean d1A = gamepad1.a;

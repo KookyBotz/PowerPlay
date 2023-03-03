@@ -34,15 +34,15 @@ public class LiftSubsystem extends SubsystemBase {
     public State curState;
     private final ElapsedTime timer;
     private final ElapsedTime voltageTimer;
-    private final PIDController controller;
+    private PIDController controller;
     private final VoltageSensor voltageSensor;
 
     private double voltage;
     private int liftPosition;
 
-    private final double P = 0.0375;
-    private final double I = 0.0;
-    private final double D = 0.0;
+    public static double P = 0.0375;
+    public static double I = 0.0;
+    public static double D = 0.0;
 
     public double power = 0.0;
     public double targetPosition = 0.0;
@@ -96,6 +96,8 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void loop() {
+        this.controller = new PIDController(P, I, D);
+
         if (voltageTimer.seconds() > 5) {
             voltage = voltageSensor.getVoltage();
             voltageTimer.reset();

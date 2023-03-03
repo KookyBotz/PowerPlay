@@ -179,7 +179,7 @@ public class HalfAutoLeft extends LinearOpMode {
 //                                )
 //
 //                        ),
-
+                        new InstantCommand(() -> robot.drivetrain.setIMUOffset(robot.getAngle())),
                         new InstantCommand(this::requestOpModeStop)
                 )
         );
