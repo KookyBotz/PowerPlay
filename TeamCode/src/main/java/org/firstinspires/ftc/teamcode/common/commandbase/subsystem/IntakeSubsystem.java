@@ -229,7 +229,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         isExtended = (getPos() > 30);
 
-//        power = -controller.calculate(intakePosition, targetPosition) / voltage * 12;
+        power = -controller.calculate(intakePosition, targetPosition) / voltage * 12;
     }
 
     public void read() {

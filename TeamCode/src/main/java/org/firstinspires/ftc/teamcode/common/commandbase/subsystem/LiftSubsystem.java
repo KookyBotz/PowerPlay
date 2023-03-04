@@ -40,9 +40,10 @@ public class LiftSubsystem extends SubsystemBase {
     private double voltage;
     private int liftPosition;
 
-    public static double P = 0.0375;
+    public static double P = 0.022;
     public static double I = 0.0;
-    public static double D = 0.0;
+    public static double D = 0.0005;
+    public static double F = -0.13;
 
     public double power = 0.0;
     public double targetPosition = 0.0;
@@ -96,7 +97,7 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void loop() {
-        this.controller = new PIDController(P, I, D);
+        this.controller.setPID(P, I, D);
 
         if (voltageTimer.seconds() > 5) {
             voltage = voltageSensor.getVoltage();
@@ -108,7 +109,7 @@ public class LiftSubsystem extends SubsystemBase {
             targetPosition = curState.x;
         }
 
-        power = -controller.calculate(liftPosition, targetPosition) / voltage * 14;
+        power = (-controller.calculate(liftPosition, targetPosition) / voltage * 14) + F;
     }
 
     public void update(LatchState state) {

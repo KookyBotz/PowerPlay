@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.PrecisePositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.SlowAutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.SwerveXCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.commands.LiftPositionCommand;
@@ -116,8 +117,11 @@ public class HalfAutoLeft extends LinearOpMode {
                         // start cycling
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
-                                        new PositionCommand(drivetrain, localizer, new Pose(59, -1, -0.22899), 500, 4000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                                        new SwerveXCommand(robot.drivetrain)
+                                        new PositionCommand(drivetrain, localizer, new Pose(59, -1, -0.22899), 500, 2500, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        new PrecisePositionCommand(drivetrain, localizer, new Pose(59, -1, -0.22899), 500, 18000, hardwareMap.voltageSensor.iterator().next().getVoltage())
+
+//
+//                                        new SwerveXCommand(robot.drivetrain)
                                 ),
 
                                 new WaitCommand(2500).andThen(new SequentialCommandGroup(
@@ -219,11 +223,11 @@ public class HalfAutoLeft extends LinearOpMode {
             robot.drivetrain.updateModules();
             localizer.periodic();
 
-            telemetry.addData("STATE: ", robot.intake.state);
-            telemetry.addData("STATE: ", robot.lift.state);
-            telemetry.addData("targetPos", robot.intake.targetPosition);
-            telemetry.addData("intakePos", robot.intake.getPos());
-            telemetry.addData("current pose", localizer.getPos());
+//            telemetry.addData("STATE: ", robot.intake.state);
+//            telemetry.addData("STATE: ", robot.lift.state);
+//            telemetry.addData("targetPos", robot.intake.targetPosition);
+//            telemetry.addData("intakePos", robot.intake.getPos());
+//            telemetry.addData("current pose", localizer.getPos());
 
             double loop = System.nanoTime();
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));

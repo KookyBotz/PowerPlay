@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopLiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopTransferCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.commands.IntakePositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
+import org.firstinspires.ftc.teamcode.common.drive.geometry.Constraints;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Point;
@@ -64,6 +65,12 @@ public class OpMode extends CommandOpMode {
     private boolean pD2FlickDown = false;
     private boolean pD2FlickUp = false;
 
+    public static double decelConstraint = 2000;
+    public static double accelConstraint = 7500;
+    public static double velocity = 6500;
+
+    public static boolean usingIMU = true;
+
     @Override
     public void initialize() {
         CommandScheduler.getInstance().reset();
@@ -90,7 +97,9 @@ public class OpMode extends CommandOpMode {
         if (timer == null) {
             timer = new ElapsedTime();
             robot.reset();
-            robot.startIMUThread(this);
+            if (usingIMU) {
+                robot.startIMUThread(this);
+            }
             SwerveDrivetrain.imuOff = -Math.PI / 2;
         }
 
@@ -220,15 +229,14 @@ public class OpMode extends CommandOpMode {
                     new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE))
             );
         } else if (dBX && !pDBX) {
+            schedule(new TeleopLiftCommand(robot, 350, new Constraints(6500, 7500, decelConstraint), LiftSubsystem.STATE.FAILED_EXTEND));
 //            robot.lift.targetPosition = 350;
-            schedule(new TeleopLiftCommand(robot, 350, LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBY && !pDBY) {
 //            robot.lift.targetPosition = 595;
-            schedule(new TeleopLiftCommand(robot, 595, LiftSubsystem.STATE.FAILED_EXTEND));
-//            robot.lift.newProfile(targetPos, targetVelo, targetAcc, targetDec);
+            schedule(new TeleopLiftCommand(robot, 595, new Constraints(6500, 7500, decelConstraint), LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (dBB && !pDBB) {
 //            robot.lift.targetPosition = 0;
-            schedule(new TeleopLiftCommand(robot, 0, LiftSubsystem.STATE.FAILED_RETRACT));
+            schedule(new TeleopLiftCommand(robot, 0, new Constraints(6500, 7500, decelConstraint), LiftSubsystem.STATE.FAILED_RETRACT));
         }
         pDBA = dBA;
         pDBX = dBX;
@@ -267,18 +275,18 @@ public class OpMode extends CommandOpMode {
         robot.write();
 
         // Telemetry
-        telemetry.addData("liftCurrent", robot.lift.lift.motorEx.getCurrent(CurrentUnit.AMPS));
-        telemetry.addData("liftPos:", robot.lift.getPos());
-        telemetry.addData("liftPow:", robot.lift.power);
-        telemetry.addData("liftTarget:", robot.lift.targetPosition);
-        telemetry.addData("intakePos:", robot.intake.getPos());
-        telemetry.addData("intakePow:", robot.intake.power);
-        telemetry.addData("intakeTarget:", robot.intake.targetPosition);
-        telemetry.addData("imu", SwerveDrivetrain.imuOff);
+//        telemetry.addData("liftCurrent", robot.lift.lift.motorEx.getCurrent(CurrentUnit.AMPS));
+//        telemetry.addData("liftPos:", robot.lift.getPos());
+//        telemetry.addData("liftPow:", robot.lift.power);
+//        telemetry.addData("liftTarget:", robot.lift.targetPosition);
+//        telemetry.addData("intakePos:", robot.intake.getPos());
+//        telemetry.addData("intakePow:", robot.intake.power);
+//        telemetry.addData("intakeTarget:", robot.intake.targetPosition);
+//        telemetry.addData("imu", SwerveDrivetrain.imuOff);
 //        telemetry.addData("targetPos", robot.lift.curState.x);
 //        telemetry.addData("targetVelo", robot.lift.curState.v);
 //        telemetry.addData("targetAcc", robot.lift.curState.a);
-        telemetry.addData("liftCurrent", robot.lift.lift.motorEx.getCurrent(CurrentUnit.AMPS));
+//        telemetry.addData("liftCurrent", robot.lift.lift.motorEx.getCurrent(CurrentUnit.AMPS));
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
