@@ -89,7 +89,7 @@ public class OpMode extends CommandOpMode {
                 (Math.pow(-gamepad1.right_stick_x, 3)) * speedMultiplier * ((robot.intake.isExtended) ? 0.5 : 1)
         );
 
-        if (gamepad1.left_bumper) {
+        if (gamepadEx1.wasJustPressed(Button.LEFT_BUMPER)) {
             SwerveDrivetrain.imuOff = robot.getAngle() + Math.PI;
         }
 

@@ -128,23 +128,14 @@ public class IntakeSubsystem extends SubsystemBase {
         this.turret = hardwareMap.get(Servo.class, "turret");
         this.pivot = hardwareMap.get(Servo.class, "pivot");
 
-//        this.distanceSensor = new BetterDistanceSensor(hardwareMap, "distanceSensor", 50, DistanceUnit.CM);
-//        distanceSensor.request();
-//        Rev2mDistanceSensor ds = hardwareMap.get(Rev2mDistanceSensor.class, "distanceSensor");
-//        this.distanceSensor = new Rev2mDistanceSensorEx(ds.getDeviceClient());
-//        this.distanceSensor.setRangingProfile(Rev2mDistanceSensorEx.RANGING_PROFILE.HIGH_SPEED);
-
-
-//        this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
         this.profile = new AsymmetricMotionProfile(0, 1, new Constraints(0, 0, 0));
-
-        this.timer = new ElapsedTime();
-        timer.reset();
-        this.voltageTimer = new ElapsedTime();
-        voltageTimer.reset();
         this.controller = new PIDFController(P, I, D, F);
+        this.timer = new ElapsedTime();
+        this.voltageTimer = new ElapsedTime();
         this.voltageSensor = hardwareMap.voltageSensor.iterator().next();
         this.voltage = voltageSensor.getVoltage();
+        timer.reset();
+        voltageTimer.reset();
     }
 
     public void update(PivotState state) {
@@ -253,10 +244,6 @@ public class IntakeSubsystem extends SubsystemBase {
         return (int) intakePosition;
     }
 
-//    public boolean hasCone() {
-//        return distanceSensor.getDistance(DistanceUnit.CM) < distanceThreshold;
-//    }
-
     public void setFourbarFactor(double factor) {
         double fourbarAddition = -0.01 * factor;
         double barLeftPos = barLeft.getPosition();
@@ -281,7 +268,6 @@ public class IntakeSubsystem extends SubsystemBase {
             targetPosition = newPosition;
         }
     }
-
 
     public void resetTimer() {
         timer.reset();

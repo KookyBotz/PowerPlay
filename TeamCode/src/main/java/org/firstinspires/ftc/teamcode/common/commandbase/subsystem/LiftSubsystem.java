@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -71,8 +72,7 @@ public class LiftSubsystem extends SubsystemBase {
         this.lift = new MotorEx(hardwareMap, "lift");
         this.liftEncoder = new MotorEx(hardwareMap, "leftRearMotor");
         this.latch = hardwareMap.get(Servo.class, "latch");
-        this.timer = new ElapsedTime();
-        timer.reset();
+
 
         if (isAuto) {
             liftEncoder.resetEncoder();
@@ -80,20 +80,19 @@ public class LiftSubsystem extends SubsystemBase {
         } else {
             update(LatchState.UNLATCHED);
         }
+
         liftEncoder.motor.setDirection(DcMotorSimple.Direction.REVERSE);
         lift.motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-//        this.profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(1, 0), new MotionState(0, 0), 30, 25);
         this.profile = new AsymmetricMotionProfile(0, 1, new Constraints(0, 0, 0));
-
         this.voltageTimer = new ElapsedTime();
-        voltageTimer.reset();
-
         this.controller = new PIDController(P, I, D);
-        controller.setPID(P, I, D);
-
         this.voltageSensor = hardwareMap.voltageSensor.iterator().next();
         this.voltage = voltageSensor.getVoltage();
+        this.timer = new ElapsedTime();
+
+        voltageTimer.reset();
+        timer.reset();
     }
 
     public void loop() {
