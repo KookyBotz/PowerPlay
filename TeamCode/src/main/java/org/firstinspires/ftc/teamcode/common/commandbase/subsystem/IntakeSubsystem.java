@@ -66,7 +66,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public boolean isExtended = false;
 
-    public double offset2 = 0;
+    public double pivotOffset = 0;
 
     public static final GrabPosition[] CYCLE_GRAB_POSITIONS = {
             new GrabPosition(550, 150, 0.457, pivot_pitch_up, 0),
@@ -151,19 +151,19 @@ public class IntakeSubsystem extends SubsystemBase {
         pivotState = state;
         switch (state) {
             case FLAT:
-                pivot.setPosition(pivot_flat + offset2);
+                pivot.setPosition(pivot_flat + pivotOffset);
                 break;
             case PITCH_UP:
-                pivot.setPosition(pivot_pitch_up + offset2);
+                pivot.setPosition(pivot_pitch_up + pivotOffset);
                 break;
             case SCORE:
-                pivot.setPosition(pivot_pitch_score + offset2);
+                pivot.setPosition(pivot_pitch_score + pivotOffset);
                 break;
             case DOWN:
-                pivot.setPosition(pivot_pitch_pikcup + offset2);
+                pivot.setPosition(pivot_pitch_pikcup + pivotOffset);
                 break;
             case PIVOT_AUTO_TRANSFER:
-                pivot.setPosition(pivot_auto_transfer + offset2);
+                pivot.setPosition(pivot_auto_transfer + pivotOffset);
                 break;
         }
     }
@@ -297,6 +297,6 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void adjustPivotOffset(double offset) {
-        this.offset2 += offset;
+        this.pivotOffset += offset;
     }
 }
