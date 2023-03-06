@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.LowPresetCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.LowScoreCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopIntakeCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopLiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
@@ -46,6 +47,8 @@ public class OpMode extends CommandOpMode {
 
     private final GamepadEx gamepadEx2 = new GamepadEx(gamepad2),
                             gamepadEx1 = new GamepadEx(gamepad1);
+
+    private boolean rumble = true;
 
     @Override
     public void initialize() {
@@ -79,6 +82,18 @@ public class OpMode extends CommandOpMode {
             SwerveDrivetrain.imuOff = -Math.PI / 2;
         }
 
+        if (timer.seconds() < 45 && timer.seconds() > 30 && rumble) {
+            gamepad1.rumble(500);
+            gamepad2.rumble(500);
+            rumble = false;
+        }
+
+        if (timer.seconds() < 30 && !rumble) {
+            gamepad1.rumble(1000);
+            gamepad2.rumble(1000);
+            rumble = true;
+        }
+
         robot.read();
 
         double speedMultiplier = 1 - 0.75 * gamepad1.right_trigger;
@@ -101,6 +116,14 @@ public class OpMode extends CommandOpMode {
             robot.intake.update(robot.intake.pivotState);
         }
 
+        if (gamepadEx1.wasJustPressed(Button.RIGHT_BUMPER)) {
+            if (robot.intake.pivotState.equals(IntakeSubsystem.PivotState.SCORE) && robot.intake.fourbarState == (IntakeSubsystem.FourbarState.SCORE)) {
+                schedule(new LowScoreCommand(robot));
+            } else {
+                schedule(new TeleopLiftCommand(robot, 0, new Constraints(6500, 7500, decelConstraint), LiftSubsystem.STATE.FAILED_RETRACT));
+            }
+        }
+
         if (gamepadEx2.wasJustPressed(Button.DPAD_LEFT)) {
             robot.lift.update(LiftSubsystem.LatchState.UNLATCHED);
         } else if (gamepadEx2.wasJustPressed(Button.DPAD_RIGHT)) {
@@ -114,13 +137,7 @@ public class OpMode extends CommandOpMode {
 
         if (gamepadEx2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.3) {
             if (robot.intake.pivotState.equals(IntakeSubsystem.PivotState.SCORE) && robot.intake.fourbarState == (IntakeSubsystem.FourbarState.SCORE)) {
-                schedule(
-                        new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
-                        new WaitCommand(100),
-                        new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
-                        new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
-                        new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE))
-                );
+                schedule(new LowScoreCommand(robot));
             } else {
                 schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)));
             }
