@@ -34,7 +34,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "1+5 Left HIGH MIDLINE")
+@Autonomous(name = "1+5 Left MID")
 @Config
 public class Left5Mid extends LinearOpMode {
 

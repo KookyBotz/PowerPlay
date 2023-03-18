@@ -110,87 +110,87 @@ public class OpMode extends CommandOpMode {
         if (gamepadEx1.wasJustPressed(Button.LEFT_BUMPER)) {
             SwerveDrivetrain.imuOff = robot.getAngle() + Math.PI;
         }
-
-        if (gamepadEx1.wasJustPressed(Button.A)) {
-            robot.intake.adjustPivotOffset(-0.03);
-            robot.intake.update(robot.intake.pivotState);
-        } else if (gamepadEx1.wasJustPressed(Button.Y)) {
-            robot.intake.adjustPivotOffset(0.03);
-            robot.intake.update(robot.intake.pivotState);
-        }
-
-        if (gamepadEx1.wasJustPressed(Button.RIGHT_BUMPER)) {
-            if (robot.intake.pivotState.equals(IntakeSubsystem.PivotState.SCORE) && robot.intake.fourbarState == (IntakeSubsystem.FourbarState.SCORE)) {
-                schedule(new LowScoreCommand(robot));
-            } else {
-                schedule(new TeleopLiftCommand(robot, 0, new Constraints(6500, 7500, decelConstraint), LiftSubsystem.STATE.FAILED_RETRACT));
-            }
-        }
-
-        if (gamepadEx2.wasJustPressed(Button.DPAD_LEFT)) {
-            robot.lift.update(LiftSubsystem.LatchState.UNLATCHED);
-        } else if (gamepadEx2.wasJustPressed(Button.DPAD_RIGHT)) {
-            robot.lift.update(LiftSubsystem.LatchState.LATCHED);
-        }
-
-        double slideFactor = (gamepadEx2.getButton(Button.DPAD_UP) ? 0.03 : 0) + (gamepadEx2.getButton(Button.DPAD_DOWN) ? -0.03 : 0);
-        if (slideFactor != 0) {
-            robot.lift.setSlideFactor(slideFactor);
-        }
-
-        if (robot.intake.hasCone() && !pHasCone) {
-            schedule(new TeleopTransferCommand(robot));
-        }
-
-        if (gamepadEx2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.3) {
-            if (robot.intake.pivotState.equals(IntakeSubsystem.PivotState.SCORE) && robot.intake.fourbarState == (IntakeSubsystem.FourbarState.SCORE)) {
-                schedule(new LowScoreCommand(robot));
-            } else {
-                schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)));
-            }
-        } else if (gamepadEx2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.3) {
-            schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)));
-        }
-
-        double leftY = gamepadEx2.getLeftY();
-        if (Math.abs(leftY) > 0.1) {
-            robot.intake.setSlideFactor(joystickScalar(-leftY, 0.1));
-        }
-
-        double leftX = gamepadEx2.getLeftX();
-        if (Math.abs(leftX) > 0.4) {
-            robot.intake.setFourbarFactor(joystickScalar(leftX, 0.4));
-        }
-
-        double rightX = gamepadEx2.getRightX();
-        if (Math.abs(rightX) > 0.15) {
-            robot.intake.setTurretFactor(joystickScalar(rightX, 0.15));
-        }
-
-        if (gamepadEx2.wasJustPressed(Button.LEFT_BUMPER)) {
-            schedule(new TeleopIntakeCommand(robot));
-        } else if (gamepadEx2.wasJustPressed(Button.RIGHT_BUMPER)) {
-            schedule(new TeleopIntakeCommand(robot));
-        }
-
-        if (gamepadEx2.wasJustPressed(Button.A)) {
-            schedule(new LowPresetCommand(robot));
-        } else if (gamepadEx2.wasJustPressed(Button.X)) {
-            schedule(new TeleopLiftCommand(robot, robot.lift.getHeightMid(), new Constraints(6500, 7500, decelConstraint), LiftSubsystem.STATE.FAILED_EXTEND));
-        } else if (gamepadEx2.wasJustPressed(Button.Y)) {
-            schedule(new TeleopLiftCommand(robot, robot.lift.getHeightHigh(), new Constraints(6500, 7500, decelConstraint), LiftSubsystem.STATE.FAILED_EXTEND));
-        } else if (gamepadEx2.wasJustPressed(Button.B)) {
-            schedule(new TeleopLiftCommand(robot, 0, new Constraints(6500, 7500, decelConstraint), LiftSubsystem.STATE.FAILED_RETRACT));
-        }
-
-        if (gamepadEx1.wasJustPressed(Button.X)) {
-            robot.intake.update(IntakeSubsystem.PivotState.DOWN);
-            robot.intake.update(IntakeSubsystem.FourbarState.DOWN);
-        }
-
-        if (gamepadEx1.wasJustPressed(Button.RIGHT_STICK_BUTTON)) {
-            xLock = !xLock;
-        }
+//
+//        if (gamepadEx1.wasJustPressed(Button.A)) {
+//            robot.intake.adjustPivotOffset(-0.03);
+//            robot.intake.update(robot.intake.pivotState);
+//        } else if (gamepadEx1.wasJustPressed(Button.Y)) {
+//            robot.intake.adjustPivotOffset(0.03);
+//            robot.intake.update(robot.intake.pivotState);
+//        }
+//
+//        if (gamepadEx1.wasJustPressed(Button.RIGHT_BUMPER)) {
+//            if (robot.intake.pivotState.equals(IntakeSubsystem.PivotState.SCORE) && robot.intake.fourbarState == (IntakeSubsystem.FourbarState.SCORE)) {
+//                schedule(new LowScoreCommand(robot));
+//            } else {
+//                schedule(new TeleopLiftCommand(robot, 0, new Constraints(6500, 7500, decelConstraint), LiftSubsystem.STATE.FAILED_RETRACT));
+//            }
+//        }
+//
+//        if (gamepadEx2.wasJustPressed(Button.DPAD_LEFT)) {
+//            robot.lift.update(LiftSubsystem.LatchState.UNLATCHED);
+//        } else if (gamepadEx2.wasJustPressed(Button.DPAD_RIGHT)) {
+//            robot.lift.update(LiftSubsystem.LatchState.LATCHED);
+//        }
+//
+//        double slideFactor = (gamepadEx2.getButton(Button.DPAD_UP) ? 0.03 : 0) + (gamepadEx2.getButton(Button.DPAD_DOWN) ? -0.03 : 0);
+//        if (slideFactor != 0) {
+//            robot.lift.setSlideFactor(slideFactor);
+//        }
+//
+//        if (robot.intake.hasCone() && !pHasCone) {
+//            schedule(new TeleopTransferCommand(robot));
+//        }
+//
+//        if (gamepadEx2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.3) {
+//            if (robot.intake.pivotState.equals(IntakeSubsystem.PivotState.SCORE) && robot.intake.fourbarState == (IntakeSubsystem.FourbarState.SCORE)) {
+//                schedule(new LowScoreCommand(robot));
+//            } else {
+//                schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)));
+//            }
+//        } else if (gamepadEx2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.3) {
+//            schedule(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)));
+//        }
+//
+//        double leftY = gamepadEx2.getLeftY();
+//        if (Math.abs(leftY) > 0.1) {
+//            robot.intake.setSlideFactor(joystickScalar(-leftY, 0.1));
+//        }
+//
+//        double leftX = gamepadEx2.getLeftX();
+//        if (Math.abs(leftX) > 0.4) {
+//            robot.intake.setFourbarFactor(joystickScalar(leftX, 0.4));
+//        }
+//
+//        double rightX = gamepadEx2.getRightX();
+//        if (Math.abs(rightX) > 0.15) {
+//            robot.intake.setTurretFactor(joystickScalar(rightX, 0.15));
+//        }
+//
+//        if (gamepadEx2.wasJustPressed(Button.LEFT_BUMPER)) {
+//            schedule(new TeleopIntakeCommand(robot));
+//        } else if (gamepadEx2.wasJustPressed(Button.RIGHT_BUMPER)) {
+//            schedule(new TeleopIntakeCommand(robot));
+//        }
+//
+//        if (gamepadEx2.wasJustPressed(Button.A)) {
+//            schedule(new LowPresetCommand(robot));
+//        } else if (gamepadEx2.wasJustPressed(Button.X)) {
+//            schedule(new TeleopLiftCommand(robot, robot.lift.getHeightMid(), new Constraints(6500, 7500, decelConstraint), LiftSubsystem.STATE.FAILED_EXTEND));
+//        } else if (gamepadEx2.wasJustPressed(Button.Y)) {
+//            schedule(new TeleopLiftCommand(robot, robot.lift.getHeightHigh(), new Constraints(6500, 7500, decelConstraint), LiftSubsystem.STATE.FAILED_EXTEND));
+//        } else if (gamepadEx2.wasJustPressed(Button.B)) {
+//            schedule(new TeleopLiftCommand(robot, 0, new Constraints(6500, 7500, decelConstraint), LiftSubsystem.STATE.FAILED_RETRACT));
+//        }
+//
+//        if (gamepadEx1.wasJustPressed(Button.X)) {
+//            robot.intake.update(IntakeSubsystem.PivotState.DOWN);
+//            robot.intake.update(IntakeSubsystem.FourbarState.DOWN);
+//        }
+//
+//        if (gamepadEx1.wasJustPressed(Button.RIGHT_STICK_BUTTON)) {
+//            xLock = !xLock;
+//        }
 
         if (xLock) {
             robot.drivetrain.leftFrontModule.setTargetRotation(PI / 4);

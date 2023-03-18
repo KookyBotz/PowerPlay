@@ -51,12 +51,12 @@ public class Robot {
             imu.initialize(parameters);
         }
 
-        horizontalEncoder = new MotorEx(hardwareMap, "rightFrontMotor").encoder;
-        lateralEncoder = new MotorEx(hardwareMap, "leftFrontMotor").encoder;
-
-        intake = new IntakeSubsystem(hardwareMap, isAuto);
-
-        lift = new LiftSubsystem(hardwareMap, isAuto);
+//        horizontalEncoder = new MotorEx(hardwareMap, "rightFrontMotor").encoder;
+//        lateralEncoder = new MotorEx(hardwareMap, "leftFrontMotor").encoder;
+//
+//        intake = new IntakeSubsystem(hardwareMap, isAuto);
+//
+//        lift = new LiftSubsystem(hardwareMap, isAuto);
     }
 
     /**
@@ -104,8 +104,8 @@ public class Robot {
      * Bulk caches every encoder position on the robot.
      */
     public void read() {
-        intake.read();
-        lift.read();
+//        intake.read();
+//        lift.read();
         for (SwerveModule module : drivetrain.modules) {
             module.read();
         }
@@ -115,8 +115,8 @@ public class Robot {
      * Bulk writes to all motors within the robot.
      */
     public void write() {
-        intake.write();
-        lift.write();
+//        intake.write();
+//        lift.write();
         if (this.isAuto) {
             drivetrain.writeAuto();
         } else {
