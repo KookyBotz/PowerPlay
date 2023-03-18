@@ -4,7 +4,6 @@ import static org.firstinspires.ftc.teamcode.common.commandbase.subsystem.Intake
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -16,6 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.AutoCycleCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.ParkSequence;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.SwerveXCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.commands.LiftPositionCommand;
@@ -32,20 +32,20 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-import java.util.function.BooleanSupplier;
+import static org.firstinspires.ftc.teamcode.common.hardware.Constants.*;
 
-@Autonomous(name = "1+10 Left")
+@Autonomous(name = "1+10 Left High")
 @Config
-public class FullAutoLeft extends LinearOpMode {
+public class Left10High extends LinearOpMode {
 
-    SleeveDetection sleeveDetection = new SleeveDetection();
+    SleeveDetection sleeveDetection;
     OpenCvCamera camera;
     private double loopTime;
-    private BooleanSupplier side_left = () -> true;
 
     @Override
     public void runOpMode() throws InterruptedException {
         CommandScheduler.getInstance().reset();
+        side = Side.LEFT;
         Robot robot = new Robot(hardwareMap, true);
         Drivetrain drivetrain = robot.drivetrain;
 
@@ -70,7 +70,7 @@ public class FullAutoLeft extends LinearOpMode {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-//        sleeveDetection = new SleeveDetection(new Point(75, 120));
+        sleeveDetection = new SleeveDetection();
         camera.setPipeline(sleeveDetection);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
@@ -92,7 +92,7 @@ public class FullAutoLeft extends LinearOpMode {
             }
             robot.drivetrain.updateModules();
 
-            telemetry.addLine("RUNNING LEFT 10 CYCLE");
+            telemetry.addLine("RUNNING LEFT 10 CYCLE HIGH");
             telemetry.addLine(sleeveDetection.getPosition().toString());
             telemetry.update();
 
@@ -109,61 +109,54 @@ public class FullAutoLeft extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        // get to cycle position
-                        // start cycling
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new PositionCommand(drivetrain, localizer, new Pose(59, -1, -0.22899), 500, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                                         new SwerveXCommand(robot.drivetrain)
-
                                 ),
 
                                 new WaitCommand(2500).andThen(new SequentialCommandGroup(
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0]),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1]),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2]),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3]),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4])
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0], robot.lift.getHeightHigh()),
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1], robot.lift.getHeightHigh()),
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2], robot.lift.getHeightHigh()),
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3], robot.lift.getHeightHigh()),
+                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4], robot.lift.getHeightHigh())
                                 ))
-
                         ),
 
                         new PositionCommand(drivetrain, localizer, new Pose(52.5, 0, 0), 0, 250, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new PositionCommand(drivetrain, localizer, new Pose(52.5, -71.5, 0), 500, 1500, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                        new InstantCommand(() -> side_left = () -> false),
+                        new InstantCommand(() -> side = Side.RIGHT),
 
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new PositionCommand(drivetrain, localizer, new Pose(52.5, -70.5, 0.19 + Math.PI), 0, 1000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                                         new PositionCommand(drivetrain, localizer, new Pose(64.5, -70.5, 0.19 + Math.PI), 250, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                                         new SwerveXCommand(robot.drivetrain)
-
                                 ),
 
                                 new WaitCommand(2000).andThen(new SequentialCommandGroup(
-                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0]),
-                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1]),
-                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2]),
-                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3]),
-                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4]),
+                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0], robot.lift.getHeightHigh()),
+                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1], robot.lift.getHeightHigh()),
+                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2], robot.lift.getHeightHigh()),
+                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3], robot.lift.getHeightHigh()),
+                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4], robot.lift.getHeightHigh()),
                                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
                                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
                                                 new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
-//                                                new LiftPositionCommand(robot.lift, 585, 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND),
-//                                                new WaitCommand(100),
-//                                                new LiftPositionCommand(robot.lift, -5, 6000, 7500, 10, 1000, LiftSubsystem.STATE.FAILED_RETRACT)
-//                                                        .alongWith(new WaitCommand(50).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)))),
+                                                new LiftPositionCommand(robot.lift, robot.lift.getHeightHigh(), 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND),
+                                                new WaitCommand(100),
+                                                new LiftPositionCommand(robot.lift, -5, 6000, 7500, 10, 1000, LiftSubsystem.STATE.FAILED_RETRACT)
+                                                        .alongWith(new WaitCommand(50).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)))),
                                                 new WaitCommand(200),
-                                                new PositionCommand(drivetrain, localizer,
-                                                        position == SleeveDetection.ParkingPosition.LEFT ? new Pose(56.5, -45.5, Math.PI / 2) :
-                                                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(56.5, -70.5, Math.PI / 2) :
-                                                                        new Pose(56.5, -94.5, Math.PI / 2), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage())
+                                                new ParkSequence(robot, hardwareMap, side, position)
                                         )
                                 )
 
                         ),
 
+                        new InstantCommand(() -> robot.drivetrain.setIMUOffset(robot.getAngle())),
                         new InstantCommand(this::requestOpModeStop)
                 )
         );
@@ -176,24 +169,9 @@ public class FullAutoLeft extends LinearOpMode {
             if (robot.intake.state == IntakeSubsystem.STATE.FAILED_RETRACT || robot.lift.state == LiftSubsystem.STATE.FAILED_RETRACT) {
                 CommandScheduler.getInstance().reset();
                 CommandScheduler.getInstance().schedule(
-                        new SequentialCommandGroup(
-                                new ConditionalCommand(
-                                        new SequentialCommandGroup(
-                                            new WaitCommand(200),
-                                            new PositionCommand(drivetrain, localizer, new Pose(31.5, -1, Math.PI / 2), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                                            new WaitCommand(500),
-                                            new PositionCommand(drivetrain, localizer,
-                                                    position == SleeveDetection.ParkingPosition.LEFT ? new Pose(29.5, 24, Math.PI / 2) :
-                                                            position == SleeveDetection.ParkingPosition.CENTER ? new Pose(29.5, -1, Math.PI / 2) :
-                                                                    new Pose(29.5, -25, Math.PI / 2), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage())
-                                        ), new PositionCommand(drivetrain, localizer,
-                                        position == SleeveDetection.ParkingPosition.LEFT ? new Pose(56.5, -45.5, Math.PI / 2) :
-                                                position == SleeveDetection.ParkingPosition.CENTER ? new Pose(56.5, -70.5, Math.PI / 2) :
-                                                        new Pose(56.5, -94.5, Math.PI / 2), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                                        side_left
-                                ),
-                                new InstantCommand(this::requestOpModeStop)
-                        )
+                        new ParkSequence(robot, hardwareMap, side, position),
+                        new InstantCommand(() -> robot.drivetrain.setIMUOffset(robot.getAngle())),
+                        new InstantCommand(this::requestOpModeStop)
                 );
             }
 
@@ -202,12 +180,6 @@ public class FullAutoLeft extends LinearOpMode {
             robot.lift.loop();
             robot.drivetrain.updateModules();
             localizer.periodic();
-
-            telemetry.addData("STATE: ", robot.intake.state);
-            telemetry.addData("STATE: ", robot.lift.state);
-            telemetry.addData("targetPos", robot.intake.targetPosition);
-            telemetry.addData("intakePos", robot.intake.getPos());
-            telemetry.addData("current pose", localizer.getPos());
 
             double loop = System.nanoTime();
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));

@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -25,7 +26,7 @@ public class LiftSubsystem extends SubsystemBase {
     // anything other than GOOD means it goofed
     public LiftSubsystem.STATE state = LiftSubsystem.STATE.GOOD;
 
-    public final MotorEx lift;
+    public final MotorEx lift1, lift2;
     public final MotorEx liftEncoder;
     public final Servo latch;
 
@@ -35,7 +36,7 @@ public class LiftSubsystem extends SubsystemBase {
     public State curState;
     private final ElapsedTime timer;
     private final ElapsedTime voltageTimer;
-    private PIDController controller;
+    private PIDFController controller;
     private final VoltageSensor voltageSensor;
 
     private double voltage;
@@ -45,6 +46,9 @@ public class LiftSubsystem extends SubsystemBase {
     public static double I = 0.0;
     public static double D = 0.0005;
     public static double F = -0.13;
+
+    public static int heightHigh = 595;
+    public static int heightMid = 350;
 
     public double power = 0.0;
     public double targetPosition = 0.0;
@@ -69,7 +73,8 @@ public class LiftSubsystem extends SubsystemBase {
 
     // thanks aabhas <3
     public LiftSubsystem(HardwareMap hardwareMap, boolean isAuto) {
-        this.lift = new MotorEx(hardwareMap, "lift");
+        this.lift1 = new MotorEx(hardwareMap, "lift1");
+        this.lift2 = new MotorEx(hardwareMap, "lift2");
         this.liftEncoder = new MotorEx(hardwareMap, "leftRearMotor");
         this.latch = hardwareMap.get(Servo.class, "latch");
 
@@ -82,11 +87,12 @@ public class LiftSubsystem extends SubsystemBase {
         }
 
         liftEncoder.motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        lift.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        lift1.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        // lift2.motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.profile = new AsymmetricMotionProfile(0, 1, new Constraints(0, 0, 0));
         this.voltageTimer = new ElapsedTime();
-        this.controller = new PIDController(P, I, D);
+        this.controller = new PIDFController(P, I, D, F);
         this.voltageSensor = hardwareMap.voltageSensor.iterator().next();
         this.voltage = voltageSensor.getVoltage();
         this.timer = new ElapsedTime();
@@ -96,7 +102,7 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void loop() {
-        this.controller.setPID(P, I, D);
+        this.controller.setPIDF(P, I, D, F);
 
         if (voltageTimer.seconds() > 5) {
             voltage = voltageSensor.getVoltage();
@@ -108,7 +114,7 @@ public class LiftSubsystem extends SubsystemBase {
             targetPosition = curState.x;
         }
 
-        power = (-controller.calculate(liftPosition, targetPosition) / voltage * 14) + F;
+        power = (-controller.calculate(liftPosition, targetPosition) / voltage * 14);
     }
 
     public void update(LatchState state) {
@@ -127,13 +133,17 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void write() {
-        lift.set(power);
+        lift1.set(power);
+        lift2.set(power);
     }
 
     public int getPos() {
         return liftPosition;
     }
 
+    public int getHeightHigh() { return heightHigh; }
+
+    public int getHeightMid() { return heightMid; }
 
     public void setSlideFactor(double factor) {
         double slideAddition = 20 * factor;
@@ -148,12 +158,7 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void newProfile(double targetPos, double max_v, double max_a) {
-//        profile = MotionProfileGenerator.generateSimpleMotionProfile(new MotionState(getPos(), 0), new MotionState(targetPos, 0), max_v, max_a);
         this.newProfile(targetPos, max_v, max_a, max_a);
-//        this.profile = new AsymmetricMotionProfile(getPos(), targetPos, new Constraints(max_v, max_a, max_a));
-//        endPos = (int) targetPos;
-//        resetTimer();
-//        this.newProfile(targetPos, max_v, max_a);
     }
 
     public void newProfile(double targetPos, double max_v, double max_a, double max_d) {

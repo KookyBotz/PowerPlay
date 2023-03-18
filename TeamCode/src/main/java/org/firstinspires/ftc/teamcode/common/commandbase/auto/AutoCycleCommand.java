@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 
 public class AutoCycleCommand extends SequentialCommandGroup {
-    public AutoCycleCommand(Robot robot, GrabPosition state) {
+    public AutoCycleCommand(Robot robot, GrabPosition state, int liftPosition) {
         super(
                 // in parallel
                 new ParallelCommandGroup(
@@ -45,7 +45,7 @@ public class AutoCycleCommand extends SequentialCommandGroup {
                         // and deposit previous cone
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
-                                new LiftPositionCommand(robot.lift, 582, 6000, 7500, 40, 3000, LiftSubsystem.STATE.FAILED_EXTEND),
+                                new LiftPositionCommand(robot.lift, liftPosition, 6000, 7500, 40, 3000, LiftSubsystem.STATE.FAILED_EXTEND),
                                 new WaitCommand(175),
                                 new LiftPositionCommand(robot.lift, 0, 6000, 7500, 10, 2000, LiftSubsystem.STATE.FAILED_RETRACT)
                                         .alongWith(new WaitCommand(50).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED))))

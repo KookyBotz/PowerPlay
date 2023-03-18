@@ -1,23 +1,19 @@
 package org.firstinspires.ftc.teamcode.common.commandbase.subsystem;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.profile.MotionProfile;
-import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
-import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.AsymmetricMotionProfile;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Constraints;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.State;
-import org.firstinspires.ftc.teamcode.common.hardware.BetterDistanceSensor;
 
 @Config
 public class IntakeSubsystem extends SubsystemBase {
@@ -31,6 +27,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final Servo barLeft, barRight;
     private final Servo claw, turret;
     private final Servo pivot;
+    private final DigitalChannel clawSensor;
 
     public AsymmetricMotionProfile profile;
     public State curState;
@@ -65,6 +62,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double pivot_pitch_pikcup = 0.25;
 
     public boolean isExtended = false;
+    private boolean hasCone = false;
 
     public double pivotOffset = 0;
 
@@ -127,6 +125,8 @@ public class IntakeSubsystem extends SubsystemBase {
         this.claw = hardwareMap.get(Servo.class, "claw");
         this.turret = hardwareMap.get(Servo.class, "turret");
         this.pivot = hardwareMap.get(Servo.class, "pivot");
+        this.clawSensor = hardwareMap.get(DigitalChannel.class, "clawSensor");
+        clawSensor.setMode(DigitalChannel.Mode.INPUT);
 
         this.profile = new AsymmetricMotionProfile(0, 1, new Constraints(0, 0, 0));
         this.controller = new PIDFController(P, I, D, F);
@@ -206,7 +206,8 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void loop() {
-        controller = new PIDFController(P, I, D, F);
+        this.controller.setPIDF(P, I, D, F);
+        hasCone = clawSensor.getState();
 
         if (voltageTimer.seconds() > 5) {
             voltage = voltageSensor.getVoltage();
@@ -220,7 +221,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         isExtended = (getPos() > 30);
 
-        power = -controller.calculate(intakePosition, targetPosition) / voltage * 12;
+        power = -controller.calculate(intakePosition, targetPosition) / voltage * 14;
     }
 
     public void read() {
@@ -233,7 +234,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void setFourbar(double pos) {
         barLeft.setPosition(pos);
-        barRight.setPosition(1 - pos + 0.05); //fight backlash
+        barRight.setPosition(1 - pos);
     }
 
     public void setPivot(double pos){
@@ -242,6 +243,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public int getPos() {
         return (int) intakePosition;
+    }
+
+    public boolean hasCone() {
+        return hasCone;
     }
 
     public void setFourbarFactor(double factor) {

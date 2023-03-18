@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.powerplay;
 
-import com.acmerobotics.dashboard.config.Config;
-
+import org.firstinspires.ftc.teamcode.common.hardware.Constants;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -10,7 +9,8 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-@Config
+import static org.firstinspires.ftc.teamcode.common.hardware.Constants.*;
+
 public class SleeveDetection extends OpenCvPipeline {
     /*
     YELLOW  = Parking Left
@@ -24,13 +24,6 @@ public class SleeveDetection extends OpenCvPipeline {
         RIGHT
     }
 
-    // TOPLEFT anchor point for the bounding box
-    public static Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(100, 65);
-
-    // Width and height for the bounding box
-    public static int REGION_WIDTH = 30;
-    public static int REGION_HEIGHT = 50;
-
     // Color definitions
     private final Scalar
             YELLOW  = new Scalar(255, 255, 0),
@@ -38,37 +31,21 @@ public class SleeveDetection extends OpenCvPipeline {
             MAGENTA = new Scalar(255, 0, 255);
 
     // Anchor point definitions
-    Point sleeve_pointA = new Point(
-            SLEEVE_TOPLEFT_ANCHOR_POINT.x,
-            SLEEVE_TOPLEFT_ANCHOR_POINT.y);
-    Point sleeve_pointB = new Point(
-            SLEEVE_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
-            SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
+    private Point sleeve_pointA;
+    private Point sleeve_pointB;
 
     // Running variable storing the parking position
     private volatile ParkingPosition position = ParkingPosition.LEFT;
+    private boolean isLeft = true;
 
-    public SleeveDetection(Point NEW_ANCHOR_POINT) {
-        SLEEVE_TOPLEFT_ANCHOR_POINT = NEW_ANCHOR_POINT;
-
-        sleeve_pointA = new Point(
-                SLEEVE_TOPLEFT_ANCHOR_POINT.x,
-                SLEEVE_TOPLEFT_ANCHOR_POINT.y);
-        sleeve_pointB = new Point(
-                SLEEVE_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
-                SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
+    public SleeveDetection() {
+        isLeft = (Side.LEFT == Constants.side);
+        regenerate();
     }
-
-    public SleeveDetection() {}
 
     @Override
     public Mat processFrame(Mat input) {
-        Point sleeve_pointA = new Point(
-                SLEEVE_TOPLEFT_ANCHOR_POINT.x,
-                SLEEVE_TOPLEFT_ANCHOR_POINT.y);
-        Point sleeve_pointB = new Point(
-                SLEEVE_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
-                SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
+        regenerate();
         Mat areaMat = input.submat(new Rect(sleeve_pointA, sleeve_pointB));
         Scalar sumColors = Core.sumElems(areaMat);
 
@@ -111,5 +88,10 @@ public class SleeveDetection extends OpenCvPipeline {
     // Returns an enum being the current position where the robot will park
     public ParkingPosition getPosition() {
         return position;
+    }
+    
+    public void regenerate() {
+        sleeve_pointA = (isLeft) ? new Point(LEFTSIDE_REGION_X, LEFTSIDE_REGION_Y) : new Point(RIGHTSIDE_REGION_X, RIGHTSIDE_REGION_Y);
+        sleeve_pointB = (isLeft) ? new Point(LEFTSIDE_REGION_X + REGION_WIDTH, LEFTSIDE_REGION_Y + REGION_HEIGHT) : new Point(RIGHTSIDE_REGION_X + REGION_WIDTH, RIGHTSIDE_REGION_Y + REGION_HEIGHT);
     }
 }

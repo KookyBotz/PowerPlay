@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.auto.LowPresetCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.LowScoreCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopIntakeCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopLiftCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.TeleopTransferCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Constraints;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
@@ -44,6 +45,7 @@ public class OpMode extends CommandOpMode {
     public static double velocity = 6500;
 
     public static boolean usingIMU = true;
+    private boolean pHasCone = false;
 
     private final GamepadEx gamepadEx2 = new GamepadEx(gamepad2),
                             gamepadEx1 = new GamepadEx(gamepad1);
@@ -65,7 +67,8 @@ public class OpMode extends CommandOpMode {
         robot.lift.update(LiftSubsystem.LatchState.UNLATCHED);
 
         robot.intake.extension.set(0.4);
-        robot.lift.lift.set(0.4);
+        robot.lift.lift1.set(0.2);
+        robot.lift.lift2.set(0.2);
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
@@ -135,6 +138,10 @@ public class OpMode extends CommandOpMode {
             robot.lift.setSlideFactor(slideFactor);
         }
 
+        if (robot.intake.hasCone() && !pHasCone) {
+            schedule(new TeleopTransferCommand(robot));
+        }
+
         if (gamepadEx2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.3) {
             if (robot.intake.pivotState.equals(IntakeSubsystem.PivotState.SCORE) && robot.intake.fourbarState == (IntakeSubsystem.FourbarState.SCORE)) {
                 schedule(new LowScoreCommand(robot));
@@ -169,9 +176,9 @@ public class OpMode extends CommandOpMode {
         if (gamepadEx2.wasJustPressed(Button.A)) {
             schedule(new LowPresetCommand(robot));
         } else if (gamepadEx2.wasJustPressed(Button.X)) {
-            schedule(new TeleopLiftCommand(robot, 350, new Constraints(6500, 7500, decelConstraint), LiftSubsystem.STATE.FAILED_EXTEND));
+            schedule(new TeleopLiftCommand(robot, robot.lift.getHeightMid(), new Constraints(6500, 7500, decelConstraint), LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (gamepadEx2.wasJustPressed(Button.Y)) {
-            schedule(new TeleopLiftCommand(robot, 595, new Constraints(6500, 7500, decelConstraint), LiftSubsystem.STATE.FAILED_EXTEND));
+            schedule(new TeleopLiftCommand(robot, robot.lift.getHeightHigh(), new Constraints(6500, 7500, decelConstraint), LiftSubsystem.STATE.FAILED_EXTEND));
         } else if (gamepadEx2.wasJustPressed(Button.B)) {
             schedule(new TeleopLiftCommand(robot, 0, new Constraints(6500, 7500, decelConstraint), LiftSubsystem.STATE.FAILED_RETRACT));
         }
@@ -215,8 +222,9 @@ public class OpMode extends CommandOpMode {
         CommandScheduler.getInstance().reset();
         robot.intake.extension.resetEncoder();
         robot.intake.extension.set(0);
-        robot.lift.lift.resetEncoder();
-        robot.lift.lift.set(0);
+        robot.lift.liftEncoder.resetEncoder();
+        robot.lift.lift1.set(0);
+        robot.lift.lift2.set(0);
     }
 
     private double joystickScalar(double num, double min) {
