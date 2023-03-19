@@ -41,7 +41,6 @@ public class SwerveDrivetrain implements Drivetrain {
         rightFrontModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "rightFrontMotor"), hardwareMap.get(CRServo.class, "rightFrontServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "rightFrontEncoder"), 3.3).zero(frontRightOffset));
 
         modules = new SwerveModule[]{rightFrontModule, leftFrontModule, leftRearModule, rightRearModule};
-//        modules = new SwerveModule[]{leftFrontModule};
         for (SwerveModule m : modules) m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         R = hypot(TRACK_WIDTH, WHEEL_BASE);
     }
@@ -84,10 +83,6 @@ public class SwerveDrivetrain implements Drivetrain {
             m.setMotorPower(Math.abs(ws[i]));
             m.setTargetRotation(MathUtils.norm(wa[i]));
         }
-//        SwerveModule m = modules[1];
-//        if (Math.abs(max) > 1) ws[1] /= max;
-//            m.setMotorPower(Math.abs(ws[1]));
-//            m.setTargetRotation(MathUtils.norm(wa[1]));
     }
 
     public void writeAuto() {
@@ -102,8 +97,6 @@ public class SwerveDrivetrain implements Drivetrain {
     public void updateModules() {
         for (SwerveModule m : modules) m.update();
         SwerveModule.K_STATIC = K_STATIC;
-//        SwerveModule.K_STATIC = K_STATIC;
-//        leftFrontModule.update();
     }
 
     public String getTelemetry() {
