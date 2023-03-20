@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.hardware;
 
-import android.content.Context;
-
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -44,7 +41,7 @@ public class Robot {
      */
     public Robot(HardwareMap hardwareMap, boolean isAuto) {
         this.isAuto = isAuto;
-        drivetrain = new SwerveDrivetrain(hardwareMap);
+        drivetrain = new SwerveDrivetrain();
 
         synchronized (imuLock) {
             imu = hardwareMap.get(BNO055IMU.class, "imu");
@@ -53,12 +50,12 @@ public class Robot {
             imu.initialize(parameters);
         }
 
-        horizontalEncoder = new MotorEx(hardwareMap, "rightFrontMotor").encoder;
-        lateralEncoder = new MotorEx(hardwareMap, "leftFrontMotor").encoder;
-
-        intake = new IntakeSubsystem(hardwareMap, isAuto);
-
-        lift = new LiftSubsystem(hardwareMap, isAuto);
+//        horizontalEncoder = new MotorEx(hardwareMap, "rightFrontMotor").encoder;
+//        lateralEncoder = new MotorEx(hardwareMap, "leftFrontMotor").encoder;
+//
+//        intake = new IntakeSubsystem(hardwareMap, isAuto);
+//
+//        lift = new LiftSubsystem(hardwareMap, isAuto);
     }
 
     /**
@@ -98,32 +95,32 @@ public class Robot {
      * Resets the lift and intake slide encoders.
      */
     public void reset() {
-        lift.liftEncoder.resetEncoder();
-        intake.extensionEncoder.resetEncoder();
+//        lift.liftEncoder.resetEncoder();
+//        intake.extensionEncoder.resetEncoder();
     }
 
     /**
      * Bulk caches every encoder position on the robot.
      */
     public void read() {
-        intake.read();
-        lift.read();
-        for (SwerveModule module : drivetrain.modules) {
+//        intake.read();
+//        lift.read();
+        /*or (SwerveModule module : drivetrain.modules) {
             module.read();
-        }
+        }*/
     }
 
     /**
      * Bulk writes to all motors within the robot.
      */
     public void write() {
-        intake.write();
-        lift.write();
-        if (this.isAuto) {
-            drivetrain.writeAuto();
-        } else {
-            drivetrain.write();
-        }
+//        intake.write();
+//        lift.write();
+//        if (this.isAuto) {
+//            drivetrain.writeAuto();
+//        } else {
+//            drivetrain.write();
+//        }
     }
 
     /**

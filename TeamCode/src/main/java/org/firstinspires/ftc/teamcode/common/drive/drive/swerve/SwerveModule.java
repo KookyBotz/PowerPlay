@@ -24,7 +24,7 @@ import java.util.Locale;
 
 @Config
 public class SwerveModule {
-    public static double P = 0.5, I = 0, D = 0.1;
+    public static double P = 0.6, I = 0, D = 0.1;
     public static double K_STATIC = 0.04;
 
     public static double MAX_SERVO = 1, MAX_MOTOR = 1;
@@ -69,7 +69,6 @@ public class SwerveModule {
         position = encoder.getCurrentPosition();
     }
 
-
     public void update() {
         rotationController.setPIDF(P, I, D, 0);
         double target = getTargetRotation(), current = getModuleRotation();
@@ -87,7 +86,6 @@ public class SwerveModule {
         double power = Range.clip(rotationController.calculate(0, error), -MAX_SERVO, MAX_SERVO);
         if (Double.isNaN(power)) power = 0;
         servo.setPower(power + (Math.abs(error) > 0.02 ? K_STATIC : 0) * Math.signum(power));
-
     }
 
     public double getTargetRotation() {
@@ -111,7 +109,6 @@ public class SwerveModule {
     public String getTelemetry(String name) {
         return String.format(Locale.ENGLISH, "%s: Motor Flipped: %b \ncurrent position %.2f target position %.2f flip modifer = %d motor power = %.2f", name, wheelFlipped, getModuleRotation(), getTargetRotation(), flipModifier(), lastMotorPower);
     }
-
 
     public int flipModifier() {
         return wheelFlipped ? -1 : 1;

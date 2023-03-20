@@ -20,28 +20,28 @@ public class ServoTest extends OpMode {
 
     @Override
     public void loop() {
-        if(gamepad1.a){
-            a.setPosition(1);
-        }
-
-        if(gamepad1.b){
-            b.setPosition(1);
-        }
-
-        if(gamepad1.x){
-            c.setPosition(1);
-        }
-
-        if(gamepad1.y){
-            d.setPosition(0);
-        }
-
-        if(gamepad1.dpad_down){
-            e.setPosition(1);
-        }
-
-        if(gamepad1.dpad_up){
-            f.setPosition(1);
-        }
+//        if(gamepad1.a){
+//            a.setPosition(1);
+//        }
+//
+//        if(gamepad1.b){
+//            b.setPosition(1);
+//        }
+//
+//        if(gamepad1.x){
+//            c.setPosition(1);
+//        }
+//
+//        if(gamepad1.y){
+//            d.setPosition(0);
+//        }
+//
+//        if(gamepad1.dpad_down){
+//            e.setPosition(1);
+//        }
+//
+//        if(gamepad1.dpad_up){
+//            f.setPosition(1);
+//        }
     }
 }

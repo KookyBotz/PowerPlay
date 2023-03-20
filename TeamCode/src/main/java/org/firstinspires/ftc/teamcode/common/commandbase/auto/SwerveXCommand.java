@@ -18,10 +18,10 @@ public class SwerveXCommand extends CommandBase {
     @Override
     public void execute() {
         if (timeout == null) timeout = new ElapsedTime();
-        drivetrain.leftFrontModule.setTargetRotation(-PI / 4);
-        drivetrain.rightFrontModule.setTargetRotation(PI / 4);
-        drivetrain.rightRearModule.setTargetRotation(-PI / 4);
-        drivetrain.leftRearModule.setTargetRotation(PI / 4);
+        drivetrain.frontLeftModule.setTargetRotation(-PI / 4);
+        drivetrain.frontRightModule.setTargetRotation(PI / 4);
+        drivetrain.backRightModule.setTargetRotation(-PI / 4);
+        drivetrain.backLeftModule.setTargetRotation(PI / 4);
         drivetrain.updateModules();
     }
 
