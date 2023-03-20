@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.powerplay;
 
-import org.firstinspires.ftc.teamcode.common.hardware.Constants;
+import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -9,7 +9,7 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-import static org.firstinspires.ftc.teamcode.common.hardware.Constants.*;
+import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
 
 public class SleeveDetection extends OpenCvPipeline {
     /*
@@ -39,7 +39,7 @@ public class SleeveDetection extends OpenCvPipeline {
     private boolean isLeft = true;
 
     public SleeveDetection() {
-        isLeft = (Side.LEFT == Constants.side);
+        isLeft = (Side.LEFT == Globals.SIDE);
         regenerate();
     }
 

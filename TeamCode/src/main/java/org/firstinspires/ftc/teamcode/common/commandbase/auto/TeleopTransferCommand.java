@@ -17,24 +17,24 @@ public class TeleopTransferCommand extends SequentialCommandGroup {
                 new WaitUntilCommand(() -> robot.lift.getTargetPos() < 20 && robot.lift.getPos() < 563),
                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.CLOSED)),
 //                new WaitCommand(150), optional, likely not needed here
-                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
+//                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
 
-                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.PIVOT_AUTO_TRANSFER)),
-                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.DEPOSIT)),
+//                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.PIVOT_AUTO_TRANSFER)),
+//                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.DEPOSIT)),
                 new IntakePositionCommand(robot.intake, -5, 6000, 2500, 20, 3000, IntakeSubsystem.STATE.FAILED_RETRACT),
 
                 new WaitCommand(200),
                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
                 new WaitCommand(50),
 //                new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_flat)),
-                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
+//                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
                 new WaitCommand(200),
                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                 new WaitCommand(100),
                 new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
-                new WaitCommand(100),
-                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
-                new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_pitch_down))
+                new WaitCommand(100)
+//                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
+//                new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_pitch_down))
         );
     }
 }

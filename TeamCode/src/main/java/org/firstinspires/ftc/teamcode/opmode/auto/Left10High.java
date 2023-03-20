@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
-import static org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem.CYCLE_GRAB_POSITIONS;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandScheduler;
@@ -32,7 +31,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-import static org.firstinspires.ftc.teamcode.common.hardware.Constants.*;
+import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
 
 @Autonomous(name = "1+10 Left High")
 @Config
@@ -45,23 +44,19 @@ public class Left10High extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         CommandScheduler.getInstance().reset();
-        side = Side.LEFT;
+        SIDE = Side.LEFT;
         Robot robot = new Robot(hardwareMap, true);
         Drivetrain drivetrain = robot.drivetrain;
 
-        Localizer localizer = new TwoWheelLocalizer(
-                () -> robot.horizontalEncoder.getPosition(),
-                () -> robot.lateralEncoder.getPosition(),
-                robot::getAngle
-        );
+        Localizer localizer = new TwoWheelLocalizer();
 
         robot.localizer = localizer;
-        robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION);
+//        robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION);
         robot.intake.update(IntakeSubsystem.ClawState.CLOSED);
         robot.lift.update(LiftSubsystem.LatchState.LATCHED);
         robot.intake.update(IntakeSubsystem.ClawState.OPEN);
-        robot.intake.update(IntakeSubsystem.PivotState.FLAT);
-        robot.intake.update(IntakeSubsystem.TurretState.INTAKE);
+//        robot.intake.update(IntakeSubsystem.PivotState.FLAT);
+//        robot.intake.update(IntakeSubsystem.TurretState.INTAKE);
 
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
@@ -116,17 +111,17 @@ public class Left10High extends LinearOpMode {
                                 ),
 
                                 new WaitCommand(2500).andThen(new SequentialCommandGroup(
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0], robot.lift.getHeightHigh()),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1], robot.lift.getHeightHigh()),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2], robot.lift.getHeightHigh()),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3], robot.lift.getHeightHigh()),
-                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4], robot.lift.getHeightHigh())
+//                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0], robot.lift.getHeightHigh()),
+//                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1], robot.lift.getHeightHigh()),
+//                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2], robot.lift.getHeightHigh()),
+//                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3], robot.lift.getHeightHigh()),
+//                                        new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4], robot.lift.getHeightHigh())
                                 ))
                         ),
 
                         new PositionCommand(drivetrain, localizer, new Pose(52.5, 0, 0), 0, 250, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new PositionCommand(drivetrain, localizer, new Pose(52.5, -71.5, 0), 500, 1500, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                        new InstantCommand(() -> side = Side.RIGHT),
+                        new InstantCommand(() -> SIDE = Side.RIGHT),
 
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
@@ -136,21 +131,21 @@ public class Left10High extends LinearOpMode {
                                 ),
 
                                 new WaitCommand(2000).andThen(new SequentialCommandGroup(
-                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0], robot.lift.getHeightHigh()),
-                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1], robot.lift.getHeightHigh()),
-                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2], robot.lift.getHeightHigh()),
-                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3], robot.lift.getHeightHigh()),
-                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4], robot.lift.getHeightHigh()),
-                                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
-                                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
-                                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
-                                                new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
-                                                new LiftPositionCommand(robot.lift, robot.lift.getHeightHigh(), 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND),
-                                                new WaitCommand(100),
+//                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[0], robot.lift.getHeightHigh()),
+//                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[1], robot.lift.getHeightHigh()),
+//                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[2], robot.lift.getHeightHigh()),
+//                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[3], robot.lift.getHeightHigh()),
+//                                                new AutoCycleCommand(robot, CYCLE_GRAB_POSITIONS[4], robot.lift.getHeightHigh()),
+//                                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
+//                                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
+//                                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
+//                                                new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.LATCHED)),
+//                                                new LiftPositionCommand(robot.lift, robot.lift.getHeightHigh(), 6000, 7500, 30, 1000, LiftSubsystem.STATE.FAILED_EXTEND),
+//                                                new WaitCommand(100),
                                                 new LiftPositionCommand(robot.lift, -5, 6000, 7500, 10, 1000, LiftSubsystem.STATE.FAILED_RETRACT)
                                                         .alongWith(new WaitCommand(50).andThen(new InstantCommand(() -> robot.lift.update(LiftSubsystem.LatchState.UNLATCHED)))),
                                                 new WaitCommand(200),
-                                                new ParkSequence(robot, hardwareMap, side, position)
+                                                new ParkSequence(robot, hardwareMap, SIDE, position)
                                         )
                                 )
 
@@ -169,7 +164,7 @@ public class Left10High extends LinearOpMode {
             if (robot.intake.state == IntakeSubsystem.STATE.FAILED_RETRACT || robot.lift.state == LiftSubsystem.STATE.FAILED_RETRACT) {
                 CommandScheduler.getInstance().reset();
                 CommandScheduler.getInstance().schedule(
-                        new ParkSequence(robot, hardwareMap, side, position),
+                        new ParkSequence(robot, hardwareMap, SIDE, position),
                         new InstantCommand(() -> robot.drivetrain.setIMUOffset(robot.getAngle())),
                         new InstantCommand(this::requestOpModeStop)
                 );

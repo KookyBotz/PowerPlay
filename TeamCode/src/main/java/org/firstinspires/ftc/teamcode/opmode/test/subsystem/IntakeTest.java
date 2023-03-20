@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.test.subsystem;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -9,7 +8,6 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -35,7 +33,7 @@ public class IntakeTest extends CommandOpMode {
     public static double turretPosition = 0;
     public static double pivotPosition = 0;
 
-    private boolean lowScore = false;
+    private boolean amogus = false;
 
     public static double offset = 0;
     private boolean transfer = false;
@@ -64,15 +62,28 @@ public class IntakeTest extends CommandOpMode {
 
     @Override
     public void run() {
+        if (!amogus) {
+//            robot.startIMUThread(this);
+//            SwerveDrivetrain.imuOff = -Math.PI / 2;
+            amogus = !amogus;
+        }
         robot.read();
 
-//        double speedMultiplier = 1 - 0.75 * gamepad1.right_trigger;
+        double speedMultiplier = 1 - 0.75 * gamepad1.right_trigger;
         // Drivetrain
         Pose drive = new Pose(
                 new Point((Math.pow(Math.abs(gamepad1.left_stick_y) > 0.02 ? gamepad1.left_stick_y : 0, 3)),
-                        (Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3))).rotate(offset),
-                (Math.pow(-gamepad1.right_stick_x, 3))
+                        (Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3))).rotate(0),
+                (Math.pow(-gamepad1.right_stick_x, 3)) * speedMultiplier
         );
+
+        barLeft.setPosition(fourbarPosition);
+        barRight.setPosition(1 - fourbarPosition);
+        pivot.setPosition(pivotPosition);
+
+        if (gamepad1.left_bumper) {
+            SwerveDrivetrain.imuOffset = robot.getAngle() - Math.PI;
+        }
 
         if (gamepad2.a) {
             CommandScheduler.getInstance().schedule(
@@ -80,8 +91,7 @@ public class IntakeTest extends CommandOpMode {
                             new InstantCommand(() -> pivot.setPosition(0.4)),
                             new InstantCommand(() -> turret.setPosition(0.728)),
                             new InstantCommand(() -> barLeft.setPosition(0.359)),
-                            new InstantCommand(() -> barRight.setPosition(1 - 0.359)),
-                            new InstantCommand(() -> lowScore = true)
+                            new InstantCommand(() -> barRight.setPosition(1 - 0.359))
                     )
             );
         }
@@ -151,7 +161,7 @@ public class IntakeTest extends CommandOpMode {
             claw.setPosition(0.48);
         }
 
-        boolean lt = gamepad1.left_trigger > 0.3;
+        boolean lt = gamepad1.right_trigger > 0.15;
         // CHECK IF IN LOW OR GROUND POSITION
         if ((!lastLT && lt) && !clawSensor.getState()) {
             CommandScheduler.getInstance().schedule(
@@ -178,6 +188,7 @@ public class IntakeTest extends CommandOpMode {
         }
 
         telemetry.addData("sensorState: ", !clawSensor.getState());
+//        for (SwerveModule m : )
         telemetry.update();
 
         robot.drivetrain.set(drive);

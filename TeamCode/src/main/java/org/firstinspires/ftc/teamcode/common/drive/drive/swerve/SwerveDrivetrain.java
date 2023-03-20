@@ -4,26 +4,24 @@ import static java.lang.Math.atan2;
 import static java.lang.Math.hypot;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.common.hardware.AbsoluteAnalogEncoder;
 import org.firstinspires.ftc.teamcode.common.drive.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.MathUtils;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 
+import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
+
 @Config
 public class SwerveDrivetrain implements Drivetrain {
 
-    public SwerveModule leftFrontModule, leftRearModule, rightRearModule, rightFrontModule;
+    public SwerveModule frontLeftModule, backLeftModule, backRightModule, frontRightModule;
     public SwerveModule[] modules;
 
     public static double TRACK_WIDTH = 9, WHEEL_BASE = 9;
     private final double R;
-    public static double frontLeftOffset = 2.65, frontRightOffset = 3.64, rearLeftOffset = 1.91, rearRightOffset = 1.95;
+    public static double frontLeftOffset = 2.65, frontRightOffset = 3.64, backLeftOffset = 1.91, backRightOffset = 1.95;
 
     public static double K_STATIC = 0.03;
 
@@ -32,21 +30,25 @@ public class SwerveDrivetrain implements Drivetrain {
     double max = 0.0;
 
     public static double minPow = 0.07;
-    public static double imuOff = 0.0;
+    public static double imuOffset = 0.0;
 
-    public SwerveDrivetrain(HardwareMap hardwareMap) {
-        leftFrontModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "leftFrontMotor"), hardwareMap.get(CRServo.class, "leftFrontServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "leftFrontEncoder"), 3.3).zero(frontLeftOffset));
-        leftRearModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "leftRearMotor"), hardwareMap.get(CRServo.class, "leftRearServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "leftRearEncoder"), 3.3).zero(rearLeftOffset));
-        rightRearModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "rightRearMotor"), hardwareMap.get(CRServo.class, "rightRearServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "rightRearEncoder"), 3.3).zero(rearRightOffset));
-        rightFrontModule = new SwerveModule(hardwareMap.get(DcMotorEx.class, "rightFrontMotor"), hardwareMap.get(CRServo.class, "rightFrontServo"), new AbsoluteAnalogEncoder(hardwareMap.get(AnalogInput.class, "rightFrontEncoder"), 3.3).zero(frontRightOffset));
+    public SwerveDrivetrain() {
+        frontLeftModule = new SwerveModule(robot.frontLeftMotor, robot.frontLeftServo, new AbsoluteAnalogEncoder(robot.frontLeftEncoder, 3.3).zero(frontLeftOffset));
+        backLeftModule = new SwerveModule(robot.backLeftMotor, robot.backLeftServo, new AbsoluteAnalogEncoder(robot.backLeftEncoder, 3.3).zero(backLeftOffset));
+        backRightModule = new SwerveModule(robot.backRightMotor, robot.backRightServo, new AbsoluteAnalogEncoder(robot.backRightEncoder, 3.3).zero(backRightOffset));
+        frontRightModule = new SwerveModule(robot.frontRightMotor, robot.frontRightServo, new AbsoluteAnalogEncoder(robot.frontRightEncoder, 3.3).zero(frontRightOffset));
 
-        modules = new SwerveModule[]{rightFrontModule, leftFrontModule, leftRearModule, rightRearModule};
+        modules = new SwerveModule[]{frontLeftModule, backLeftModule, backRightModule, frontRightModule};
         for (SwerveModule m : modules) m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         R = hypot(TRACK_WIDTH, WHEEL_BASE);
     }
 
+    public void read() {
+        for (SwerveModule module : modules) module.read();
+    }
+
     public void setIMUOffset(double offset) {
-        this.imuOff = offset;
+        this.imuOffset = offset;
     }
 
     @Override
@@ -80,19 +82,26 @@ public class SwerveDrivetrain implements Drivetrain {
         for (int i = 0; i < 4; i++) {
             SwerveModule m = modules[i];
             if (Math.abs(max) > 1) ws[i] /= max;
-            m.setMotorPower(Math.abs(ws[i]));
+            m.setMotorPower(Math.abs(ws[i]) + ((AUTO) ? minPow * Math.signum(ws[i]) : 0));
             m.setTargetRotation(MathUtils.norm(wa[i]));
         }
     }
+//
+//    public void writeAuto() {
+//        for (int i = 0; i < 4; i++) {
+//            SwerveModule m = modules[i];
+//            if (Math.abs(max) > 1) ws[i] /= max;
+//            m.setMotorPower(Math.abs(ws[i] + minPow * Math.signum(ws[i])));
+//            m.setTargetRotation(MathUtils.norm(wa[i]));
+//        }
+//    }
 
-    public void writeAuto() {
-        for (int i = 0; i < 4; i++) {
-            SwerveModule m = modules[i];
-            if (Math.abs(max) > 1) ws[i] /= max;
-            m.setMotorPower(Math.abs(ws[i] + minPow * Math.signum(ws[i])));
-            m.setTargetRotation(MathUtils.norm(wa[i]));
-        }
-    }
+//    public void write() {
+//        for (int i = 0; i < 4; i++) {
+//            SwerveModule m = modules[i];
+//
+//        }
+//    }
 
     public void updateModules() {
         for (SwerveModule m : modules) m.update();
@@ -100,9 +109,9 @@ public class SwerveDrivetrain implements Drivetrain {
     }
 
     public String getTelemetry() {
-        return leftFrontModule.getTelemetry("leftFrontModule") + "\n" +
-                leftRearModule.getTelemetry("leftRearModule") + "\n" +
-                rightFrontModule.getTelemetry("rightFrontModule") + "\n" +
-                rightRearModule.getTelemetry("rightRearModule") + "\n";
+        return frontLeftModule.getTelemetry("leftFrontModule") + "\n" +
+                backLeftModule.getTelemetry("leftRearModule") + "\n" +
+                frontRightModule.getTelemetry("rightFrontModule") + "\n" +
+                backRightModule.getTelemetry("rightRearModule") + "\n";
     }
 }

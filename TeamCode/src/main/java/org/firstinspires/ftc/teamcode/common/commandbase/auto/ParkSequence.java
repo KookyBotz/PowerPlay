@@ -6,12 +6,12 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
-import org.firstinspires.ftc.teamcode.common.hardware.Constants;
+import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 
 public class ParkSequence extends SequentialCommandGroup {
-    public ParkSequence(Robot robot, HardwareMap hardwareMap, Constants.Side currentSide, SleeveDetection.ParkingPosition position) {
+    public ParkSequence(Robot robot, HardwareMap hardwareMap, Globals.Side currentSide, SleeveDetection.ParkingPosition position) {
         super(
                 new ConditionalCommand(
                         new SequentialCommandGroup(
@@ -26,7 +26,7 @@ public class ParkSequence extends SequentialCommandGroup {
                         position == SleeveDetection.ParkingPosition.LEFT ? new Pose(56.5, -45.5, Math.PI / 2) :
                                 position == SleeveDetection.ParkingPosition.CENTER ? new Pose(56.5, -70.5, Math.PI / 2) :
                                         new Pose(56.5, -94.5, Math.PI / 2), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                        () -> (currentSide == Constants.Side.LEFT)
+                        () -> (currentSide == Globals.Side.LEFT)
                 )
         );
     }

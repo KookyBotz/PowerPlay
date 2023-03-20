@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.hardware;
 
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -42,7 +41,7 @@ public class Robot {
      */
     public Robot(HardwareMap hardwareMap, boolean isAuto) {
         this.isAuto = isAuto;
-        drivetrain = new SwerveDrivetrain(hardwareMap);
+        drivetrain = new SwerveDrivetrain();
 
         synchronized (imuLock) {
             imu = hardwareMap.get(BNO055IMU.class, "imu");
@@ -96,8 +95,8 @@ public class Robot {
      * Resets the lift and intake slide encoders.
      */
     public void reset() {
-        lift.liftEncoder.resetEncoder();
-        intake.extensionEncoder.resetEncoder();
+//        lift.liftEncoder.resetEncoder();
+//        intake.extensionEncoder.resetEncoder();
     }
 
     /**
@@ -106,9 +105,9 @@ public class Robot {
     public void read() {
 //        intake.read();
 //        lift.read();
-        for (SwerveModule module : drivetrain.modules) {
+        /*or (SwerveModule module : drivetrain.modules) {
             module.read();
-        }
+        }*/
     }
 
     /**
@@ -117,11 +116,11 @@ public class Robot {
     public void write() {
 //        intake.write();
 //        lift.write();
-        if (this.isAuto) {
-            drivetrain.writeAuto();
-        } else {
-            drivetrain.write();
-        }
+//        if (this.isAuto) {
+//            drivetrain.writeAuto();
+//        } else {
+//            drivetrain.write();
+//        }
     }
 
     /**

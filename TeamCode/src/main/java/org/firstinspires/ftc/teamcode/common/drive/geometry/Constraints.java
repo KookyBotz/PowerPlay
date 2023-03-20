@@ -10,9 +10,15 @@ public class Constraints {
     }
 
     public Constraints(double velo, double accel, double decel) {
+        this.velo = Math.abs(velo);
         this.accel = Math.abs(accel);
         this.decel = Math.abs(decel);
-        this.velo = Math.abs(velo);
+    }
+
+    public void convert(double factor) {
+        this.velo *= factor;
+        this.accel *= factor;
+        this.decel *= factor;
     }
 }
 

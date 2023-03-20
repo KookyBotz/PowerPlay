@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmode.test;
 
-import static org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem.CYCLE_GRAB_POSITIONS;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandScheduler;
@@ -50,19 +49,15 @@ public class PrecisePositionTesting extends LinearOpMode {
         Robot robot = new Robot(hardwareMap, true);
         Drivetrain drivetrain = robot.drivetrain;
 
-        Localizer localizer = new TwoWheelLocalizer(
-                () -> robot.horizontalEncoder.getPosition(),
-                () -> robot.lateralEncoder.getPosition(),
-                robot::getAngle
-        );
+        Localizer localizer = new TwoWheelLocalizer();
 
         robot.localizer = localizer;
-        robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION);
-        robot.intake.update(IntakeSubsystem.ClawState.CLOSED);
-        robot.lift.update(LiftSubsystem.LatchState.LATCHED);
-        robot.intake.update(IntakeSubsystem.ClawState.OPEN);
-        robot.intake.update(IntakeSubsystem.PivotState.FLAT);
-        robot.intake.update(IntakeSubsystem.TurretState.INTAKE);
+//        robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION);
+//        robot.intake.update(IntakeSubsystem.ClawState.CLOSED);
+//        robot.lift.update(LiftSubsystem.LatchState.LATCHED);
+//        robot.intake.update(IntakeSubsystem.ClawState.OPEN);
+//        robot.intake.update(IntakeSubsystem.PivotState.FLAT);
+//        robot.intake.update(IntakeSubsystem.TurretState.INTAKE);
 
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.EXPANSION_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);

@@ -9,10 +9,10 @@ import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 public class TeleopIntakeCommand extends SequentialCommandGroup {
     public TeleopIntakeCommand(Robot robot) {
         super(
-                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
-                new InstantCommand(() -> robot.intake.setFourbar(IntakeSubsystem.fourbar_extended)),
-                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
-                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE))
+//                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
+//                new InstantCommand(() -> robot.intake.setFourbar(IntakeSubsystem.fourbar_extended)),
+//                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
+//                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE))
         );
     }
 }

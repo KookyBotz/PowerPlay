@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.DoubleSupplier;
 
+import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
+
 /*
  * Sample tracking wheel localizer implementation assuming the standard configuration:
  *
@@ -49,15 +51,15 @@ public class TwoWheelLocalizer extends TwoTrackingWheelLocalizer implements Loca
 
     private final DoubleSupplier horizontalPosition, lateralPosition, imuAngle;
 
-    public TwoWheelLocalizer(DoubleSupplier horizontalPosition, DoubleSupplier lateralPosition, DoubleSupplier imuAngle) {
+    public TwoWheelLocalizer() {
         super(Arrays.asList(
                 new Pose2d(PARALLEL_X, PARALLEL_Y, 0),
                 new Pose2d(PERPENDICULAR_X, PERPENDICULAR_Y, Math.toRadians(90))
         ));
 
-        this.horizontalPosition = horizontalPosition;
-        this.lateralPosition = lateralPosition;
-        this.imuAngle = imuAngle;
+        this.horizontalPosition = () -> robot.horizontalPod.getPosition();
+        this.lateralPosition = () -> robot.lateralPod.getPosition();
+        this.imuAngle = robot::getAngle;
     }
 
     public static double encoderTicksToInches(double ticks) {

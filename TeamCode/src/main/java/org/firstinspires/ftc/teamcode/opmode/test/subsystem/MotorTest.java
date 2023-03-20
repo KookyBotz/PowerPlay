@@ -1,15 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmode.test.subsystem;
 
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
-import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveModule;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
@@ -65,7 +62,7 @@ public class MotorTest extends OpMode {
         // Drivetrain
         Pose drive = new Pose(
                 new Point((Math.pow(Math.abs(gamepad1.left_stick_y) > 0.02 ? gamepad1.left_stick_y : 0, 3)),
-                        (Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3))).rotate(robot.getAngle() - SwerveDrivetrain.imuOff),
+                        (Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3))).rotate(robot.getAngle() - SwerveDrivetrain.imuOffset),
                 (Math.pow(-gamepad1.right_stick_x, 3))
         );
 
@@ -82,7 +79,7 @@ public class MotorTest extends OpMode {
 ////            telemetry.addData(" module.getModuleRotation())
 //        }
 //        telemetry.addData("leftRear", robot.drivetrain.leftRearModule.getTelemetry("leftRear"));
-        telemetry.addData("leftFront", robot.drivetrain.leftFrontModule.getTelemetry("leftFront"));
+//        telemetry.addData("leftFront", robot.drivetrain./**/leftFrontModule.getTelemetry("leftFront"));
 //        telemetry.addData("rightRear", robot.drivetrain.rightRearModule.getTelemetry("rightRear"));
 //        telemetry.addData("rightFront", robot.drivetrain.rightFrontModule.getTelemetry("rightFront"));
 

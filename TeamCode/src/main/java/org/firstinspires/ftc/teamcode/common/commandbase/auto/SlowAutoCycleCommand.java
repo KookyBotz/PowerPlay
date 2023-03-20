@@ -21,9 +21,9 @@ public class SlowAutoCycleCommand extends SequentialCommandGroup {
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                                 new InstantCommand(() -> robot.intake.setFourbar(state.fourbarPos)),
-                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
-                                new IntakePositionCommand(robot.intake, state.intPos, 6000, 4500, 20, 3000, IntakeSubsystem.STATE.FAILED_EXTEND)
-                                        .alongWith(new WaitCommand(75).andThen(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE)))),
+//                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
+                                new IntakePositionCommand(robot.intake, state.intPos, 6000, 4500, 20, 3000, IntakeSubsystem.STATE.FAILED_EXTEND),
+//                                        .alongWith(new WaitCommand(75).andThen(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE)))),
 
                                 new WaitCommand(500),
                                 new GrabStackCommand(robot, state),
@@ -31,12 +31,12 @@ public class SlowAutoCycleCommand extends SequentialCommandGroup {
                                 new IntakePositionCommand(robot.intake, 0, 6000, 4500, 20, 3000, IntakeSubsystem.STATE.FAILED_RETRACT)
                                         .alongWith(
                                                 new WaitCommand(150)
-                                                        .andThen(new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_auto_transfer)))
-                                                        .andThen(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.DEPOSIT)))
+//                                                        .andThen(new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_auto_transfer)))
+//                                                        .andThen(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.DEPOSIT)))
                                         ),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
                                 new WaitCommand(50),
-                                new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_flat)),
+//                                new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_flat)),
                                 new WaitCommand(50),
                                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                                 new WaitCommand(100)

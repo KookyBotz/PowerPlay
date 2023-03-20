@@ -11,10 +11,10 @@ public class LowScoreCommand extends SequentialCommandGroup {
     public LowScoreCommand(Robot robot) {
         super(
                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
-                new WaitCommand(100),
-                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
-                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
-                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE))
+                new WaitCommand(100)
+//                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.TRANSITION)),
+//                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.PivotState.FLAT)),
+//                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.INTAKE))
         );
     }
 }
