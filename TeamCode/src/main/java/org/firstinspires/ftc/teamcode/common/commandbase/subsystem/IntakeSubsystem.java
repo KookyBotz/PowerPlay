@@ -126,7 +126,6 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeTimer.reset();
         fourbarTimer.reset();
         voltageTimer.reset();
-
 //        update(FourbarState.INTERMEDIATE);
         setFourbar(INTAKE_FOURBAR_INTERMEDIATE);
         update(TurretState.OUTWARDS);

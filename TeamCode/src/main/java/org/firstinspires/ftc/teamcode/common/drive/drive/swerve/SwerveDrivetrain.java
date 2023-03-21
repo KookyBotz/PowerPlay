@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 
 import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
 
+import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
+
 @Config
 public class SwerveDrivetrain implements Drivetrain {
 

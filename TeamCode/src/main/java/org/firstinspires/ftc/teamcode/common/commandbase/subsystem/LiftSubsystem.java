@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 
 import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
 
+import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
+
 @Config
 public class LiftSubsystem extends SubsystemBase {
 
@@ -61,6 +63,7 @@ public class LiftSubsystem extends SubsystemBase {
     // thanks aabhas <3
     public LiftSubsystem(RobotHardware robot) {
         this.robot = robot;
+
         this.profile = new AsymmetricMotionProfile(0, 1, new Constraints(0, 0, 0));
         this.controller = new PIDFController(P, I, D, F);
         this.voltage = robot.voltageSensor.getVoltage();
@@ -129,7 +132,6 @@ public class LiftSubsystem extends SubsystemBase {
         } catch (Exception e) {
             //
         }
-
     }
 
     public double getPos() {

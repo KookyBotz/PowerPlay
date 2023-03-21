@@ -53,6 +53,7 @@ public class TwoWheelLocalizer extends TwoTrackingWheelLocalizer implements Loca
     private final DoubleSupplier horizontalPosition, lateralPosition, imuAngle;
 
     public TwoWheelLocalizer(RobotHardware robot) {
+
         super(Arrays.asList(
                 new Pose2d(PARALLEL_X, PARALLEL_Y, 0),
                 new Pose2d(PERPENDICULAR_X, PERPENDICULAR_Y, Math.toRadians(90))
