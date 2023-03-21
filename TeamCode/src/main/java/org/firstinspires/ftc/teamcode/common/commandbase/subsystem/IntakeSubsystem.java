@@ -16,7 +16,7 @@ import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
 @Config
 public class IntakeSubsystem extends SubsystemBase {
 
-    public RobotHardware robot;
+    private RobotHardware robot;
 
     // stores the state of the subsystem
     // anything other than GOOD means it goofed
@@ -43,6 +43,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double D = 0.0;
     public static double F = 0.0001;
 
+    public static double INTAKE_DELAY = 0.02;
+
     public boolean isExtended = false;
     private boolean hasCone = false;
 
@@ -62,6 +64,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public double power = 0.0;
     public double targetPosition = 0.0;
     public static double targetFourbarPosition = 0.0;
+    public static double lastTargetFourbarPosition = 0.0;
 
     public enum STATE {
         GOOD,
@@ -91,7 +94,8 @@ public class IntakeSubsystem extends SubsystemBase {
         GROUND,
         FALLEN,
         INTERMEDIATE,
-        DEPOSIT,
+        PRE_TRANSFER,
+        TRANSFER
     }
 
 //    public enum PivotState {
@@ -101,15 +105,18 @@ public class IntakeSubsystem extends SubsystemBase {
     public enum PivotState {
         FLAT,
         LOW,
-        PIVOT_UP,
-        PICKUP,
-        DEPOSIT,
+        FALLEN,
+        TRANSFER,
+        PRE_TRANSFER
     }
 
     // thanks aabhas <3
-    public IntakeSubsystem() {
+    public IntakeSubsystem(RobotHardware robot) {
+        this.robot = robot;
         this.intakeProfile = new AsymmetricMotionProfile(0, 1, new Constraints(0, 0, 0));
         this.fourbarProfile = new AsymmetricMotionProfile(0, 1, new Constraints(0, 0, 0));
+        this.intakeMotionState = new State(0, 0, 0);
+        this.fourbarMotionState = new State(0, 0, 0);
         this.controller = new PIDFController(P, I, D, F);
         this.intakeTimer = new ElapsedTime();
         this.fourbarTimer = new ElapsedTime();
@@ -119,6 +126,12 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeTimer.reset();
         fourbarTimer.reset();
         voltageTimer.reset();
+
+//        update(FourbarState.INTERMEDIATE);
+        setFourbar(INTAKE_FOURBAR_INTERMEDIATE);
+        update(TurretState.OUTWARDS);
+        update(ClawState.OPEN);
+        update(PivotState.FLAT);
     }
 
     public void update(PivotState state) {
@@ -130,11 +143,14 @@ public class IntakeSubsystem extends SubsystemBase {
             case LOW:
                 robot.pivot.setPosition(INTAKE_PIVOT_LOW + pivotOffset);
                 break;
-            case DEPOSIT:
-                robot.pivot.setPosition(Globals.INTAKE_PIVOT_TRANSFER + pivotOffset);
-                break;
-            case PICKUP:
+            case FALLEN:
                 robot.pivot.setPosition(INTAKE_PIVOT_PICKUP + pivotOffset);
+                break;
+            case TRANSFER:
+                robot.pivot.setPosition(INTAKE_PIVOT_TRANSFER + pivotOffset);
+                break;
+            case PRE_TRANSFER:
+                robot.pivot.setPosition(INTAKE_PIVOT_PRE_TRANSFER + pivotOffset);
                 break;
         }
     }
@@ -147,6 +163,7 @@ public class IntakeSubsystem extends SubsystemBase {
                 break;
             case INTERMEDIATE:
                 robot.turret.setPosition(INTAKE_TURRET_INTERMEDIATE);
+                break;
             case INWARDS:
                 robot.turret.setPosition(INTAKE_TURRET_INWARDS);
                 break;
@@ -169,19 +186,28 @@ public class IntakeSubsystem extends SubsystemBase {
         fourbarState = state;
         switch(state) {
             case GROUND:
-                newProfile(INTAKE_FOURBAR_GROUND, new Constraints(0, 0, 0), ProfileTarget.FOURBAR);
+//                newProfile(INTAKE_FOURBAR_GROUND, new Constraints(0, 0, 0), ProfileTarget.FOURBAR);
+                newProfile(INTAKE_FOURBAR_GROUND);
                 break;
             case INTAKE:
-                newProfile(INTAKE_FOURBAR_INTAKE, new Constraints(0, 0, 0), ProfileTarget.FOURBAR);
+//                newProfile(INTAKE_FOURBAR_INTAKE, new Constraints(0, 0, 0), ProfileTarget.FOURBAR);
+//                setFourbar(INTAKE_FOURBAR_INTAKE);
+                newProfile(INTAKE_FOURBAR_INTAKE);
                 break;
             case LOW:
-                newProfile(INTAKE_FOURBAR_LOW, new Constraints(0, 0, 0), ProfileTarget.FOURBAR);
+//                newProfile(INTAKE_FOURBAR_LOW, new Constraints(0, 0, 0), ProfileTarget.FOURBAR);
+                newProfile(INTAKE_FOURBAR_LOW);
                 break;
-            case DEPOSIT:
-                newProfile(INTAKE_FOURBAR_DEPOSIT, new Constraints(0, 0, 0), ProfileTarget.FOURBAR);
+            case PRE_TRANSFER:
+//                newProfile(INTAKE_FOURBAR_DEPOSIT, new Constraints(0, 0, 0), ProfileTarget.FOURBAR);
+                newProfile(INTAKE_FOURBAR_PRE_TRANSFER);
+                break;
+            case TRANSFER:
+                newProfile(INTAKE_FOURBAR_TRANSFER);
                 break;
             case INTERMEDIATE:
-                newProfile(INTAKE_FOURBAR_INTERMEDIATE, new Constraints(0, 0, 0), ProfileTarget.FOURBAR);
+//                newProfile(INTAKE_FOURBAR_INTERMEDIATE, new Constraints(0, 0, 0), ProfileTarget.FOURBAR);
+                newProfile(INTAKE_FOURBAR_INTERMEDIATE);
                 break;
         }
     }
@@ -211,27 +237,41 @@ public class IntakeSubsystem extends SubsystemBase {
 //    }
 
     public void loop() {
-        this.controller.setPIDF(P, I, D, F);
+//        this.controller.setPIDF(P, I, D, F);
+//
+//        if (voltageTimer.seconds() > 5) {
+//            voltage = robot.voltageSensor.getVoltage();
+//            voltageTimer.reset();
+//        }
 
-        if (voltageTimer.seconds() > 5) {
-            voltage = robot.voltageSensor.getVoltage();
-            voltageTimer.reset();
-        }
+//        intakeMotionState = intakeProfile.calculate(intakeTimer.time());
+//        if (intakeMotionState.v != 0) {
+//            targetPosition = intakeMotionState.x;
+//        }
 
-        intakeMotionState = intakeProfile.calculate(intakeTimer.time());
-        if (intakeMotionState.v != 0) {
-            targetPosition = intakeMotionState.x;
-        }
+        hasCone = !robot.clawSensor.getState();
 
-        fourbarMotionState = fourbarProfile.calculate(fourbarTimer.time());
-        if (fourbarMotionState.v != 0) {
-            targetFourbarPosition = fourbarMotionState.x;
-        }
-        setFourbar(targetFourbarPosition);
+//        fourbarMotionState = fourbarProfile.calculate(fourbarTimer.time());
+//        if (fourbarMotionState.v != 0) {
+//            targetFourbarPosition = fourbarMotionState.x;
+//        }
+//        setFourbar(targetFourbarPosition);
 
 //        isExtended = getPos() > (INTAKE_EXTENDED_TOLERANCE * EXTENSION_TICKS_PER_INCH);
 
 //        power = -controller.calculate(intakePosition, targetPosition) / voltage * 14;
+    }
+
+    public void loop2 () {
+//        if (targetFourbarPosition != lastTargetFourbarPosition) {
+//            newProfile(targetFourbarPosition);
+//            lastTargetFourbarPosition = targetFourbarPosition;
+//        }
+
+        fourbarMotionState = fourbarProfile.calculate(fourbarTimer.time() + INTAKE_DELAY);
+        if (fourbarMotionState.v != 0) {
+            setFourbar(fourbarMotionState.x);
+        }
     }
 
     public void read() {
@@ -272,14 +312,21 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setFourbarFactor(double factor) {
-        if (fourbarMotionState.v == 0) {
-            double fourbarAddition = INTAKE_FOURBAR_FACTOR * factor;
-            double fourbarPosition = robot.fourbarLeft.getPosition();
-
-            if (!(fourbarPosition + fourbarAddition > INTAKE_FOURBAR_DEPOSIT) || !(fourbarPosition - fourbarAddition < INTAKE_FOURBAR_INTAKE)) {
-                targetFourbarPosition = fourbarPosition + fourbarAddition;
-            }
-        }
+//        if (fourbarMotionState.v == 0) {
+//            double fourbarAddition = INTAKE_FOURBAR_FACTOR * factor;
+//            double fourbarPosition = robot.fourbarLeft.getPosition();
+//
+//            if (!(fourbarPosition + fourbarAddition > INTAKE_FOURBAR_DEPOSIT) || !(fourbarPosition - fourbarAddition < INTAKE_FOURBAR_INTAKE)) {
+////                targetFourbarPosition = fourbarPosition + fourbarAddition;
+//                setFourbar(fourbarPosition + fourbarAddition);
+//                setFourbar(1 - fourbarPosition + fourbarAddition);
+//            }
+//        }
+//        setFourbar(fourbarPosition + fourbarAddition);
+//        setFourbar(1 - fourbarPosition + fourbarAddition);
+        double fourbarAddition = INTAKE_FOURBAR_FACTOR * factor;
+        double fourbarPosition = robot.fourbarLeft.getPosition();
+        setFourbar(fourbarPosition + fourbarAddition);
     }
 
     public void setTurretFactor(double factor) {
@@ -313,14 +360,17 @@ public class IntakeSubsystem extends SubsystemBase {
                 intakeProfile = new AsymmetricMotionProfile(getPos(), targetPos, constraints);
                 intakeTimer.reset();
                 break;
-            case FOURBAR:
-                fourbarProfile = new AsymmetricMotionProfile(robot.fourbarLeft.getPosition(), targetPos, new Constraints(INTAKE_FOURBAR_MAX_V, INTAKE_FOURBAR_MAX_A, INTAKE_FOURBAR_MAX_D));
-                fourbarTimer.reset();
-                break;
         }
     }
 
+    public void newProfile(double targetPos) {
+        Constraints constraints = new Constraints(INTAKE_FOURBAR_MAX_V, INTAKE_FOURBAR_MAX_A, (fourbarState.equals(FourbarState.INTERMEDIATE) ? INTAKE_FOURBAR_MAX_D_UP : INTAKE_FOURBAR_MAX_D_DOWN));
+        fourbarProfile = new AsymmetricMotionProfile(robot.fourbarLeft.getPosition(), targetPos, constraints);
+        fourbarTimer.reset();
+    }
+
     public void adjustPivotOffset(double offset) {
-        this.pivotOffset += offset;
+//        robot.pivot.setPosition(robot.pivot.getPosition() + offset);
+        pivotOffset += offset;
     }
 }

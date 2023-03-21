@@ -10,12 +10,14 @@ import org.firstinspires.ftc.teamcode.common.hardware.AbsoluteAnalogEncoder;
 import org.firstinspires.ftc.teamcode.common.drive.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.MathUtils;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
+import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 
 import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
 
 @Config
 public class SwerveDrivetrain implements Drivetrain {
 
+    private RobotHardware robot;
     public SwerveModule frontLeftModule, backLeftModule, backRightModule, frontRightModule;
     public SwerveModule[] modules;
 
@@ -32,7 +34,8 @@ public class SwerveDrivetrain implements Drivetrain {
     public static double minPow = 0.07;
     public static double imuOffset = 0.0;
 
-    public SwerveDrivetrain() {
+    public SwerveDrivetrain(RobotHardware robot) {
+        this.robot = robot;
         frontLeftModule = new SwerveModule(robot.frontLeftMotor, robot.frontLeftServo, new AbsoluteAnalogEncoder(robot.frontLeftEncoder, 3.3).zero(frontLeftOffset));
         backLeftModule = new SwerveModule(robot.backLeftMotor, robot.backLeftServo, new AbsoluteAnalogEncoder(robot.backLeftEncoder, 3.3).zero(backLeftOffset));
         backRightModule = new SwerveModule(robot.backRightMotor, robot.backRightServo, new AbsoluteAnalogEncoder(robot.backRightEncoder, 3.3).zero(backRightOffset));

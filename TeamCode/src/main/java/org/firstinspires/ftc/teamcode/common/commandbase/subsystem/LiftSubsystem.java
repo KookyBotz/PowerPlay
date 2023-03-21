@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.AsymmetricMotionProfile;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Constraints;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.State;
+import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 
 import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
 
@@ -16,6 +17,7 @@ public class LiftSubsystem extends SubsystemBase {
 
     // stores the state of the subsystem
     // anything other than GOOD means it goofed
+    private RobotHardware robot;
     public LiftSubsystem.STATE state = LiftSubsystem.STATE.GOOD;
     public LiftState liftState = LiftState.RETRACTED;
     public LatchState latchState = LatchState.LATCHED;
@@ -57,8 +59,8 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     // thanks aabhas <3
-    public LiftSubsystem() {
-
+    public LiftSubsystem(RobotHardware robot) {
+        this.robot = robot;
 //        if (AUTO) {
 //            update(LatchState.LATCHED);
 //        } else {

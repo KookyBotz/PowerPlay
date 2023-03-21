@@ -34,7 +34,7 @@ public class SlowAutoCycleCommand extends SequentialCommandGroup {
 //                                                        .andThen(new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_auto_transfer)))
 //                                                        .andThen(new InstantCommand(() -> robot.intake.update(IntakeSubsystem.TurretState.DEPOSIT)))
                                         ),
-                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
+//                                new InstantCommand(() -> robot.intake.update(IntakeSubsystem.FourbarState.DEPOSIT)),
                                 new WaitCommand(50),
 //                                new InstantCommand(() -> robot.intake.setPivot(IntakeSubsystem.pivot_flat)),
                                 new WaitCommand(50),
