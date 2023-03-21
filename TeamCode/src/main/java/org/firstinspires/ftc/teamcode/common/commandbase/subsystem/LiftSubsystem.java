@@ -8,6 +8,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.AsymmetricMotionProfile;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Constraints;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.State;
+import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
+
+import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
 
 import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
 
@@ -16,6 +19,7 @@ public class LiftSubsystem extends SubsystemBase {
 
     // stores the state of the subsystem
     // anything other than GOOD means it goofed
+    private RobotHardware robot;
     public LiftSubsystem.STATE state = LiftSubsystem.STATE.GOOD;
     public LiftState liftState = LiftState.RETRACTED;
     public LatchState latchState = LatchState.LATCHED;
@@ -57,13 +61,8 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     // thanks aabhas <3
-    public LiftSubsystem() {
-
-//        if (AUTO) {
-//            update(LatchState.LATCHED);
-//        } else {
-//            update(LatchState.UNLATCHED);
-//        }
+    public LiftSubsystem(RobotHardware robot) {
+        this.robot = robot;
 
         this.profile = new AsymmetricMotionProfile(0, 1, new Constraints(0, 0, 0));
         this.controller = new PIDFController(P, I, D, F);
@@ -102,10 +101,10 @@ public class LiftSubsystem extends SubsystemBase {
     public void loop() {
         this.controller.setPIDF(P, I, D, F);
 
-//        if (voltageTimer.seconds() > 5) {
-//            voltage = robot.voltageSensor.getVoltage();
-//            voltageTimer.reset();
-//        }
+        if (voltageTimer.seconds() > 5) {
+            voltage = robot.voltageSensor.getVoltage();
+            voltageTimer.reset();
+        }
 
         curState = profile.calculate(timer.time());
         if (curState.v != 0) {
@@ -119,12 +118,20 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void read() {
-        liftPosition = robot.liftEncoder.getPosition();
+        try {
+            liftPosition = robot.liftEncoder.getPosition();
+        } catch (Exception e) {
+            liftPosition = 0;
+        }
     }
 
     public void write() {
-        robot.liftLeft.set(power);
-        robot.liftRight.set(power);
+        try {
+            robot.liftLeft.set(power);
+            robot.liftRight.set(power);
+        } catch (Exception e) {
+            //
+        }
     }
 
     public double getPos() {

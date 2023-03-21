@@ -15,6 +15,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
@@ -68,11 +70,6 @@ public class RobotHardware {
     private Thread imuThread;
     private double imuAngle = 0;
 
-    public IntakeSubsystem intake;
-    public LiftSubsystem lift;
-    public SwerveDrivetrain drivetrain;
-    public Localizer localizer;
-
     public DigitalChannel clawSensor;
     public DigitalChannel depositSensor;
 
@@ -82,16 +79,19 @@ public class RobotHardware {
 
     public OpenCvPipeline pipeline;
 
-    public static RobotHardware instance = new RobotHardware();
+    public static RobotHardware instance = null;
+
+    public boolean enabled;
 
     public static RobotHardware getInstance() {
         if (instance == null) {
             instance = new RobotHardware();
         }
+        instance.enabled = true;
         return instance;
     }
 
-    public void init(HardwareMap hardwareMap) {
+    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         try {
             if (!Globals.USING_IMU) throw new Exception();
             synchronized (imuLock) {
@@ -146,35 +146,40 @@ public class RobotHardware {
             backRightMotor = null;
         }
 
-        try {
-            claw = hardwareMap.get(Servo.class, "claw");
-        } catch (Exception e) {
-            claw = null;
-        }
+//        try {
+//            claw = hardwareMap.get(Servo.class, "claw");
+//        } catch (Exception e) {
+//            claw = null;
+//        }
+        claw = hardwareMap.get(Servo.class, "claw");
 
-        try {
-            turret = hardwareMap.get(Servo.class, "turret");
-        } catch (Exception e) {
-            turret = null;
-        }
+//        try {
+//            turret = hardwareMap.get(Servo.class, "turret");
+//        } catch (Exception e) {
+//            turret = null;
+//        }
+        turret = hardwareMap.get(Servo.class, "turret");
 
-        try {
-            pivot = hardwareMap.get(Servo.class, "pivot");
-        } catch (Exception e) {
-            pivot = null;
-        }
+//        try {
+//            pivot = hardwareMap.get(Servo.class, "pivot");
+//        } catch (Exception e) {
+//            pivot = null;
+//        }
+        pivot = hardwareMap.get(Servo.class, "pivot");
 
-        try {
-            fourbarLeft = hardwareMap.get(Servo.class, "fourbarLeft");
-        } catch (Exception e) {
-            fourbarLeft = null;
-        }
+//        try {
+//            fourbarLeft = hardwareMap.get(Servo.class, "fourbarLeft");
+//        } catch (Exception e) {
+//            fourbarLeft = null;
+//        }
+        fourbarLeft = hardwareMap.get(Servo.class, "fourbarLeft");
 
-        try {
-            fourbarRight = hardwareMap.get(Servo.class, "fourbarRight");
-        } catch (Exception e) {
-            fourbarRight = null;
-        }
+//        try {
+//            fourbarRight = hardwareMap.get(Servo.class, "fourbarRight");
+//        } catch (Exception e) {
+//            fourbarRight = null;
+//        }
+        fourbarRight = hardwareMap.get(Servo.class, "fourbarRight");
 
         try {
             latch = hardwareMap.get(Servo.class, "latch");
@@ -274,26 +279,22 @@ public class RobotHardware {
         } catch (Exception e) {
             voltageSensor = null;
         }
-
-        PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
-        PhotonCore.experimental.setMaximumParallelCommands(8);
-        PhotonCore.enable();
     }
 
-    public void loop(Pose drive) {
+    public void loop(Pose drive, SwerveDrivetrain drivetrain, IntakeSubsystem intake, LiftSubsystem lift) {
         drivetrain.set(drive);
         drivetrain.updateModules();
         intake.loop();
         lift.loop();
     }
 
-    public void read() {
+    public void read(SwerveDrivetrain drivetrain, IntakeSubsystem intake, LiftSubsystem lift) {
         intake.read();
         lift.read();
         drivetrain.read();
     }
 
-    public void write() {
+    public void write(SwerveDrivetrain drivetrain, IntakeSubsystem intake, LiftSubsystem lift) {
         intake.write();
         lift.write();
         drivetrain.write();
