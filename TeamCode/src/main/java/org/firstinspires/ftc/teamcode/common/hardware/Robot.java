@@ -41,7 +41,7 @@ public class Robot {
      */
     public Robot(HardwareMap hardwareMap, boolean isAuto) {
         this.isAuto = isAuto;
-        drivetrain = new SwerveDrivetrain();
+//        drivetrain = new SwerveDrivetrain();
 
         synchronized (imuLock) {
             imu = hardwareMap.get(BNO055IMU.class, "imu");
