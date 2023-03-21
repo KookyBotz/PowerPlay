@@ -38,10 +38,10 @@ public class IntakeSubsystem extends SubsystemBase {
     private double voltage = 0;
     private double intakePosition = 0;
 
-    public static double P = 0.06;
-    public static double I = 0.013;
+    public static double P = 0.0;
+    public static double I = 0.0;
     public static double D = 0.0;
-    public static double F = 0.0001;
+    public static double F = 0.0;
 
     public static double INTAKE_DELAY = 0.02;
 

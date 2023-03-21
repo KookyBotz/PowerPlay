@@ -61,12 +61,6 @@ public class LiftSubsystem extends SubsystemBase {
     // thanks aabhas <3
     public LiftSubsystem(RobotHardware robot) {
         this.robot = robot;
-//        if (AUTO) {
-//            update(LatchState.LATCHED);
-//        } else {
-//            update(LatchState.UNLATCHED);
-//        }
-
         this.profile = new AsymmetricMotionProfile(0, 1, new Constraints(0, 0, 0));
         this.controller = new PIDFController(P, I, D, F);
         this.voltage = robot.voltageSensor.getVoltage();

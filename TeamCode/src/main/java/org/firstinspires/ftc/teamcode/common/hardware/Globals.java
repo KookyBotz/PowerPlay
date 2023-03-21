@@ -19,13 +19,13 @@ public class Globals {
     public static int REGION_HEIGHT = 50;
 
     // Lift Subsystem Constants
-    public static double LIFT_HIGH_POS = 26.15;
-    public static double LIFT_MID_POS = 16.83;
+    public static double LIFT_HIGH_POS = 37.34;
+    public static double LIFT_MID_POS = 25.43;
     public static double LIFT_RETRACT_POS = 0;
 
-    public static double LIFT_MAX_V = 285.66;
-    public static double LIFT_MAX_A = 329.61;
-    public static double LIFT_MAX_D = 109.87;
+    public static double LIFT_MAX_V = 0.0;
+    public static double LIFT_MAX_A = 0.0;
+    public static double LIFT_MAX_D = 0.0;
 
     public static double LIFT_LATCHED = 0;
     public static double LIFT_UNLATCHED = 0;
@@ -38,13 +38,13 @@ public class Globals {
     public static double LIFT_EXTENDED_TOLERANCE = 1.32;
 
     // Intake Subsystem Constants
-    public static double INTAKE_EXTENSION_MAX_V = 6;
-    public static double INTAKE_EXTENSION_MAX_A = 9999;
-    public static double INTAKE_EXTENSION_MAX_D = 3;
+    public static double INTAKE_EXTENSION_MAX_V = 0;
+    public static double INTAKE_EXTENSION_MAX_A = 0;
+    public static double INTAKE_EXTENSION_MAX_D = 0;
 
-    public static double INTAKE_FOURBAR_MAX_V = 0;
-    public static double INTAKE_FOURBAR_MAX_A = 0;
-    public static double INTAKE_FOURBAR_MAX_D_UP = 0;
+    public static double INTAKE_FOURBAR_MAX_V = 6;
+    public static double INTAKE_FOURBAR_MAX_A = 9999;
+    public static double INTAKE_FOURBAR_MAX_D_UP = 3;
     public static double INTAKE_FOURBAR_MAX_D_DOWN = 3;
 
 
@@ -74,7 +74,7 @@ public class Globals {
 
     public static double INTAKE_MANUAL_FACTOR = 10;
     public static double INTAKE_TURRET_FACTOR = 0.007;
-    public static double INTAKE_FOURBAR_FACTOR = -0.002;
+    public static double INTAKE_FOURBAR_FACTOR = -0.00025;
     public static double INTAKE_PIVOT_FACTOR = 0.03;
     public static double INTAKE_MIN = 0;
     public static double INTAKE_MAX = 23.73;
