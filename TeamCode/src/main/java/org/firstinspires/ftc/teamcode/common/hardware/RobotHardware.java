@@ -82,12 +82,15 @@ public class RobotHardware {
 
     public OpenCvPipeline pipeline;
 
-    public static RobotHardware instance = new RobotHardware();
+    public static RobotHardware instance = null;
+
+    public boolean enabled;
 
     public static RobotHardware getInstance() {
         if (instance == null) {
             instance = new RobotHardware();
         }
+        instance.enabled = true;
         return instance;
     }
 
@@ -274,10 +277,6 @@ public class RobotHardware {
         } catch (Exception e) {
             voltageSensor = null;
         }
-
-        PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
-        PhotonCore.experimental.setMaximumParallelCommands(8);
-        PhotonCore.enable();
     }
 
     public void loop(Pose drive) {

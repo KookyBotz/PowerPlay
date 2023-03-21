@@ -51,7 +51,9 @@ public class Globals {
 
     public static double INTAKE_PIVOT_LOW = 0.4;
     public static double INTAKE_PIVOT_FLAT = 0.545;
-    public static double INTAKE_PIVOT_DEPOSIT = 0.625;
+    public static double INTAKE_PIVOT_TRANSFER = 0.625;
+    public static double INTAKE_PIVOT_PICKUP = 0.545;
+    public static double INTAKE_PIVOT_DEPOSIT = 0.6;
 
     public static double INTAKE_TURRET_OUTWARDS = 0.728;
     public static double INTAKE_TURRET_INTERMEDIATE = 0.449;
@@ -63,9 +65,13 @@ public class Globals {
     public static double INTAKE_FOURBAR_LOW = 0.359;
     public static double INTAKE_FOURBAR_GROUND = 0.075;
 
+    public static final long INTAKE_CLAW_CLOSE_TIME = 84; // ms
+
     public static final double EXTENSION_TICKS_PER_INCH = 23.54;
 
     public static double INTAKE_MANUAL_FACTOR = 10;
+    public static double INTAKE_TURRET_FACTOR = 0.007;
+    public static double INTAKE_FOURBAR_FACTOR = -0.01;
     public static double INTAKE_MIN = 0;
     public static double INTAKE_MAX = 23.73;
 

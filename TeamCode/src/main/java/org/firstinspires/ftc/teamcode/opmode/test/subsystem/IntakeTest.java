@@ -95,6 +95,7 @@ public class IntakeTest extends CommandOpMode {
                     )
             );
         }
+
         if (gamepad2.b) {
             CommandScheduler.getInstance().schedule(
                     new SequentialCommandGroup(

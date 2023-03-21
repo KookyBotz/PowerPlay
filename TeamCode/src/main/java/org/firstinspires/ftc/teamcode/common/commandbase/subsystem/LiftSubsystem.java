@@ -102,10 +102,10 @@ public class LiftSubsystem extends SubsystemBase {
     public void loop() {
         this.controller.setPIDF(P, I, D, F);
 
-//        if (voltageTimer.seconds() > 5) {
-//            voltage = robot.voltageSensor.getVoltage();
-//            voltageTimer.reset();
-//        }
+        if (voltageTimer.seconds() > 5) {
+            voltage = robot.voltageSensor.getVoltage();
+            voltageTimer.reset();
+        }
 
         curState = profile.calculate(timer.time());
         if (curState.v != 0) {
@@ -119,12 +119,21 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void read() {
-        liftPosition = robot.liftEncoder.getPosition();
+        try {
+            liftPosition = robot.liftEncoder.getPosition();
+        } catch (Exception e) {
+            liftPosition = 0;
+        }
     }
 
     public void write() {
-        robot.liftLeft.set(power);
-        robot.liftRight.set(power);
+        try {
+            robot.liftLeft.set(power);
+            robot.liftRight.set(power);
+        } catch (Exception e) {
+            //
+        }
+
     }
 
     public double getPos() {
