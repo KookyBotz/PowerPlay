@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.TwoTrackingWheelLocalizer;
 
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
+import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 
 import java.util.Arrays;
 import java.util.List;
@@ -51,7 +52,8 @@ public class TwoWheelLocalizer extends TwoTrackingWheelLocalizer implements Loca
 
     private final DoubleSupplier horizontalPosition, lateralPosition, imuAngle;
 
-    public TwoWheelLocalizer() {
+    public TwoWheelLocalizer(RobotHardware robot) {
+
         super(Arrays.asList(
                 new Pose2d(PARALLEL_X, PARALLEL_Y, 0),
                 new Pose2d(PERPENDICULAR_X, PERPENDICULAR_Y, Math.toRadians(90))

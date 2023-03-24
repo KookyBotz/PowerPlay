@@ -2,12 +2,16 @@ package org.firstinspires.ftc.teamcode.common.commandbase.subsystem;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.controller.PIDFController;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.common.drive.geometry.AsymmetricMotionProfile;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Constraints;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.State;
+import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
+
+import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
 
 import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
 
@@ -16,6 +20,7 @@ public class LiftSubsystem extends SubsystemBase {
 
     // stores the state of the subsystem
     // anything other than GOOD means it goofed
+    private RobotHardware robot;
     public LiftSubsystem.STATE state = LiftSubsystem.STATE.GOOD;
     public LiftState liftState = LiftState.RETRACTED;
     public LatchState latchState = LatchState.LATCHED;
@@ -24,7 +29,7 @@ public class LiftSubsystem extends SubsystemBase {
     public State curState;
     private final ElapsedTime timer;
     private final ElapsedTime voltageTimer;
-    private PIDFController controller;
+    private PIDController controller;
 
     private double voltage;
     private int liftPosition;
@@ -34,10 +39,10 @@ public class LiftSubsystem extends SubsystemBase {
     private boolean isExtended = false;
     private boolean hasCone = false;
 
-    public static double P = 0.0;
-    public static double I = 0.0;
-    public static double D = 0.0;
-    public static double F = 0.0;
+    public static double P = 0.01;
+    public static double I = 0.1;
+    public static double D = 0.000125;
+    public static double F = -0.1;
 
     public enum STATE {
         GOOD,
@@ -57,16 +62,11 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     // thanks aabhas <3
-    public LiftSubsystem() {
-
-//        if (AUTO) {
-//            update(LatchState.LATCHED);
-//        } else {
-//            update(LatchState.UNLATCHED);
-//        }
+    public LiftSubsystem(RobotHardware robot) {
+        this.robot = robot;
 
         this.profile = new AsymmetricMotionProfile(0, 1, new Constraints(0, 0, 0));
-        this.controller = new PIDFController(P, I, D, F);
+        this.controller = new PIDController(P, I, D);
         this.voltage = robot.voltageSensor.getVoltage();
         this.voltageTimer = new ElapsedTime();
         this.timer = new ElapsedTime();
@@ -88,19 +88,22 @@ public class LiftSubsystem extends SubsystemBase {
         liftState = state;
         switch (state) {
             case HIGH:
-                newProfile(LIFT_HIGH_POS, new Constraints(LIFT_MAX_V, LIFT_MAX_A, LIFT_MAX_D));
+                setTargetPos(LIFT_HIGH_POS);
+//                newProfile(LIFT_HIGH_POS, new Constraints(LIFT_MAX_V, LIFT_MAX_A, LIFT_MAX_D));
                 break;
             case MID:
-                newProfile(LIFT_MID_POS, new Constraints(LIFT_MAX_V, LIFT_MAX_A, LIFT_MAX_D));
+                setTargetPos(LIFT_MID_POS);
+//                newProfile(LIFT_MID_POS, new Constraints(LIFT_MAX_V, LIFT_MAX_A, LIFT_MAX_D));
                 break;
             case RETRACTED:
-                newProfile(LIFT_RETRACT_POS, new Constraints(LIFT_MAX_V, LIFT_MAX_A, LIFT_MAX_D));
+                setTargetPos(LIFT_RETRACT_POS);
+//                newProfile(LIFT_RETRACT_POS, new Constraints(LIFT_MAX_V, LIFT_MAX_A, LIFT_MAX_D));
                 break;
         }
     }
 
     public void loop() {
-        this.controller.setPIDF(P, I, D, F);
+        this.controller.setPID(P, I, D);
 
         if (voltageTimer.seconds() > 5) {
             voltage = robot.voltageSensor.getVoltage();
@@ -112,10 +115,10 @@ public class LiftSubsystem extends SubsystemBase {
             targetPosition = (int) curState.x;
         }
 
-        isExtended = getPos() > (LIFT_EXTENDED_TOLERANCE * LIFT_TICKS_PER_INCH);
+//        isExtended = getPos() > (LIFT_EXTENDED_TOLERANCE * LIFT_TICKS_PER_INCH);
 //        hasCone = !robot.depositSensor.getState();
 
-        power = (-controller.calculate(liftPosition, targetPosition) / voltage * 14);
+        power = Range.clip(((-controller.calculate(liftPosition, targetPosition) + F) / voltage * 14), -1, 1);
     }
 
     public void read() {
@@ -129,11 +132,8 @@ public class LiftSubsystem extends SubsystemBase {
     public void write() {
         try {
             robot.liftLeft.set(power);
-            robot.liftRight.set(power);
-        } catch (Exception e) {
-            //
-        }
-
+            robot.liftRight.set(-power);
+        } catch (Exception e) {}
     }
 
     public double getPos() {
@@ -146,6 +146,10 @@ public class LiftSubsystem extends SubsystemBase {
 
     public int getTargetPos() {
         return targetPosition;
+    }
+
+    public double getPower() {
+        return power;
     }
 
     public boolean hasCone() { return hasCone; }

@@ -10,10 +10,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
@@ -58,7 +61,7 @@ public class RobotHardware {
     public AnalogInput backRightEncoder;
 
     public Motor.Encoder liftEncoder;
-    public Motor.Encoder extensionEncoder;
+    public Motor.Encoder intakeEncoder;
     public Motor.Encoder horizontalPod;
     public Motor.Encoder lateralPod;
 
@@ -67,11 +70,6 @@ public class RobotHardware {
     public BNO055IMU imu;
     private Thread imuThread;
     private double imuAngle = 0;
-
-    public IntakeSubsystem intake;
-    public LiftSubsystem lift;
-    public SwerveDrivetrain drivetrain;
-    public Localizer localizer;
 
     public DigitalChannel clawSensor;
     public DigitalChannel depositSensor;
@@ -94,163 +92,50 @@ public class RobotHardware {
         return instance;
     }
 
-    public void init(HardwareMap hardwareMap) {
-        try {
-            if (!Globals.USING_IMU) throw new Exception();
+    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
+        if (Globals.USING_IMU) {
             synchronized (imuLock) {
                 imu = hardwareMap.get(BNO055IMU.class, "imu");
                 BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
                 parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
                 imu.initialize(parameters);
             }
-        } catch (Exception e) {
-            imu = null;
         }
 
-        try {
-            liftLeft = new MotorEx(hardwareMap, "liftLeft");
-        } catch (Exception e) {
-            liftLeft = null;
-        }
+        liftLeft = new MotorEx(hardwareMap, "motorLiftLeft");
+        liftRight = new MotorEx(hardwareMap, "motorLiftRight");
+        extension = new MotorEx(hardwareMap, "extension");
 
-        try {
-            liftRight = new MotorEx(hardwareMap, "liftRight");
-        } catch (Exception e) {
-            liftRight = null;
-        }
+        frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
+        frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
+//        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeftMotor = hardwareMap.get(DcMotorEx.class, "backLeftMotor");
+        backRightMotor = hardwareMap.get(DcMotorEx.class, "backRightMotor");
 
-        try {
-            extension = new MotorEx(hardwareMap, "extension");
-        } catch (Exception e) {
-            extension = null;
-        }
+        claw = hardwareMap.get(Servo.class, "claw");
+        turret = hardwareMap.get(Servo.class, "turret");
+        pivot = hardwareMap.get(Servo.class, "pivot");
+        fourbarLeft = hardwareMap.get(Servo.class, "fourbarLeft");
+        fourbarRight = hardwareMap.get(Servo.class, "fourbarRight");
 
-        try {
-            frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
-        } catch (Exception e) {
-            frontLeftMotor = null;
-        }
+        latch = hardwareMap.get(Servo.class, "latch");
 
-        try {
-            frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
-        } catch (Exception e) {
-            frontRightMotor = null;
-        }
+        frontLeftServo = hardwareMap.get(CRServo.class, "frontLeftServo");
+        frontRightServo = hardwareMap.get(CRServo.class, "frontRightServo");
+        backLeftServo = hardwareMap.get(CRServo.class, "backLeftServo");
+        backRightServo = hardwareMap.get(CRServo.class, "backRightServo");
 
-        try {
-            backLeftMotor = hardwareMap.get(DcMotorEx.class, "backLeftMotor");
-        } catch (Exception e) {
-            backLeftMotor = null;
-        }
+        frontLeftEncoder = hardwareMap.get(AnalogInput.class, "frontLeftEncoder");
+        frontRightEncoder = hardwareMap.get(AnalogInput.class, "frontRightEncoder");
+        backLeftEncoder = hardwareMap.get(AnalogInput.class, "backLeftEncoder");
+        backRightEncoder = hardwareMap.get(AnalogInput.class, "backRightEncoder");
 
-        try {
-            backRightMotor = hardwareMap.get(DcMotorEx.class, "backRightMotor");
-        } catch (Exception e) {
-            backRightMotor = null;
-        }
+        liftEncoder = new MotorEx(hardwareMap, "frontLeftMotor").encoder;
+        liftEncoder.setDirection(Motor.Direction.REVERSE);
+        intakeEncoder = new MotorEx(hardwareMap, "frontRightMotor").encoder;
 
-        try {
-            claw = hardwareMap.get(Servo.class, "claw");
-        } catch (Exception e) {
-            claw = null;
-        }
-
-        try {
-            turret = hardwareMap.get(Servo.class, "turret");
-        } catch (Exception e) {
-            turret = null;
-        }
-
-        try {
-            pivot = hardwareMap.get(Servo.class, "pivot");
-        } catch (Exception e) {
-            pivot = null;
-        }
-
-        try {
-            fourbarLeft = hardwareMap.get(Servo.class, "fourbarLeft");
-        } catch (Exception e) {
-            fourbarLeft = null;
-        }
-
-        try {
-            fourbarRight = hardwareMap.get(Servo.class, "fourbarRight");
-        } catch (Exception e) {
-            fourbarRight = null;
-        }
-
-        try {
-            latch = hardwareMap.get(Servo.class, "latch");
-        } catch (Exception e) {
-            latch = null;
-        }
-
-        try {
-            frontLeftServo = hardwareMap.get(CRServo.class, "frontLeftServo");
-        } catch (Exception e) {
-            frontLeftServo = null;
-        }
-
-        try {
-            frontRightServo = hardwareMap.get(CRServo.class, "frontRightServo");
-        } catch (Exception e) {
-            frontRightServo = null;
-        }
-
-        try {
-            backLeftServo = hardwareMap.get(CRServo.class, "backLeftServo");
-        } catch (Exception e) {
-            backLeftServo = null;
-        }
-
-        try {
-            backRightServo = hardwareMap.get(CRServo.class, "backRightServo");
-        } catch (Exception e) {
-            backRightServo = null;
-        }
-
-        try {
-            frontLeftEncoder = hardwareMap.get(AnalogInput.class, "frontLeftEncoder");
-        } catch (Exception e) {
-            frontLeftEncoder = null;
-        }
-
-        try {
-            frontRightEncoder = hardwareMap.get(AnalogInput.class, "frontRightEncoder");
-        } catch (Exception e) {
-            frontRightEncoder = null;
-        }
-
-        try {
-            backLeftEncoder = hardwareMap.get(AnalogInput.class, "backLeftEncoder");
-        } catch (Exception e) {
-            backLeftEncoder = null;
-        }
-
-        try {
-            backRightEncoder = hardwareMap.get(AnalogInput.class, "backRightEncoder");
-        } catch (Exception e) {
-            backRightEncoder = null;
-        }
-
-        try {
-            liftEncoder = new MotorEx(hardwareMap, "liftEncoder").encoder;
-        } catch (Exception e) {
-            liftEncoder = null;
-        }
-
-        try {
-            horizontalPod = new MotorEx(hardwareMap, "horizontalPod").encoder;
-        } catch (Exception e) {
-            horizontalPod = null;
-        }
-
-        try {
-            lateralPod = new MotorEx(hardwareMap, "lateralPod").encoder;
-        } catch (Exception e) {
-            lateralPod = null;
-        }
-
+        horizontalPod = new MotorEx(hardwareMap, "backLeftMotor").encoder;
+        lateralPod = new MotorEx(hardwareMap, "backRightMotor").encoder;
         try {
             int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
             camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, (Globals.SIDE.equals(Globals.Side.LEFT)) ? "WebcamLeft" : "WebcamRight"), cameraMonitorViewId);
@@ -260,17 +145,13 @@ public class RobotHardware {
             pipeline = null;
         }
 
-        try {
-            clawSensor = hardwareMap.get(DigitalChannel.class, "clawSensor");
-        } catch (Exception e) {
-            clawSensor = null;
-        }
+        clawSensor = hardwareMap.get(DigitalChannel.class, "clawSensor");
 
-        try {
-            depositSensor = hardwareMap.get(DigitalChannel.class, "depositSensor");
-        } catch (Exception e) {
-            depositSensor = null;
-        }
+//        try {
+//            depositSensor = hardwareMap.get(DigitalChannel.class, "depositSensor");
+//        } catch (Exception e) {
+//            depositSensor = null;
+//        }
 
         try {
             voltageSensor = hardwareMap.voltageSensor.iterator().next();
@@ -279,27 +160,48 @@ public class RobotHardware {
         }
     }
 
-    public void loop(Pose drive) {
-        drivetrain.set(drive);
-        drivetrain.updateModules();
-        intake.loop();
-        lift.loop();
+    public void loop(Pose drive, SwerveDrivetrain drivetrain, IntakeSubsystem intake, LiftSubsystem lift) {
+        try {
+            drivetrain.set(drive);
+            drivetrain.updateModules();
+        } catch (Exception e) {}
+        try {
+            intake.loop();
+            intake.loop2();
+        } catch (Exception e) {}
+        try {
+            lift.loop();
+        } catch (Exception e) {}
     }
 
-    public void read() {
-        intake.read();
-        lift.read();
-        drivetrain.read();
+    public void read(SwerveDrivetrain drivetrain, IntakeSubsystem intake, LiftSubsystem lift) {
+        try {
+            intake.read();
+        } catch (Exception e) {}
+        try {
+            lift.read();
+        } catch (Exception e) {}
+        try {
+            drivetrain.read();
+
+        } catch (Exception e) {}
     }
 
-    public void write() {
-        intake.write();
-        lift.write();
-        drivetrain.write();
+    public void write(SwerveDrivetrain drivetrain, IntakeSubsystem intake, LiftSubsystem lift) {
+        try {
+            intake.write();
+        } catch (Exception e) {}
+        try {
+            lift.write();
+        } catch (Exception e) {}
+        try {
+            drivetrain.write();
+
+        } catch (Exception e) {}
     }
 
     public void reset() {
-        extensionEncoder.reset();
+        intakeEncoder.reset();
         liftEncoder.reset();
     }
 

@@ -35,7 +35,7 @@ public class OpModeOld extends CommandOpMode {
     public static double accelConstraint = 7500;
     public static double velocity = 6500;
 
-    public static boolean usingIMU = true;
+    public static boolean usingIMU = false;
     private boolean pHasCone = false;
 
     private final GamepadEx gamepadEx2 = new GamepadEx(gamepad2),
