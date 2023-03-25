@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.DetectionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.GroundScoreCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.IntakeStateCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.IntermediateStateCommand;
@@ -48,8 +49,11 @@ public class OpMode extends CommandOpMode {
     private boolean lastAButton1 = false;
 
     private boolean lastRightBumper2 = false;
-    private boolean lastRightTrigger1 = false;
+    private boolean lastRightBumper1 = false;
     private boolean lastLeftBumper2 = false;
+    private boolean lastLeftBumper1 = false;
+
+    private boolean lastDpadLeft1 = false;
 
     private boolean lastRightTrigger2 = false;
     private boolean lastLeftTrigger2 = false;
@@ -69,7 +73,7 @@ public class OpMode extends CommandOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         Globals.AUTO = false;
-        Globals.USING_IMU = false;
+        Globals.USING_IMU = true;
 
         robot.init(hardwareMap, telemetry);
         intake = new IntakeSubsystem(robot);
@@ -89,8 +93,9 @@ public class OpMode extends CommandOpMode {
             timer = new ElapsedTime();
             try{
                 robot.reset();
-
+                robot.startIMUThread(this);
             } catch (Exception e) {}
+            SwerveDrivetrain.imuOffset = -Math.PI / 2;
         }
 
         robot.read(drivetrain, intake, lift);
@@ -110,20 +115,32 @@ public class OpMode extends CommandOpMode {
         }
 
         /*
-         * Robot centric with speed control - G1
+         * Robot Centric to Field Centric
          */
-        double speedMultiplier = 1 - 0.75 * gamepad1.left_trigger;
+        boolean leftBumper1 = gamepad1.left_bumper;
+        if (leftBumper1 && !lastLeftBumper1) {
+            Globals.USING_IMU = !Globals.USING_IMU;
+        }
+        lastLeftBumper1 = leftBumper1;
+
+        boolean dpadLeft1 = gamepad1.dpad_left;
+        if (dpadLeft1 && !lastDpadLeft1 && Globals.USING_IMU) {
+            SwerveDrivetrain.imuOffset = robot.getAngle() + Math.PI;
+        }
+        lastDpadLeft1 = dpadLeft1;
+
+        double rotationAmount = (Globals.USING_IMU) ? robot.getAngle() - SwerveDrivetrain.imuOffset : 0;
         Pose drive = new Pose(
                 new Point((Math.pow(Math.abs(gamepad1.left_stick_y) > 0.02 ? gamepad1.left_stick_y : 0, 3)),
-                        (Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3))).rotate(0),
+                        (Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3))).rotate(rotationAmount),
                 -(Math.pow(-gamepad1.right_stick_x, 3))
         );
 
         /*
          * Depositing - G1
          */
-        boolean rightTrigger1 = gamepad1.right_trigger > 0.15;
-        if (rightTrigger1 && !lastRightTrigger1) {
+        boolean rightBumper1 = gamepad1.right_bumper;
+        if (rightBumper1 && !lastRightBumper1) {
             if (intake.fourbarState.equals(IntakeSubsystem.FourbarState.LOW) ||
                 intake.fourbarState.equals(IntakeSubsystem.FourbarState.GROUND)) {
                 // deposit cone, and go to intermediate position with intake turret
@@ -146,13 +163,12 @@ public class OpMode extends CommandOpMode {
                 );
             }
         }
-        lastRightTrigger1 = rightTrigger1;
+        lastRightBumper1 = rightBumper1;
 
         /*
          * Transfer to Intake Sequences - G2
          */
         boolean rightBumper = gamepad2.right_bumper;
-        long sequenceWait = Globals.wait1;
         if (!lastRightBumper2 && rightBumper) {
             if (intake.hasCone()) {
                 CommandScheduler.getInstance().schedule(new TransferCommand(intake, lift));
@@ -213,12 +229,9 @@ public class OpMode extends CommandOpMode {
         } else if (BButton2 && !lastBButton2) {
             CommandScheduler.getInstance().schedule(new GroundScoreCommand(intake));
         } else if (XButton2 && !lastXButton2) {
-            CommandScheduler.getInstance().schedule();
-            // mid pole
-            lift.update(LiftSubsystem.LiftState.MID);
+            CommandScheduler.getInstance().schedule(new LiftCommand(lift, LiftSubsystem.LiftState.MID));
         } else if (YButton2 && !lastYButton2) {
-            // high pole
-            lift.update(LiftSubsystem.LiftState.HIGH);
+            CommandScheduler.getInstance().schedule(new LiftCommand(lift, LiftSubsystem.LiftState.HIGH));
         }
         lastAButton2 = AButton2;
         lastBButton2 = BButton2;
