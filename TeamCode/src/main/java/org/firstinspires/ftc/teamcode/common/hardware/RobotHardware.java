@@ -80,7 +80,7 @@ public class RobotHardware {
 
     public OpenCvPipeline pipeline;
 
-    public static RobotHardware instance = null;
+    private static RobotHardware instance = null;
 
     public boolean enabled;
 
@@ -108,7 +108,6 @@ public class RobotHardware {
 
         frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
         frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
-//        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor = hardwareMap.get(DcMotorEx.class, "backLeftMotor");
         backRightMotor = hardwareMap.get(DcMotorEx.class, "backRightMotor");
 
@@ -124,6 +123,11 @@ public class RobotHardware {
         frontRightServo = hardwareMap.get(CRServo.class, "frontRightServo");
         backLeftServo = hardwareMap.get(CRServo.class, "backLeftServo");
         backRightServo = hardwareMap.get(CRServo.class, "backRightServo");
+
+        frontLeftServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRightServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeftServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRightServo.setDirection(DcMotorSimple.Direction.REVERSE);
 
         frontLeftEncoder = hardwareMap.get(AnalogInput.class, "frontLeftEncoder");
         frontRightEncoder = hardwareMap.get(AnalogInput.class, "frontRightEncoder");
@@ -164,40 +168,40 @@ public class RobotHardware {
         try {
             drivetrain.set(drive);
             drivetrain.updateModules();
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
         try {
             intake.loop();
             intake.loop2();
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
         try {
             lift.loop();
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
     }
 
     public void read(SwerveDrivetrain drivetrain, IntakeSubsystem intake, LiftSubsystem lift) {
         try {
             intake.read();
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
         try {
             lift.read();
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
         try {
             drivetrain.read();
 
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
     }
 
     public void write(SwerveDrivetrain drivetrain, IntakeSubsystem intake, LiftSubsystem lift) {
         try {
             intake.write();
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
         try {
             lift.write();
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
         try {
             drivetrain.write();
 
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
     }
 
     public void reset() {

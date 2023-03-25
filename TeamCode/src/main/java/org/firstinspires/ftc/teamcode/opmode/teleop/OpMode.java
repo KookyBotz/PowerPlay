@@ -266,28 +266,10 @@ public class OpMode extends CommandOpMode {
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-//        telemetry.addData("fourbarPos", robot.fourbarLeft.getPosition());
-//        telemetry.addData("pivotPos", robot.pivot.getPosition());
-//        telemetry.addData("turretPos", robot.turret.getPosition());
-//        telemetry.addData("clawPos", robot.claw.getPosition());
-//        telemetry.addData("sensor", clawHasCone);
-//        telemetry.addData("liftEncoder", lift.getPos());
-//        telemetry.addData("intakeEncoder", intake.getPos());
-//        telemetry.addData("intakeTarget", intake.getTargetPosition());
-//        telemetry.addData("intakePOwer", intake.power);
-//        telemetry.addData("liftCurrentLeft", robot.liftLeft.motorEx.getCurrent(CurrentUnit.AMPS));
-//        telemetry.addData("liftCurrentRight", robot.liftRight.motorEx.getCurrent(CurrentUnit.AMPS));
-//        telemetry.addData("liftPos", lift.getPos());
-//        telemetry.addData("liftTargetPos", lift.getTargetPos());
-//        telemetry.addData("liftPower", lift.getPower());
-//        telemetry.addData("intakePos", lift.getPos());
-//        telemetry.addData("intakeTargetPos", lift.getTargetPos());
-//        telemetry.addData("intakeV", lift.liftMotionState.v);
-//        telemetry.addData("intakeA", lift.liftMotionState.a);
-//        telemetry.addData("intakePower", intake.getPower());
-//        telemetry.addData("intakeTime", intake.time);
-//        telemetry.addData("intakeCurrent", robot.extension.motorEx.getCurrent(CurrentUnit.AMPS));
-//        telemetry.adddata("lif")
+        telemetry.addData("fl", drivetrain.frontLeftModule.wheelFlipped + " " + drivetrain.frontLeftModule.lastMotorPower);
+        telemetry.addData("fr", drivetrain.frontRightModule.wheelFlipped + " " + drivetrain.frontRightModule.lastMotorPower);
+        telemetry.addData("bl", drivetrain.backLeftModule.wheelFlipped + " " + drivetrain.backLeftModule.lastMotorPower);
+        telemetry.addData("br", drivetrain.backRightModule.wheelFlipped + " " + drivetrain.backRightModule.lastMotorPower);
         loopTime = loop;
         telemetry.update();
 

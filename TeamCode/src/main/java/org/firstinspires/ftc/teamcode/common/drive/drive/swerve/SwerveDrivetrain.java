@@ -25,7 +25,7 @@ public class SwerveDrivetrain implements Drivetrain {
 
     public static double TRACK_WIDTH = 9, WHEEL_BASE = 9;
     private final double R;
-    public static double frontLeftOffset = 2.65, frontRightOffset = 3.64, backLeftOffset = 1.91, backRightOffset = 1.95;
+    public static double frontLeftOffset = -2.65, frontRightOffset = -3.64, backLeftOffset = -1.91, backRightOffset = -1.95;
 
     public static double K_STATIC = 0.03;
 
@@ -38,12 +38,12 @@ public class SwerveDrivetrain implements Drivetrain {
 
     public SwerveDrivetrain(RobotHardware robot) {
         this.robot = robot;
-        frontLeftModule = new SwerveModule(robot.frontLeftMotor, robot.frontLeftServo, new AbsoluteAnalogEncoder(robot.frontLeftEncoder, 3.3).zero(frontLeftOffset));
-        backLeftModule = new SwerveModule(robot.backLeftMotor, robot.backLeftServo, new AbsoluteAnalogEncoder(robot.backLeftEncoder, 3.3).zero(backLeftOffset));
-        backRightModule = new SwerveModule(robot.backRightMotor, robot.backRightServo, new AbsoluteAnalogEncoder(robot.backRightEncoder, 3.3).zero(backRightOffset));
-        frontRightModule = new SwerveModule(robot.frontRightMotor, robot.frontRightServo, new AbsoluteAnalogEncoder(robot.frontRightEncoder, 3.3).zero(frontRightOffset));
+        frontLeftModule = new SwerveModule(robot.frontLeftMotor, robot.frontLeftServo, new AbsoluteAnalogEncoder(robot.frontLeftEncoder, 3.3).zero(frontLeftOffset).setInverted(true));
+        backLeftModule = new SwerveModule(robot.backLeftMotor, robot.backLeftServo, new AbsoluteAnalogEncoder(robot.backLeftEncoder, 3.3).zero(backLeftOffset).setInverted(true));
+        backRightModule = new SwerveModule(robot.backRightMotor, robot.backRightServo, new AbsoluteAnalogEncoder(robot.backRightEncoder, 3.3).zero(backRightOffset).setInverted(true));
+        frontRightModule = new SwerveModule(robot.frontRightMotor, robot.frontRightServo, new AbsoluteAnalogEncoder(robot.frontRightEncoder, 3.3).zero(frontRightOffset).setInverted(true));
 
-        modules = new SwerveModule[]{frontLeftModule, backLeftModule, backRightModule, frontRightModule};
+        modules = new SwerveModule[]{frontLeftModule, frontRightModule, backRightModule, backLeftModule};
         for (SwerveModule m : modules) m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         R = hypot(TRACK_WIDTH, WHEEL_BASE);
     }
@@ -53,7 +53,7 @@ public class SwerveDrivetrain implements Drivetrain {
     }
 
     public void setIMUOffset(double offset) {
-        this.imuOffset = offset;
+        imuOffset = offset;
     }
 
     @Override
@@ -80,7 +80,6 @@ public class SwerveDrivetrain implements Drivetrain {
         wa = new double[]{atan2(b, c), atan2(b, d), atan2(a, d), atan2(a, c)};
 
         max = MathUtils.max(ws);
-        //todo integrate motor flipping here
     }
 
     public void write() {
@@ -91,22 +90,6 @@ public class SwerveDrivetrain implements Drivetrain {
             m.setTargetRotation(MathUtils.norm(wa[i]));
         }
     }
-//
-//    public void writeAuto() {
-//        for (int i = 0; i < 4; i++) {
-//            SwerveModule m = modules[i];
-//            if (Math.abs(max) > 1) ws[i] /= max;
-//            m.setMotorPower(Math.abs(ws[i] + minPow * Math.signum(ws[i])));
-//            m.setTargetRotation(MathUtils.norm(wa[i]));
-//        }
-//    }
-
-//    public void write() {
-//        for (int i = 0; i < 4; i++) {
-//            SwerveModule m = modules[i];
-//
-//        }
-//    }
 
     public void updateModules() {
         for (SwerveModule m : modules) m.update();

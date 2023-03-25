@@ -40,7 +40,7 @@ public class SwerveModule {
     private AbsoluteAnalogEncoder encoder;
     private PIDFController rotationController;
 
-    private boolean wheelFlipped = false;
+    public boolean wheelFlipped = false;
     private double target = 0.0;
     private double position = 0.0;
 
@@ -127,7 +127,7 @@ public class SwerveModule {
         motor.setPIDFCoefficients(runMode, coefficients);
     }
 
-    double lastMotorPower = 0;
+    public double lastMotorPower = 0;
 
     public double getServoPower() {
         return servo.getPower();
