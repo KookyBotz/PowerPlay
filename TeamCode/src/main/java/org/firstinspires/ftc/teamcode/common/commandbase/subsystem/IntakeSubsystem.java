@@ -68,11 +68,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public double power = 0.0;
     public double targetPosition = 0.0;
-    public static double targetFourbarPosition = 0.0;
-    public static double lastTargetFourbarPosition = 0.0;
     public double time = 0.0;
 
-    public static double publicTargetPosition = 0;
 
     public enum STATE {
         GOOD,
@@ -287,6 +284,11 @@ public class IntakeSubsystem extends SubsystemBase {
             setFourbar(fourbarMotionState.x);
         }
 
+        intakeMotionState = intakeProfile.calculate(intakeTimer.time());
+        if (intakeMotionState.v != 0) {
+            setTargetPosition((int) intakeMotionState.x);
+        }
+
 //        if (lastTargetPosition != publicTargetPosition) {
 //            intaketime.reset();
 //            done = false;
@@ -300,7 +302,7 @@ public class IntakeSubsystem extends SubsystemBase {
 //        }
 //        notreached = reached;
 
-        power = Range.clip((-controller.calculate(intakePosition, targetPosition) + (F * Math.signum(publicTargetPosition - intakePosition)) / voltage * 14), -1, 1);
+        power = Range.clip((-controller.calculate(intakePosition, targetPosition) + (F * Math.signum(targetPosition - intakePosition)) / voltage * 14), -1, 1);
 //        lastTargetPosition = publicTargetPosition;
     }
 

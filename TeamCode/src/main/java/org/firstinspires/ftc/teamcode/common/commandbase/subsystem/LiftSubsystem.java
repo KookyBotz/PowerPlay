@@ -25,8 +25,8 @@ public class LiftSubsystem extends SubsystemBase {
     public LiftState liftState = LiftState.RETRACTED;
     public LatchState latchState = LatchState.LATCHED;
 
-    private AsymmetricMotionProfile profile;
-    public State curState;
+    private AsymmetricMotionProfile liftProfile;
+    public State liftMotionState;
     private final ElapsedTime timer;
     private final ElapsedTime voltageTimer;
     private PIDController controller;
@@ -65,7 +65,7 @@ public class LiftSubsystem extends SubsystemBase {
     public LiftSubsystem(RobotHardware robot) {
         this.robot = robot;
 
-        this.profile = new AsymmetricMotionProfile(0, 1, new Constraints(0, 0, 0));
+        this.liftProfile = new AsymmetricMotionProfile(0, 1, new Constraints(0, 0, 0));
         this.controller = new PIDController(P, I, D);
         this.voltage = robot.voltageSensor.getVoltage();
         this.voltageTimer = new ElapsedTime();
@@ -110,9 +110,9 @@ public class LiftSubsystem extends SubsystemBase {
             voltageTimer.reset();
         }
 
-        curState = profile.calculate(timer.time());
-        if (curState.v != 0) {
-            targetPosition = (int) curState.x;
+        liftMotionState = liftProfile.calculate(timer.time());
+        if (liftMotionState.v != 0) {
+            setTargetPos((int) liftMotionState.x);
         }
 
 //        isExtended = getPos() > (LIFT_EXTENDED_TOLERANCE * LIFT_TICKS_PER_INCH);
@@ -157,7 +157,7 @@ public class LiftSubsystem extends SubsystemBase {
     public void setSlideFactor(double factor) {
         double slideAddition = LIFT_MANUAL_FACTOR * factor;
         double newPosition = liftPosition + slideAddition;
-        if (curState.v == 0 && newPosition >= 0 && newPosition <= LIFT_MAX) {
+        if (liftMotionState.v == 0 && newPosition >= 0 && newPosition <= LIFT_MAX) {
             setTargetPos((int) newPosition);
         }
     }
@@ -166,17 +166,9 @@ public class LiftSubsystem extends SubsystemBase {
         timer.reset();
     }
 
-    public void newProfile(double targetPos, double max_v, double max_a) {
-        this.newProfile(targetPos, new Constraints(max_v, max_a, max_a));
-    }
-
-    public void newProfile(double targetPos, double max_v, double max_a, double max_d) {
-        this.newProfile(targetPos, new Constraints(max_v, max_a, max_d));
-    }
-
     public void newProfile(double targetPos, Constraints constraints) {
         constraints.convert(LIFT_TICKS_PER_INCH);
-        this.profile = new AsymmetricMotionProfile(getPos(), targetPos, constraints);
+        this.liftProfile = new AsymmetricMotionProfile(getPos(), targetPos, constraints);
         resetTimer();
     }
 }

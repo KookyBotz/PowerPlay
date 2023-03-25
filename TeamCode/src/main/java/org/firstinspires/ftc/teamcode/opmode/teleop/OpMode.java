@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.opmode.teleop;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
@@ -16,7 +15,12 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.DetectionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.GroundScoreCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.IntakeStateCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.IntermediateStateCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.LowScoreCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.TransferCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem.ClawState;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
@@ -151,42 +155,10 @@ public class OpMode extends CommandOpMode {
         long sequenceWait = Globals.wait1;
         if (!lastRightBumper2 && rightBumper) {
             if (intake.hasCone()) {
-                if (intake.fourbarState.equals(IntakeSubsystem.FourbarState.INTAKE)) {
-                    sequenceWait = 400;
-                }
-                CommandScheduler.getInstance().schedule(
-                        new SequentialCommandGroup(
-                                new ConditionalCommand(
-                                        new InstantCommand(() -> intake.update(ClawState.CLOSED)),
-                                        new WaitCommand(Globals.INTAKE_CLAW_CLOSE_TIME),
-                                        () -> intake.clawState.equals(ClawState.OPEN)
-                                ),
-                                new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.PRE_TRANSFER)),
-                                new WaitCommand(Globals.wait5),
-                                new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.PRE_TRANSFER)),
-                                new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.INWARDS)),
-                                new WaitUntilCommand(() -> intake.fourbarMotionState.v == 0).alongWith(
-                                        new WaitCommand(sequenceWait)),
-                                new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.TRANSFER)),
-                                new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.TRANSFER)),
-                                new WaitCommand(Globals.wait2),
-                                new InstantCommand(() -> intake.update(ClawState.OPEN)),
-                                new WaitCommand(Globals.wait3),
-                                new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
-                                new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
-                                new WaitCommand(Globals.wait4),
-                                new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS)),
-                                new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.LATCHED))
-                        )
-                );
+                CommandScheduler.getInstance().schedule(new TransferCommand(intake, lift));
             } else if (!intake.fourbarState.equals(IntakeSubsystem.FourbarState.INTAKE)){
                 CommandScheduler.getInstance().schedule(
-                        new SequentialCommandGroup(
-                                new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTAKE)),
-                                new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS)),
-                                new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
-                                new InstantCommand(() -> intake.update(ClawState.OPEN))
-                        )
+                        new IntakeStateCommand(intake)
                 );
             }
         }
@@ -224,11 +196,7 @@ public class OpMode extends CommandOpMode {
         boolean leftBumper2 = gamepad2.left_bumper;
         if (leftBumper2 && !lastLeftBumper2) {
             CommandScheduler.getInstance().schedule(
-                    new SequentialCommandGroup(
-                            new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
-                            new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.INTERMEDIATE)),
-                            new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT))
-                    )
+                    new IntermediateStateCommand(intake)
             );
         }
         lastLeftBumper2 = leftBumper2;
@@ -241,27 +209,16 @@ public class OpMode extends CommandOpMode {
         boolean XButton2 = gamepad2.x;
         boolean YButton2 = gamepad2.y;
         if (AButton2 && !lastAButton2) {
-            CommandScheduler.getInstance().schedule(
-                    new SequentialCommandGroup(
-                            new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.LOW)),
-                            new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS)),
-                            new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.LOW))
-                    )
-            );
+            CommandScheduler.getInstance().schedule(new LowScoreCommand(intake));
         } else if (BButton2 && !lastBButton2) {
-            CommandScheduler.getInstance().schedule(
-                    new SequentialCommandGroup(
-                            new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
-                            new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS)),
-                            new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.GROUND))
-                    )
-            );
+            CommandScheduler.getInstance().schedule(new GroundScoreCommand(intake));
         } else if (XButton2 && !lastXButton2) {
+            CommandScheduler.getInstance().schedule();
             // mid pole
-            lift.setTargetPos(Globals.LIFT_MID_POS);
+            lift.update(LiftSubsystem.LiftState.MID);
         } else if (YButton2 && !lastYButton2) {
             // high pole
-            lift.setTargetPos(Globals.LIFT_HIGH_POS);
+            lift.update(LiftSubsystem.LiftState.HIGH);
         }
         lastAButton2 = AButton2;
         lastBButton2 = BButton2;
@@ -323,8 +280,10 @@ public class OpMode extends CommandOpMode {
 //        telemetry.addData("liftPos", lift.getPos());
 //        telemetry.addData("liftTargetPos", lift.getTargetPos());
 //        telemetry.addData("liftPower", lift.getPower());
-        telemetry.addData("intakePos", intake.getPos());
-        telemetry.addData("intakeTargetPos", intake.getTargetPosition());
+//        telemetry.addData("intakePos", lift.getPos());
+//        telemetry.addData("intakeTargetPos", lift.getTargetPos());
+//        telemetry.addData("intakeV", lift.liftMotionState.v);
+//        telemetry.addData("intakeA", lift.liftMotionState.a);
 //        telemetry.addData("intakePower", intake.getPower());
 //        telemetry.addData("intakeTime", intake.time);
 //        telemetry.addData("intakeCurrent", robot.extension.motorEx.getCurrent(CurrentUnit.AMPS));

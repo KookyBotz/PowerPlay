@@ -7,8 +7,8 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.hardware.Robot;
 
-public class LowScoreCommand extends SequentialCommandGroup {
-    public LowScoreCommand(Robot robot) {
+public class LowScoreCommandOld extends SequentialCommandGroup {
+    public LowScoreCommandOld(Robot robot) {
         super(
                 new InstantCommand(() -> robot.intake.update(IntakeSubsystem.ClawState.OPEN)),
                 new WaitCommand(100)
