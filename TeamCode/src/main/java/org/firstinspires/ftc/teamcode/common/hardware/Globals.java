@@ -48,7 +48,6 @@ public class Globals {
     public static double INTAKE_FOURBAR_MAX_D_UP = 5;
     public static double INTAKE_FOURBAR_MAX_D_DOWN = 7;
 
-
     public static double INTAKE_CLAW_OPEN = 0.5;
     public static double INTAKE_CLAW_CLOSED = 0.57;
 

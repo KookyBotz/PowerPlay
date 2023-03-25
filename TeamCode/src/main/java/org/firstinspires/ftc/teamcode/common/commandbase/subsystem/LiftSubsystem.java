@@ -42,7 +42,7 @@ public class LiftSubsystem extends SubsystemBase {
     public static double P = 0.01;
     public static double I = 0.1;
     public static double D = 0.000125;
-    public static double F = -0.1;
+    public static double F = 0.1;
 
     public enum STATE {
         GOOD,
@@ -118,7 +118,7 @@ public class LiftSubsystem extends SubsystemBase {
 //        isExtended = getPos() > (LIFT_EXTENDED_TOLERANCE * LIFT_TICKS_PER_INCH);
 //        hasCone = !robot.depositSensor.getState();
 
-        power = Range.clip(((-controller.calculate(liftPosition, targetPosition) + F) / voltage * 14), -1, 1);
+        power = Range.clip(((-controller.calculate(liftPosition, targetPosition) + (F * Math.signum(targetPosition - liftPosition))) / voltage * 14), -1, 1);
     }
 
     public void read() {

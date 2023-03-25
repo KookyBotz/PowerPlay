@@ -179,7 +179,7 @@ public class OpMode extends CommandOpMode {
                                 new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.LATCHED))
                         )
                 );
-            } else {
+            } else if (!intake.fourbarState.equals(IntakeSubsystem.FourbarState.INTAKE)){
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTAKE)),
