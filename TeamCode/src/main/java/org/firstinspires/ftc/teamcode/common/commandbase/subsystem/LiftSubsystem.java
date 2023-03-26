@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.AsymmetricMotionProfile;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Constraints;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.State;
+import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 
 import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
@@ -52,7 +53,8 @@ public class LiftSubsystem extends SubsystemBase {
 
     public enum LatchState {
         LATCHED,
-        UNLATCHED
+        UNLATCHED,
+        INTERMEDIATE
     }
 
     public enum LiftState {
@@ -70,6 +72,12 @@ public class LiftSubsystem extends SubsystemBase {
         this.voltage = robot.voltageSensor.getVoltage();
         this.voltageTimer = new ElapsedTime();
         this.timer = new ElapsedTime();
+
+        if (AUTO) {
+            update(LatchState.LATCHED);
+        } else {
+            update(LatchState.UNLATCHED);
+        }
     }
 
     public void update(LatchState state) {
@@ -80,6 +88,9 @@ public class LiftSubsystem extends SubsystemBase {
                 break;
             case UNLATCHED:
                 robot.latch.setPosition(LIFT_UNLATCHED);
+                break;
+            case INTERMEDIATE:
+                robot.latch.setPosition(LIFT_INTERMEDIATE);
                 break;
         }
     }
@@ -146,6 +157,18 @@ public class LiftSubsystem extends SubsystemBase {
 
     public int getTargetPos() {
         return targetPosition;
+    }
+
+    public int getStatePos(LiftState state) {
+        switch(state) {
+            case HIGH:
+                return LIFT_HIGH_POS;
+            case MID:
+                return LIFT_MID_POS;
+            case RETRACTED:
+                return LIFT_RETRACT_POS;
+        }
+        return 0;
     }
 
     public double getPower() {

@@ -25,6 +25,7 @@ public class LocalizationTest extends CommandOpMode {
         CommandScheduler.getInstance().reset();
 
         Globals.AUTO = true;
+        Globals.USING_IMU = true;
 
         robot.init(hardwareMap, telemetry);
         localizer = new TwoWheelLocalizer(robot);
@@ -42,9 +43,8 @@ public class LocalizationTest extends CommandOpMode {
             timer = new ElapsedTime();
             try {
                 robot.reset();
-            } catch (Exception e) {
-
-            }
+                robot.startIMUThread(this);
+            } catch (Exception e) {}
         }
 
         Pose currentPose = localizer.getPos();

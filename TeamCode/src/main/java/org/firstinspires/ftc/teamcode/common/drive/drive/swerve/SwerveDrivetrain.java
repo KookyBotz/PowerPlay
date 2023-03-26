@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.common.hardware.AbsoluteAnalogEncoder;
 import org.firstinspires.ftc.teamcode.common.drive.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.MathUtils;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
+import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 
 import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
@@ -28,6 +29,7 @@ public class SwerveDrivetrain implements Drivetrain {
     public static double frontLeftOffset = -2.65, frontRightOffset = -3.64, backLeftOffset = -1.91, backRightOffset = -1.95;
 
     public static double K_STATIC = 0.03;
+    public static boolean maintainHeading = false;
 
     double[] ws = new double[4];
     double[] wa = new double[4];
@@ -64,7 +66,6 @@ public class SwerveDrivetrain implements Drivetrain {
     @Override
     public void set(Pose pose, double maxPower) {
         double x = pose.x, y = pose.y, head = pose.heading;
-
         if (maxPower != -1) {
             double r = Math.hypot(x, y);
             x = x / r * maxPower;
@@ -77,7 +78,9 @@ public class SwerveDrivetrain implements Drivetrain {
                 d = y + head * (TRACK_WIDTH / R);
 
         ws = new double[]{hypot(b, c), hypot(b, d), hypot(a, d), hypot(a, c)};
-        wa = new double[]{atan2(b, c), atan2(b, d), atan2(a, d), atan2(a, c)};
+        if (!maintainHeading) {
+            wa = new double[]{atan2(b, c), atan2(b, d), atan2(a, d), atan2(a, c)};
+        }
 
         max = MathUtils.max(ws);
     }

@@ -19,7 +19,7 @@ public class Globals {
     public static int REGION_HEIGHT = 50;
 
     // Lift Subsystem Constants
-    public static int LIFT_HIGH_POS = 600;
+    public static int LIFT_HIGH_POS = 610;
     public static int LIFT_MID_POS = 0;
     public static int LIFT_RETRACT_POS = 0;
 
@@ -27,8 +27,9 @@ public class Globals {
     public static double LIFT_MAX_A = 0.0;
     public static double LIFT_MAX_D = 0.0;
 
-    public static double LIFT_LATCHED = 1;
-    public static double LIFT_UNLATCHED = 0.9;
+    public static double LIFT_LATCHED = 0.84;
+    public static double LIFT_INTERMEDIATE = 0.91;
+    public static double LIFT_UNLATCHED = 1;
 
     public static final double LIFT_TICKS_PER_INCH = 22.754;
 
@@ -90,4 +91,5 @@ public class Globals {
     public static int wait3 = 50;
     public static int wait4 = 50;
     public static int wait5 = 50;
+    public static int wait6 = 100;
 }

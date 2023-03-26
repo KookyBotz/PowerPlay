@@ -14,7 +14,7 @@ public class DetectionCommand extends SequentialCommandGroup {
           new ConditionalCommand(
                   new ClawCommand(intake, IntakeSubsystem.ClawState.CLOSED)
                           .alongWith(new WaitCommand(Globals.INTAKE_CLAW_CLOSE_TIME)),
-                  null,
+                  new WaitCommand(0),
                   () -> !(intake.hasCone() && intake.clawState == IntakeSubsystem.ClawState.CLOSED)
           )
         );

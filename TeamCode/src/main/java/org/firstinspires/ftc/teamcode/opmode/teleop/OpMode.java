@@ -15,7 +15,9 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.DetectionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.GroundScoreCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.IntakeStateCommand;
@@ -129,10 +131,11 @@ public class OpMode extends CommandOpMode {
         }
         lastDpadLeft1 = dpadLeft1;
 
+        SwerveDrivetrain.maintainHeading = (Math.abs(gamepad1.left_stick_x) < 0.02 & Math.abs(gamepad1.left_stick_y) < 0.02 & Math.abs(gamepad1.right_stick_x) < 0.02);
         double rotationAmount = (Globals.USING_IMU) ? robot.getAngle() - SwerveDrivetrain.imuOffset : 0;
         Pose drive = new Pose(
                 new Point((Math.pow(Math.abs(gamepad1.left_stick_y) > 0.02 ? gamepad1.left_stick_y : 0, 3)),
-                        (Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3))).rotate(rotationAmount),
+                        (-Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3))).rotate(rotationAmount),
                 -(Math.pow(-gamepad1.right_stick_x, 3))
         );
 
@@ -153,11 +156,12 @@ public class OpMode extends CommandOpMode {
                                 new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS))
                         )
                 );
-            } else if (lift.getPos() > Globals.LIFT_EXTENDED_TOLERANCE && lift.latchState.equals(LiftSubsystem.LatchState.LATCHED)) {
+            } else if (lift.getPos() > Globals.LIFT_EXTENDED_TOLERANCE && lift.latchState.equals(LiftSubsystem.LatchState.INTERMEDIATE)) {
                 // TODO retract slides, open latch
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
+                                new WaitCommand(75),
                                 new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED))
                         )
                 );
@@ -229,9 +233,15 @@ public class OpMode extends CommandOpMode {
         } else if (BButton2 && !lastBButton2) {
             CommandScheduler.getInstance().schedule(new GroundScoreCommand(intake));
         } else if (XButton2 && !lastXButton2) {
-            CommandScheduler.getInstance().schedule(new LiftCommand(lift, LiftSubsystem.LiftState.MID));
+            CommandScheduler.getInstance().schedule(new LiftCommand(lift, LiftSubsystem.LiftState.MID)
+                    .alongWith(new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED))
+                    .alongWith(new WaitUntilCommand(() -> Math.abs(lift.getPos() - lift.getTargetPos()) < 20))
+                    .andThen(new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE)));
         } else if (YButton2 && !lastYButton2) {
-            CommandScheduler.getInstance().schedule(new LiftCommand(lift, LiftSubsystem.LiftState.HIGH));
+            CommandScheduler.getInstance().schedule(new LiftCommand(lift, LiftSubsystem.LiftState.HIGH)
+                    .alongWith(new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED))
+                    .alongWith(new WaitUntilCommand(() -> Math.abs(lift.getPos() - lift.getTargetPos()) < 20))
+                    .andThen(new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE)));
         }
         lastAButton2 = AButton2;
         lastBButton2 = BButton2;
@@ -279,10 +289,19 @@ public class OpMode extends CommandOpMode {
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-        telemetry.addData("fl", drivetrain.frontLeftModule.wheelFlipped + " " + drivetrain.frontLeftModule.lastMotorPower);
-        telemetry.addData("fr", drivetrain.frontRightModule.wheelFlipped + " " + drivetrain.frontRightModule.lastMotorPower);
-        telemetry.addData("bl", drivetrain.backLeftModule.wheelFlipped + " " + drivetrain.backLeftModule.lastMotorPower);
-        telemetry.addData("br", drivetrain.backRightModule.wheelFlipped + " " + drivetrain.backRightModule.lastMotorPower);
+//        telemetry.addData("fl", drivetrain.frontLeftModule.wheelFlipped + " " + drivetrain.frontLeftModule.lastMotorPower);
+//        telemetry.addData("fr", drivetrain.frontRightModule.wheelFlipped + " " + drivetrain.frontRightModule.lastMotorPower);
+//        telemetry.addData("bl", drivetrain.backLeftModule.wheelFlipped + " " + drivetrain.backLeftModule.lastMotorPower);
+//        telemetry.addData("br", drivetrain.backRightModule.wheelFlipped + " " + drivetrain.backRightModule.lastMotorPower);
+//        telemetry.addData("maintainHeading", SwerveDrivetrain.maintainHeading);
+//        telemetry.addData("liftPow", lift.getPower());
+//        telemetry.addData("liftPos", lift.getPos());
+//        telemetry.addData("liftTarget", lift.getTargetPos());
+        telemetry.addData("intakePow", intake.getPower());
+        telemetry.addData("intakePos", intake.getPos());
+        telemetry.addData("intakeTarget", intake.getTargetPosition());
+        telemetry.addData("intakeCurrent", robot.extension.motorEx.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("hasCone", intake.hasCone());
         loopTime = loop;
         telemetry.update();
 

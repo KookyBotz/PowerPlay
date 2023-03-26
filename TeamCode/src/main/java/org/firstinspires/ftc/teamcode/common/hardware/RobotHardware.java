@@ -105,6 +105,7 @@ public class RobotHardware {
         liftLeft = new MotorEx(hardwareMap, "motorLiftLeft");
         liftRight = new MotorEx(hardwareMap, "motorLiftRight");
         extension = new MotorEx(hardwareMap, "extension");
+        extension.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
         frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
@@ -207,6 +208,8 @@ public class RobotHardware {
     public void reset() {
         intakeEncoder.reset();
         liftEncoder.reset();
+        horizontalPod.reset();
+        lateralPod.reset();
     }
 
     public void clearBulkCache() {
