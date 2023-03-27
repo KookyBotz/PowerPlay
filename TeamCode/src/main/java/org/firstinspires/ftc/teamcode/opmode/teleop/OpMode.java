@@ -116,6 +116,12 @@ public class OpMode extends CommandOpMode {
             rumble = true;
         }
 
+        if (gamepad1.dpad_up) {
+            lift.update(LiftSubsystem.LatchState.LATCHED);
+        } else if (gamepad1.dpad_down) {
+            lift.update(LiftSubsystem.LatchState.UNLATCHED);
+        }
+
         /*
          * Robot Centric to Field Centric
          */
@@ -143,9 +149,43 @@ public class OpMode extends CommandOpMode {
          * Depositing - G1
          */
         boolean rightBumper1 = gamepad1.right_bumper;
-        if (rightBumper1 && !lastRightBumper1) {
-            if (intake.fourbarState.equals(IntakeSubsystem.FourbarState.LOW) ||
-                intake.fourbarState.equals(IntakeSubsystem.FourbarState.GROUND)) {
+//        if (rightBumper1 && !lastRightBumper1) {
+//            if (intake.fourbarState.equals(IntakeSubsystem.FourbarState.LOW) ||
+//                intake.fourbarState.equals(IntakeSubsystem.FourbarState.GROUND)) {
+//                // deposit cone, and go to intermediate position with intake turret
+//                CommandScheduler.getInstance().schedule(
+//                        new SequentialCommandGroup(
+//                                new InstantCommand(() -> intake.update(ClawState.OPEN)),
+//                                new WaitCommand(300),
+//                                new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
+//                                new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
+//                                new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS))
+//                        )
+//                );
+//            } else if (lift.getPos() > Globals.LIFT_EXTENDED_TOLERANCE && lift.latchState.equals(LiftSubsystem.LatchState.INTERMEDIATE)) {
+//                // TODO retract slides, open latch
+//                CommandScheduler.getInstance().schedule(
+//                        new SequentialCommandGroup(
+//                                new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
+//                                new WaitCommand(75),
+//                                new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED))
+//                        )
+//                );
+//            }
+//        }
+//        lastRightBumper1 = rightBumper1;
+
+        if (rightBumper1) {
+            if (lift.getPos() > Globals.LIFT_EXTENDED_TOLERANCE && lift.latchState == LiftSubsystem.LatchState.INTERMEDIATE && lift.isWithinTolerance()) {
+                CommandScheduler.getInstance().schedule(
+                        new SequentialCommandGroup(
+                                new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
+                                new WaitCommand(75),
+                                new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED))
+                        )
+                );
+            } else if ((intake.fourbarState.equals(IntakeSubsystem.FourbarState.LOW) ||
+                    intake.fourbarState.equals(IntakeSubsystem.FourbarState.GROUND))) {
                 // deposit cone, and go to intermediate position with intake turret
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
@@ -156,18 +196,8 @@ public class OpMode extends CommandOpMode {
                                 new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS))
                         )
                 );
-            } else if (lift.getPos() > Globals.LIFT_EXTENDED_TOLERANCE && lift.latchState.equals(LiftSubsystem.LatchState.INTERMEDIATE)) {
-                // TODO retract slides, open latch
-                CommandScheduler.getInstance().schedule(
-                        new SequentialCommandGroup(
-                                new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
-                                new WaitCommand(75),
-                                new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED))
-                        )
-                );
             }
         }
-        lastRightBumper1 = rightBumper1;
 
         /*
          * Transfer to Intake Sequences - G2
@@ -295,13 +325,13 @@ public class OpMode extends CommandOpMode {
 //        telemetry.addData("br", drivetrain.backRightModule.wheelFlipped + " " + drivetrain.backRightModule.lastMotorPower);
 //        telemetry.addData("maintainHeading", SwerveDrivetrain.maintainHeading);
 //        telemetry.addData("liftPow", lift.getPower());
-//        telemetry.addData("liftPos", lift.getPos());
-//        telemetry.addData("liftTarget", lift.getTargetPos());
-        telemetry.addData("intakePow", intake.getPower());
-        telemetry.addData("intakePos", intake.getPos());
-        telemetry.addData("intakeTarget", intake.getTargetPosition());
-        telemetry.addData("intakeCurrent", robot.extension.motorEx.getCurrent(CurrentUnit.AMPS));
-        telemetry.addData("hasCone", intake.hasCone());
+        telemetry.addData("liftPos", lift.getPos());
+        telemetry.addData("liftTarget", lift.getTargetPos());
+//        telemetry.addData("intakePow", intake.getPower());
+//        telemetry.addData("intakePos", intake.getPos());
+//        telemetry.addData("intakeTarget", intake.getTargetPosition());
+//        telemetry.addData("intakeCurrent", robot.extension.motorEx.getCurrent(CurrentUnit.AMPS));
+//        telemetry.addData("hasCone", intake.hasCone());
         loopTime = loop;
         telemetry.update();
 

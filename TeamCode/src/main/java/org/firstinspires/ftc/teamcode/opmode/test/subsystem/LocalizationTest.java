@@ -47,10 +47,13 @@ public class LocalizationTest extends CommandOpMode {
             } catch (Exception e) {}
         }
 
+        localizer.periodic();
+
         Pose currentPose = localizer.getPos();
         telemetry.addData("poseX", currentPose.x);
         telemetry.addData("poseY", currentPose.y);
         telemetry.addData("heading", currentPose.heading);
+        telemetry.update();
 
         PhotonCore.CONTROL_HUB.clearBulkCache();
     }

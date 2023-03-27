@@ -39,6 +39,7 @@ public class LiftSubsystem extends SubsystemBase {
 
     private boolean isExtended = false;
     private boolean hasCone = false;
+    private boolean withinTolerance = false;
 
     public static double P = 0.01;
     public static double I = 0.1;
@@ -126,6 +127,8 @@ public class LiftSubsystem extends SubsystemBase {
             setTargetPos((int) liftMotionState.x);
         }
 
+        withinTolerance = Math.abs(getPos() - getTargetPos()) < LIFT_ERROR_TOLERANCE;
+
 //        isExtended = getPos() > (LIFT_EXTENDED_TOLERANCE * LIFT_TICKS_PER_INCH);
 //        hasCone = !robot.depositSensor.getState();
 
@@ -176,6 +179,8 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public boolean hasCone() { return hasCone; }
+
+    public boolean isWithinTolerance() { return withinTolerance; }
 
     public void setSlideFactor(double factor) {
         double slideAddition = LIFT_MANUAL_FACTOR * factor;

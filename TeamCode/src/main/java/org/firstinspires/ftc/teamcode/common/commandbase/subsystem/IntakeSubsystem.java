@@ -303,7 +303,7 @@ public class IntakeSubsystem extends SubsystemBase {
 //        notreached = reached;
         power = Range.clip((-controller.calculate(intakePosition, targetPosition) + (F * Math.signum(targetPosition - intakePosition)) / voltage * 14), -1, 1);
         if (targetPosition == 0) {
-            power -= -0.1;
+            power -= -0.3;
         }
         //        lastTargetPosition = publicTargetPosition;
     }

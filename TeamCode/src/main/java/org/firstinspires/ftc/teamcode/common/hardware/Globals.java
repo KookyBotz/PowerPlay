@@ -20,7 +20,7 @@ public class Globals {
 
     // Lift Subsystem Constants
     public static int LIFT_HIGH_POS = 610;
-    public static int LIFT_MID_POS = 0;
+    public static int LIFT_MID_POS = 380;
     public static int LIFT_RETRACT_POS = 0;
 
     public static double LIFT_MAX_V = 0.0;
@@ -29,7 +29,7 @@ public class Globals {
 
     public static double LIFT_LATCHED = 0.84;
     public static double LIFT_INTERMEDIATE = 0.91;
-    public static double LIFT_UNLATCHED = 1;
+    public static double LIFT_UNLATCHED = 0.96;
 
     public static final double LIFT_TICKS_PER_INCH = 22.754;
 
@@ -37,7 +37,8 @@ public class Globals {
     public static double LIFT_MIN = 0;
     public static double LIFT_MAX = 0;
 
-    public static double LIFT_EXTENDED_TOLERANCE = 0;
+    public static double LIFT_EXTENDED_TOLERANCE = 20;
+    public static double LIFT_ERROR_TOLERANCE = 20;
 
     // Intake Subsystem Constants
     public static double INTAKE_EXTENSION_MAX_V = 0;
@@ -63,7 +64,7 @@ public class Globals {
     public static double INTAKE_TURRET_INWARDS = 0.17;
 
     public static double INTAKE_FOURBAR_PRE_TRANSFER = 0.391;
-    public static double INTAKE_FOURBAR_TRANSFER = 0.455;
+    public static double INTAKE_FOURBAR_TRANSFER = 0.469;
     public static double INTAKE_FOURBAR_INTERMEDIATE = 0.385;
     public static double INTAKE_FOURBAR_INTAKE = 0.06;
     public static double INTAKE_FOURBAR_LOW = 0.359;
@@ -87,9 +88,9 @@ public class Globals {
     public static boolean USING_IMU = true;
 
     public static int wait1 = 100;
-    public static int wait2 = 100;
+    public static int wait2 = 300;
     public static int wait3 = 50;
     public static int wait4 = 50;
-    public static int wait5 = 50;
-    public static int wait6 = 100;
+    public static int wait5 = 200;
+    public static int wait6 = 500;
 }

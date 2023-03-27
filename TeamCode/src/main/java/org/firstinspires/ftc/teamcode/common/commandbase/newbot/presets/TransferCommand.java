@@ -14,16 +14,16 @@ import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 public class TransferCommand extends SequentialCommandGroup {
     public TransferCommand(IntakeSubsystem intake, LiftSubsystem lift) {
         super(
+                new LatchCommand(lift, LiftSubsystem.LatchState.UNLATCHED),
                 new ConditionalCommand(
                         new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.CLOSED)),
                         new WaitCommand(Globals.INTAKE_CLAW_CLOSE_TIME),
                         () -> intake.clawState.equals(IntakeSubsystem.ClawState.OPEN)
                 ),
-                new LatchCommand(lift, LiftSubsystem.LatchState.UNLATCHED),
+                new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.PRE_TRANSFER)),
                 new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.PRE_TRANSFER)),
                 new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.INWARDS)),
                 new WaitCommand(Globals.wait5),
-                new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.PRE_TRANSFER)),
                 new WaitUntilCommand(() -> intake.getTargetPosition() <= Globals.INTAKE_EXTENDED_TOLERANCE)
                         .alongWith(new InstantCommand(() -> intake.setTargetPosition(0))),
                 new WaitUntilCommand(() -> intake.fourbarMotionState.v == 0).alongWith(

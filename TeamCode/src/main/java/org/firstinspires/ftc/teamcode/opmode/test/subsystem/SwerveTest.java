@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+
 @Config
 @TeleOp(name = "SwerveTest")
 public class SwerveTest extends OpMode {
@@ -46,40 +48,45 @@ public class SwerveTest extends OpMode {
     @Override
     public void loop() {
         if (gamepad1.a) {
-            frontLeftMotor.setPower(0.5);
-            frontLeftServo.setPower(0.3);
+            frontLeftMotor.setPower(1);
+//            frontLeftServo.setPower(1);
         } else {
             frontLeftMotor.setPower(0);
             frontLeftServo.setPower(0);
         }
 
         if (gamepad1.b) {
-            frontRightMotor.setPower(0.5);
-            frontRightServo.setPower(0.3);
+            frontRightMotor.setPower(1);
+//            frontRightServo.setPower(1);
         } else {
             frontRightMotor.setPower(0);
             frontRightServo.setPower(0);
         }
 
         if (gamepad1.x) {
-            backLeftMotor.setPower(0.5);
-            backLeftServo.setPower(0.3);
+            backLeftMotor.setPower(1);
+//            backLeftServo.setPower(1);
         } else {
             backLeftMotor.setPower(0);
             backLeftServo.setPower(0);
         }
 
         if (gamepad1.y) {
-            backRightMotor.setPower(0.5);
-            backRightServo.setPower(0.3);
+            backRightMotor.setPower(1);
+//            backRightServo.setPower(1);
         } else {
             backRightMotor.setPower(0);
             backRightServo.setPower(0);
         }
 
-        telemetry.addData("frontLeft", frontLeftEncoder.getVoltage());
-        telemetry.addData("frontRight", frontRightEncoder.getVoltage());
-        telemetry.addData("backRight", backRightEncoder.getVoltage());
-        telemetry.addData("backLeft", backLeftEncoder.getVoltage());
+//        telemetry.addData("frontLeft", frontLeftEncoder.getVoltage());
+//        telemetry.addData("frontRight", frontRightEncoder.getVoltage());
+//        telemetry.addData("backRight", backRightEncoder.getVoltage());
+//        telemetry.addData("backLeft", backLeftEncoder.getVoltage());
+        telemetry.addData("frontLeftCurrent", frontLeftMotor.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("frontRightCurrent", frontRightMotor.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("backRightCurrent", backRightMotor.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("backLeftCurrent", backLeftMotor.getCurrent(CurrentUnit.AMPS));
+        telemetry.update();
     }
 }
