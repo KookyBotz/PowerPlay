@@ -43,12 +43,12 @@ public class TwoWheelLocalizer extends TwoTrackingWheelLocalizer implements Loca
     public static double WHEEL_RADIUS = 0.689; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
-    // -1.425
-    public static double PARALLEL_X = 4.22; // X is the up and down direction
-    public static double PARALLEL_Y = 4.22; // Y is the strafe direction
-    // -1.375
-    public static double PERPENDICULAR_X = 1.34;
-    public static double PERPENDICULAR_Y = 1.34;
+    // -1.5
+    public static double PARALLEL_X = 0; // X is the up and down direction
+    public static double PARALLEL_Y = 0; // Y is the strafe direction
+    // -1.375-
+    public static double PERPENDICULAR_X = -4;
+    public static double PERPENDICULAR_Y = -4;
 
     private final DoubleSupplier horizontalPosition, lateralPosition, imuAngle;
 
@@ -59,9 +59,9 @@ public class TwoWheelLocalizer extends TwoTrackingWheelLocalizer implements Loca
                 new Pose2d(PERPENDICULAR_X, PERPENDICULAR_Y, Math.toRadians(90))
         ));
 
-        this.horizontalPosition = () -> robot.horizontalPod.getPosition();
+        this.horizontalPosition = () -> 0;
         this.lateralPosition = () -> robot.lateralPod.getPosition();
-        this.imuAngle = robot::getAngle;
+        this.imuAngle = () -> -robot.getAngle();
     }
 
     public static double encoderTicksToInches(double ticks) {

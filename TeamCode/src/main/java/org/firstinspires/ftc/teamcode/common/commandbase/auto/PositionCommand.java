@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.commandbase.auto;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -8,19 +9,20 @@ import org.firstinspires.ftc.teamcode.common.drive.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.drive.localizer.Localizer;
 
+@Config
 public class PositionCommand extends CommandBase {
     public static double ALLOWED_TRANSLATIONAL_ERROR = 0.25;
     public static double ALLOWED_HEADING_ERROR = Math.toRadians(1);
 
-    public static double xP = 0.023;
+    public static double xP = 0.1;
     public static double xD = 0;
     public static double xF = 0;
 
-    public static double yP = 0.023;
+    public static double yP = 0.1;
     public static double yD = 0;
     public static double yF = 0;
 
-    public static double hP = -0.25;
+    public static double hP = -.25;
     public static double hD = 0;
     public static double hF = 0;
 

@@ -305,7 +305,7 @@ public class IntakeSubsystem extends SubsystemBase {
         if (targetPosition == 0) {
             power -= -0.3;
         }
-        //        lastTargetPosition = publicTargetPosition;
+        // TODO: 0.066 is the compensate max
     }
 
     public void read() {

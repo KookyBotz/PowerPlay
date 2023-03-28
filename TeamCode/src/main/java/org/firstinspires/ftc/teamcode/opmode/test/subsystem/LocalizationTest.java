@@ -43,8 +43,9 @@ public class LocalizationTest extends CommandOpMode {
             timer = new ElapsedTime();
             try {
                 robot.reset();
-                robot.startIMUThread(this);
             } catch (Exception e) {}
+            robot.startIMUThread(this);
+
         }
 
         localizer.periodic();
@@ -53,6 +54,8 @@ public class LocalizationTest extends CommandOpMode {
         telemetry.addData("poseX", currentPose.x);
         telemetry.addData("poseY", currentPose.y);
         telemetry.addData("heading", currentPose.heading);
+//        telemetry.addData("parallel", robot.horizontalPod.getPosition());
+//        telemetry.addData("perpindicular", robot.lateralPod.getPosition());
         telemetry.update();
 
         PhotonCore.CONTROL_HUB.clearBulkCache();

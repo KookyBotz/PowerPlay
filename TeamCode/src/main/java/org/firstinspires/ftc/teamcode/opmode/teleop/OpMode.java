@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
@@ -59,6 +60,9 @@ public class OpMode extends CommandOpMode {
 
     private boolean lastRightTrigger2 = false;
     private boolean lastLeftTrigger2 = false;
+
+    private boolean lastGamepadUp1 = false;
+    private boolean lastGamepadDown1 = false;
     
     private boolean clawHasCone = false;
     public static double position;
@@ -75,7 +79,7 @@ public class OpMode extends CommandOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         Globals.AUTO = false;
-        Globals.USING_IMU = true;
+        Globals.USING_IMU = false;
 
         robot.init(hardwareMap, telemetry);
         intake = new IntakeSubsystem(robot);
@@ -116,11 +120,15 @@ public class OpMode extends CommandOpMode {
             rumble = true;
         }
 
-        if (gamepad1.dpad_up) {
+        boolean gamepadUp1 = gamepad1.dpad_up;
+        boolean gamepadDown1 = gamepad1.dpad_down;
+        if (gamepadUp1 && !lastGamepadUp1) {
             lift.update(LiftSubsystem.LatchState.LATCHED);
-        } else if (gamepad1.dpad_down) {
+        } else if (gamepadDown1 && !lastGamepadDown1) {
             lift.update(LiftSubsystem.LatchState.UNLATCHED);
         }
+        boolean lastGamepadUp1 = gamepadUp1;
+        boolean lastGamepadDown1 = gamepadDown1;
 
         /*
          * Robot Centric to Field Centric
@@ -246,7 +254,8 @@ public class OpMode extends CommandOpMode {
         boolean leftBumper2 = gamepad2.left_bumper;
         if (leftBumper2 && !lastLeftBumper2) {
             CommandScheduler.getInstance().schedule(
-                    new IntermediateStateCommand(intake)
+                    new IntermediateStateCommand(intake),
+                    new SequentialCommandGroup()
             );
         }
         lastLeftBumper2 = leftBumper2;
@@ -327,6 +336,7 @@ public class OpMode extends CommandOpMode {
 //        telemetry.addData("liftPow", lift.getPower());
         telemetry.addData("liftPos", lift.getPos());
         telemetry.addData("liftTarget", lift.getTargetPos());
+telemetry.addData("fourbarPos", robot.fourbarLeft.getPosition());
 //        telemetry.addData("intakePow", intake.getPower());
 //        telemetry.addData("intakePos", intake.getPos());
 //        telemetry.addData("intakeTarget", intake.getTargetPosition());

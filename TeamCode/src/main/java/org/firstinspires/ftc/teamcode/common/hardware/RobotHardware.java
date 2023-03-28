@@ -139,7 +139,8 @@ public class RobotHardware {
         liftEncoder.setDirection(Motor.Direction.REVERSE);
         intakeEncoder = new MotorEx(hardwareMap, "frontRightMotor").encoder;
 
-        horizontalPod = new MotorEx(hardwareMap, "backLeftMotor").encoder;
+//        horizontalPod = new MotorEx(hardwareMap, "backLeftMotor").encoder;
+//        horizontalPod.setDirection(Motor.Direction.REVERSE);
         lateralPod = new MotorEx(hardwareMap, "backRightMotor").encoder;
         try {
             int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -226,7 +227,7 @@ public class RobotHardware {
             imuThread = new Thread(() -> {
                 while (!opMode.isStopRequested() && opMode.opModeIsActive()) {
                     synchronized (imuLock) {
-                        imuAngle = -imu.getAngularOrientation().firstAngle;
+                        imuAngle = imu.getAngularOrientation().firstAngle;
                     }
                 }
             });
