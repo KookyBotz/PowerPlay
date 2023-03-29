@@ -13,8 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.DoubleSupplier;
 
-import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
-
 /*
  * Sample tracking wheel localizer implementation assuming the standard configuration:
  *
@@ -39,16 +37,15 @@ import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
 @Config
 //BRUH JUST DONT USE ROADRUNNER
 public class TwoWheelLocalizer extends TwoTrackingWheelLocalizer implements Localizer {
-    public static double TICKS_PER_REV = 8092;
+    public static double TICKS_PER_REV = 8192;
     public static double WHEEL_RADIUS = 0.689; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
-    // -1.5
-    public static double PARALLEL_X = 0; // X is the up and down direction
-    public static double PARALLEL_Y = 0; // Y is the strafe direction
-    // -1.375-
-    public static double PERPENDICULAR_X = -4;
-    public static double PERPENDICULAR_Y = -4;
+    public static double PARALLEL_X = -4.354; // X is the up and down direction
+    public static double PARALLEL_Y = -4.354; // Y is the strafe direction
+
+    public static double PERPENDICULAR_X = -1.441;
+    public static double PERPENDICULAR_Y = -1.441;
 
     private final DoubleSupplier horizontalPosition, lateralPosition, imuAngle;
 
@@ -59,9 +56,9 @@ public class TwoWheelLocalizer extends TwoTrackingWheelLocalizer implements Loca
                 new Pose2d(PERPENDICULAR_X, PERPENDICULAR_Y, Math.toRadians(90))
         ));
 
-        this.horizontalPosition = () -> 0;
-        this.lateralPosition = () -> robot.lateralPod.getPosition();
-        this.imuAngle = () -> -robot.getAngle();
+        this.horizontalPosition = () -> robot.parallelPod.getPosition();
+        this.lateralPosition = () -> -robot.perpindicularPod.getPosition();
+        this.imuAngle = () -> robot.getAngle();
     }
 
     public static double encoderTicksToInches(double ticks) {

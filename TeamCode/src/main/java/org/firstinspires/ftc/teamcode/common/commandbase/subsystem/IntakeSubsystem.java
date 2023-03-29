@@ -52,6 +52,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private boolean hasCone = false;
     private boolean notreached = false;
     private boolean done = false;
+    private boolean withinTolerance = false;
 
     public double pivotOffset = 0;
 
@@ -289,6 +290,8 @@ public class IntakeSubsystem extends SubsystemBase {
             setTargetPosition((int) intakeMotionState.x);
         }
 
+        withinTolerance = Math.abs(getPos() - getTargetPosition()) <= INTAKE_ERROR_TOLERANCE;
+
 //        if (lastTargetPosition != publicTargetPosition) {
 //            intaketime.reset();
 //            done = false;
@@ -302,7 +305,7 @@ public class IntakeSubsystem extends SubsystemBase {
 //        }
 //        notreached = reached;
         power = Range.clip((-controller.calculate(intakePosition, targetPosition) + (F * Math.signum(targetPosition - intakePosition)) / voltage * 14), -1, 1);
-        if (targetPosition == 0) {
+        if (targetPosition <= 0) {
             power -= -0.3;
         }
         // TODO: 0.066 is the compensate max
@@ -329,6 +332,9 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setFourbar(double pos) {
+        if (pos <= 0.066) {
+            pos += 1.0399e-5 * (getPos());
+        }
         robot.fourbarLeft.setPosition(pos);
         robot.fourbarRight.setPosition(1 - pos);
     }
@@ -339,6 +345,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void setTargetPosition(double targetPosition) {
         this.targetPosition = targetPosition;
+    }
+
+    public void setFourbarTargetPosition(double targetPosition) {
+        this.newProfile(targetPosition);
     }
 
     public int getPos() {
@@ -356,6 +366,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public boolean hasCone() {
         return hasCone;
     }
+
+    public boolean isWithinTolerance() { return withinTolerance; }
 
     public void setFourbarFactor(double factor) {
 //        if (fourbarMotionState.v == 0) {
@@ -386,7 +398,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setSlideFactor(double factor) {
         double slideAddition = INTAKE_MANUAL_FACTOR * factor;
         double newPosition = intakePosition + slideAddition;
-        if (intakeMotionState.v == 0 && newPosition >= INTAKE_MIN && newPosition <= INTAKE_MAX) {
+        if (intakeMotionState.v == 0 && newPosition >= INTAKE_MIN - 10 && newPosition <= INTAKE_MAX) {
             targetPosition = newPosition;
         }
     }
@@ -416,7 +428,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void adjustPivotOffset(double offset) {
-//        robot.pivot.setPosition(robot.pivot.getPosition() + offset);
+        robot.pivot.setPosition(robot.pivot.getPosition() + offset);
         pivotOffset += offset;
     }
 }

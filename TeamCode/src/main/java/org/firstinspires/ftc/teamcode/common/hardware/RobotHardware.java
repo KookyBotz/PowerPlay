@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.common.hardware;
 
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -23,8 +21,6 @@ import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsyst
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
-import org.firstinspires.ftc.teamcode.common.drive.localizer.Localizer;
-import org.firstinspires.ftc.teamcode.common.drive.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -62,8 +58,8 @@ public class RobotHardware {
 
     public Motor.Encoder liftEncoder;
     public Motor.Encoder intakeEncoder;
-    public Motor.Encoder horizontalPod;
-    public Motor.Encoder lateralPod;
+    public Motor.Encoder parallelPod;
+    public Motor.Encoder perpindicularPod;
 
     private final Object imuLock = new Object();
     @GuardedBy("imuLock")
@@ -139,9 +135,10 @@ public class RobotHardware {
         liftEncoder.setDirection(Motor.Direction.REVERSE);
         intakeEncoder = new MotorEx(hardwareMap, "frontRightMotor").encoder;
 
-//        horizontalPod = new MotorEx(hardwareMap, "backLeftMotor").encoder;
-//        horizontalPod.setDirection(Motor.Direction.REVERSE);
-        lateralPod = new MotorEx(hardwareMap, "backRightMotor").encoder;
+        parallelPod = new MotorEx(hardwareMap, "backLeftMotor").encoder;
+        parallelPod.setDirection(Motor.Direction.REVERSE);
+        perpindicularPod = new MotorEx(hardwareMap, "backRightMotor").encoder;
+        perpindicularPod.setDirection(Motor.Direction.REVERSE);
         try {
             int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
             camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, (Globals.SIDE.equals(Globals.Side.LEFT)) ? "WebcamLeft" : "WebcamRight"), cameraMonitorViewId);
@@ -209,8 +206,8 @@ public class RobotHardware {
     public void reset() {
         intakeEncoder.reset();
         liftEncoder.reset();
-        horizontalPod.reset();
-        lateralPod.reset();
+        parallelPod.reset();
+        perpindicularPod.reset();
     }
 
     public void clearBulkCache() {

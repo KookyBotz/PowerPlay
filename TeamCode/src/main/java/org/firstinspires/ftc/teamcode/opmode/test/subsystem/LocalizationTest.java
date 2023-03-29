@@ -4,7 +4,6 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -35,14 +34,21 @@ public class LocalizationTest extends CommandOpMode {
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
+        robot.reset();
+
+
+        while(opModeInInit()) {
+            telemetry.addLine("here");
+            telemetry.update();
+        }
     }
 
     @Override
     public void run() {
         if (timer == null) {
             timer = new ElapsedTime();
+
             try {
-                robot.reset();
             } catch (Exception e) {}
             robot.startIMUThread(this);
 
@@ -54,8 +60,8 @@ public class LocalizationTest extends CommandOpMode {
         telemetry.addData("poseX", currentPose.x);
         telemetry.addData("poseY", currentPose.y);
         telemetry.addData("heading", currentPose.heading);
-//        telemetry.addData("parallel", robot.horizontalPod.getPosition());
-//        telemetry.addData("perpindicular", robot.lateralPod.getPosition());
+        telemetry.addData("parallel", robot.parallelPod.getPosition());
+        telemetry.addData("perpindicular", robot.perpindicularPod.getPosition());
         telemetry.update();
 
         PhotonCore.CONTROL_HUB.clearBulkCache();

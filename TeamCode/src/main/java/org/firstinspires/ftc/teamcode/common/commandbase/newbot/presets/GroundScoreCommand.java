@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.DetectionCommand;
@@ -11,7 +12,8 @@ import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsyst
 public class GroundScoreCommand extends SequentialCommandGroup {
     public GroundScoreCommand(IntakeSubsystem intake) {
         super(
-                new DetectionCommand(intake),
+                new DetectionCommand(intake)
+                        .alongWith(new InstantCommand(() -> intake.setTargetPosition(0))),
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.GROUND),
                 new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
                 new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT)

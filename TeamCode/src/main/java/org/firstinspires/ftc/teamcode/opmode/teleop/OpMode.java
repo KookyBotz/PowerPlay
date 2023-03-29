@@ -17,6 +17,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.CycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.DetectionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LiftCommand;
@@ -29,6 +30,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsyst
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem.ClawState;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
+import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
@@ -57,6 +59,7 @@ public class OpMode extends CommandOpMode {
     private boolean lastLeftBumper1 = false;
 
     private boolean lastDpadLeft1 = false;
+    private boolean lastDpadRight2 = false;
 
     private boolean lastRightTrigger2 = false;
     private boolean lastLeftTrigger2 = false;
@@ -268,6 +271,9 @@ public class OpMode extends CommandOpMode {
         boolean XButton2 = gamepad2.x;
         boolean YButton2 = gamepad2.y;
         if (AButton2 && !lastAButton2) {
+            if (intake.hasCone()) {
+
+            }
             CommandScheduler.getInstance().schedule(new LowScoreCommand(intake));
         } else if (BButton2 && !lastBButton2) {
             CommandScheduler.getInstance().schedule(new GroundScoreCommand(intake));
@@ -326,6 +332,28 @@ public class OpMode extends CommandOpMode {
             robot.latch.setPosition(position);
         }
 
+        boolean dpadRight2 = gamepad2.dpad_right;
+        if (dpadRight2 && !lastDpadRight2) {
+            schedule(
+                    new SequentialCommandGroup(
+                            new CycleCommand(lift, intake, new GrabPosition(536, 0, 0.202, 0.37, 750), LiftSubsystem.LiftState.HIGH),
+                            new CycleCommand(lift, intake, new GrabPosition(523, 0, 0.164, 0.37, 750), LiftSubsystem.LiftState.HIGH),
+                            new CycleCommand(lift, intake, new GrabPosition(514, 0, 0.131, 0.37, 750), LiftSubsystem.LiftState.HIGH),
+                            new CycleCommand(lift, intake, new GrabPosition(517, 0, 0.1, 0.37, 750), LiftSubsystem.LiftState.HIGH),
+                            new CycleCommand(lift, intake, new GrabPosition(522, 0, 0.06, 0.37, 750), LiftSubsystem.LiftState.HIGH),
+                            new SequentialCommandGroup(
+                                    new LiftCommand(lift, LiftSubsystem.LiftState.HIGH)
+                                            .alongWith(new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED)),
+                                    new WaitUntilCommand(lift::isWithinTolerance),
+                                    new LatchCommand(lift, LiftSubsystem.LatchState.UNLATCHED),
+                                    new WaitCommand(75),
+                                    new LiftCommand(lift, LiftSubsystem.LiftState.RETRACTED)
+                            )
+                    )
+            );
+        }
+        lastDpadRight2 = dpadRight2;
+
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
 //        telemetry.addData("fl", drivetrain.frontLeftModule.wheelFlipped + " " + drivetrain.frontLeftModule.lastMotorPower);
@@ -334,12 +362,13 @@ public class OpMode extends CommandOpMode {
 //        telemetry.addData("br", drivetrain.backRightModule.wheelFlipped + " " + drivetrain.backRightModule.lastMotorPower);
 //        telemetry.addData("maintainHeading", SwerveDrivetrain.maintainHeading);
 //        telemetry.addData("liftPow", lift.getPower());
-        telemetry.addData("liftPos", lift.getPos());
-        telemetry.addData("liftTarget", lift.getTargetPos());
+//        telemetry.addData("liftPos", lift.getPos());
+//        telemetry.addData("liftTarget", lift.getTargetPos());
 telemetry.addData("fourbarPos", robot.fourbarLeft.getPosition());
-//        telemetry.addData("intakePow", intake.getPower());
-//        telemetry.addData("intakePos", intake.getPos());
-//        telemetry.addData("intakeTarget", intake.getTargetPosition());
+////        telemetry.addData("intakePow", intake.getPower());
+        telemetry.addData("intakePos", intake.getPos());
+        telemetry.addData("intakeTarget", intake.getTargetPosition());
+        telemetry.addData("pivot", robot.pivot.getPosition());
 //        telemetry.addData("intakeCurrent", robot.extension.motorEx.getCurrent(CurrentUnit.AMPS));
 //        telemetry.addData("hasCone", intake.hasCone());
         loopTime = loop;
