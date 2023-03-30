@@ -151,7 +151,7 @@ public class OpMode extends CommandOpMode {
         SwerveDrivetrain.maintainHeading = (Math.abs(gamepad1.left_stick_x) < 0.02 & Math.abs(gamepad1.left_stick_y) < 0.02 & Math.abs(gamepad1.right_stick_x) < 0.02);
         double rotationAmount = (Globals.USING_IMU) ? robot.getAngle() - SwerveDrivetrain.imuOffset : 0;
         Pose drive = new Pose(
-                new Point((Math.pow(Math.abs(gamepad1.left_stick_y) > 0.02 ? gamepad1.left_stick_y : 0, 3)),
+                new Point((Math.pow(Math.abs(gamepad1.left_stick_y) > 0.0 ? gamepad1.left_stick_y : 0, 3)),
                         (-Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.02 ? gamepad1.left_stick_x : 0), 3))).rotate(rotationAmount),
                 -(Math.pow(-gamepad1.right_stick_x, 3))
         );

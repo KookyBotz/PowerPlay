@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.test.subsystem;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
@@ -7,6 +8,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.drive.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
@@ -27,6 +29,7 @@ public class LocalizationTest extends CommandOpMode {
         Globals.USING_IMU = true;
 
         robot.init(hardwareMap, telemetry);
+        SwerveDrivetrain.imuOffset = 0;
         localizer = new TwoWheelLocalizer(robot);
 
         robot.enabled = true;
@@ -35,23 +38,15 @@ public class LocalizationTest extends CommandOpMode {
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
         robot.reset();
-
-
-        while(opModeInInit()) {
-            telemetry.addLine("here");
-            telemetry.update();
-        }
+        localizer.setPoseEstimate(new Pose2d(0, 0, 0));
     }
 
     @Override
     public void run() {
         if (timer == null) {
             timer = new ElapsedTime();
-
-            try {
-            } catch (Exception e) {}
             robot.startIMUThread(this);
-
+            localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         }
 
         localizer.periodic();
@@ -66,6 +61,4 @@ public class LocalizationTest extends CommandOpMode {
 
         PhotonCore.CONTROL_HUB.clearBulkCache();
     }
-
-
 }
