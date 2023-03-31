@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.common.hardware;
 
 import com.acmerobotics.dashboard.config.Config;
 
+import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
+
 @Config
 public class Globals {
     public enum Side {
@@ -17,6 +19,8 @@ public class Globals {
 
     public static int REGION_WIDTH = 30;
     public static int REGION_HEIGHT = 50;
+
+    public static Pose yummypose = new Pose(0, 0, 0);
 
     // Lift Subsystem Constants
     public static int LIFT_HIGH_POS = 610;

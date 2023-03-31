@@ -37,7 +37,7 @@ public class LocalizationTest extends CommandOpMode {
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
-        robot.reset();
+        robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
     }
 
@@ -45,7 +45,7 @@ public class LocalizationTest extends CommandOpMode {
     public void run() {
         if (timer == null) {
             timer = new ElapsedTime();
-            robot.startIMUThread(this);
+            robot.reset();
             localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         }
 

@@ -66,9 +66,9 @@ public class RobotHardware {
     public BNO055IMU imu;
     private Thread imuThread;
     private double imuAngle = 0;
+    public double imuOffset = 0;
 
     public DigitalChannel clawSensor;
-    public DigitalChannel depositSensor;
 
     public OpenCvCamera camera;
 
@@ -139,22 +139,19 @@ public class RobotHardware {
         parallelPod.setDirection(Motor.Direction.REVERSE);
         perpindicularPod = new MotorEx(hardwareMap, "backRightMotor").encoder;
         perpindicularPod.setDirection(Motor.Direction.REVERSE);
-        try {
-            int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-            camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, (Globals.SIDE.equals(Globals.Side.LEFT)) ? "WebcamLeft" : "WebcamRight"), cameraMonitorViewId);
-            pipeline = new SleeveDetection();
-        } catch (Exception e) {
-            camera = null;
-            pipeline = null;
-        }
 
         clawSensor = hardwareMap.get(DigitalChannel.class, "clawSensor");
 
-//        try {
-//            depositSensor = hardwareMap.get(DigitalChannel.class, "depositSensor");
-//        } catch (Exception e) {
-//            depositSensor = null;
-//        }
+        if (Globals.AUTO) {
+            try {
+                int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+                camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, (Globals.SIDE.equals(Globals.Side.LEFT)) ? "WebcamLeft" : "WebcamRight"), cameraMonitorViewId);
+                pipeline = new SleeveDetection();
+            } catch (Exception e) {
+                camera = null;
+                pipeline = null;
+            }
+        }
 
         try {
             voltageSensor = hardwareMap.voltageSensor.iterator().next();
@@ -165,7 +162,9 @@ public class RobotHardware {
 
     public void loop(Pose drive, SwerveDrivetrain drivetrain, IntakeSubsystem intake, LiftSubsystem lift) {
         try {
-            drivetrain.set(drive);
+            if (drive != null) {
+                drivetrain.set(drive);
+            }
             drivetrain.updateModules();
         } catch (Exception ignored) {}
         try {
@@ -204,10 +203,13 @@ public class RobotHardware {
     }
 
     public void reset() {
-        intakeEncoder.reset();
-        liftEncoder.reset();
-        parallelPod.reset();
-        perpindicularPod.reset();
+        try {
+            intakeEncoder.reset();
+            liftEncoder.reset();
+            parallelPod.reset();
+            perpindicularPod.reset();
+        } catch (Exception e) {}
+        imuOffset = imu.getAngularOrientation().firstAngle;
     }
 
     public void clearBulkCache() {
@@ -215,12 +217,11 @@ public class RobotHardware {
     }
 
     public double getAngle() {
-        return imuAngle;
+        return imuAngle - imuOffset;
     }
 
     public void startIMUThread(LinearOpMode opMode) {
         if (Globals.USING_IMU) {
-            SwerveDrivetrain.imuOffset = -Math.PI / 2;
             imuThread = new Thread(() -> {
                 while (!opMode.isStopRequested() && opMode.opModeIsActive()) {
                     synchronized (imuLock) {

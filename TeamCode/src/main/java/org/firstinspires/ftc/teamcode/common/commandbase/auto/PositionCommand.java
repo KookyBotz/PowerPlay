@@ -8,21 +8,22 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.common.drive.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.drive.localizer.Localizer;
+import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 
 @Config
 public class PositionCommand extends CommandBase {
     public static double ALLOWED_TRANSLATIONAL_ERROR = 0.25;
     public static double ALLOWED_HEADING_ERROR = Math.toRadians(1);
 
-    public static double xP = 0.1;
+    public static double xP = 0.05;
     public static double xD = 0;
     public static double xF = 0;
 
-    public static double yP = 0.1;
+    public static double yP = 0.05;
     public static double yD = 0;
     public static double yF = 0;
 
-    public static double hP = -.25;
+    public static double hP = -0.25;
     public static double hD = 0;
     public static double hF = 0;
 
@@ -30,7 +31,7 @@ public class PositionCommand extends CommandBase {
     public static PIDFController xController = new PIDFController(xP, 0.0, xD, xF);
     public static PIDFController yController = new PIDFController(yP, 0.0, yD, yF);
     public static PIDFController hController = new PIDFController(hP, 0.0, hD, hF);
-    public static double max_power = 0.7;
+    public static double max_power = 0.3;
 
     Drivetrain drivetrain;
     Localizer localizer;
@@ -57,12 +58,17 @@ public class PositionCommand extends CommandBase {
         if (deadTimer == null) {
             deadTimer = new ElapsedTime();
         }
-        drivetrain.set(goToPosition(localizer.getPos(), targetPose));
+
+        Pose yummypose = goToPosition(localizer.getPos(), targetPose);
+        System.out.println(yummypose);
+        drivetrain.set(yummypose);
+        Globals.yummypose = yummypose;
     }
 
     @Override
     public boolean isFinished() {
         Pose error = targetPose.subtract(localizer.getPos());
+//        error.divide(new Pose(1, -1, 1));
 
         boolean reached = ((Math.hypot(error.x, error.y) < ALLOWED_TRANSLATIONAL_ERROR) && (Math.abs(error.heading) < ALLOWED_HEADING_ERROR));
 
