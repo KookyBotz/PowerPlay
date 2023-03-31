@@ -21,6 +21,9 @@ public class Globals {
     public static int REGION_HEIGHT = 50;
 
     public static Pose yummypose = new Pose(0, 0, 0);
+    public static Pose error = new Pose(0, 0, 0);
+    public static Pose targetPose = new Pose(0, 0, 0);
+    public static boolean reached = false;
 
     // Lift Subsystem Constants
     public static int LIFT_HIGH_POS = 610;

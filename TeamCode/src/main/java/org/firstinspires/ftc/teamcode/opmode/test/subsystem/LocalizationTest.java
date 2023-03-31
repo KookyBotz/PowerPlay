@@ -29,7 +29,7 @@ public class LocalizationTest extends CommandOpMode {
         Globals.USING_IMU = true;
 
         robot.init(hardwareMap, telemetry);
-        SwerveDrivetrain.imuOffset = 0;
+//        SwerveDrivetrain.imuOffset = 0;
         localizer = new TwoWheelLocalizer(robot);
 
         robot.enabled = true;
@@ -37,14 +37,14 @@ public class LocalizationTest extends CommandOpMode {
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
-        robot.startIMUThread(this);
-        localizer.setPoseEstimate(new Pose2d(0, 0, 0));
+//        localizer.setPoseEstimate(new Pose2d(0, 0, 0));
     }
 
     @Override
     public void run() {
         if (timer == null) {
             timer = new ElapsedTime();
+            robot.startIMUThread(this);
             robot.reset();
             localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         }

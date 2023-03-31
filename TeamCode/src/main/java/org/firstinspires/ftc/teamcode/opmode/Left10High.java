@@ -82,8 +82,8 @@ public class Left10High extends LinearOpMode {
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         CommandScheduler.getInstance().schedule(
-                new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(0, 0, Math.PI/2), 25000, 25000, hardwareMap.voltageSensor.iterator().next().getVoltage())
+                new SequentialCommandGroup( // 0.22899
+                        new PositionCommand(drivetrain, localizer, new Pose(0,60.35, 0.24888), 10000, 10000, hardwareMap.voltageSensor.iterator().next().getVoltage())
 //                        new PositionCommand(drivetrain, localizer, new Pose(24, -24, 0), 5000, 5000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
 //                        new PositionCommand(drivetrain, localizer, new Pose(0, -24, 0), 5000, 5000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
 //                        new PositionCommand(drivetrain, localizer, new Pose(0, 0, 0), 5000, 5000, hardwareMap.voltageSensor.iterator().next().getVoltage())
@@ -131,9 +131,21 @@ public class Left10High extends LinearOpMode {
             telemetry.addData("poseY", currentPose.y);
             telemetry.addData("heading", currentPose.heading);
             telemetry.addLine("TARGET POSE");
-            telemetry.addData("poseX", Globals.yummypose.x);
-            telemetry.addData("poseY", Globals.yummypose.y);
-            telemetry.addData("heading", Globals.yummypose.heading);
+            telemetry.addData("poseX", Globals.targetPose.x);
+            telemetry.addData("poseY", Globals.targetPose.y);
+            telemetry.addData("heading", Globals.targetPose.heading);
+            telemetry.addLine("ERROR");
+            telemetry.addData("errorx", Globals.error.x);
+            telemetry.addData("errory", Globals.error.y);
+            telemetry.addData("heading", Math.toDegrees(Globals.error.heading));
+            telemetry.addData("Power:", Globals.yummypose);
+            telemetry.addLine("HYPOT");
+            telemetry.addData("hypotXY", Math.hypot(Globals.error.x, Globals.error.y));
+            telemetry.addData("reached", Globals.reached);
+            if (Globals.reached) {
+                telemetry.addData("TIME TO GOAL", timer.milliseconds());
+            }
+//            telemetry.addData("poseX", Globals.)
             double loop = System.nanoTime();
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
             loopTime = loop;

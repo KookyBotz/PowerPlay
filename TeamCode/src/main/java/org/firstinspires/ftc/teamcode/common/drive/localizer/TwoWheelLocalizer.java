@@ -72,7 +72,7 @@ public class TwoWheelLocalizer extends TwoTrackingWheelLocalizer implements Loca
     @Override
     public Pose getPos() {
         Pose2d pose = getPoseEstimate();
-        return new Pose(pose.getX(), pose.getY(), pose.getHeading());
+        return new Pose(pose.getX(), -pose.getY(), pose.getHeading());
     }
 
     @Override
