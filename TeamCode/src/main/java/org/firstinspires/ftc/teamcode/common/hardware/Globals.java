@@ -62,16 +62,16 @@ public class Globals {
 
     public static double INTAKE_PIVOT_LOW = 0.355;
     public static double INTAKE_PIVOT_FLAT = 0.5;
-    public static double INTAKE_PIVOT_PRE_TRANSFER = 0.595;
-    public static double INTAKE_PIVOT_TRANSFER = 0.63;
+    public static double INTAKE_PIVOT_PRE_TRANSFER = 0.62;
+    public static double INTAKE_PIVOT_TRANSFER = 0.592;
     public static double INTAKE_PIVOT_PICKUP = 0.5;
 
     public static double INTAKE_TURRET_OUTWARDS = 0.728;
     public static double INTAKE_TURRET_INTERMEDIATE = 0.449;
     public static double INTAKE_TURRET_INWARDS = 0.17;
 
-    public static double INTAKE_FOURBAR_PRE_TRANSFER = 0.391;
-    public static double INTAKE_FOURBAR_TRANSFER = 0.469;
+    public static double INTAKE_FOURBAR_PRE_TRANSFER = 0.426;
+    public static double INTAKE_FOURBAR_TRANSFER = 0.472;
     public static double INTAKE_FOURBAR_INTERMEDIATE = 0.385;
     public static double INTAKE_FOURBAR_INTAKE = 0.06;
     public static double INTAKE_FOURBAR_LOW = 0.359;
@@ -84,7 +84,7 @@ public class Globals {
     public static double INTAKE_MANUAL_FACTOR = 100;
     public static double INTAKE_TURRET_FACTOR = 0.007;
     public static double INTAKE_FOURBAR_FACTOR = -0.005;
-    public static double INTAKE_PIVOT_FACTOR = 0.03;
+    public static double INTAKE_PIVOT_FACTOR = 0.0025;
     public static double INTAKE_MIN = 0;
     public static double INTAKE_MAX = 577;
 

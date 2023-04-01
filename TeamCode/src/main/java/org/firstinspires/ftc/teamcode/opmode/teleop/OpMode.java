@@ -257,8 +257,7 @@ public class OpMode extends CommandOpMode {
         boolean leftBumper2 = gamepad2.left_bumper;
         if (leftBumper2 && !lastLeftBumper2) {
             CommandScheduler.getInstance().schedule(
-                    new IntermediateStateCommand(intake),
-                    new SequentialCommandGroup()
+                    new IntermediateStateCommand(intake)
             );
         }
         lastLeftBumper2 = leftBumper2;
