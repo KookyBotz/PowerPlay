@@ -59,6 +59,7 @@ public class Globals {
 
     public static double INTAKE_CLAW_OPEN = 0.5;
     public static double INTAKE_CLAW_CLOSED = 0.57;
+    public static double INTAKE_CLAW_AUTO = 0.585;
 
     public static double INTAKE_PIVOT_LOW = 0.355;
     public static double INTAKE_PIVOT_FLAT = 0.5;
@@ -70,7 +71,7 @@ public class Globals {
     public static double INTAKE_TURRET_INTERMEDIATE = 0.449;
     public static double INTAKE_TURRET_INWARDS = 0.17;
 
-    public static double INTAKE_FOURBAR_PRE_TRANSFER = 0.426;
+    public static double INTAKE_FOURBAR_PRE_TRANSFER = 0.41;
     public static double INTAKE_FOURBAR_TRANSFER = 0.472;
     public static double INTAKE_FOURBAR_INTERMEDIATE = 0.385;
     public static double INTAKE_FOURBAR_INTAKE = 0.06;

@@ -26,20 +26,24 @@ public class CycleCommand extends ParallelCommandGroup {
                         // NOTE - IsWithinTolerance, checks for when it has 20 ticks or less of error. Can be adjusted
                         // via the Globals.INTAKE_ERROR_TOLERANCE variable in FTCDash.
                         new WaitUntilCommand(() -> lift.liftState == LiftSubsystem.LiftState.RETRACTED && intake.isWithinTolerance()),
-                        new ClawCommand(intake, IntakeSubsystem.ClawState.CLOSED),
+                        new ClawCommand(intake, IntakeSubsystem.ClawState.AUTO),
                         new WaitCommand(Globals.INTAKE_CLAW_CLOSE_TIME + 50),
-                        new InstantCommand(() -> intake.setFourbar(grabPosition.fourbarPos + 0.0975)),
+//                        new InstantCommand(() -> intake.setFourbar(grabPosition.fourbarPos + 0.0975)),
+                        new FourbarCommand(intake, IntakeSubsystem.FourbarState.PRE_TRANSFER),
+//                        new WaitCommand(50),
                         new InstantCommand(() -> intake.setPivot(grabPosition.pivotPos)),
-                        new WaitCommand(100),
-                        new AutoTransferCommand(intake, lift)
+                        new WaitCommand(50),
+                        new AutoTransferCommand(intake, lift, grabPosition)
                 ),
                 new SequentialCommandGroup(
                         new LiftCommand(lift, liftState),
-                        new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED),
+                        new WaitCommand(300),
+                        new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE),
                         new WaitUntilCommand(lift::isWithinTolerance),
-                        new LatchCommand(lift, LiftSubsystem.LatchState.UNLATCHED),
-                        new WaitCommand(75),
-                        new LiftCommand(lift, LiftSubsystem.LiftState.RETRACTED)
+                        new WaitCommand(200),
+                        new LiftCommand(lift, LiftSubsystem.LiftState.RETRACTED),
+                        new WaitCommand(5),
+                        new LatchCommand(lift, LiftSubsystem.LatchState.UNLATCHED)
                 )
         );
     }

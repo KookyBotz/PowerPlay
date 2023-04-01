@@ -18,30 +18,23 @@ import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 public class TransferCommand extends SequentialCommandGroup {
     public TransferCommand(IntakeSubsystem intake, LiftSubsystem lift) {
         super(
+                new LatchCommand(lift, LiftSubsystem.LatchState.UNLATCHED),
                 new ConditionalCommand(
                         new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.CLOSED)),
                         new WaitCommand(Globals.INTAKE_CLAW_CLOSE_TIME),
                         () -> intake.clawState.equals(IntakeSubsystem.ClawState.OPEN)
                 ),
-                new LatchCommand(lift, LiftSubsystem.LatchState.UNLATCHED),
-                new InstantCommand(() -> intake.setTargetPosition(-10)),
-
+                new TurretCommand(intake, IntakeSubsystem.TurretState.INWARDS),
+                new PivotCommand(intake, IntakeSubsystem.PivotState.PRE_TRANSFER),
                 new ConditionalCommand(
-                        new SequentialCommandGroup(
-                                new PivotCommand(intake, IntakeSubsystem.PivotState.PRE_TRANSFER),
-                                new FourbarCommand(intake, IntakeSubsystem.FourbarState.PRE_TRANSFER),
-                                new WaitCommand(100),
-                                new TurretCommand(intake, IntakeSubsystem.TurretState.INWARDS)
-                        ),
-                        new SequentialCommandGroup(
-                                new TurretCommand(intake, IntakeSubsystem.TurretState.INWARDS),
-                                new PivotCommand(intake, IntakeSubsystem.PivotState.PRE_TRANSFER),
-                                new WaitCommand(150),
-                                new FourbarCommand(intake, IntakeSubsystem.FourbarState.PRE_TRANSFER)
-                        ),
-                        () -> intake.fourbarState == IntakeSubsystem.FourbarState.INTAKE
+                        new WaitCommand(150),
+                        new WaitCommand(0),
+                        () -> intake.turretState == IntakeSubsystem.TurretState.INTERMEDIATE
                 ),
+                new FourbarCommand(intake, IntakeSubsystem.FourbarState.PRE_TRANSFER),
+                new InstantCommand(() -> intake.setTargetPosition(-10)),
                 new WaitUntilCommand(() -> intake.isWithinTolerance() && intake.fourbarMotionState.v == 0),
+
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.TRANSFER),
                 new PivotCommand(intake, IntakeSubsystem.PivotState.TRANSFER),
                 new WaitUntilCommand(() -> intake.fourbarMotionState.v == 0),

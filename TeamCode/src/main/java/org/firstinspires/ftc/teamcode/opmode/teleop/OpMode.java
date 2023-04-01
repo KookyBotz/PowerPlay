@@ -17,6 +17,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.SwerveXCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.CycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.DetectionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
@@ -334,21 +335,25 @@ public class OpMode extends CommandOpMode {
         boolean dpadRight2 = gamepad2.dpad_right;
         if (dpadRight2 && !lastDpadRight2) {
             schedule(
-                    new SequentialCommandGroup(
-                            new CycleCommand(lift, intake, new GrabPosition(536, 0, 0.202, 0.37, 750), LiftSubsystem.LiftState.HIGH),
-                            new CycleCommand(lift, intake, new GrabPosition(523, 0, 0.164, 0.37, 750), LiftSubsystem.LiftState.HIGH),
-                            new CycleCommand(lift, intake, new GrabPosition(514, 0, 0.131, 0.37, 750), LiftSubsystem.LiftState.HIGH),
-                            new CycleCommand(lift, intake, new GrabPosition(517, 0, 0.1, 0.37, 750), LiftSubsystem.LiftState.HIGH),
-                            new CycleCommand(lift, intake, new GrabPosition(522, 0, 0.06, 0.37, 750), LiftSubsystem.LiftState.HIGH),
+                    new ParallelCommandGroup(
                             new SequentialCommandGroup(
-                                    new LiftCommand(lift, LiftSubsystem.LiftState.HIGH)
-                                            .alongWith(new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED)),
-                                    new WaitUntilCommand(lift::isWithinTolerance),
-                                    new LatchCommand(lift, LiftSubsystem.LatchState.UNLATCHED),
-                                    new WaitCommand(75),
-                                    new LiftCommand(lift, LiftSubsystem.LiftState.RETRACTED)
-                            )
+                                    new CycleCommand(lift, intake, new GrabPosition(551, 0, 0.172, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                    new CycleCommand(lift, intake, new GrabPosition(538, 0, 0.139, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                    new CycleCommand(lift, intake, new GrabPosition(529, 0, 0.106, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                    new CycleCommand(lift, intake, new GrabPosition(527, 0, 0.075, 0.37, 100), LiftSubsystem.LiftState.HIGH),
+                                    new CycleCommand(lift, intake, new GrabPosition(537, 0, 0.045, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                    new SequentialCommandGroup(
+                                            new LiftCommand(lift, LiftSubsystem.LiftState.HIGH)
+                                                    .alongWith(new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED)),
+                                            new WaitUntilCommand(lift::isWithinTolerance),
+                                            new LatchCommand(lift, LiftSubsystem.LatchState.UNLATCHED),
+                                            new WaitCommand(75),
+                                            new LiftCommand(lift, LiftSubsystem.LiftState.RETRACTED)
+                                    )
+                            ),
+                            new SwerveXCommand(drivetrain)
                     )
+
             );
         }
         lastDpadRight2 = dpadRight2;

@@ -13,10 +13,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.CycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveModule;
+import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.drive.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
@@ -78,6 +80,11 @@ public class Left10HighOptimizedPath extends LinearOpMode {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         new PositionCommand(drivetrain, localizer, new Pose(0, 60.35, 0.25), 250, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new CycleCommand(lift, intake, new GrabPosition(536, 0, 0.192, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                        new CycleCommand(lift, intake, new GrabPosition(523, 0, 0.154, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                        new CycleCommand(lift, intake, new GrabPosition(514, 0, 0.121, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                        new CycleCommand(lift, intake, new GrabPosition(517, 0, 0.08, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                        new CycleCommand(lift, intake, new GrabPosition(522, 0, 0.04, 0.37, 0), LiftSubsystem.LiftState.HIGH),
                         new PositionCommand(drivetrain, localizer, new Pose(-17, 49.5, Math.PI / 2), 0, 750, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         // we just need to get slightly close before we can run the next path, dont actually care where
                         new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 7),

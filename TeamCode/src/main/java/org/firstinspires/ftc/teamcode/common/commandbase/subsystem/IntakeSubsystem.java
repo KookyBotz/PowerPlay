@@ -92,6 +92,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public enum ClawState {
         OPEN,
         CLOSED,
+        AUTO
     }
 
     public enum FourbarState {
@@ -184,6 +185,9 @@ public class IntakeSubsystem extends SubsystemBase {
                 break;
             case CLOSED:
                 robot.claw.setPosition(INTAKE_CLAW_CLOSED);
+                break;
+            case AUTO:
+                robot.claw.setPosition(INTAKE_CLAW_AUTO);
                 break;
         }
     }
