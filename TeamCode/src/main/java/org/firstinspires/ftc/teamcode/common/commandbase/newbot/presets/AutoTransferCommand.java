@@ -14,10 +14,12 @@ import org.firstinspires.ftc.teamcode.common.commandbase.newbot.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
+import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 
 public class AutoTransferCommand extends SequentialCommandGroup {
     public AutoTransferCommand(IntakeSubsystem intake, LiftSubsystem lift, GrabPosition position) {
         super(
+                new InstantCommand(() -> Globals.MANUAL_ENABLED = false),
                 new InstantCommand(() -> intake.setTargetPosition(0)),
                 new PivotCommand(intake, IntakeSubsystem.PivotState.PRE_TRANSFER),
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.PRE_TRANSFER),
@@ -32,7 +34,8 @@ public class AutoTransferCommand extends SequentialCommandGroup {
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.INTERMEDIATE),
                 new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT),
                 new WaitCommand(50),
-                new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS)
+                new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
+                new InstantCommand(() -> Globals.MANUAL_ENABLED = true)
         );
     }
 }

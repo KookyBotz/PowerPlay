@@ -111,6 +111,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public enum PivotState {
         FLAT,
+        FLAT_AUTO,
         LOW,
         FALLEN,
         TRANSFER,
@@ -144,6 +145,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public void update(PivotState state) {
         pivotState = state;
         switch (state) {
+            case FLAT_AUTO:
+                robot.pivot.setPosition(INTAKE_PIVOT_FLAT_AUTO + pivotOffset);
             case FLAT:
                 robot.pivot.setPosition(INTAKE_PIVOT_FLAT + pivotOffset);
                 break;
@@ -289,10 +292,10 @@ public class IntakeSubsystem extends SubsystemBase {
             setFourbar(fourbarMotionState.x);
         }
 
-        intakeMotionState = intakeProfile.calculate(intakeTimer.time());
-        if (intakeMotionState.v != 0) {
-            setTargetPosition((int) intakeMotionState.x);
-        }
+//        intakeMotionState = intakeProfile.calculate(intakeTimer.time());
+//        if (intakeMotionState.v != 0) {
+//            setTargetPosition((int) intakeMotionState.x);
+//        }
 
         withinTolerance = Math.abs(getPos() - getTargetPosition()) <= INTAKE_ERROR_TOLERANCE;
 
@@ -336,11 +339,11 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setFourbar(double pos) {
-        if (pos <= 0.066) {
-            pos += 1.0399e-5 * (getPos());
-        }
+//        if (pos <= 0.066) {
+//            pos += 1.0399e-5 * (getPos());
+//        }
         robot.fourbarLeft.setPosition(pos);
-        robot.fourbarRight.setPosition(1 - pos);
+        robot.fourbarRight.setPosition(1 - pos + 0.01);
     }
 
     public void retractReset() {
@@ -408,7 +411,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setSlideFactor(double factor) {
         double slideAddition = INTAKE_MANUAL_FACTOR * factor;
         double newPosition = intakePosition + slideAddition;
-        if (intakeMotionState.v == 0 && newPosition >= INTAKE_MIN - 10 && newPosition <= INTAKE_MAX) {
+        if (intakeMotionState.v == 0 && newPosition >= INTAKE_MIN - 20 && newPosition <= INTAKE_MAX) {
             targetPosition = newPosition;
         }
     }

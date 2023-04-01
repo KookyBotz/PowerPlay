@@ -63,6 +63,7 @@ public class Globals {
 
     public static double INTAKE_PIVOT_LOW = 0.355;
     public static double INTAKE_PIVOT_FLAT = 0.5125;
+    public static double INTAKE_PIVOT_FLAT_AUTO = 0.52;
     public static double INTAKE_PIVOT_PRE_TRANSFER = 0.62;
     public static double INTAKE_PIVOT_TRANSFER = 0.592;
     public static double INTAKE_PIVOT_PICKUP = 0.5;
@@ -73,10 +74,10 @@ public class Globals {
 
     public static double INTAKE_FOURBAR_PRE_TRANSFER = 0.41;
     public static double INTAKE_FOURBAR_TRANSFER = 0.472;
-    public static double INTAKE_FOURBAR_INTERMEDIATE = 0.35;
+    public static double INTAKE_FOURBAR_INTERMEDIATE = 0.33;
     public static double INTAKE_FOURBAR_INTAKE = 0.04;
     public static double INTAKE_FOURBAR_LOW = 0.359;
-    public static double INTAKE_FOURBAR_GROUND = 0.075;
+    public static double INTAKE_FOURBAR_GROUND = 0.06;
 
     public static long INTAKE_CLAW_CLOSE_TIME = 50; // ms
 
@@ -95,6 +96,7 @@ public class Globals {
     public static Side SIDE = Side.LEFT;
     public static boolean AUTO = false;
     public static boolean USING_IMU = true;
+    public static boolean MANUAL_ENABLED = true;
 
     public static int wait1 = 100;
     public static int wait2 = 300;

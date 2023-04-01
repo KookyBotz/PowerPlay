@@ -21,7 +21,7 @@ public class AutoCycleCommand extends ParallelCommandGroup {
                         // Extend Outwards
                         new InstantCommand(() -> intake.setTargetPosition(grabPosition.intakeTargetPosition)),
                         new InstantCommand(() -> intake.setFourbarTargetPosition(grabPosition.fourbarPos)),
-                        new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT),
+                        new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT_AUTO),
                         new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
 
                         // Wait until the lift is retracting and the intake is within tolerance

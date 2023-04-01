@@ -134,24 +134,26 @@ public class OpMode extends CommandOpMode {
         /*
          * Robot Centric to Field Centric
          */
-        boolean leftBumper1 = gamepad1.left_bumper;
-        if (leftBumper1 && !lastLeftBumper1) {
-            Globals.USING_IMU = !Globals.USING_IMU;
-        }
-        lastLeftBumper1 = leftBumper1;
+//        boolean leftBumper1 = gamepad1.left_bumper;
+//        if (leftBumper1 && !lastLeftBumper1) {
+//            Globals.USING_IMU = !Globals.USING_IMU;
+//        }
+//        lastLeftBumper1 = leftBumper1;
 
-        boolean dpadLeft1 = gamepad1.dpad_left;
-        if (dpadLeft1 && !lastDpadLeft1 && Globals.USING_IMU) {
-            SwerveDrivetrain.imuOffset = robot.getAngle() + Math.PI;
-        }
-        lastDpadLeft1 = dpadLeft1;
+//        boolean dpadLeft1 = gamepad1.dpad_left;
+//        if (dpadLeft1 && !lastDpadLeft1 && Globals.USING_IMU) {
+//            SwerveDrivetrain.imuOffset = robot.getAngle() + Math.PI;
+//        }
+//        lastDpadLeft1 = dpadLeft1;
 
+//        double extended = intake.getPos() > 200 || lift.getPos() > 75 ? 0.5 : 1;
+        double extended = (gamepad1.dpad_left ? 1 : 0.5);
         SwerveDrivetrain.maintainHeading = (Math.abs(gamepad1.left_stick_x) < 0.02 & Math.abs(gamepad1.left_stick_y) < 0.02 & Math.abs(gamepad1.right_stick_x) < 0.02);
         double rotationAmount = (Globals.USING_IMU) ? robot.getAngle() - SwerveDrivetrain.imuOffset : 0;
         Pose drive = new Pose(
                 new Point((Math.pow(Math.abs(gamepad1.left_stick_y) > 0.01 ? gamepad1.left_stick_y : 0, 3)),
                         (-Math.pow(-(Math.abs(gamepad1.left_stick_x) > 0.01 ? gamepad1.left_stick_x : 0), 3))).rotate(rotationAmount),
-                -(Math.pow(-gamepad1.right_stick_x, 3))
+                -(Math.pow(-gamepad1.right_stick_x, 3)) * extended
         );
 
         /*
@@ -280,7 +282,7 @@ public class OpMode extends CommandOpMode {
         }
 
         double leftY = gamepad2.left_stick_y;
-        if (Math.abs(leftY) > 0.1) {
+        if (Math.abs(leftY) > 0.1 && Globals.MANUAL_ENABLED) {
             intake.setSlideFactor(joystickScalar(-leftY, 0.1));
         }
 
@@ -341,13 +343,13 @@ public class OpMode extends CommandOpMode {
 //        telemetry.addData("liftPow", lift.getPower());
 //        telemetry.addData("liftPos", lift.getPos());
 //        telemetry.addData("liftTarget", lift.getTargetPos());
-telemetry.addData("fourbarPos", robot.fourbarLeft.getPosition());
-////        telemetry.addData("intakePow", intake.getPower());
-        telemetry.addData("intakePos", intake.getPos());
-        telemetry.addData("intakeTarget", intake.getTargetPosition());
-        telemetry.addData("pivot", robot.pivot.getPosition());
-        telemetry.addData("velocity", robot.extension.getVelocity());
-        telemetry.addData("velocityencoder", robot.intakeEncoder.getRawVelocity());
+//telemetry.addData("fourbarPos", robot.fourbarLeft.getPosition());
+//////        telemetry.addData("intakePow", intake.getPower());
+//        telemetry.addData("intakePos", intake.getPos());
+//        telemetry.addData("intakeTarget", intake.getTargetPosition());
+//        telemetry.addData("pivot", robot.pivot.getPosition());
+//        telemetry.addData("velocity", robot.extension.getVelocity());
+//        telemetry.addData("velocityencoder", robot.intakeEncoder.getRawVelocity());
 //        telemetry.addData("intakeCurrent", robot.extension.motorEx.getCurrent(CurrentUnit.AMPS));
 //        telemetry.addData("hasCone", intake.hasCone());
         loopTime = loop;
