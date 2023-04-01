@@ -343,6 +343,12 @@ public class IntakeSubsystem extends SubsystemBase {
         robot.fourbarRight.setPosition(1 - pos);
     }
 
+    public void retractReset() {
+        if (isWithinTolerance() && Math.abs(robot.intakeEncoder.getRawVelocity()) == 0 && getTargetPosition() <= 0) {
+            robot.intakeEncoder.reset();
+        }
+    }
+
     public void setPivot(double pos){
         robot.pivot.setPosition(pos);
     }

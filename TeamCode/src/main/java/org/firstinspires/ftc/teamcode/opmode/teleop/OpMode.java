@@ -203,12 +203,17 @@ public class OpMode extends CommandOpMode {
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> intake.update(ClawState.OPEN)),
                                 new WaitCommand(300),
+                                new InstantCommand(() -> intake.setTargetPosition(-10)),
                                 new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
                                 new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
                                 new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS))
                         )
                 );
             }
+        }
+
+        if (gamepad1.x) {
+            robot.intakeEncoder.reset();
         }
 
         /*
@@ -271,9 +276,6 @@ public class OpMode extends CommandOpMode {
         boolean XButton2 = gamepad2.x;
         boolean YButton2 = gamepad2.y;
         if (AButton2 && !lastAButton2) {
-            if (intake.hasCone()) {
-
-            }
             CommandScheduler.getInstance().schedule(new LowScoreCommand(intake));
         } else if (BButton2 && !lastBButton2) {
             CommandScheduler.getInstance().schedule(new GroundScoreCommand(intake));
@@ -337,11 +339,11 @@ public class OpMode extends CommandOpMode {
             schedule(
                     new ParallelCommandGroup(
                             new SequentialCommandGroup(
-                                    new CycleCommand(lift, intake, new GrabPosition(551, 0, 0.172, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                    new CycleCommand(lift, intake, new GrabPosition(538, 0, 0.139, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                    new CycleCommand(lift, intake, new GrabPosition(529, 0, 0.106, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                    new CycleCommand(lift, intake, new GrabPosition(527, 0, 0.075, 0.37, 100), LiftSubsystem.LiftState.HIGH),
-                                    new CycleCommand(lift, intake, new GrabPosition(537, 0, 0.045, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                    new CycleCommand(lift, intake, new GrabPosition(556, 0, 0.172, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                    new CycleCommand(lift, intake, new GrabPosition(542, 0, 0.139, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                    new CycleCommand(lift, intake, new GrabPosition(533, 0, 0.106, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                    new CycleCommand(lift, intake, new GrabPosition(527, 0, 0.075, 0.37, -1), LiftSubsystem.LiftState.HIGH),
+                                    new CycleCommand(lift, intake, new GrabPosition(530, 0, 0.035, 0.37, -1), LiftSubsystem.LiftState.HIGH),
                                     new SequentialCommandGroup(
                                             new LiftCommand(lift, LiftSubsystem.LiftState.HIGH)
                                                     .alongWith(new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED)),
@@ -373,6 +375,8 @@ telemetry.addData("fourbarPos", robot.fourbarLeft.getPosition());
         telemetry.addData("intakePos", intake.getPos());
         telemetry.addData("intakeTarget", intake.getTargetPosition());
         telemetry.addData("pivot", robot.pivot.getPosition());
+        telemetry.addData("velocity", robot.extension.getVelocity());
+        telemetry.addData("velocityencoder", robot.intakeEncoder.getRawVelocity());
 //        telemetry.addData("intakeCurrent", robot.extension.motorEx.getCurrent(CurrentUnit.AMPS));
 //        telemetry.addData("hasCone", intake.hasCone());
         loopTime = loop;
