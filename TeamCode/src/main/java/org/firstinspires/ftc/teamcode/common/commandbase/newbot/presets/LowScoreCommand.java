@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsyst
 public class LowScoreCommand extends SequentialCommandGroup {
     public LowScoreCommand(IntakeSubsystem intake) {
         super(
-                new DetectionCommand(intake)
-                        .alongWith(new InstantCommand(() -> intake.setTargetPosition(0))),
+                new DetectionCommand(intake),
+                new InstantCommand(() -> intake.setTargetPosition(0)),
                 new PivotCommand(intake, IntakeSubsystem.PivotState.LOW),
                 new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.LOW)

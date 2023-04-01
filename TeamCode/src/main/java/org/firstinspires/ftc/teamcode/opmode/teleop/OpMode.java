@@ -102,9 +102,9 @@ public class OpMode extends CommandOpMode {
             timer = new ElapsedTime();
             try{
                 robot.reset();
-                robot.startIMUThread(this);
+//                robot.startIMUThread(this);
             } catch (Exception e) {}
-            SwerveDrivetrain.imuOffset = -Math.PI / 2;
+//            SwerveDrivetrain.imuOffset = -Math.PI / 2;
         }
 
         robot.read(drivetrain, intake, lift);

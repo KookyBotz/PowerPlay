@@ -7,7 +7,6 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.AutoTransferCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.TransferCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
@@ -32,14 +31,11 @@ public class CycleCommand extends ParallelCommandGroup {
                         new InstantCommand(() -> intake.setFourbar(grabPosition.fourbarPos + 0.0975)),
                         new InstantCommand(() -> intake.setPivot(grabPosition.pivotPos)),
                         new WaitCommand(100),
-//                        new InstantCommand(() -> intake.setPivot(grabPosition.pivotPos))
-//                                .alongWith(new FourbarCommand(intake, IntakeSubsystem.FourbarState.INTERMEDIATE)),
-//                        new WaitCommand(grabPosition.upDelay),
                         new AutoTransferCommand(intake, lift)
                 ),
                 new SequentialCommandGroup(
-                        new LiftCommand(lift, liftState)
-                                .alongWith(new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED)),
+                        new LiftCommand(lift, liftState),
+                        new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED),
                         new WaitUntilCommand(lift::isWithinTolerance),
                         new LatchCommand(lift, LiftSubsystem.LatchState.UNLATCHED),
                         new WaitCommand(75),
