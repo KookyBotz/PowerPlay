@@ -5,7 +5,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -16,10 +15,8 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.SwerveXCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.newbot.CycleCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.newbot.DetectionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.GroundScoreCommand;
@@ -127,7 +124,7 @@ public class OpMode extends CommandOpMode {
         boolean gamepadUp1 = gamepad1.dpad_up;
         boolean gamepadDown1 = gamepad1.dpad_down;
         if (gamepadUp1 && !lastGamepadUp1) {
-            lift.update(LiftSubsystem.LatchState.LATCHED);
+            lift.update(LiftSubsystem.LatchState.INTERMEDIATE);
         } else if (gamepadDown1 && !lastGamepadDown1) {
             lift.update(LiftSubsystem.LatchState.UNLATCHED);
         }
@@ -161,32 +158,6 @@ public class OpMode extends CommandOpMode {
          * Depositing - G1
          */
         boolean rightBumper1 = gamepad1.right_bumper;
-//        if (rightBumper1 && !lastRightBumper1) {
-//            if (intake.fourbarState.equals(IntakeSubsystem.FourbarState.LOW) ||
-//                intake.fourbarState.equals(IntakeSubsystem.FourbarState.GROUND)) {
-//                // deposit cone, and go to intermediate position with intake turret
-//                CommandScheduler.getInstance().schedule(
-//                        new SequentialCommandGroup(
-//                                new InstantCommand(() -> intake.update(ClawState.OPEN)),
-//                                new WaitCommand(300),
-//                                new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
-//                                new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
-//                                new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS))
-//                        )
-//                );
-//            } else if (lift.getPos() > Globals.LIFT_EXTENDED_TOLERANCE && lift.latchState.equals(LiftSubsystem.LatchState.INTERMEDIATE)) {
-//                // TODO retract slides, open latch
-//                CommandScheduler.getInstance().schedule(
-//                        new SequentialCommandGroup(
-//                                new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
-//                                new WaitCommand(75),
-//                                new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED))
-//                        )
-//                );
-//            }
-//        }
-//        lastRightBumper1 = rightBumper1;
-
         if (rightBumper1) {
             if (lift.getPos() > Globals.LIFT_EXTENDED_TOLERANCE && lift.latchState == LiftSubsystem.LatchState.INTERMEDIATE && lift.isWithinTolerance()) {
                 CommandScheduler.getInstance().schedule(
@@ -339,11 +310,11 @@ public class OpMode extends CommandOpMode {
             schedule(
                     new ParallelCommandGroup(
                             new SequentialCommandGroup(
-                                    new CycleCommand(lift, intake, new GrabPosition(556, 0, 0.172, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                    new CycleCommand(lift, intake, new GrabPosition(542, 0, 0.139, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                    new CycleCommand(lift, intake, new GrabPosition(533, 0, 0.106, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                    new CycleCommand(lift, intake, new GrabPosition(527, 0, 0.075, 0.37, -1), LiftSubsystem.LiftState.HIGH),
-                                    new CycleCommand(lift, intake, new GrabPosition(530, 0, 0.035, 0.37, -1), LiftSubsystem.LiftState.HIGH),
+                                    new AutoCycleCommand(lift, intake, new GrabPosition(560, 0, 0.172, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                    new AutoCycleCommand(lift, intake, new GrabPosition(542, 0, 0.139, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                    new AutoCycleCommand(lift, intake, new GrabPosition(533, 0, 0.106, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                    new AutoCycleCommand(lift, intake, new GrabPosition(532, 0, 0.075, 0.37, 20), LiftSubsystem.LiftState.HIGH),
+                                    new AutoCycleCommand(lift, intake, new GrabPosition(535, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH),
                                     new SequentialCommandGroup(
                                             new LiftCommand(lift, LiftSubsystem.LiftState.HIGH)
                                                     .alongWith(new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED)),

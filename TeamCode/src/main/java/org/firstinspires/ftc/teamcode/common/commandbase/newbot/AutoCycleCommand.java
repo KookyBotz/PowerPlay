@@ -14,8 +14,8 @@ import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem
 import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 
-public class CycleCommand extends ParallelCommandGroup {
-    public CycleCommand(LiftSubsystem lift, IntakeSubsystem intake, GrabPosition grabPosition, LiftSubsystem.LiftState liftState) {
+public class AutoCycleCommand extends ParallelCommandGroup {
+    public AutoCycleCommand(LiftSubsystem lift, IntakeSubsystem intake, GrabPosition grabPosition, LiftSubsystem.LiftState liftState) {
         super(
                 new SequentialCommandGroup(
                         // Extend Outwards
@@ -35,21 +35,16 @@ public class CycleCommand extends ParallelCommandGroup {
 //                        new WaitCommand(50),
                         new InstantCommand(() -> intake.setPivot(grabPosition.pivotPos)),
                         new WaitCommand(50),
-                        new ConditionalCommand(
-                                new TransferCommand(intake, lift),
-                                new AutoTransferCommand(intake, lift, grabPosition)
-                                ,
-                                () -> grabPosition.upDelay == -1
-                        )
+                        new AutoTransferCommand(intake, lift, grabPosition)
                 ),
                 new SequentialCommandGroup(
                         new LiftCommand(lift, liftState),
-                        new WaitCommand(300),
+                        new WaitCommand(150),
                         new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE),
                         new WaitUntilCommand(lift::isWithinTolerance),
-                        new WaitCommand(200),
-                        new LiftCommand(lift, LiftSubsystem.LiftState.RETRACTED),
-                        new LatchCommand(lift, LiftSubsystem.LatchState.UNLATCHED)
+                        new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
+                        new WaitCommand(75),
+                        new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED))
                 )
         );
     }
