@@ -1,39 +1,31 @@
-package org.firstinspires.ftc.teamcode.opmode;
+package org.firstinspires.ftc.teamcode.opmode.auto;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.auto.SwerveXCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.newbot.CycleCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveModule;
-import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.drive.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 
-@Autonomous(name = "1+10 Left High")
+@Autonomous(name = "Turn")
 @Config
-public class Left10High extends LinearOpMode {
+public class HeadingTest extends LinearOpMode {
 
     private RobotHardware robot = RobotHardware.getInstance();
     private SwerveDrivetrain drivetrain;
@@ -47,6 +39,7 @@ public class Left10High extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         CommandScheduler.getInstance().reset();
         Globals.SIDE = Globals.Side.LEFT;
         Globals.AUTO = true;
@@ -67,7 +60,7 @@ public class Left10High extends LinearOpMode {
         while (!isStarted()) {
             robot.read(drivetrain, intake, lift);
             for (SwerveModule module : drivetrain.modules) {
-                module.setTargetRotation(Math.PI / 2);
+                module.setTargetRotation(0);
             }
             drivetrain.updateModules();
 
@@ -82,34 +75,8 @@ public class Left10High extends LinearOpMode {
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         CommandScheduler.getInstance().schedule(
-                new SequentialCommandGroup( // 0.22899
-                        new PositionCommand(drivetrain, localizer, new Pose(0,60.35, 0.24888), 10000, 10000, hardwareMap.voltageSensor.iterator().next().getVoltage())
-//                        new PositionCommand(drivetrain, localizer, new Pose(24, -24, 0), 5000, 5000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-//                        new PositionCommand(drivetrain, localizer, new Pose(0, -24, 0), 5000, 5000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-//                        new PositionCommand(drivetrain, localizer, new Pose(0, 0, 0), 5000, 5000, hardwareMap.voltageSensor.iterator().next().getVoltage())
-//                        new ParallelCommandGroup(
-//                                new SequentialCommandGroup(
-//                                        new PositionCommand(drivetrain, localizer, new Pose(-5, 5, 0.22899), 500, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-//                                        new SwerveXCommand(drivetrain)
-//                                ),
-//                                new WaitCommand(0)
-//
-////                                new WaitCommand(2500).andThen(new SequentialCommandGroup(
-////                                        new CycleCommand(lift, intake, new GrabPosition(536, 0, 0.202, 0.37, 750), LiftSubsystem.LiftState.HIGH),
-////                                        new CycleCommand(lift, intake, new GrabPosition(523, 0, 0.164, 0.37, 750), LiftSubsystem.LiftState.HIGH),
-////                                        new CycleCommand(lift, intake, new GrabPosition(514, 0, 0.131, 0.37, 750), LiftSubsystem.LiftState.HIGH),
-////                                        new CycleCommand(lift, intake, new GrabPosition(517, 0, 0.1, 0.37, 750), LiftSubsystem.LiftState.HIGH),
-////                                        new CycleCommand(lift, intake, new GrabPosition(522, 0, 0.06, 0.37, 750), LiftSubsystem.LiftState.HIGH)
-//////                                        new SequentialCommandGroup(
-//////                                                new LiftCommand(lift, LiftSubsystem.LiftState.HIGH)
-//////                                                        .alongWith(new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED)),
-//////                                                new WaitUntilCommand(lift::isWithinTolerance),
-//////                                                new LatchCommand(lift, LiftSubsystem.LatchState.UNLATCHED),
-//////                                                new WaitCommand(75),
-//////                                                new LiftCommand(lift, LiftSubsystem.LiftState.RETRACTED)
-////                                ))
-//                        ),
-//                        new WaitCommand(0)
+                new SequentialCommandGroup(
+                        new PositionCommand(drivetrain, localizer, new Pose(48,0, 0), 100000, 100000, hardwareMap.voltageSensor.iterator().next().getVoltage())
                 )
         );
 
@@ -137,7 +104,7 @@ public class Left10High extends LinearOpMode {
             telemetry.addLine("ERROR");
             telemetry.addData("errorx", Globals.error.x);
             telemetry.addData("errory", Globals.error.y);
-            telemetry.addData("heading", Math.toDegrees(Globals.error.heading));
+            telemetry.addData("errorheading", Globals.error.heading);
             telemetry.addData("Power:", Globals.yummypose);
             telemetry.addLine("HYPOT");
             telemetry.addData("hypotXY", Math.hypot(Globals.error.x, Globals.error.y));
