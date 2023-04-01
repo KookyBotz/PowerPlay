@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 
 public class AutoTransferCommand extends SequentialCommandGroup {
-    public AutoTransferCommand(IntakeSubsystem intake, LiftSubsystem lift, GrabPosition position) {
+    public AutoTransferCommand(IntakeSubsystem intake, GrabPosition position) {
         super(
                 new InstantCommand(() -> Globals.MANUAL_ENABLED = false),
                 new InstantCommand(() -> intake.setTargetPosition(0)),
@@ -29,6 +29,7 @@ public class AutoTransferCommand extends SequentialCommandGroup {
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.TRANSFER),
                 new PivotCommand(intake, IntakeSubsystem.PivotState.TRANSFER),
                 new WaitUntilCommand(() -> intake.fourbarMotionState.v == 0),
+//                new WaitCommand(25),
                 new ClawCommand(intake, IntakeSubsystem.ClawState.OPEN),
                 new WaitCommand(20),
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.INTERMEDIATE),

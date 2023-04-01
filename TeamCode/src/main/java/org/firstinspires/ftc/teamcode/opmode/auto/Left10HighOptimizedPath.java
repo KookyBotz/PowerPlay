@@ -4,7 +4,9 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -12,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.SwerveXCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.AutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
@@ -78,19 +81,34 @@ public class Left10HighOptimizedPath extends LinearOpMode {
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(0, 60.35, 0.25), 250, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                        new AutoCycleCommand(lift, intake, new GrabPosition(536, 0, 0.192, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                        new AutoCycleCommand(lift, intake, new GrabPosition(523, 0, 0.154, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                        new AutoCycleCommand(lift, intake, new GrabPosition(514, 0, 0.121, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                        new AutoCycleCommand(lift, intake, new GrabPosition(517, 0, 0.08, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                        new AutoCycleCommand(lift, intake, new GrabPosition(522, 0, 0.04, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                        new PositionCommand(drivetrain, localizer, new Pose(0, 59.35, 0.235), 250, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new ParallelCommandGroup(
+                                new SequentialCommandGroup(
+                                        new AutoCycleCommand(lift, intake, new GrabPosition(560, 0, 0.172, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new AutoCycleCommand(lift, intake, new GrabPosition(542, 0, 0.139, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new AutoCycleCommand(lift, intake, new GrabPosition(533, 0, 0.106, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new AutoCycleCommand(lift, intake, new GrabPosition(532, 0, 0.075, 0.37, 20), LiftSubsystem.LiftState.HIGH),
+                                        new AutoCycleCommand(lift, intake, new GrabPosition(535, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH)
+                                ),
+                                new SwerveXCommand(drivetrain)
+                        ),
                         new PositionCommand(drivetrain, localizer, new Pose(-17, 49.5, Math.PI / 2), 0, 750, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         // we just need to get slightly close before we can run the next path, dont actually care where
                         new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 7),
                         new PositionCommand(drivetrain, localizer, new Pose(-69, 52, Math.PI / 2), 0, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 0.25),
-                        new PositionCommand(drivetrain, localizer, new Pose(-69, 61, Math.PI - 0.23), 250, 800, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                        new PositionCommand(drivetrain, localizer, new Pose(-69, 52, Math.PI / 2), 0, 500, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(-69, 62.7, Math.PI - 0.23), 250, 800, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new ParallelCommandGroup(
+                                new SequentialCommandGroup(
+                                        new AutoCycleCommand(lift, intake, new GrabPosition(560, 0, 0.172, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new AutoCycleCommand(lift, intake, new GrabPosition(542, 0, 0.139, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new AutoCycleCommand(lift, intake, new GrabPosition(533, 0, 0.106, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new AutoCycleCommand(lift, intake, new GrabPosition(532, 0, 0.075, 0.37, 20), LiftSubsystem.LiftState.HIGH),
+                                        new AutoCycleCommand(lift, intake, new GrabPosition(535, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH)
+                                ),
+                                new SwerveXCommand(drivetrain)
+                        ),
+                        new PositionCommand(drivetrain, localizer, new Pose(-69, 50, Math.PI / 2), 0, 500, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new InstantCommand(() -> endtime = timer.milliseconds())
                 )
         );
@@ -107,17 +125,8 @@ public class Left10HighOptimizedPath extends LinearOpMode {
             robot.loop(null, drivetrain, intake, lift);
             localizer.periodic();
 
-            Pose currentPose = localizer.getPos();
-            telemetry.addLine("CURRENT POSE");
-            telemetry.addData("poseX", currentPose.x);
-            telemetry.addData("poseY", currentPose.y);
-            telemetry.addData("heading", currentPose.heading);
-            telemetry.addData("errorx", Globals.error.x);
-            telemetry.addData("errory", Globals.error.y);
-            telemetry.addData("heading", Math.toDegrees(Globals.error.heading));
-            telemetry.addData("Power:", Globals.yummypose);
+            telemetry.addData("encoder pod", intake.getPos());
             telemetry.addData("time", endtime);
-//            telemetry.addData("poseX", Globals.)
             double loop = System.nanoTime();
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
             loopTime = loop;

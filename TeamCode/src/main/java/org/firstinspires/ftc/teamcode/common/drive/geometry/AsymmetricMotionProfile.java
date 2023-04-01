@@ -33,7 +33,7 @@ public class AsymmetricMotionProfile {
         t2 = Math.abs(distance) / constraints.velo - (t1 + t3) / 2;
 
         if (t2 < 0) {
-            System.out.println("Non-Max Velocity Profile");
+//            System.out.println("Non-Max Velocity Profile");
             this.t2 = 0;
 
             // this math utilizes a negative deceleration constant. either negate from the passed in value,
@@ -108,12 +108,6 @@ public class AsymmetricMotionProfile {
     }
 
     public void log() {
-        System.out.println("TIME FOR ACCELERATION\n" + t1);
-        System.out.println("\nTIME AT MAX VELOCITY\n" + t2);
-        System.out.println("\nTIME FOR DECELERATION\n" + t3);
-        System.out.println("\nACCELERATION STOP POSITION\n" + accelStopPosition);
-        System.out.println("\nACCELERATION STOP VELOCITY\n" + accelStopVelocity);
-        System.out.println("\nDISTANCE\n" + distance);
-        System.out.println("\nTOTAL TIME\n" + totalTime);
+
     }
 }

@@ -60,7 +60,7 @@ public class PositionCommand extends CommandBase {
         }
 
         Pose yummypose = targetPose.subtract(localizer.getPos());
-        System.out.println(yummypose);
+//        System.out.println(yummypose);
         Pose powers = goToPosition(localizer.getPos(), targetPose);
         drivetrain.set(powers);
         Globals.yummypose = powers;

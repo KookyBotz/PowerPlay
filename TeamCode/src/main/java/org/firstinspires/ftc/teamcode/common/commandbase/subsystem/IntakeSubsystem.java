@@ -347,9 +347,10 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void retractReset() {
-        if (isWithinTolerance() && Math.abs(robot.intakeEncoder.getRawVelocity()) == 0 && getTargetPosition() <= 0) {
-            robot.intakeEncoder.reset();
-        }
+//        if (isWithinTolerance() && Math.abs(robot.intakeEncoder.getRawVelocity()) == 0 && getTargetPosition() <= 0) {
+//            robot.intakeEncoder.reset();
+//        }
+        robot.intakeEncoder.reset();
     }
 
     public void setPivot(double pos){

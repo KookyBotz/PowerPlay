@@ -64,7 +64,7 @@ public class OpMode extends CommandOpMode {
 
     private boolean lastGamepadUp1 = false;
     private boolean lastGamepadDown1 = false;
-    
+
     private boolean clawHasCone = false;
     public static double position;
 
@@ -98,10 +98,11 @@ public class OpMode extends CommandOpMode {
     public void run() {
         if (timer == null) {
             timer = new ElapsedTime();
-            try{
+            try {
                 robot.reset();
 //                robot.startIMUThread(this);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
 //            SwerveDrivetrain.imuOffset = -Math.PI / 2;
         }
 
@@ -196,7 +197,7 @@ public class OpMode extends CommandOpMode {
         if (!lastRightBumper2 && rightBumper) {
             if (intake.hasCone()) {
                 CommandScheduler.getInstance().schedule(new TransferCommand(intake, lift));
-            } else if (!intake.fourbarState.equals(IntakeSubsystem.FourbarState.INTAKE)){
+            } else if (!intake.fourbarState.equals(IntakeSubsystem.FourbarState.INTAKE)) {
                 CommandScheduler.getInstance().schedule(
                         new IntakeStateCommand(intake)
                 );
@@ -317,14 +318,13 @@ public class OpMode extends CommandOpMode {
                                     new AutoCycleCommand(lift, intake, new GrabPosition(533, 0, 0.106, 0.37, 0), LiftSubsystem.LiftState.HIGH),
                                     new AutoCycleCommand(lift, intake, new GrabPosition(532, 0, 0.075, 0.37, 20), LiftSubsystem.LiftState.HIGH),
                                     new AutoCycleCommand(lift, intake, new GrabPosition(535, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH),
-                                    new SequentialCommandGroup(
-                                            new LiftCommand(lift, LiftSubsystem.LiftState.HIGH)
-                                                    .alongWith(new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED)),
-                                            new WaitUntilCommand(lift::isWithinTolerance),
-                                            new LatchCommand(lift, LiftSubsystem.LatchState.UNLATCHED),
-                                            new WaitCommand(75),
-                                            new LiftCommand(lift, LiftSubsystem.LiftState.RETRACTED)
-                                    )
+                                    new LiftCommand(lift, LiftSubsystem.LiftState.HIGH)
+                                            .alongWith(new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED)),
+                                    new WaitUntilCommand(lift::isWithinTolerance),
+                                    new LatchCommand(lift, LiftSubsystem.LatchState.UNLATCHED),
+                                    new WaitCommand(75),
+                                    new LiftCommand(lift, LiftSubsystem.LiftState.RETRACTED)
+
                             ),
                             new SwerveXCommand(drivetrain)
                     )

@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.common.commandbase.newbot;
 
-import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -8,7 +7,6 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.AutoTransferCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.TransferCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
@@ -35,13 +33,15 @@ public class AutoCycleCommand extends ParallelCommandGroup {
 //                        new WaitCommand(50),
                         new InstantCommand(() -> intake.setPivot(grabPosition.pivotPos)),
                         new WaitCommand(50),
-                        new AutoTransferCommand(intake, lift, grabPosition)
+                        new AutoTransferCommand(intake, grabPosition),
+                        new InstantCommand(intake::retractReset)
                 ),
                 new SequentialCommandGroup(
                         new LiftCommand(lift, liftState),
                         new WaitCommand(150),
                         new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE),
                         new WaitUntilCommand(lift::isWithinTolerance),
+                        new WaitCommand(25),
                         new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
                         new WaitCommand(75),
                         new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED))
