@@ -148,7 +148,7 @@ public class OpMode extends CommandOpMode {
 //        lastDpadLeft1 = dpadLeft1;
 
 //        double extended = intake.getPos() > 200 || lift.getPos() > 75 ? 0.5 : 1;
-        double extended = (gamepad1.dpad_left ? 1 : 0.5);
+        double extended = (Math.abs(gamepad1.right_stick_x) > 0.98) ? 1 : 0.5;
         SwerveDrivetrain.maintainHeading = (Math.abs(gamepad1.left_stick_x) < 0.02 & Math.abs(gamepad1.left_stick_y) < 0.02 & Math.abs(gamepad1.right_stick_x) < 0.02);
         double rotationAmount = (Globals.USING_IMU) ? robot.getAngle() - SwerveDrivetrain.imuOffset : 0;
         Pose drive = new Pose(
@@ -186,7 +186,7 @@ public class OpMode extends CommandOpMode {
             }
         }
 
-        if (gamepad1.x) {
+        if (gamepad2.dpad_down) {
             robot.intakeEncoder.reset();
         }
 

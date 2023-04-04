@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -16,6 +17,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.SwerveXCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.AutoCycleCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
@@ -104,11 +107,20 @@ public class Left10HighOptimizedPath extends LinearOpMode {
                                         new AutoCycleCommand(lift, intake, new GrabPosition(542, 0, 0.139, 0.37, 0), LiftSubsystem.LiftState.HIGH),
                                         new AutoCycleCommand(lift, intake, new GrabPosition(533, 0, 0.106, 0.37, 0), LiftSubsystem.LiftState.HIGH),
                                         new AutoCycleCommand(lift, intake, new GrabPosition(532, 0, 0.075, 0.37, 20), LiftSubsystem.LiftState.HIGH),
-                                        new AutoCycleCommand(lift, intake, new GrabPosition(535, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH)
+                                        new AutoCycleCommand(lift, intake, new GrabPosition(535, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH),
+                                        new LiftCommand(lift, LiftSubsystem.LiftState.HIGH),
+                                        new WaitCommand(150),
+                                        new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE),
+                                        new WaitUntilCommand(lift::isWithinTolerance),
+                                        new WaitCommand(25),
+                                        new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
+                                        new WaitCommand(75),
+                                        new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED))
                                 ),
                                 new SwerveXCommand(drivetrain)
                         ),
-                        new PositionCommand(drivetrain, localizer, new Pose(-69, 50, Math.PI / 2), 0, 500, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(-69, 28, Math.PI / 2), 0, 1000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(-45, 28, Math.PI / 2), 0, 1000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new InstantCommand(() -> endtime = timer.milliseconds())
                 )
         );
