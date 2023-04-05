@@ -80,7 +80,7 @@ public class OpMode extends CommandOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         Globals.AUTO = false;
-        Globals.USING_IMU = false;
+        Globals.USING_IMU = true;
 
         robot.init(hardwareMap, telemetry);
         intake = new IntakeSubsystem(robot);
@@ -100,10 +100,10 @@ public class OpMode extends CommandOpMode {
             timer = new ElapsedTime();
             try {
                 robot.reset();
-//                robot.startIMUThread(this);
+                robot.startIMUThread(this);
             } catch (Exception e) {
             }
-//            SwerveDrivetrain.imuOffset = -Math.PI / 2;
+            SwerveDrivetrain.imuOffset = -Math.PI / 2;
         }
 
         robot.read(drivetrain, intake, lift);
@@ -141,11 +141,9 @@ public class OpMode extends CommandOpMode {
 //        }
 //        lastLeftBumper1 = leftBumper1;
 
-//        boolean dpadLeft1 = gamepad1.dpad_left;
-//        if (dpadLeft1 && !lastDpadLeft1 && Globals.USING_IMU) {
-//            SwerveDrivetrain.imuOffset = robot.getAngle() + Math.PI;
-//        }
-//        lastDpadLeft1 = dpadLeft1;
+        if (gamepad1.right_stick_button && Globals.USING_IMU) {
+            SwerveDrivetrain.imuOffset = robot.getAngle() + Math.PI;
+        }
 
 //        double extended = intake.getPos() > 200 || lift.getPos() > 75 ? 0.5 : 1;
         double extended = (Math.abs(gamepad1.right_stick_x) > 0.98) ? 1 : 0.5;
