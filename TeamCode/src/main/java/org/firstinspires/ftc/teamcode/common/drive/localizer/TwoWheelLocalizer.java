@@ -20,9 +20,9 @@ public class TwoWheelLocalizer extends TwoTrackingWheelLocalizer implements Loca
     public static double GEAR_RATIO = 1;
 
     public static double PARALLEL_X = 0;
-    public static double PARALLEL_Y = 1.44;
+    public static double PARALLEL_Y = 1.16442;
 
-    public static double PERPENDICULAR_X = -4;
+    public static double PERPENDICULAR_X = -3.61212;
     public static double PERPENDICULAR_Y = 0;
 
     private final DoubleSupplier horizontalPosition, lateralPosition, imuAngle;
