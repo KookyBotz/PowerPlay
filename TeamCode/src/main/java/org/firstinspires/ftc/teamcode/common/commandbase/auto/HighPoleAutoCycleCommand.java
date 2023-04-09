@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.commandbase.newbot;
+package org.firstinspires.ftc.teamcode.common.commandbase.auto;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
@@ -6,14 +6,20 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.ClawCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.FourbarCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LiftCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.PivotCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.AutoTransferCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 
-public class AutoCycleCommand extends ParallelCommandGroup {
-    public AutoCycleCommand(LiftSubsystem lift, IntakeSubsystem intake, GrabPosition grabPosition, LiftSubsystem.LiftState liftState) {
+public class HighPoleAutoCycleCommand extends ParallelCommandGroup {
+    public HighPoleAutoCycleCommand(LiftSubsystem lift, IntakeSubsystem intake, GrabPosition grabPosition, LiftSubsystem.LiftState liftState) {
         super(
                 new SequentialCommandGroup(
                         // Extend Outwards

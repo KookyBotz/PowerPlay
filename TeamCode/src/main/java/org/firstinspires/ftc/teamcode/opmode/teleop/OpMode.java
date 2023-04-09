@@ -16,7 +16,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.SwerveXCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.newbot.AutoCycleCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.HighPoleAutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.GroundScoreCommand;
@@ -311,11 +311,11 @@ public class OpMode extends CommandOpMode {
             schedule(
                     new ParallelCommandGroup(
                             new SequentialCommandGroup(
-                                    new AutoCycleCommand(lift, intake, new GrabPosition(560, 0, 0.172, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                    new AutoCycleCommand(lift, intake, new GrabPosition(542, 0, 0.139, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                    new AutoCycleCommand(lift, intake, new GrabPosition(533, 0, 0.106, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                    new AutoCycleCommand(lift, intake, new GrabPosition(532, 0, 0.075, 0.37, 20), LiftSubsystem.LiftState.HIGH),
-                                    new AutoCycleCommand(lift, intake, new GrabPosition(535, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH),
+                                    new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(560, 0, 0.172, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                    new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(542, 0, 0.139, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                    new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(533, 0, 0.106, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                    new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(532, 0, 0.075, 0.37, 20), LiftSubsystem.LiftState.HIGH),
+                                    new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(535, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH),
                                     new LiftCommand(lift, LiftSubsystem.LiftState.HIGH)
                                             .alongWith(new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED)),
                                     new WaitUntilCommand(lift::isWithinTolerance),
