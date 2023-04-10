@@ -32,6 +32,7 @@ public class PositionCommand extends CommandBase {
     public static PIDFController yController = new PIDFController(yP, 0.0, yD, yF);
     public static PIDFController hController = new PIDFController(hP, 0.0, hD, hF);
     public static double max_power = 1;
+    public static double max_heading = 0.5;
 
     Drivetrain drivetrain;
     Localizer localizer;
@@ -111,7 +112,7 @@ public class PositionCommand extends CommandBase {
                 Math.min(-y_rotated, max_power);
         double heading_power = powers.heading;
 
-        heading_power = Math.max(Math.min(0.5, heading_power), -0.5);
+        heading_power = Math.max(Math.min(max_heading, heading_power), -max_heading);
 
         return new Pose(-y_power/v * 12.5, x_power/v * 12.5, -heading_power/v * 12.5);
     }

@@ -15,7 +15,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.C2DepositCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.C2ExtendCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.C2RetractCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.auto.HighPoleAutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
@@ -28,9 +27,9 @@ import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 
-@Autonomous(name = "Left C2 Auto")
+@Autonomous(name = "Left C2 Auto V2")
 @Config
-public class LeftC2Auto extends LinearOpMode {
+public class LeftC2AutoV2 extends LinearOpMode {
 
     private RobotHardware robot = RobotHardware.getInstance();
     private SwerveDrivetrain drivetrain;
@@ -81,7 +80,7 @@ public class LeftC2Auto extends LinearOpMode {
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
 
-        Pose intermediate = new Pose(0, 52, 0);
+        Pose intermediate = new Pose(0, 55, 0);
 
         Pose[] pickup = new Pose[]{
                 new Pose(3.5, 54, -0.055),
@@ -89,6 +88,7 @@ public class LeftC2Auto extends LinearOpMode {
                 new Pose(2, 55.5, -0.055),
                 new Pose(2, 56, -0.055),
                 new Pose(2, 57, -0.055),
+                new Pose(-70.5, 56, Math.PI),
         };
 
         Pose[] deposit_inter = new Pose[]{
@@ -97,16 +97,18 @@ public class LeftC2Auto extends LinearOpMode {
                 new Pose(-27.66, 52.2, 0),
                 new Pose(-27.66, 52.8, 0),
                 new Pose(-27.66, 53.4, 0),
-                new Pose(-27.33, 54, 0)
+                new Pose(-27.33, 54, 0),
+                new Pose(-43.5, 53, 0)
         };
 
         Pose[] deposit = new Pose[]{
-                new Pose(-27.66, 51, -Math.PI / 4),
-                new Pose(-27, 51.6, -Math.PI / 4),
-                new Pose(-27.66, 52.2, -Math.PI / 4),
-                new Pose(-27.66, 52.8, -Math.PI / 4),
-                new Pose(-27.66, 53.4, -Math.PI / 4),
-                new Pose(-27.66, 54, -Math.PI / 4)
+                new Pose(-27.66, 46, -Math.PI / 6),
+                new Pose(-27, 46.1, -Math.PI / 6),
+                new Pose(-27.66, 46.7, -Math.PI / 6),
+                new Pose(-27.66, 48.9, -Math.PI / 6),
+                new Pose(-27.66, 49.5, -Math.PI / 6),
+                new Pose(-36.5, 56, -Math.PI/2),
+                new Pose(-43.5, 52,  Math.PI / 6 + Math.PI)
         };
 
         GrabPosition[] grabPositions = new GrabPosition[]{
@@ -156,8 +158,14 @@ public class LeftC2Auto extends LinearOpMode {
                         new PositionCommand(drivetrain, localizer, pickup[4], 0, 1250, voltage())
                                 .alongWith(new WaitCommand(650).andThen(new C2ExtendCommand(intake, grabPositions[4]))),
                         new PositionCommand(drivetrain, localizer, deposit_inter[5], 0, 250, voltage())
-                                .andThen(new PositionCommand(drivetrain, localizer, deposit[5], 0, 1250, voltage()))
-                                .alongWith(new C2RetractCommand(intake, grabPositions[4]).andThen(new C2DepositCommand(lift))),
+                                .andThen(new PositionCommand(drivetrain, localizer, deposit[5], 0, 2250, voltage()))
+                                .alongWith(new C2RetractCommand(intake, grabPositions[4]).andThen(new WaitCommand(100).andThen(new C2DepositCommand(lift)))),
+
+                        new PositionCommand(drivetrain, localizer, pickup[5], 0, 2000, voltage())
+                                .alongWith(new WaitCommand(1150).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
+                        new PositionCommand(drivetrain, localizer, deposit_inter[6], 0, 250, voltage())
+                                .andThen(new PositionCommand(drivetrain, localizer, deposit[6], 0, 1250, voltage()))
+                                .alongWith(new C2RetractCommand(intake, grabPositions[1]).andThen(new C2DepositCommand(lift))),
 
                         //record
                         new InstantCommand(() -> endtime = timer.milliseconds())
@@ -187,7 +195,7 @@ public class LeftC2Auto extends LinearOpMode {
         }
     }
 
-    private double voltage(){
+    private double voltage() {
         return hardwareMap.voltageSensor.iterator().next().getVoltage();
     }
 }
