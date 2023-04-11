@@ -50,7 +50,7 @@ public class HoldPositionCommand extends CommandBase {
 
     private final double v;
 
-    private boolean retargeting = false;
+    public static boolean retargeting = false;
 
     public HoldPositionCommand(Drivetrain drivetrain, Localizer localizer, Pose targetPose, double ms, double voltage) {
         this.drivetrain = drivetrain;

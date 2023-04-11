@@ -15,6 +15,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.SwerveXCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.HighPoleAutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
@@ -175,7 +176,7 @@ public class OpMode extends CommandOpMode {
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> intake.update(ClawState.OPEN)),
                                 new WaitCommand(300),
-                                new InstantCommand(() -> intake.setTargetPosition(-10)),
+                                new InstantCommand(() -> intake.setTargetPosition(0)),
                                 new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
                                 new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
                                 new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS))
@@ -333,23 +334,10 @@ public class OpMode extends CommandOpMode {
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-//        telemetry.addData("fl", drivetrain.frontLeftModule.wheelFlipped + " " + drivetrain.frontLeftModule.lastMotorPower);
-//        telemetry.addData("fr", drivetrain.frontRightModule.wheelFlipped + " " + drivetrain.frontRightModule.lastMotorPower);
-//        telemetry.addData("bl", drivetrain.backLeftModule.wheelFlipped + " " + drivetrain.backLeftModule.lastMotorPower);
-//        telemetry.addData("br", drivetrain.backRightModule.wheelFlipped + " " + drivetrain.backRightModule.lastMotorPower);
-//        telemetry.addData("maintainHeading", SwerveDrivetrain.maintainHeading);
-//        telemetry.addData("liftPow", lift.getPower());
-//        telemetry.addData("liftPos", lift.getPos());
-//        telemetry.addData("liftTarget", lift.getTargetPos());
-//telemetry.addData("fourbarPos", robot.fourbarLeft.getPosition());
-//////        telemetry.addData("intakePow", intake.getPower());
-//        telemetry.addData("intakePos", intake.getPos());
-//        telemetry.addData("intakeTarget", intake.getTargetPosition());
-//        telemetry.addData("pivot", robot.pivot.getPosition());
-//        telemetry.addData("velocity", robot.extension.getVelocity());
-//        telemetry.addData("velocityencoder", robot.intakeEncoder.getRawVelocity());
 //        telemetry.addData("intakeCurrent", robot.extension.motorEx.getCurrent(CurrentUnit.AMPS));
-//        telemetry.addData("hasCone", intake.hasCone());
+//        telemetry.addData("current pos", intake.getPos());
+//        telemetry.addData("target pos", intake.getTargetPosition());
+//        telemetry.addData("hasCone", intake.coneDetected);
         loopTime = loop;
         telemetry.update();
 

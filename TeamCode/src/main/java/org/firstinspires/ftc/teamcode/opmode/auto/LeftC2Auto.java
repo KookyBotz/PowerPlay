@@ -80,19 +80,19 @@ public class LeftC2Auto extends LinearOpMode {
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
 
-        Pose intermediate = new Pose(0, 55, 0);
+        Pose intermediate = new Pose(0, 54, 0);
 
         Pose[] pickup = new Pose[]{
-                new Pose(3.5, 54, -0.055),
-                new Pose(3, 54.5, -0.055),
-                new Pose(2, 55.5, -0.055),
-                new Pose(2, 56, -0.055),
-                new Pose(2, 57, -0.055),
-                new Pose(-70.5, 56, Math.PI),
+                new Pose(3.5, 54, -0.0545),
+                new Pose(3, 54.5, -0.045),
+                new Pose(2, 55.5, -0.045),
+                new Pose(2, 56, -0.045),
+                new Pose(2, 57, -0.045),
                 new Pose(-70.5, 56.5, Math.PI),
                 new Pose(-70.5, 57, Math.PI),
                 new Pose(-70.5, 57.5, Math.PI),
                 new Pose(-70.5, 58, Math.PI),
+                new Pose(-70.5, 58.5, Math.PI),
         };
 
         Pose[] deposit_inter = new Pose[]{
@@ -115,7 +115,7 @@ public class LeftC2Auto extends LinearOpMode {
                 new Pose(-27.66, 46.7, -Math.PI / 6),
                 new Pose(-27.66, 48.9, -Math.PI / 6),
                 new Pose(-27.66, 49.5, -Math.PI / 6),
-                new Pose(-36.5, 56, -Math.PI / 2),
+                new Pose(-38, 56, -Math.PI / 2),
                 new Pose(-43.5, 52, Math.PI / 6 + Math.PI),
                 new Pose(-43.5, 52.6, Math.PI / 6 + Math.PI),
                 new Pose(-43.5, 53.2, Math.PI / 6 + Math.PI),
@@ -135,7 +135,7 @@ public class LeftC2Auto extends LinearOpMode {
                 new SequentialCommandGroup(
                         new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 2),
                         new InstantCommand(() -> PositionCommand.max_heading = 0.6),
-                        new PositionCommand(drivetrain, localizer, intermediate, 0, 1150, voltage()),
+                        new PositionCommand(drivetrain, localizer, intermediate, 0, 1250, voltage()),
                         new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 1),
 
                         //preload
@@ -173,7 +173,7 @@ public class LeftC2Auto extends LinearOpMode {
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[5], 0, 2250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, grabPositions[4]).andThen(new WaitCommand(100).andThen(new C2DepositCommand(lift)))),
 
-                        new PositionCommand(drivetrain, localizer, pickup[5], 0, 1750, voltage())
+                        new PositionCommand(drivetrain, localizer, pickup[5], 0, 1800, voltage())
                                 .alongWith(new WaitCommand(650).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
                         new PositionCommand(drivetrain, localizer, deposit_inter[6], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[6], 0, 1250, voltage()))

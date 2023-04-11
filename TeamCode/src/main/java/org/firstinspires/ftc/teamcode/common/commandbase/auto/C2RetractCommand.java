@@ -22,7 +22,7 @@ public class C2RetractCommand extends SequentialCommandGroup {
     public C2RetractCommand(IntakeSubsystem intake, GrabPosition grabPosition) {
         super(
                 new ClawCommand(intake, IntakeSubsystem.ClawState.AUTO),
-                new WaitCommand(Globals.INTAKE_CLAW_CLOSE_TIME + 50),
+                new WaitCommand(Globals.INTAKE_CLAW_CLOSE_TIME + 25),
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.PRE_TRANSFER),
                 new InstantCommand(() -> intake.setPivot(grabPosition.pivotPos)),
                 new WaitCommand(50),

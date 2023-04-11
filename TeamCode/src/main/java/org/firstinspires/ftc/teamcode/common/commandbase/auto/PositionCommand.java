@@ -15,11 +15,11 @@ public class PositionCommand extends CommandBase {
     public static double ALLOWED_TRANSLATIONAL_ERROR = 0.25;
     public static double ALLOWED_HEADING_ERROR = Math.toRadians(1);
 
-    public static double xP = 0.02;
+    public static double xP = 0.022;
     public static double xD = 0.03;
     public static double xF = 0;
 
-    public static double yP = 0.02;
+    public static double yP = 0.022;
     public static double yD = 0.03;
     public static double yF = 0;
 

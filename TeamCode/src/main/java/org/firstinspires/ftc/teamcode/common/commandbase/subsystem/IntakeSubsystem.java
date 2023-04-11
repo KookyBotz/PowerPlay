@@ -14,6 +14,9 @@ import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 
 import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Config
 public class IntakeSubsystem extends SubsystemBase {
 
@@ -49,6 +52,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double INTAKE_DELAY = 0.02;
 
     public boolean isExtended = false;
+    public final List<Boolean> coneDetected = new ArrayList<>();
     private boolean hasCone = false;
     private boolean notreached = false;
     private boolean done = false;
@@ -249,30 +253,6 @@ public class IntakeSubsystem extends SubsystemBase {
 //        }
 //    }
 
-    public void loop() {
-//        this.controller.setPID(P, I, D, F);
-//
-//        if (voltageTimer.seconds() > 5) {
-//            voltage = robot.voltageSensor.getVoltage();
-//            voltageTimer.reset();
-        }
-
-//        intakeMotionState = intakeProfile.calculate(intakeTimer.time());
-//        if (intakeMotionState.v != 0) {
-//            targetPosition = intakeMotionState.x;
-//        }
-
-//        fourbarMotionState = fourbarProfile.calculate(fourbarTimer.time());
-//        if (fourbarMotionState.v != 0) {
-//            targetFourbarPosition = fourbarMotionState.x;
-//        }
-//        setFourbar(targetFourbarPosition);
-
-//        isExtended = getPos() > (INTAKE_EXTENDED_TOLERANCE * EXTENSION_TICKS_PER_INCH);
-
-//        power = -controller.calculate(intakePosition, targetPosition) / voltage * 14;
-//    }
-
     public void loop2 () {
         this.controller.setPID(P, I, D);
 //        if (targetFourbarPosition != lastTargetFourbarPosition) {
@@ -280,7 +260,11 @@ public class IntakeSubsystem extends SubsystemBase {
 //            lastTargetFourbarPosition = targetFourbarPosition;
 //        }
 
-        hasCone = !robot.clawSensor.getState();
+        coneDetected.add(!robot.clawSensor.getState());
+        if(coneDetected.size()>7){
+            coneDetected.remove(0);
+        }
+        hasCone = coneDetected.contains(true);
 
         if (voltageTimer.seconds() > 5) {
             voltage = robot.voltageSensor.getVoltage();
@@ -313,7 +297,7 @@ public class IntakeSubsystem extends SubsystemBase {
 //        notreached = reached;
         power = Range.clip((-controller.calculate(intakePosition, targetPosition) + (F * Math.signum(targetPosition - intakePosition)) / voltage * 14), -1, 1);
         if (targetPosition <= 0) {
-            power -= -0.3;
+            power -= -0.1;
         }
         // TODO: 0.066 is the compensate max
     }
@@ -342,8 +326,8 @@ public class IntakeSubsystem extends SubsystemBase {
 //        if (pos <= 0.066) {
 //            pos += 1.0399e-5 * (getPos());
 //        }
-        robot.fourbarLeft.setPosition(pos);
-        robot.fourbarRight.setPosition(1 - pos + 0.01);
+        robot.fourbarLeft.setPosition(pos - F_OFFSET);
+        robot.fourbarRight.setPosition(1 - (pos + 0.01 - F_OFFSET));
     }
 
     public void retractReset() {
@@ -384,18 +368,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public boolean isWithinTolerance() { return withinTolerance; }
 
     public void setFourbarFactor(double factor) {
-//        if (fourbarMotionState.v == 0) {
-//            double fourbarAddition = INTAKE_FOURBAR_FACTOR * factor;
-//            double fourbarPosition = robot.fourbarLeft.getPosition();
-//
-//            if (!(fourbarPosition + fourbarAddition > INTAKE_FOURBAR_DEPOSIT) || !(fourbarPosition - fourbarAddition < INTAKE_FOURBAR_INTAKE)) {
-////                targetFourbarPosition = fourbarPosition + fourbarAddition;
-//                setFourbar(fourbarPosition + fourbarAddition);
-//                setFourbar(1 - fourbarPosition + fourbarAddition);
-//            }
-//        }
-//        setFourbar(fourbarPosition + fourbarAddition);
-//        setFourbar(1 - fourbarPosition + fourbarAddition);
         double fourbarAddition = INTAKE_FOURBAR_FACTOR * factor;
         double fourbarPosition = robot.fourbarLeft.getPosition();
         setFourbar(fourbarPosition + fourbarAddition);
@@ -412,7 +384,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setSlideFactor(double factor) {
         double slideAddition = INTAKE_MANUAL_FACTOR * factor;
         double newPosition = intakePosition + slideAddition;
-        if (intakeMotionState.v == 0 && newPosition >= INTAKE_MIN - 20 && newPosition <= INTAKE_MAX) {
+        if (intakeMotionState.v == 0 && newPosition >= INTAKE_MIN - 5 && newPosition <= INTAKE_MAX) {
             targetPosition = newPosition;
         }
     }

@@ -172,7 +172,6 @@ public class RobotHardware {
             drivetrain.updateModules();
         } catch (Exception ignored) {}
         try {
-            intake.loop();
             intake.loop2();
         } catch (Exception ignored) {}
         try {

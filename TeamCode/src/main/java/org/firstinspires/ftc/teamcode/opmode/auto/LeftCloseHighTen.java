@@ -32,7 +32,7 @@ import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 
 @Autonomous(name = "1+10 Left High Optimized")
 @Config
-public class Left10HighOptimizedPath extends LinearOpMode {
+public class LeftCloseHighTen extends LinearOpMode {
 
     private RobotHardware robot = RobotHardware.getInstance();
     private SwerveDrivetrain drivetrain;
@@ -84,7 +84,7 @@ public class Left10HighOptimizedPath extends LinearOpMode {
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(0, 59.35, 0.235), 250, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(0, 59.35, 0.235), 250, 5000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(560, 0, 0.172, 0.37, 0), LiftSubsystem.LiftState.HIGH),
@@ -98,9 +98,9 @@ public class Left10HighOptimizedPath extends LinearOpMode {
                         new PositionCommand(drivetrain, localizer, new Pose(-17, 49.5, Math.PI / 2), 0, 750, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         // we just need to get slightly close before we can run the next path, dont actually care where
                         new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 7),
-                        new PositionCommand(drivetrain, localizer, new Pose(-69, 52, Math.PI / 2), 0, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(-69.2, 52, Math.PI / 2), 0, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 0.25),
-                        new PositionCommand(drivetrain, localizer, new Pose(-69, 62.7, Math.PI - 0.23), 250, 800, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(-69.2, 63.4, Math.PI - 0.235 ), 250, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(560, 0, 0.172, 0.37, 0), LiftSubsystem.LiftState.HIGH),

@@ -49,7 +49,7 @@ public class HighPoleAutoCycleCommand extends ParallelCommandGroup {
                         new WaitUntilCommand(lift::isWithinTolerance),
                         new WaitCommand(25),
                         new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
-                        new WaitCommand(75),
+                        new WaitCommand(100),
                         new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED))
                 )
         );
