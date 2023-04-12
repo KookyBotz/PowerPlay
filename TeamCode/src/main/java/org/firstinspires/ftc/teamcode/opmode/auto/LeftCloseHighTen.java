@@ -84,7 +84,7 @@ public class LeftCloseHighTen extends LinearOpMode {
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(0, 59.35, 0.235), 250, 5000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(0, 60, 0.235), 250, 5000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(560, 0, 0.172, 0.37, 0), LiftSubsystem.LiftState.HIGH),
@@ -100,7 +100,7 @@ public class LeftCloseHighTen extends LinearOpMode {
                         new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 7),
                         new PositionCommand(drivetrain, localizer, new Pose(-69.2, 52, Math.PI / 2), 0, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 0.25),
-                        new PositionCommand(drivetrain, localizer, new Pose(-69.2, 63.4, Math.PI - 0.235 ), 250, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(-69.2, 62.4, Math.PI - 0.235 ), 250, 3000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(560, 0, 0.172, 0.37, 0), LiftSubsystem.LiftState.HIGH),

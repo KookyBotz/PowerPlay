@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode.common.commandbase.auto;
 
+import static java.lang.Math.PI;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.drive.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.drive.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
@@ -114,6 +117,6 @@ public class PositionCommand extends CommandBase {
 
         heading_power = Math.max(Math.min(max_heading, heading_power), -max_heading);
 
-        return new Pose(-y_power/v * 12.5, x_power/v * 12.5, -heading_power/v * 12.5);
+        return new Pose(-y_power / v * 12.5, x_power / v * 12.5, -heading_power / v * 12.5);
     }
 }

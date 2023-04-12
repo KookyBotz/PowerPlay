@@ -27,7 +27,7 @@ import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 
-@Autonomous(name = "Left C2 Auto")
+@Autonomous(name = "Left 1+10 C2")
 @Config
 public class LeftC2Auto extends LinearOpMode {
 
@@ -65,11 +65,11 @@ public class LeftC2Auto extends LinearOpMode {
         while (!isStarted()) {
             robot.read(drivetrain, intake, lift);
             for (SwerveModule module : drivetrain.modules) {
-                module.setTargetRotation(Math.PI / 2);
+                module.setTargetRotation(-5 * Math.PI / 6);
             }
             drivetrain.updateModules();
 
-            telemetry.addLine("Left C2 Auto");
+            telemetry.addLine("Left C2 Auto 1+10");
             telemetry.update();
 
             robot.clearBulkCache();
@@ -80,20 +80,20 @@ public class LeftC2Auto extends LinearOpMode {
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
 
-        Pose intermediate = new Pose(0, 54, 0);
+        Pose intermediate = new Pose(-30, 12, 0);
 
         Pose[] pickup = new Pose[]{
-                new Pose(1.5, 54.25, 0),
+                new Pose(3, 54.25, 0),
                 new Pose(1.5, 54.75, 0),
                 new Pose(0.5, 55.75, 0),
                 new Pose(0.5, 56.25, 0),
-                new Pose(0.5, 57.25, 0),
+                new Pose(0.5, 56.75, 0),
 
-                new Pose(-70, 57.25, Math.PI - 0.045),
-                new Pose(-70, 57.75, Math.PI - 0.045),
-                new Pose(-70, 58.25, Math.PI - 0.045),
-                new Pose(-70, 58.75, Math.PI - 0.045),
-                new Pose(-70, 59.25, Math.PI - 0.045),
+                new Pose(-69, 56.25, Math.PI + 0.04),
+                new Pose(-69, 56.75, Math.PI + 0.04),
+                new Pose(-69, 57.25, Math.PI + 0.04),
+                new Pose(-69, 57.75, Math.PI + 0.04),
+                new Pose(-69, 58.25, Math.PI + 0.04),
         };
 
         Pose[] deposit_inter = new Pose[]{
@@ -113,20 +113,20 @@ public class LeftC2Auto extends LinearOpMode {
         };
 
         Pose[] deposit = new Pose[]{
-                new Pose(-27, 46.5, -Math.PI / 6.5),
+                new Pose(-23, 49, -Math.PI / 4.5),
 
-                new Pose(-26, 47, -Math.PI / 6.5),
-                new Pose(-26, 48, -Math.PI / 6.5),
-                new Pose(-26, 48.9, -Math.PI / 6.5),
-                new Pose(-26, 49.5, -Math.PI / 6.5),
+                new Pose(-24, 47, -Math.PI / 6.5),
+                new Pose(-24, 48, -Math.PI / 6.5),
+                new Pose(-24, 49, -Math.PI / 6.5),
+                new Pose(-24, 50, -Math.PI / 6.5),
 
-                new Pose(-38, 56, -Math.PI / 2),
+                new Pose(-36, 56, -Math.PI / 2),
 
-                new Pose(-43.5, 52, Math.PI / 6.5 + Math.PI),
-                new Pose(-43.5, 52.6, Math.PI / 6.5 + Math.PI),
-                new Pose(-43.5, 53.2, Math.PI / 6.5 + Math.PI),
-                new Pose(-43.5, 53.8, Math.PI / 6.5 + Math.PI),
-                new Pose(-43.5, 54.4, Math.PI / 6.5 + Math.PI)
+                new Pose(-44.5, 51.5, Math.PI / 6.5 + Math.PI),
+                new Pose(-44.5, 52.1, Math.PI / 6.5 + Math.PI),
+                new Pose(-44.5, 52.7, Math.PI / 6.5 + Math.PI),
+                new Pose(-44.5, 53.3, Math.PI / 6.5 + Math.PI),
+                new Pose(-44.5, 54, Math.PI / 6.5 + Math.PI)
         };
 
         GrabPosition[] grabPositions = new GrabPosition[]{
@@ -141,12 +141,12 @@ public class LeftC2Auto extends LinearOpMode {
                 new SequentialCommandGroup(
                         new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 2),
                         new InstantCommand(() -> PositionCommand.max_heading = 0.6),
-                        new PositionCommand(drivetrain, localizer, intermediate, 0, 1250, voltage()),
+                        new PositionCommand(drivetrain, localizer, intermediate, 0, 450, voltage()),
                         new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 1),
 
                         //preload
                         new PositionCommand(drivetrain, localizer, deposit[0], 0, 1250, voltage())
-                                .alongWith(new WaitCommand(650).andThen(new C2DepositCommand(lift, intake))),
+                                .alongWith(new WaitCommand(1000).andThen(new C2DepositCommand(lift, intake))),
 
                         //1
                         new PositionCommand(drivetrain, localizer, pickup[0], 0, 1250, voltage())
