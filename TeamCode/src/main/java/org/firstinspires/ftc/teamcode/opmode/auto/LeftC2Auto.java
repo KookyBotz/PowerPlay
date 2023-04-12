@@ -83,17 +83,17 @@ public class LeftC2Auto extends LinearOpMode {
         Pose intermediate = new Pose(0, 54, 0);
 
         Pose[] pickup = new Pose[]{
-                new Pose(1.5, 54.25, -0.045),
-                new Pose(1.5, 54.75, -0.045),
-                new Pose(0.5, 55.75, -0.045),
-                new Pose(0.5, 56.25, -0.045),
-                new Pose(0.5, 57.25, -0.045),
+                new Pose(1.5, 54.25, 0),
+                new Pose(1.5, 54.75, 0),
+                new Pose(0.5, 55.75, 0),
+                new Pose(0.5, 56.25, 0),
+                new Pose(0.5, 57.25, 0),
 
-                new Pose(-70, 56.25, Math.PI),
-                new Pose(-70, 56.75, Math.PI),
-                new Pose(-70, 57.25, Math.PI),
-                new Pose(-70, 57.75, Math.PI),
-                new Pose(-70, 58.25, Math.PI),
+                new Pose(-70, 57.25, Math.PI - 0.045),
+                new Pose(-70, 57.75, Math.PI - 0.045),
+                new Pose(-70, 58.25, Math.PI - 0.045),
+                new Pose(-70, 58.75, Math.PI - 0.045),
+                new Pose(-70, 59.25, Math.PI - 0.045),
         };
 
         Pose[] deposit_inter = new Pose[]{
@@ -113,28 +113,28 @@ public class LeftC2Auto extends LinearOpMode {
         };
 
         Pose[] deposit = new Pose[]{
-                new Pose(-26, 46.5, -Math.PI / 6),
+                new Pose(-27, 46.5, -Math.PI / 6.5),
 
-                new Pose(-26, 47, -Math.PI / 6),
-                new Pose(-26, 48, -Math.PI / 6),
-                new Pose(-26, 48.9, -Math.PI / 6),
-                new Pose(-26, 49.5, -Math.PI / 6),
+                new Pose(-26, 47, -Math.PI / 6.5),
+                new Pose(-26, 48, -Math.PI / 6.5),
+                new Pose(-26, 48.9, -Math.PI / 6.5),
+                new Pose(-26, 49.5, -Math.PI / 6.5),
 
                 new Pose(-38, 56, -Math.PI / 2),
 
-                new Pose(-43.5, 52, Math.PI / 6 + Math.PI),
-                new Pose(-43.5, 52.6, Math.PI / 6 + Math.PI),
-                new Pose(-43.5, 53.2, Math.PI / 6 + Math.PI),
-                new Pose(-43.5, 53.8, Math.PI / 6 + Math.PI),
-                new Pose(-43.5, 54.4, Math.PI / 6 + Math.PI)
+                new Pose(-43.5, 52, Math.PI / 6.5 + Math.PI),
+                new Pose(-43.5, 52.6, Math.PI / 6.5 + Math.PI),
+                new Pose(-43.5, 53.2, Math.PI / 6.5 + Math.PI),
+                new Pose(-43.5, 53.8, Math.PI / 6.5 + Math.PI),
+                new Pose(-43.5, 54.4, Math.PI / 6.5 + Math.PI)
         };
 
         GrabPosition[] grabPositions = new GrabPosition[]{
-                new GrabPosition(560, 0, 0.192, 0.37, 0),
-                new GrabPosition(560, 0, 0.16, 0.37, 0),
-                new GrabPosition(560, 0, 0.13, 0.37, 0),
-                new GrabPosition(560, 0, 0.095, 0.37, 20),
-                new GrabPosition(560, 0, 0.07, 0.37, 20)
+                new GrabPosition(560, 0, 0.182, 0.37, 0),
+                new GrabPosition(560, 0, 0.15, 0.37, 0),
+                new GrabPosition(560, 0, 0.12, 0.37, 0),
+                new GrabPosition(560, 0, 0.085, 0.37, 20),
+                new GrabPosition(560, 0, 0.06, 0.37, 20)
         };
 
         CommandScheduler.getInstance().schedule(
@@ -146,7 +146,7 @@ public class LeftC2Auto extends LinearOpMode {
 
                         //preload
                         new PositionCommand(drivetrain, localizer, deposit[0], 0, 1250, voltage())
-                                .alongWith(new WaitCommand(430).andThen(new C2DepositCommand(lift, intake))),
+                                .alongWith(new WaitCommand(650).andThen(new C2DepositCommand(lift, intake))),
 
                         //1
                         new PositionCommand(drivetrain, localizer, pickup[0], 0, 1250, voltage())

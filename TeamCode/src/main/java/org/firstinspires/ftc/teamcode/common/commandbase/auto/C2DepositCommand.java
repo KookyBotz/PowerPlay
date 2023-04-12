@@ -16,10 +16,10 @@ public class C2DepositCommand extends SequentialCommandGroup {
     public C2DepositCommand(LiftSubsystem lift, IntakeSubsystem intake) {
         super(
                 new LiftCommand(lift, LiftSubsystem.LiftState.HIGH),
-                new WaitCommand(0),
+                new WaitCommand(75),
                 new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT_AUTO),
                 new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
-                new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE),
+                new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED),
                 new WaitUntilCommand(lift::isWithinTolerance),
                 new WaitCommand(50),
                 new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
