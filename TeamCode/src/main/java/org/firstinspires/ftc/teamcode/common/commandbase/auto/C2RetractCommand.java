@@ -19,14 +19,14 @@ import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 
 public class C2RetractCommand extends SequentialCommandGroup {
-    public C2RetractCommand(IntakeSubsystem intake, GrabPosition grabPosition) {
+    public C2RetractCommand(IntakeSubsystem intake, LiftSubsystem lift, GrabPosition grabPosition) {
         super(
                 new ClawCommand(intake, IntakeSubsystem.ClawState.AUTO),
                 new WaitCommand(Globals.INTAKE_CLAW_CLOSE_TIME + 25),
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.PRE_TRANSFER),
                 new InstantCommand(() -> intake.setPivot(grabPosition.pivotPos)),
                 new WaitCommand(50),
-                new AutoTransferCommand(intake, grabPosition),
+                new AutoTransferCommand(intake, lift, grabPosition),
                 new InstantCommand(intake::retractReset)
         );
     }

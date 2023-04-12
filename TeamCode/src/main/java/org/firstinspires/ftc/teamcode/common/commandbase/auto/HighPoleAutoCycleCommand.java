@@ -39,7 +39,7 @@ public class HighPoleAutoCycleCommand extends ParallelCommandGroup {
 //                        new WaitCommand(50),
                         new InstantCommand(() -> intake.setPivot(grabPosition.pivotPos)),
                         new WaitCommand(50),
-                        new AutoTransferCommand(intake, grabPosition),
+                        new AutoTransferCommand(intake, lift, grabPosition),
                         new InstantCommand(intake::retractReset)
                 ),
                 new SequentialCommandGroup(

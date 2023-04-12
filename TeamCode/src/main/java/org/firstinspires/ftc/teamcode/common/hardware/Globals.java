@@ -26,7 +26,7 @@ public class Globals {
     public static boolean reached = false;
 
     // Lift Subsystem Constants
-    public static int LIFT_HIGH_POS = 610;
+    public static int LIFT_HIGH_POS = 590;
     public static int LIFT_MID_POS = 370;
     public static int LIFT_RETRACT_POS = 0;
 
@@ -63,9 +63,9 @@ public class Globals {
 
     public static double INTAKE_PIVOT_LOW = 0.355;
     public static double INTAKE_PIVOT_FLAT = 0.5125;
-    public static double INTAKE_PIVOT_FLAT_AUTO = 0.52;
-    public static double INTAKE_PIVOT_PRE_TRANSFER = 0.62;
-    public static double INTAKE_PIVOT_TRANSFER = 0.592;
+    public static double INTAKE_PIVOT_FLAT_AUTO = 0.5125;
+    public static double INTAKE_PIVOT_PRE_TRANSFER = 0.625;
+    public static double INTAKE_PIVOT_TRANSFER = 0.62;
     public static double INTAKE_PIVOT_PICKUP = 0.5;
 
     public static double INTAKE_TURRET_OUTWARDS = 0.728;
