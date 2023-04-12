@@ -89,11 +89,11 @@ public class LeftC2Auto extends LinearOpMode {
                 new Pose(0.5, 56.25, -0.045),
                 new Pose(0.5, 57.25, -0.045),
 
+                new Pose(-70, 56.25, Math.PI),
                 new Pose(-70, 56.75, Math.PI),
                 new Pose(-70, 57.25, Math.PI),
                 new Pose(-70, 57.75, Math.PI),
                 new Pose(-70, 58.25, Math.PI),
-                new Pose(-70, 58.75, Math.PI),
         };
 
         Pose[] deposit_inter = new Pose[]{
