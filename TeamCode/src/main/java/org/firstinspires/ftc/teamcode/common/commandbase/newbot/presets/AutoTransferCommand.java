@@ -24,11 +24,11 @@ public class AutoTransferCommand extends SequentialCommandGroup {
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.PRE_TRANSFER),
                 new WaitCommand(position.turretDelay),
                 new TurretCommand(intake, IntakeSubsystem.TurretState.INWARDS),
-                new WaitUntilCommand(() -> intake.getPos() < 50 && Math.abs(intake.fourbarMotionState.v) <= 0.3),
+                new WaitUntilCommand(() -> intake.getPos() < 75 && Math.abs(intake.fourbarMotionState.v) <= 0.3),
 
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.TRANSFER),
                 new PivotCommand(intake, IntakeSubsystem.PivotState.TRANSFER),
-                new WaitUntilCommand(() -> intake.fourbarMotionState.v == 0),
+                new WaitUntilCommand(() -> Math.abs(intake.fourbarMotionState.v) <= 0.5),
                 new ClawCommand(intake, IntakeSubsystem.ClawState.OPEN),
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.INTERMEDIATE),
                 new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT),

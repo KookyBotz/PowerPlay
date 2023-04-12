@@ -79,7 +79,7 @@ public class Globals {
     public static double INTAKE_FOURBAR_LOW = 0.359;
     public static double INTAKE_FOURBAR_GROUND = 0.06;
 
-    public static double F_OFFSET = 0.03;
+    public static double F_OFFSET = 0.01;
 
     public static long INTAKE_CLAW_CLOSE_TIME = 50; // ms
 

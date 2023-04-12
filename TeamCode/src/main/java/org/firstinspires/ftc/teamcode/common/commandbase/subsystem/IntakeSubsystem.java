@@ -327,7 +327,7 @@ public class IntakeSubsystem extends SubsystemBase {
 //            pos += 1.0399e-5 * (getPos());
 //        }
         robot.fourbarLeft.setPosition(pos - F_OFFSET);
-        robot.fourbarRight.setPosition(1 - (pos + 0.0075 - F_OFFSET));
+        robot.fourbarRight.setPosition(1 - (pos - F_OFFSET));
     }
 
     public void retractReset() {

@@ -80,20 +80,23 @@ public class LeftC2Auto extends LinearOpMode {
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
 
-        Pose intermediate = new Pose(-30, 12, 0);
+        Pose intermediate = new Pose(-24, 12, 0);
 
         Pose[] pickup = new Pose[]{
-                new Pose(3, 54.25, 0),
+                new Pose(2, 54.25, 0),
                 new Pose(1.5, 54.75, 0),
                 new Pose(0.5, 55.75, 0),
                 new Pose(0.5, 56.25, 0),
                 new Pose(0.5, 56.75, 0),
 
-                new Pose(-69, 56.25, Math.PI + 0.04),
-                new Pose(-69, 56.75, Math.PI + 0.04),
-                new Pose(-69, 57.25, Math.PI + 0.04),
-                new Pose(-69, 57.75, Math.PI + 0.04),
-                new Pose(-69, 58.25, Math.PI + 0.04),
+                new Pose(-69, 56.25, Math.PI + 0.015),
+                new Pose(-69, 56.75, Math.PI + 0.015),
+                new Pose(-69, 57.25, Math.PI + 0.015),
+                new Pose(-69, 57.75, Math.PI + 0.015),
+                new Pose(-69, 58.25, Math.PI + 0.015),
+
+                //park
+                new Pose(-90, 58.25, Math.PI),
         };
 
         Pose[] deposit_inter = new Pose[]{
@@ -113,20 +116,20 @@ public class LeftC2Auto extends LinearOpMode {
         };
 
         Pose[] deposit = new Pose[]{
-                new Pose(-23, 49, -Math.PI / 4.5),
+                new Pose(-24, 49, -Math.PI / 4.5),
 
                 new Pose(-24, 47, -Math.PI / 6.5),
                 new Pose(-24, 48, -Math.PI / 6.5),
                 new Pose(-24, 49, -Math.PI / 6.5),
                 new Pose(-24, 50, -Math.PI / 6.5),
 
-                new Pose(-36, 56, -Math.PI / 2),
+                new Pose(-24, 51, -Math.PI / 6.5),
 
-                new Pose(-44.5, 51.5, Math.PI / 6.5 + Math.PI),
-                new Pose(-44.5, 52.1, Math.PI / 6.5 + Math.PI),
-                new Pose(-44.5, 52.7, Math.PI / 6.5 + Math.PI),
-                new Pose(-44.5, 53.3, Math.PI / 6.5 + Math.PI),
-                new Pose(-44.5, 54, Math.PI / 6.5 + Math.PI)
+                new Pose(-44.5, 51.2, Math.PI / 6.5 + Math.PI),
+                new Pose(-44.5, 52, Math.PI / 6.5 + Math.PI),
+                new Pose(-44.5, 52.6, Math.PI / 6.5 + Math.PI),
+                new Pose(-44.5, 53.1, Math.PI / 6.5 + Math.PI),
+                new Pose(-44.5, 53.2, Math.PI / 6.5 + Math.PI)
         };
 
         GrabPosition[] grabPositions = new GrabPosition[]{
@@ -141,7 +144,7 @@ public class LeftC2Auto extends LinearOpMode {
                 new SequentialCommandGroup(
                         new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 2),
                         new InstantCommand(() -> PositionCommand.max_heading = 0.6),
-                        new PositionCommand(drivetrain, localizer, intermediate, 0, 450, voltage()),
+                        new PositionCommand(drivetrain, localizer, intermediate, 0, 500, voltage()),
                         new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 1),
 
                         //preload
@@ -174,13 +177,13 @@ public class LeftC2Auto extends LinearOpMode {
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[3]).andThen(new C2DepositCommand(lift, intake))),
                         //5
                         new PositionCommand(drivetrain, localizer, pickup[4], 0, 1250, voltage())
-                                .alongWith(new WaitCommand(650).andThen(new C2ExtendCommand(intake, grabPositions[4]))),
+                                .alongWith(new WaitCommand(650).andThen(new C2ExtendCommand(intake, grabPositions[4] ))),
                         new PositionCommand(drivetrain, localizer, deposit_inter[5], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[5], 0, 2250, voltage()))
-                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[4]).andThen(new WaitCommand(200).andThen(new C2DepositCommand(lift, intake)))),
+                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[4]).andThen(new C2DepositCommand(lift, intake))),
 
-                        new PositionCommand(drivetrain, localizer, pickup[5], 0, 1800, voltage())
-                                .alongWith(new WaitCommand(650).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
+                        new PositionCommand(drivetrain, localizer, pickup[5], 0, 2000, voltage())
+                                .alongWith(new WaitCommand(1000).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
                         new PositionCommand(drivetrain, localizer, deposit_inter[6], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[6], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[0]).andThen(new C2DepositCommand(lift, intake))),
@@ -209,6 +212,8 @@ public class LeftC2Auto extends LinearOpMode {
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[10], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[4]).andThen(new C2DepositCommand(lift, intake))),
 
+                        new PositionCommand(drivetrain, localizer, pickup[10], 0, 1250, voltage()),
+
                         //record
                         new InstantCommand(() -> endtime = timer.milliseconds())
                 )
@@ -216,7 +221,7 @@ public class LeftC2Auto extends LinearOpMode {
 
         robot.reset();
 
-        while (opModeIsActive()) {
+        while (opModeIsActive() && !isStopRequested()) {
             if (timer == null) {
                 timer = new ElapsedTime();
             }
@@ -235,6 +240,12 @@ public class LeftC2Auto extends LinearOpMode {
             robot.write(drivetrain, intake, lift);
             robot.clearBulkCache();
         }
+
+        robot.read(drivetrain, intake, lift);
+        robot.loop(new Pose(), drivetrain, intake, lift);
+        robot.write(drivetrain, intake, lift);
+        robot.clearBulkCache();
+
     }
 
     private double voltage() {
