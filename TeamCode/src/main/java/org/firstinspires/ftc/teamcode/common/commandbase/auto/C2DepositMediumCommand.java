@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsyst
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 
 public class C2DepositMediumCommand extends SequentialCommandGroup {
-    public C2DepositMediumCommand(LiftSubsystem lift, IntakeSubsystem intake) {
+    public C2DepositMediumCommand(LiftSubsystem lift, IntakeSubsystem intake, long delay) {
         super(
                 new LiftCommand(lift, LiftSubsystem.LiftState.MID),
                 new WaitCommand(75),
@@ -21,7 +21,7 @@ public class C2DepositMediumCommand extends SequentialCommandGroup {
                 new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
                 new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED),
                 new WaitUntilCommand(lift::isWithinTolerance),
-                new WaitCommand(50),
+                new WaitCommand(delay),
                 new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
                 new WaitCommand(20),
                 new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED))

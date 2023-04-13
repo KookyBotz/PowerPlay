@@ -72,14 +72,14 @@ public class Globals {
     public static double INTAKE_TURRET_INTERMEDIATE = 0.449;
     public static double INTAKE_TURRET_INWARDS = 0.17;
 
-    public static double INTAKE_FOURBAR_PRE_TRANSFER = 0.41;
+    public static double INTAKE_FOURBAR_PRE_TRANSFER = 0.40;
     public static double INTAKE_FOURBAR_TRANSFER = 0.472;
     public static double INTAKE_FOURBAR_INTERMEDIATE = 0.33;
     public static double INTAKE_FOURBAR_INTAKE = 0.04;
     public static double INTAKE_FOURBAR_LOW = 0.359;
     public static double INTAKE_FOURBAR_GROUND = 0.06;
 
-    public static double F_OFFSET = 0.015;
+    public static double F_OFFSET = 0.02;
 
     public static long INTAKE_CLAW_CLOSE_TIME = 50; // ms
 

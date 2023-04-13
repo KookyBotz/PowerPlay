@@ -25,7 +25,7 @@ public class C2RetractCommand extends SequentialCommandGroup {
                 new WaitCommand(Globals.INTAKE_CLAW_CLOSE_TIME + 25),
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.PRE_TRANSFER),
                 new InstantCommand(() -> intake.setPivot(grabPosition.pivotPos)),
-                new WaitCommand(50),
+                new WaitCommand(35),
                 new AutoTransferCommand(intake, lift, grabPosition),
                 new InstantCommand(intake::retractReset)
         );

@@ -21,7 +21,7 @@ public class C2DepositHighCommand extends SequentialCommandGroup {
                 new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
                 new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED),
                 new WaitUntilCommand(lift::isWithinTolerance),
-                new WaitCommand(50),
+                new WaitCommand(70),
                 new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
                 new WaitCommand(20),
                 new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED))
