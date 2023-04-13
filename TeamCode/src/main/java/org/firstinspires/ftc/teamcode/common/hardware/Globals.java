@@ -26,7 +26,7 @@ public class Globals {
     public static boolean reached = false;
 
     // Lift Subsystem Constants
-    public static int LIFT_HIGH_POS = 590;
+    public static int LIFT_HIGH_POS = 597;
     public static int LIFT_MID_POS = 370;
     public static int LIFT_RETRACT_POS = 0;
 
@@ -79,7 +79,7 @@ public class Globals {
     public static double INTAKE_FOURBAR_LOW = 0.359;
     public static double INTAKE_FOURBAR_GROUND = 0.06;
 
-    public static double F_OFFSET = 0.01;
+    public static double F_OFFSET = 0.015;
 
     public static long INTAKE_CLAW_CLOSE_TIME = 50; // ms
 

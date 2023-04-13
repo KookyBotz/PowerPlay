@@ -12,10 +12,10 @@ import org.firstinspires.ftc.teamcode.common.commandbase.newbot.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 
-public class C2DepositCommand extends SequentialCommandGroup {
-    public C2DepositCommand(LiftSubsystem lift, IntakeSubsystem intake) {
+public class C2DepositMediumCommand extends SequentialCommandGroup {
+    public C2DepositMediumCommand(LiftSubsystem lift, IntakeSubsystem intake) {
         super(
-                new LiftCommand(lift, LiftSubsystem.LiftState.HIGH),
+                new LiftCommand(lift, LiftSubsystem.LiftState.MID),
                 new WaitCommand(75),
                 new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT_AUTO),
                 new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
@@ -23,7 +23,7 @@ public class C2DepositCommand extends SequentialCommandGroup {
                 new WaitUntilCommand(lift::isWithinTolerance),
                 new WaitCommand(50),
                 new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
-                new WaitCommand(25),
+                new WaitCommand(20),
                 new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED))
         );
     }
