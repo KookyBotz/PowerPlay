@@ -117,6 +117,7 @@ public class LeftCoverageAuto extends LinearOpMode {
                 )
         );
 
+        robot.stopCameraStream();
         robot.reset();
 
         while (opModeIsActive()) {

@@ -221,6 +221,7 @@ public class LeftC2Auto extends LinearOpMode {
                 )
         );
 
+        robot.stopCameraStream();
         robot.reset();
 
         while (opModeIsActive() && !isStopRequested()) {
