@@ -128,8 +128,8 @@ public class LeftC2Auto extends LinearOpMode {
                 new Pose(-45, 51.2, Math.PI / 6.5 + Math.PI),
                 new Pose(-45, 52, Math.PI / 6.5 + Math.PI),
                 new Pose(-44.5, 52.1, Math.PI / 6.5 + Math.PI),
-                new Pose(-44.5, 52.6, Math.PI / 6.5 + Math.PI),
-                new Pose(-44.5, 52.7, Math.PI / 6.5 + Math.PI)
+                new Pose(-44, 52.6, Math.PI / 6.5 + Math.PI),
+                new Pose(-44, 52.7, Math.PI / 6.5 + Math.PI)
         };
 
         GrabPosition[] grabPositions = new GrabPosition[]{
