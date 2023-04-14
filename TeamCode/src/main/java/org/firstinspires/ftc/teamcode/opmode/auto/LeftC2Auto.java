@@ -79,6 +79,7 @@ public class LeftC2Auto extends LinearOpMode {
 //        SleeveDetection.ParkingPosition position = sleeveDetection.getPosition();
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
+        robot.reset();
 
         Pose intermediate = new Pose(0, 51, 0);
 

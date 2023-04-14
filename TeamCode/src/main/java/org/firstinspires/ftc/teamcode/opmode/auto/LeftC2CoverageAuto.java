@@ -80,21 +80,22 @@ public class LeftC2CoverageAuto extends LinearOpMode {
 //        SleeveDetection.ParkingPosition position = sleeveDetection.getPosition();
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
+        robot.reset();
 
         Pose intermediate = new Pose(0, 51, 0);
 
         Pose[] pickup = new Pose[]{
-                new Pose(1, 54.25, 0),
                 new Pose(1, 54.75, 0),
-                new Pose(0, 055.75, 0),
+                new Pose(1, 55.25, 0),
+                new Pose(0, 55.75, 0),
                 new Pose(0, 56.25, 0),
                 new Pose(0, 56.75, 0),
 
-                new Pose(-69, 56.25, Math.PI + 0.015),
-                new Pose(-69, 56.75, Math.PI + 0.015),
-                new Pose(-69, 57.25, Math.PI + 0.015),
-                new Pose(-69, 57.75, Math.PI + 0.015),
-                new Pose(-69, 58.25, Math.PI + 0.015),
+                new Pose(-66, 56.75, Math.PI + 0.015),
+                new Pose(-68.25, 56.75, Math.PI + 0.015),
+                new Pose(-68.25, 57.25, Math.PI + 0.015),
+                new Pose(-68.25, 57.75, Math.PI + 0.015),
+                new Pose(-68.25, 58.25, Math.PI + 0.015),
 
                 //park
                 new Pose(-72, 58.25, Math.PI),
@@ -119,20 +120,20 @@ public class LeftC2CoverageAuto extends LinearOpMode {
 
         Pose[] deposit = new Pose[]{
                 //preload
-                new Pose(-24, 47, -Math.PI / 6.5),
+                new Pose(-24, 47, -Math.PI / 6.2),
 
-                new Pose(-24, 47, -Math.PI / 6.5),
-                new Pose(-24, 48, -Math.PI / 6.5),
-                new Pose(-24, 49, -Math.PI / 6.5),
-                new Pose(-24, 50, -Math.PI / 6.5),
+                new Pose(-24, 47, -Math.PI / 6.2),
+                new Pose(-24, 48, -Math.PI / 6.2),
+                new Pose(-24, 49, -Math.PI / 6.2),
+                new Pose(-24, 50, -Math.PI / 6.2),
 
                 //medium
                 new Pose(-21, 51, -3 * Math.PI / 4.5),
 
-                new Pose(-45, 51.2, Math.PI / 6.5 + Math.PI),
-                new Pose(-45, 52, Math.PI / 6.5 + Math.PI),
-                new Pose(-44.5, 52.1, Math.PI / 6.5 + Math.PI),
-                new Pose(-44.5, 52.6, Math.PI / 6.5 + Math.PI),
+                new Pose(-45, 51.2, Math.PI / 6.2 + Math.PI),
+                new Pose(-45, 52, Math.PI / 6.2 + Math.PI),
+                new Pose(-44.5, 52.1, Math.PI / 6.2 + Math.PI),
+                new Pose(-44.5, 52.6, Math.PI / 6.2 + Math.PI),
 
                 //medium
                 new Pose(-44.5 - 21.5, 52, Math.PI / 4 + Math.PI)
@@ -189,7 +190,7 @@ public class LeftC2CoverageAuto extends LinearOpMode {
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[4])
                                         .andThen(new C2DepositMediumCommand(lift, intake, 100)).andThen(new WaitCommand(100))),
 
-                        new PositionCommand(drivetrain, localizer, pickup[5], 0, 1800, voltage()).andThen(new WaitCommand(100))
+                        new PositionCommand(drivetrain, localizer, pickup[5], 0, 1800, voltage())
                                 .alongWith(new WaitCommand(800).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
                         new PositionCommand(drivetrain, localizer, deposit_inter[6], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[6], 0, 1250, voltage()))
