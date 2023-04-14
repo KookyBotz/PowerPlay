@@ -92,10 +92,10 @@ public class LeftC2CoverageAuto extends LinearOpMode {
                 new Pose(0, 56.75, 0),
 
                 new Pose(-67.5, 56.75, Math.PI + 0.017),
-                new Pose(-68.25, 57.25, Math.PI + 0.017),
                 new Pose(-68.25, 57.75, Math.PI + 0.017),
                 new Pose(-68.25, 58.25, Math.PI + 0.017),
                 new Pose(-68.25, 58.75, Math.PI + 0.017),
+                new Pose(-68.25, 59.25, Math.PI + 0.017),
 
                 //park
                 new Pose(-72, 58.25, Math.PI),
@@ -120,9 +120,9 @@ public class LeftC2CoverageAuto extends LinearOpMode {
 
         Pose[] deposit = new Pose[]{
                 //preload
-                new Pose(-24, 47, -Math.PI / 6.35),
+                new Pose(-24, 47, -Math.PI / 6.5),
 
-                new Pose(-24, 47, -Math.PI / 6.35),
+                new Pose(-24, 47, -Math.PI / 6.5),
                 new Pose(-24, 48, -Math.PI / 6.5),
                 new Pose(-24, 49, -Math.PI / 6.5),
                 new Pose(-24, 50, -Math.PI / 6.5),
@@ -136,7 +136,7 @@ public class LeftC2CoverageAuto extends LinearOpMode {
                 new Pose(-44.5, 52.6, Math.PI / 6.35 + Math.PI),
 
                 //medium
-                new Pose(-44.5 - 21.5, 52, Math.PI / 4 + Math.PI)
+                new Pose(-66.25, 52, Math.PI / 4 + Math.PI)
         };
 
         GrabPosition[] grabPositions = new GrabPosition[]{
