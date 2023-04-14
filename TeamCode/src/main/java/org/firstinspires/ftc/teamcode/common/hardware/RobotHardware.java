@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.common.hardware;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
@@ -71,11 +73,12 @@ public class RobotHardware {
 
     public DigitalChannel clawSensor;
 
-    public OpenCvCamera camera;
+    public OpenCvCamera cameraLeft;
+    public OpenCvCamera cameraRight;
 
     public VoltageSensor voltageSensor;
 
-    public OpenCvPipeline pipeline;
+    public SleeveDetection sleeveDetection;
 
     private static RobotHardware instance = null;
 
@@ -147,13 +150,33 @@ public class RobotHardware {
         clawSensor = hardwareMap.get(DigitalChannel.class, "clawSensor");
 
         if (Globals.AUTO) {
-            try {
+            sleeveDetection = new SleeveDetection();
+
+            if (Globals.SIDE == Globals.Side.LEFT) {
+                cameraLeft = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"));
+                cameraLeft.setPipeline(sleeveDetection);
+                cameraLeft.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+                    @Override
+                    public void onOpened() {
+                        cameraLeft.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                    }
+
+                    @Override
+                    public void onError(int errorCode) {}
+                });
+            } else {
                 int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-                camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, (Globals.SIDE.equals(Globals.Side.LEFT)) ? "WebcamLeft" : "WebcamRight"), cameraMonitorViewId);
-                pipeline = new SleeveDetection();
-            } catch (Exception e) {
-                camera = null;
-                pipeline = null;
+                cameraRight = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+                cameraRight.setPipeline(sleeveDetection);
+                cameraRight.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+                    @Override
+                    public void onOpened() {
+                        cameraRight.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                    }
+
+                    @Override
+                    public void onError(int errorCode) {}
+                });
             }
         }
 
@@ -236,18 +259,12 @@ public class RobotHardware {
         }
     }
 
-    public void cameraInit() {
-        camera.setPipeline(pipeline);
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened() {
-                camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-            }
+    public void stopCameraStream() {
+        if (Globals.SIDE == Globals.Side.LEFT) {
+            cameraLeft.closeCameraDeviceAsync(() -> System.out.println("Stopped Left Camera"));
+        } else {
+            cameraRight.closeCameraDeviceAsync(() -> System.out.println("Stopped Right Camera"));
 
-            @Override
-            public void onError(int errorCode) {
-
-            }
-        });
+        }
     }
 }

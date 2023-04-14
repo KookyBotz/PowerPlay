@@ -11,14 +11,14 @@ public class Globals {
         RIGHT
     }
 
-    public static int LEFTSIDE_REGION_X = 75;
-    public static int LEFTSIDE_REGION_Y = 120;
+    public static int LEFTSIDE_REGION_X = 220;
+    public static int LEFTSIDE_REGION_Y = 140;
 
-    public static int RIGHTSIDE_REGION_X = 75;
-    public static int RIGHTSIDE_REGION_Y = 120;
+    public static int RIGHTSIDE_REGION_X = 210;
+    public static int RIGHTSIDE_REGION_Y = 60;
 
-    public static int REGION_WIDTH = 30;
-    public static int REGION_HEIGHT = 50;
+    public static int REGION_WIDTH = 75;
+    public static int REGION_HEIGHT = 55;
 
     public static Pose yummypose = new Pose(0, 0, 0);
     public static Pose error = new Pose(0, 0, 0);
