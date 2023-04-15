@@ -338,6 +338,11 @@ public class OpMode extends CommandOpMode {
 //        telemetry.addData("current pos", intake.getPos());
 //        telemetry.addData("target pos", intake.getTargetPosition());
 //        telemetry.addData("hasCone", intake.coneDetected);
+
+        telemetry.addData("frontLeft", drivetrain.frontLeftModule.getModuleRotation());
+        telemetry.addData("frontRight", drivetrain.frontRightModule.getModuleRotation());
+        telemetry.addData("backRight", drivetrain.backRightModule.getModuleRotation());
+        telemetry.addData("backLeft", drivetrain.backLeftModule.getModuleRotation());
         loopTime = loop;
         telemetry.update();
 

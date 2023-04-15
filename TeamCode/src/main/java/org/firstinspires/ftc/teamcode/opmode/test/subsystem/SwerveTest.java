@@ -87,6 +87,12 @@ public class SwerveTest extends OpMode {
         telemetry.addData("frontRightCurrent", frontRightMotor.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("backRightCurrent", backRightMotor.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("backLeftCurrent", backLeftMotor.getCurrent(CurrentUnit.AMPS));
+
+
+        telemetry.addData("frontLeft", frontLeftEncoder.getVoltage());
+        telemetry.addData("frontRight", frontRightEncoder.getVoltage());
+        telemetry.addData("backRight", backRightEncoder.getVoltage());
+        telemetry.addData("backLeft", backLeftEncoder.getVoltage());
         telemetry.update();
     }
 }

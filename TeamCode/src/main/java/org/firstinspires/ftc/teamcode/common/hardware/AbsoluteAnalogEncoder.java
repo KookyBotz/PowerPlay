@@ -35,7 +35,7 @@ public class AbsoluteAnalogEncoder {
 
     private double pastPosition = 1;
     public double getCurrentPosition() {
-        double pos = Angle.norm((!inverted ? 1 - encoder.getVoltage() / analogRange : encoder.getVoltage() / analogRange) * Math.PI*2 - offset);
+        double pos = Angle.norm((!inverted ? 1 - getVoltage() / analogRange : getVoltage() / analogRange) * Math.PI*2 - offset);
         //checks for crazy values when the encoder is close to zero
         if(!VALUE_REJECTION || Math.abs(Angle.normDelta(pastPosition)) > 0.1 || Math.abs(Angle.normDelta(pos)) < 1) pastPosition = pos;
         return pastPosition;
@@ -43,5 +43,16 @@ public class AbsoluteAnalogEncoder {
 
     public AnalogInput getEncoder() {
         return encoder;
+    }
+
+    public static double reLinearize(double v){
+        double v2 = 3.3-v;
+        double alpha = v2 * ((3.3 * v2) - 16.335);
+        double beta = (v2 * v2) - (3.3 * v2) - 5.445;
+        return 3.3 - (alpha / beta);
+    }
+
+    public double getVoltage(){
+        return encoder.getVoltage();
     }
 }
