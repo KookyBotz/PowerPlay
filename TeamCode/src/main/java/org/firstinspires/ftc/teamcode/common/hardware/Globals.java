@@ -64,7 +64,7 @@ public class Globals {
     public static double INTAKE_PIVOT_LOW = 0.355;
     public static double INTAKE_PIVOT_FLAT = 0.5125;
     public static double INTAKE_PIVOT_FLAT_AUTO = 0.5125;
-    public static double INTAKE_PIVOT_PRE_TRANSFER = 0.625;
+    public static double INTAKE_PIVOT_PRE_TRANSFER = 0.63;
     public static double INTAKE_PIVOT_TRANSFER = 0.62;
     public static double INTAKE_PIVOT_PICKUP = 0.5;
 
