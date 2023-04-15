@@ -85,11 +85,11 @@ public class LeftC2CoverageAutoOptimized extends LinearOpMode {
         robot.reset();
 
         Pose[] pickup = new Pose[]{
-                new Pose(1, 54.75, 0),
-                new Pose(1, 55.25, 0),
                 new Pose(0, 55.75, 0),
+                new Pose(0.5, 55.25, 0),
+                new Pose(0.25, 55.75, 0),
                 new Pose(0, 56.355, 0),
-                new Pose(0, 56.75, 0),
+                new Pose(-0.25, 56.75, 0),
 
                 new Pose(-67.5, 56.75, Math.PI + 0.017),
                 new Pose(-68.25, 57.75, Math.PI + 0.017),
@@ -109,7 +109,7 @@ public class LeftC2CoverageAutoOptimized extends LinearOpMode {
                 new Pose(-27.66, 52.8, 0),
                 new Pose(-27.66, 53.4, 0),
 
-                new Pose(-53.5, 50.5, 0),
+                new Pose(-45, 51.2, 0),
 
                 new Pose(-43.5, 53, Math.PI),
                 new Pose(-43.5, 53.6, Math.PI),
@@ -120,15 +120,14 @@ public class LeftC2CoverageAutoOptimized extends LinearOpMode {
 
         Pose[] deposit = new Pose[]{
                 //preload
-                new Pose(-1.5, 41.5, -Math.PI / 12),
+                new Pose(-2.5, 41, -Math.PI / 18),
 
                 new Pose(-24, 47, -Math.PI / 6.5),
                 new Pose(-24, 48, -Math.PI / 6.5),
                 new Pose(-24, 49, -Math.PI / 6.5),
                 new Pose(-24, 50, -Math.PI / 6.5),
 
-                //medium
-                new Pose(-52, 50.5, -Math.PI/5),
+                new Pose(-45, 51.2, Math.PI / 6.35 + Math.PI),
 
                 new Pose(-45, 51.2, Math.PI / 6.35 + Math.PI),
                 new Pose(-45, 52, Math.PI / 6.35 + Math.PI),
@@ -151,11 +150,11 @@ public class LeftC2CoverageAutoOptimized extends LinearOpMode {
 
                         //preload
                         new PositionCommand(drivetrain, localizer, deposit[0], 0, 1250, voltage())
-                                .alongWith(new WaitCommand(1050).andThen(new C2DepositMediumCommand(lift, intake, 150))
-                                        .alongWith(new WaitCommand(1350).andThen(new C2ExtendCommand(intake, grabPositions[0])))),
+                                .alongWith(new WaitCommand(1100).andThen(new C2DepositMediumCommand(lift, intake, 150))),
 
                         //1
-                        new PositionCommand(drivetrain, localizer, pickup[0], 0, 500, voltage()),
+                        new PositionCommand(drivetrain, localizer, pickup[0], 0, 800, voltage()).andThen(new WaitCommand(0))
+                                .alongWith(new WaitCommand(300).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
                         new PositionCommand(drivetrain, localizer, deposit_inter[1], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[1], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[0]).andThen(new C2DepositHighCommand(lift, intake))),
@@ -178,19 +177,18 @@ public class LeftC2CoverageAutoOptimized extends LinearOpMode {
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[4], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[3]).andThen(new C2DepositHighCommand(lift, intake))),
 
-                        //medium
+                        //funny
                         new PositionCommand(drivetrain, localizer, pickup[4], 0, 1250, voltage())
-                                .alongWith(new WaitCommand(500).andThen(new C2ExtendCommand(intake, grabPositions[4])))
-                                .andThen(new C2RetractCommand(intake, lift, grabPositions[4])),
-                        new PositionCommand(drivetrain, localizer, deposit_inter[5], 0, 300, voltage()),
-                        new PositionCommand(drivetrain, localizer, deposit[5], 0, 1000, voltage())
-                                .alongWith(new WaitCommand(500).andThen(new C2DepositExtendMediumCommand(lift, intake)))
-                                .andThen(new C2DepositRetractMediumCommand(lift, intake, 50))
-                                        .andThen(new WaitCommand(100)),
+                                .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[4]))),
+                        new PositionCommand(drivetrain, localizer, deposit_inter[5], 0, 1250, voltage())
+                                .andThen(new PositionCommand(drivetrain, localizer, deposit[5], 0, 1000, voltage())
+                                        .alongWith(new C2DepositHighCommand(lift, intake)))
+                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[4])),
 
 
-                        new PositionCommand(drivetrain, localizer, pickup[5], 0, 1800, voltage())
-                                .alongWith(new WaitCommand(1000).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
+                        //second
+                        new PositionCommand(drivetrain, localizer, pickup[5], 0, 2500, voltage())
+                                .alongWith(new WaitCommand(1400).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
                         new PositionCommand(drivetrain, localizer, deposit_inter[6], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[6], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[0]).andThen(new C2DepositHighCommand(lift, intake))),
