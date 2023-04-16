@@ -186,7 +186,10 @@ public class OpMode extends CommandOpMode {
         }
 
         if (gamepad2.dpad_down) {
+            intake.resetting = true;
             robot.intakeEncoder.reset();
+        }else{
+            intake.resetting = false;
         }
 
         /*

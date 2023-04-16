@@ -75,6 +75,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public double targetPosition = 0.0;
     public double time = 0.0;
 
+    public boolean resetting = false;
+
 
     public enum STATE {
         GOOD,
@@ -298,6 +300,10 @@ public class IntakeSubsystem extends SubsystemBase {
         power = Range.clip((-controller.calculate(intakePosition, targetPosition) + (F * Math.signum(targetPosition - intakePosition)) / voltage * 14), -1, 1);
         if (targetPosition <= 0) {
             power -= -0.1;
+        }
+
+        if(resetting){
+            power = 0.4;
         }
         // TODO: 0.066 is the compensate max
     }
