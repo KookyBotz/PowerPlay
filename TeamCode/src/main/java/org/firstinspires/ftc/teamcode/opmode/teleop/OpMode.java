@@ -197,7 +197,7 @@ public class OpMode extends CommandOpMode {
          */
         boolean rightBumper = gamepad2.right_bumper;
         if (!lastRightBumper2 && rightBumper) {
-            if (intake.hasCone()) {
+            if (intake.hasCone() || gamepad1.left_bumper) {
                 CommandScheduler.getInstance().schedule(new TransferCommand(intake, lift));
             } else if (!intake.fourbarState.equals(IntakeSubsystem.FourbarState.INTAKE)) {
                 CommandScheduler.getInstance().schedule(
@@ -216,7 +216,7 @@ public class OpMode extends CommandOpMode {
             CommandScheduler.getInstance().schedule(
                     new InstantCommand(() -> intake.update(ClawState.CLOSED))
             );
-            if (intake.hasCone()) {
+            if (intake.hasCone() || gamepad1.left_bumper) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
                                 new WaitCommand(Globals.INTAKE_CLAW_CLOSE_TIME),
