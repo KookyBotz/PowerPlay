@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -9,7 +8,6 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -29,12 +27,8 @@ import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 
-@Autonomous(name = "Left 1+10 C2 Coverage Auto")
-@Config
-@Disabled
-
-public class LeftC2CoverageAuto extends LinearOpMode {
-
+@Autonomous(name = "Left 1+5 C2")
+public class Left5C2 extends LinearOpMode {
     private RobotHardware robot = RobotHardware.getInstance();
     private SwerveDrivetrain drivetrain;
     private IntakeSubsystem intake;
@@ -49,6 +43,8 @@ public class LeftC2CoverageAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        this.msStuckDetectStop = 2000;
+
         CommandScheduler.getInstance().reset();
         Globals.SIDE = Globals.Side.LEFT;
         Globals.AUTO = true;
@@ -85,23 +81,12 @@ public class LeftC2CoverageAuto extends LinearOpMode {
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         robot.reset();
 
-        Pose intermediate = new Pose(0, 51, 0);
-
         Pose[] pickup = new Pose[]{
-                new Pose(1, 54.75, 0),
-                new Pose(1, 55.25, 0),
-                new Pose(0, 55.75, 0),
+                new Pose(1, 56.75, 0),
+                new Pose(0.5, 55.25, 0),
+                new Pose(0.25, 55.75, 0),
                 new Pose(0, 56.355, 0),
-                new Pose(0, 56.75, 0),
-
-                new Pose(-67.5, 56.75, Math.PI + 0.017),
-                new Pose(-68.25, 57.75, Math.PI + 0.017),
-                new Pose(-68.25, 58.25, Math.PI + 0.017),
-                new Pose(-68.25, 58.75, Math.PI + 0.017),
-                new Pose(-68.25, 59.25, Math.PI + 0.017),
-
-                //park
-                new Pose(-72, 58.25, Math.PI),
+                new Pose(-0.25, 56.75, 0),
         };
 
         Pose[] deposit_inter = new Pose[]{
@@ -112,34 +97,25 @@ public class LeftC2CoverageAuto extends LinearOpMode {
                 new Pose(-27.66, 52.8, 0),
                 new Pose(-27.66, 53.4, 0),
 
-                new Pose(-23, 54, 0),
-
-                new Pose(-43.5, 53, Math.PI),
-                new Pose(-43.5, 53.6, Math.PI),
-                new Pose(-43.5, 54.2, Math.PI),
-                new Pose(-43.5, 54.8, Math.PI),
-                new Pose(-43.5, 55.4, Math.PI)
+                new Pose(-27.66, 54, 0),
         };
 
         Pose[] deposit = new Pose[]{
                 //preload
-                new Pose(-24, 47, -Math.PI / 6.5),
+                new Pose(-2.5, 41, -Math.PI / 18),
 
                 new Pose(-24, 47, -Math.PI / 6.5),
                 new Pose(-24, 48, -Math.PI / 6.5),
                 new Pose(-24, 49, -Math.PI / 6.5),
                 new Pose(-24, 50, -Math.PI / 6.5),
 
-                //medium
-                new Pose(-21, 51, -3 * Math.PI / 4.5),
+                new Pose(-46, 50, Math.PI / 6.35 + Math.PI),
 
                 new Pose(-45, 51.2, Math.PI / 6.35 + Math.PI),
                 new Pose(-45, 52, Math.PI / 6.35 + Math.PI),
                 new Pose(-44.5, 52.1, Math.PI / 6.35 + Math.PI),
                 new Pose(-44.5, 52.6, Math.PI / 6.35 + Math.PI),
-
-                //medium
-                new Pose(-66.25, 52, Math.PI / 4 + Math.PI)
+                new Pose(-44.5, 53, Math.PI / 6.35 + Math.PI)
         };
 
         GrabPosition[] grabPositions = new GrabPosition[]{
@@ -147,23 +123,20 @@ public class LeftC2CoverageAuto extends LinearOpMode {
                 new GrabPosition(560, 0, 0.14, 0.37, 0),
                 new GrabPosition(560, 0, 0.11, 0.37, 0),
                 new GrabPosition(560, 0, 0.075, 0.37, 20),
-                new GrabPosition(560, 0, 0.05, 0.37, 20)
+                new GrabPosition(560, 0, 0.05, 0.37, 50)
         };
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 2),
-                        new InstantCommand(() -> PositionCommand.max_heading = 0.6),
-                        new PositionCommand(drivetrain, localizer, intermediate, 0, 1250, voltage()),
                         new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 1),
 
                         //preload
                         new PositionCommand(drivetrain, localizer, deposit[0], 0, 1250, voltage())
-                                .alongWith(new WaitCommand(630).andThen(new C2DepositHighCommand(lift, intake))),
+                                .alongWith(new WaitCommand(1100).andThen(new C2DepositMediumCommand(lift, intake, 150))),
 
                         //1
-                        new PositionCommand(drivetrain, localizer, pickup[0], 0, 1250, voltage())
-                                .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
+                        new PositionCommand(drivetrain, localizer, pickup[0], 0, 800, voltage()).andThen(new WaitCommand(0))
+                                .alongWith(new WaitCommand(300).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
                         new PositionCommand(drivetrain, localizer, deposit_inter[1], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[1], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[0]).andThen(new C2DepositHighCommand(lift, intake))),
@@ -185,16 +158,19 @@ public class LeftC2CoverageAuto extends LinearOpMode {
                         new PositionCommand(drivetrain, localizer, deposit_inter[4], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[4], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[3]).andThen(new C2DepositHighCommand(lift, intake))),
-                        //medium
+
+                        //funny
                         new PositionCommand(drivetrain, localizer, pickup[4], 0, 1250, voltage())
                                 .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[4]))),
-                        new PositionCommand(drivetrain, localizer, deposit_inter[5], 0, 500, voltage())
-                                .andThen(new PositionCommand(drivetrain, localizer, deposit[5], 0, 750, voltage()))
-                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[4])
-                                        .andThen(new C2DepositMediumCommand(lift, intake, 100)).andThen(new WaitCommand(100))),
+                        new PositionCommand(drivetrain, localizer, deposit_inter[5], 0, 975, voltage())
+                                .andThen(new PositionCommand(drivetrain, localizer, deposit[5], 0, 1000, voltage())
+                                        .alongWith(new WaitCommand(650).andThen(new C2DepositHighCommand(lift, intake))))
+                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[4])),
 
-                        new PositionCommand(drivetrain, localizer, pickup[5], 5, 1800, voltage())
-                                .alongWith(new WaitCommand(800).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
+
+                        //second
+                        new PositionCommand(drivetrain, localizer, pickup[5], 0, 1250, voltage())
+                                .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
                         new PositionCommand(drivetrain, localizer, deposit_inter[6], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[6], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[0]).andThen(new C2DepositHighCommand(lift, intake))),
@@ -221,7 +197,7 @@ public class LeftC2CoverageAuto extends LinearOpMode {
                                 .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[4]))),
                         new PositionCommand(drivetrain, localizer, deposit_inter[10], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[10], 0, 1250, voltage()))
-                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[4]).andThen(new C2DepositMediumCommand(lift, intake, 50))),
+                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[4]).andThen(new C2DepositHighCommand(lift, intake))),
 
                         new PositionCommand(drivetrain, localizer, pickup[10], 0, 1250, voltage()),
 

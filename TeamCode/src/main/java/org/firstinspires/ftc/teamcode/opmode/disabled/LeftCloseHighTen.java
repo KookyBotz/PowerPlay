@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.auto;
+package org.firstinspires.ftc.teamcode.opmode.disabled;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -46,7 +46,6 @@ public class LeftCloseHighTen extends LinearOpMode {
     private SleeveDetection sleeveDetection;
     private double loopTime;
     private double endtime = 0;
-
 
     @Override
     public void runOpMode() throws InterruptedException {

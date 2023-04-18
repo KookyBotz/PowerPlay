@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.common.hardware;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
@@ -28,7 +26,6 @@ import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvPipeline;
 
 import javax.annotation.concurrent.GuardedBy;
 
@@ -70,11 +67,12 @@ public class RobotHardware {
     private Thread imuThread;
     private double imuAngle = 0;
     private double imuOffset = 0;
-
-    public DigitalChannel clawSensor;
+    private double voltage = 0.0;
 
     public OpenCvCamera cameraLeft;
     public OpenCvCamera cameraRight;
+
+    public DigitalChannel clawSensor;
 
     public VoltageSensor voltageSensor;
 
@@ -180,11 +178,7 @@ public class RobotHardware {
             }
         }
 
-        try {
-            voltageSensor = hardwareMap.voltageSensor.iterator().next();
-        } catch (Exception e) {
-            voltageSensor = null;
-        }
+        voltage = (voltageSensor = hardwareMap.voltageSensor.iterator().next()).getVoltage();
     }
 
     public void loop(Pose drive, SwerveDrivetrain drivetrain, IntakeSubsystem intake, LiftSubsystem lift) {
@@ -266,5 +260,9 @@ public class RobotHardware {
             cameraRight.closeCameraDeviceAsync(() -> System.out.println("Stopped Right Camera"));
 
         }
+    }
+
+    public double getVoltage() {
+        return voltage;
     }
 }

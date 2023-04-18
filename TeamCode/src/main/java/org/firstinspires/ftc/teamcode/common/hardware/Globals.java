@@ -36,7 +36,7 @@ public class Globals {
 
     public static double LIFT_LATCHED = 0.78;
     public static double LIFT_INTERMEDIATE = 0.795;
-    public static double LIFT_UNLATCHED = 0.87;
+    public static double LIFT_UNLATCHED = 0.88;
 
     public static final double LIFT_TICKS_PER_INCH = 22.754;
 

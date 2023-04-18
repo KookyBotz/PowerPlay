@@ -36,13 +36,10 @@ public class IntakeSubsystem extends SubsystemBase {
     public State fourbarMotionState;
     private final ElapsedTime intakeTimer;
     private final ElapsedTime fourbarTimer;
-    private final ElapsedTime voltageTimer;
     public ElapsedTime intaketime;
     private PIDController controller;
 
-    private double voltage = 0;
     private double intakePosition = 0;
-    private double lastTargetPosition = 0;
 
     public static double P = 0.0121;
     public static double I = 0.0;
@@ -51,11 +48,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public static double INTAKE_DELAY = 0.02;
 
-    public boolean isExtended = false;
     public final List<Boolean> coneDetected = new ArrayList<>();
     private boolean hasCone = false;
-    private boolean notreached = false;
-    private boolean done = false;
     private boolean withinTolerance = false;
 
     public double pivotOffset = 0;
@@ -105,15 +99,10 @@ public class IntakeSubsystem extends SubsystemBase {
         INTAKE,
         LOW,
         GROUND,
-        FALLEN,
         INTERMEDIATE,
         PRE_TRANSFER,
         TRANSFER
     }
-
-//    public enum PivotState {
-//        FLAT, PITCH_UP, SCORE, DOWN, PIVOT_AUTO_TRANSFER
-//    }
 
     public enum PivotState {
         FLAT,
@@ -134,14 +123,10 @@ public class IntakeSubsystem extends SubsystemBase {
         this.controller = new PIDController(P, I, D);
         this.intakeTimer = new ElapsedTime();
         this.fourbarTimer = new ElapsedTime();
-        this.voltageTimer = new ElapsedTime();
         this.intaketime = new ElapsedTime();
-        this.voltage = robot.voltageSensor.getVoltage();
 
         intakeTimer.reset();
         fourbarTimer.reset();
-        voltageTimer.reset();
-//        update(FourbarState.INTERMEDIATE);
         setFourbar(INTAKE_FOURBAR_INTERMEDIATE);
         update(TurretState.OUTWARDS);
         update(ClawState.OPEN);
@@ -149,6 +134,9 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void update(PivotState state) {
+        if (state != pivotState) {
+            pivotOffset = 0;
+        }
         pivotState = state;
         switch (state) {
             case FLAT_AUTO:
@@ -205,62 +193,28 @@ public class IntakeSubsystem extends SubsystemBase {
         fourbarState = state;
         switch(state) {
             case GROUND:
-//                newProfile(INTAKE_FOURBAR_GROUND, new Constraints(0, 0, 0), ProfileTarget.FOURBAR);
                 newProfile(INTAKE_FOURBAR_GROUND);
                 break;
             case INTAKE:
-//                newProfile(INTAKE_FOURBAR_INTAKE, new Constraints(0, 0, 0), ProfileTarget.FOURBAR);
-//                setFourbar(INTAKE_FOURBAR_INTAKE);
                 newProfile(INTAKE_FOURBAR_INTAKE);
                 break;
             case LOW:
-//                newProfile(INTAKE_FOURBAR_LOW, new Constraints(0, 0, 0), ProfileTarget.FOURBAR);
                 newProfile(INTAKE_FOURBAR_LOW);
                 break;
             case PRE_TRANSFER:
-//                newProfile(INTAKE_FOURBAR_DEPOSIT, new Constraints(0, 0, 0), ProfileTarget.FOURBAR);
                 newProfile(INTAKE_FOURBAR_PRE_TRANSFER);
                 break;
             case TRANSFER:
                 newProfile(INTAKE_FOURBAR_TRANSFER);
                 break;
             case INTERMEDIATE:
-//                newProfile(INTAKE_FOURBAR_INTERMEDIATE, new Constraints(0, 0, 0), ProfileTarget.FOURBAR);
                 newProfile(INTAKE_FOURBAR_INTERMEDIATE);
                 break;
         }
     }
 
-//    public void update(FourbarState state) {
-//        fourbarState = state;
-//        switch (state) {
-//            case INTAKE:
-//                setFourbar(fourbar_extended);
-//                break;
-//            case TRANSITION:
-//                setFourbar(fourbar_transition);
-//                break;
-//            case DEPOSIT:
-//                setFourbar(fourbar_retracted);
-//                break;
-//            case SCORE:
-//                setFourbar(fourbar_score);
-//                break;
-//            case UPRIGHT:
-//                setFourbar(fourbar_upright);
-//                break;
-//            case DOWN:
-//                setFourbar(fourbar_down);
-//                break;
-//        }
-//    }
-
     public void loop2 () {
         this.controller.setPID(P, I, D);
-//        if (targetFourbarPosition != lastTargetFourbarPosition) {
-//            newProfile(targetFourbarPosition);
-//            lastTargetFourbarPosition = targetFourbarPosition;
-//        }
 
         coneDetected.add(!robot.clawSensor.getState());
         if(coneDetected.size()>7){
@@ -268,36 +222,14 @@ public class IntakeSubsystem extends SubsystemBase {
         }
         hasCone = coneDetected.contains(true);
 
-        if (voltageTimer.seconds() > 5) {
-            voltage = robot.voltageSensor.getVoltage();
-            voltageTimer.reset();
-        }
-
         fourbarMotionState = fourbarProfile.calculate(fourbarTimer.time() + INTAKE_DELAY);
         if (fourbarMotionState.v != 0) {
             setFourbar(fourbarMotionState.x);
         }
 
-//        intakeMotionState = intakeProfile.calculate(intakeTimer.time());
-//        if (intakeMotionState.v != 0) {
-//            setTargetPosition((int) intakeMotionState.x);
-//        }
-
         withinTolerance = Math.abs(getPos() - getTargetPosition()) <= INTAKE_ERROR_TOLERANCE;
 
-//        if (lastTargetPosition != publicTargetPosition) {
-//            intaketime.reset();
-//            done = false;
-//        }
-//
-//        boolean reached = getPos() >= publicTargetPosition;
-//        if (reached && !notreached && !done) {
-//            time = intaketime.milliseconds();
-//            intaketime.reset();
-//            done = true;
-//        }
-//        notreached = reached;
-        power = Range.clip((-controller.calculate(intakePosition, targetPosition) + (F * Math.signum(targetPosition - intakePosition)) / voltage * 14), -1, 1);
+        power = Range.clip((-controller.calculate(intakePosition, targetPosition) + (F * Math.signum(targetPosition - intakePosition)) / robot.getVoltage() * 14), -1, 1);
         if (targetPosition <= 0) {
             power -= -0.1;
         }
@@ -305,7 +237,6 @@ public class IntakeSubsystem extends SubsystemBase {
         if(resetting){
             power = 0.4;
         }
-        // TODO: 0.066 is the compensate max
     }
 
     public void read() {
@@ -329,17 +260,11 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setFourbar(double pos) {
-//        if (pos <= 0.066) {
-//            pos += 1.0399e-5 * (getPos());
-//        }
         robot.fourbarLeft.setPosition(pos - F_OFFSET);
         robot.fourbarRight.setPosition(1 - (pos - 0.01 - F_OFFSET));
     }
 
     public void retractReset() {
-//        if (isWithinTolerance() && Math.abs(robot.intakeEncoder.getRawVelocity()) == 0 && getTargetPosition() <= 0) {
-//            robot.intakeEncoder.reset();
-//        }
         robot.intakeEncoder.reset();
     }
 

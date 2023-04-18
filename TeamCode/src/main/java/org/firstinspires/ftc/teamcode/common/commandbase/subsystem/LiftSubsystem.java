@@ -29,10 +29,8 @@ public class LiftSubsystem extends SubsystemBase {
     private AsymmetricMotionProfile liftProfile;
     public State liftMotionState;
     private final ElapsedTime timer;
-    private final ElapsedTime voltageTimer;
     private PIDController controller;
 
-    private double voltage;
     private int liftPosition;
     private double power = 0.0;
     private int targetPosition = 0;
@@ -70,8 +68,6 @@ public class LiftSubsystem extends SubsystemBase {
 
         this.liftProfile = new AsymmetricMotionProfile(0, 1, new Constraints(0, 0, 0));
         this.controller = new PIDController(P, I, D);
-        this.voltage = robot.voltageSensor.getVoltage();
-        this.voltageTimer = new ElapsedTime();
         this.timer = new ElapsedTime();
 
         if (AUTO) {
@@ -117,11 +113,6 @@ public class LiftSubsystem extends SubsystemBase {
     public void loop() {
         this.controller.setPID(P, I, D);
 
-        if (voltageTimer.seconds() > 5) {
-            voltage = robot.voltageSensor.getVoltage();
-            voltageTimer.reset();
-        }
-
         liftMotionState = liftProfile.calculate(timer.time());
         if (liftMotionState.v != 0) {
             setTargetPos((int) liftMotionState.x);
@@ -129,10 +120,7 @@ public class LiftSubsystem extends SubsystemBase {
 
         withinTolerance = Math.abs(getPos() - getTargetPos()) < LIFT_ERROR_TOLERANCE;
 
-//        isExtended = getPos() > (LIFT_EXTENDED_TOLERANCE * LIFT_TICKS_PER_INCH);
-//        hasCone = !robot.depositSensor.getState();
-
-        power = Range.clip(((-controller.calculate(liftPosition, targetPosition) + (F * Math.signum(targetPosition - liftPosition))) / voltage * 14), -1, 1);
+        power = Range.clip(((-controller.calculate(liftPosition, targetPosition) + (F * Math.signum(targetPosition - liftPosition))) / robot.getVoltage() * 14), -1, 1);
     }
 
     public void read() {
