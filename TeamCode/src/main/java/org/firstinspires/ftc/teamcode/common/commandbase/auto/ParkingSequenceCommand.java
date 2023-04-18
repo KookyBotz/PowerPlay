@@ -8,6 +8,6 @@ public class ParkingSequenceCommand extends SequentialCommandGroup {
     public ParkingSequenceCommand(SleeveDetection.ParkingPosition position) {
         super(
 
-        )
+        );
     }
 }

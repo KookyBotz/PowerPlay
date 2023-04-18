@@ -81,23 +81,23 @@ public class LeftC2CoverageAutoOptimized extends LinearOpMode {
             robot.write(drivetrain, intake, lift);
         }
 
-        SleeveDetection.ParkingPosition position = sleeveDetection.getPosition();
+        //SleeveDetection.ParkingPosition position = sleeveDetection.getPosition();
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         robot.reset();
 
         Pose[] pickup = new Pose[]{
-                new Pose(1, 56.75, 0),
+                new Pose(1, 57.25, 0),
                 new Pose(0.5, 55.25, 0),
                 new Pose(0.25, 55.75, 0),
                 new Pose(0, 56.355, 0),
                 new Pose(-0.25, 56.75, 0),
 
-                new Pose(-68.25, 56.75, Math.PI + 0.017),
-                new Pose(-68.25, 57.75, Math.PI + 0.017),
-                new Pose(-68.25, 58.25, Math.PI + 0.017),
-                new Pose(-68.25, 58.75, Math.PI + 0.017),
-                new Pose(-68.25, 59.25, Math.PI + 0.017),
+                new Pose(-73.75, 56.75, Math.PI + 0.017),
+                new Pose(-72.25, 57.75, Math.PI + 0.017),
+                new Pose(-72.25, 58.25, Math.PI + 0.017),
+                new Pose(-72.25, 58.75, Math.PI + 0.017),
+                new Pose(-72.25, 59.25, Math.PI + 0.017),
 
                 //park
                 new Pose(-72, 58.25, Math.PI),
@@ -125,17 +125,17 @@ public class LeftC2CoverageAutoOptimized extends LinearOpMode {
                 new Pose(-2.5, 41, -Math.PI / 18),
 
                 new Pose(-24, 47, -Math.PI / 6.5),
-                new Pose(-24, 48, -Math.PI / 6.5),
-                new Pose(-24, 49, -Math.PI / 6.5),
-                new Pose(-24, 50, -Math.PI / 6.5),
+                new Pose(-24.5, 48, -Math.PI / 6.5),
+                new Pose(-24.5, 49, -Math.PI / 6.5),
+                new Pose(-24.5, 50, -Math.PI / 6.5),
 
-                new Pose(-46, 50, Math.PI / 6.35 + Math.PI),
+                new Pose(-49, 50, Math.PI / 6.35 + Math.PI),
 
-                new Pose(-45, 51.2, Math.PI / 6.35 + Math.PI),
-                new Pose(-45, 52, Math.PI / 6.35 + Math.PI),
-                new Pose(-44.5, 52.1, Math.PI / 6.35 + Math.PI),
-                new Pose(-44.5, 52.6, Math.PI / 6.35 + Math.PI),
-                new Pose(-44.5, 53, Math.PI / 6.35 + Math.PI)
+                new Pose(-48, 51.2, Math.PI / 6.35 + Math.PI),
+                new Pose(-48, 52, Math.PI / 6.35 + Math.PI),
+                new Pose(-47.5, 52.1, Math.PI / 6.35 + Math.PI),
+                new Pose(-47.5, 52.6, Math.PI / 6.35 + Math.PI),
+                new Pose(-47.5, 53, Math.PI / 6.35 + Math.PI)
         };
 
         GrabPosition[] grabPositions = new GrabPosition[]{
