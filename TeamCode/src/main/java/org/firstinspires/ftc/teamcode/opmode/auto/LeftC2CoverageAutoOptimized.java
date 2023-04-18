@@ -81,7 +81,7 @@ public class LeftC2CoverageAutoOptimized extends LinearOpMode {
             robot.write(drivetrain, intake, lift);
         }
 
-//        SleeveDetection.ParkingPosition position = sleeveDetection.getPosition();
+        SleeveDetection.ParkingPosition position = sleeveDetection.getPosition();
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         robot.reset();
@@ -220,6 +220,7 @@ public class LeftC2CoverageAutoOptimized extends LinearOpMode {
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[4]).andThen(new C2DepositHighCommand(lift, intake))),
 
                         new PositionCommand(drivetrain, localizer, pickup[10], 0, 1250, voltage()),
+
 
                         //record
                         new InstantCommand(() -> endtime = timer.milliseconds())
