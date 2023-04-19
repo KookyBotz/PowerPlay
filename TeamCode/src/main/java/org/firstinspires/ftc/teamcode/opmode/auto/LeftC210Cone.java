@@ -164,71 +164,92 @@ public class LeftC210Cone extends LinearOpMode {
                         //preload
                         new PositionCommand(drivetrain, localizer, deposit[0], 0, 1250, voltage())
                                 .alongWith(new WaitCommand(1100).andThen(new C2DepositMediumCommand(lift, intake, 150))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
 
                         //1
                         new PositionCommand(drivetrain, localizer, pickup[0], 0, 800, voltage()).andThen(new WaitCommand(0))
                                 .alongWith(new WaitCommand(300).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
                         new PositionCommand(drivetrain, localizer, deposit_inter[1], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[1], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[0]).andThen(new C2DepositHighCommand(lift, intake))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
                         //2
                         new PositionCommand(drivetrain, localizer, pickup[1], 0, 1250, voltage())
                                 .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[1]))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
                         new PositionCommand(drivetrain, localizer, deposit_inter[2], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[2], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[1]).andThen(new C2DepositHighCommand(lift, intake))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
                         //3
                         new PositionCommand(drivetrain, localizer, pickup[2], 0, 1250, voltage())
                                 .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[2]))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
                         new PositionCommand(drivetrain, localizer, deposit_inter[3], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[3], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[2]).andThen(new C2DepositHighCommand(lift, intake))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
                         //4
                         new PositionCommand(drivetrain, localizer, pickup[3], 0, 1250, voltage())
                                 .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[3]))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
                         new PositionCommand(drivetrain, localizer, deposit_inter[4], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[4], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[3]).andThen(new C2DepositHighCommand(lift, intake))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
 
                         //funny
                         new PositionCommand(drivetrain, localizer, pickup[4], 0, 1250, voltage())
                                 .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[4]))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
                         new PositionCommand(drivetrain, localizer, deposit_inter[5], 0, 975, voltage())
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[4]))
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[5], 0, 1000, voltage())
                                         .alongWith(new WaitCommand(650).andThen(new C2DepositHighCommand(lift, intake)))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
 
 
                         //second
                         new PositionCommand(drivetrain, localizer, pickup[5], 0, 1550, voltage())
                                 .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
                         new PositionCommand(drivetrain, localizer, deposit_inter[6], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[6], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[0]).andThen(new C2DepositHighCommand(lift, intake))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
 
                         new PositionCommand(drivetrain, localizer, pickup[6], 0, 1250, voltage())
                                 .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[1]))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
                         new PositionCommand(drivetrain, localizer, deposit_inter[7], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[7], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[1]).andThen(new C2DepositHighCommand(lift, intake))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
 
                         new PositionCommand(drivetrain, localizer, pickup[7], 0, 1250, voltage())
                                 .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[2]))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
                         new PositionCommand(drivetrain, localizer, deposit_inter[8], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[8], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[2]).andThen(new C2DepositHighCommand(lift, intake))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
 
                         new PositionCommand(drivetrain, localizer, pickup[8], 0, 1250, voltage())
                                 .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[3]))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
                         new PositionCommand(drivetrain, localizer, deposit_inter[9], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[9], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[3]).andThen(new C2DepositHighCommand(lift, intake))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
 
                         new PositionCommand(drivetrain, localizer, pickup[9], 0, 1250, voltage())
                                 .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[4]))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
                         new PositionCommand(drivetrain, localizer, deposit_inter[10], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[10], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[4]).andThen(new C2DepositHighCommand(lift, intake))),
+                        new WaitUntilCommand(() -> SUPERYUMMY),
 
                         new PositionCommand(drivetrain, localizer, (position == SleeveDetection.ParkingPosition.CENTER) ? pickup[10] : (position == SleeveDetection.ParkingPosition.LEFT) ? pickup[11] : pickup[12], 0, 1250, voltage()),
 
