@@ -87,20 +87,25 @@ public class LeftC25Cone extends LinearOpMode {
         robot.reset();
 
         Pose[] pickup = new Pose[]{
-                new Pose(1, 56.75, 0),
-                new Pose(0.5, 55.25, 0),
-                new Pose(0.25, 55.75, 0),
-                new Pose(0, 56.355, 0),
-                new Pose(-0.25, 56.75, 0),
+                new Pose(0, 56.75, 0),
+                new Pose(-0.5, 55.25, 0),
+                new Pose(-0.5, 55.75, 0),
+                new Pose(-0.75, 56.355, 0),
+                new Pose(-1.25, 56.75, 0),
 
                 // mid
-                new Pose(0, 58.25, 0),
+                new Pose(0, 60.25, 0),
 
                 // left
-                new Pose(24, 58.25, 0),
+                new Pose(24, 60.25, 0),
 
                 //right
-                new Pose(-24, 58.25, 0),
+                new Pose(-24, 60.25, 0),
+
+                // smart park
+                new Pose(0, 34.25, Math.PI / 2),
+                new Pose(24, 34.25, Math.PI / 2),
+                new Pose(-24, 34.25, Math.PI / 2)
         };
 
         Pose[] deposit_inter = new Pose[]{
@@ -117,11 +122,12 @@ public class LeftC25Cone extends LinearOpMode {
                 //preload
                 new Pose(-2.5, 41, -Math.PI / 18),
 
-                new Pose(-26, 47, -Math.PI / 6.5),
+                new Pose(-25, 47, -Math.PI / 6.5),
                 new Pose(-25, 48, -Math.PI / 6.5),
                 new Pose(-26, 48, -Math.PI / 6.5),
                 new Pose(-26, 49.25, -Math.PI / 6.5),
-                new Pose(-26, 50, -Math.PI / 6.5),
+
+                new Pose(-26.5, 50, -Math.PI / 6.5),
         };
 
         GrabPosition[] grabPositions = new GrabPosition[]{
@@ -174,6 +180,8 @@ public class LeftC25Cone extends LinearOpMode {
 
 
                         new PositionCommand(drivetrain, localizer, (position == SleeveDetection.ParkingPosition.CENTER) ? pickup[5] : (position == SleeveDetection.ParkingPosition.LEFT) ? pickup[6] : pickup[7], 0, 1250, voltage()),
+                        new WaitCommand(500),
+                        new PositionCommand(drivetrain, localizer, (position == SleeveDetection.ParkingPosition.CENTER) ? pickup[8] : (position == SleeveDetection.ParkingPosition.LEFT) ? pickup[9] : pickup[10], 0, 1250, voltage()),
 
                         //record
                         new InstantCommand(() -> endtime = timer.milliseconds())

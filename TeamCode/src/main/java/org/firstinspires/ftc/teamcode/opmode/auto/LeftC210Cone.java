@@ -91,11 +91,11 @@ public class LeftC210Cone extends LinearOpMode {
         robot.reset();
 
         Pose[] pickup = new Pose[]{
-                new Pose(1, 56.75, 0),
-                new Pose(0.5, 55.25, 0),
-                new Pose(0.25, 55.75, 0),
-                new Pose(0, 56.355, 0),
-                new Pose(-0.25, 56.75, 0),
+                new Pose(0, 56.75, 0),
+                new Pose(-0.5, 55.25, 0),
+                new Pose(-0.5, 55.75, 0),
+                new Pose(-0.75, 56.355, 0),
+                new Pose(-1.25, 56.75, 0),
 
                 new Pose(-71.75, 56.75, Math.PI + 0.01),
                 new Pose(-71.75, 57.75, Math.PI + 0.01),
@@ -122,7 +122,7 @@ public class LeftC210Cone extends LinearOpMode {
                 new Pose(-27.66, 52.8, 0),
                 new Pose(-27.66, 53.4, 0),
 
-                new Pose(-52, 53, 0),
+                new Pose(-52, 52, 0),
 
                 new Pose(-43.5, 53, Math.PI),
                 new Pose(-43.5, 53.6, Math.PI),
@@ -140,9 +140,9 @@ public class LeftC210Cone extends LinearOpMode {
                 new Pose(-26, 48, -Math.PI / 6.5),
                 new Pose(-26, 49.25, -Math.PI / 6.5),
 
-                new Pose(-50.25, 51, Math.PI / 6 + Math.PI),
+                new Pose(-49.25, 51, Math.PI / 6 + Math.PI),
 
-                new Pose(-47.5, 50.5, Math.PI / 6.35 + Math.PI),
+                new Pose(-46.5, 50.5, Math.PI / 6.35 + Math.PI),
                 new Pose(-47.5, 51.5, Math.PI / 6.35 + Math.PI),
                 new Pose(-47, 51.5, Math.PI / 6.35 + Math.PI),
                 new Pose(-47, 52, Math.PI / 6.35 + Math.PI),
@@ -273,9 +273,10 @@ public class LeftC210Cone extends LinearOpMode {
                 robot.loop(null, drivetrain, intake, lift);
                 localizer.periodic();
 
-                boolean yummy = gamepad1.a;
-                SUPERYUMMY = yummy && !lastYummy;
-                lastYummy = yummy;
+//                boolean yummy = gamepad1.a;
+//                SUPERYUMMY = yummy && !lastYummy;
+//                lastYummy = yummy;
+                SUPERYUMMY = true;
 
                 telemetry.addData("encoder pod", intake.getPos());
                 telemetry.addData("time", endtime);
