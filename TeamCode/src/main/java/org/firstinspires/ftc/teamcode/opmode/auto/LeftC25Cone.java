@@ -46,7 +46,7 @@ public class LeftC25Cone extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        this.msStuckDetectStop = 2000;
+        this.msStuckDetectStop = 5000;
 
         CommandScheduler.getInstance().reset();
         Globals.SIDE = Globals.Side.LEFT;
@@ -94,13 +94,13 @@ public class LeftC25Cone extends LinearOpMode {
                 new Pose(-1.25, 56.75, 0),
 
                 // mid
-                new Pose(0, 60.25, 0),
+                new Pose(0, 59.25, 0),
 
                 // left
-                new Pose(24, 60.25, 0),
+                new Pose(24, 59.25, 0),
 
                 //right
-                new Pose(-24, 60.25, 0),
+                new Pose(-24, 59.25, 0),
 
                 // smart park
                 new Pose(0, 34.25, Math.PI / 2),
@@ -122,12 +122,12 @@ public class LeftC25Cone extends LinearOpMode {
                 //preload
                 new Pose(-2.5, 41, -Math.PI / 18),
 
-                new Pose(-25, 47, -Math.PI / 6.5),
-                new Pose(-25, 48, -Math.PI / 6.5),
-                new Pose(-26, 48, -Math.PI / 6.5),
-                new Pose(-26, 49.25, -Math.PI / 6.5),
+                new Pose(-25.5, 47, -Math.PI / 6.5),
+                new Pose(-25.5, 48, -Math.PI / 6.5),
+                new Pose(-26.5, 48, -Math.PI / 6.5),
+                new Pose(-26.5, 49.25, -Math.PI / 6.5),
 
-                new Pose(-26.5, 50, -Math.PI / 6.5),
+                new Pose(-27, 50, -Math.PI / 6.5),
         };
 
         GrabPosition[] grabPositions = new GrabPosition[]{
@@ -135,7 +135,9 @@ public class LeftC25Cone extends LinearOpMode {
                 new GrabPosition(560, 0, 0.14, 0.37, 0),
                 new GrabPosition(560, 0, 0.11, 0.37, 0),
                 new GrabPosition(560, 0, 0.075, 0.37, 20),
-                new GrabPosition(560, 0, 0.05, 0.37, 20)
+                new GrabPosition(560, 0, 0.05, 0.37, 20),
+
+                new GrabPosition(545, 0, 0.172, 0.37, 0)
         };
 
         CommandScheduler.getInstance().schedule(
@@ -147,8 +149,8 @@ public class LeftC25Cone extends LinearOpMode {
                                 .alongWith(new WaitCommand(1100).andThen(new C2DepositMediumCommand(lift, intake, 150))),
 
                         //1
-                        new PositionCommand(drivetrain, localizer, pickup[0], 0, 800, voltage()).andThen(new WaitCommand(0))
-                                .alongWith(new WaitCommand(300).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
+                        new PositionCommand(drivetrain, localizer, pickup[0], 0, 820, voltage()).andThen(new WaitCommand(0))
+                                .alongWith(new WaitCommand(300).andThen(new C2ExtendCommand(intake, grabPositions[5]))),
                         new PositionCommand(drivetrain, localizer, deposit_inter[1], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[1], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[0]).andThen(new C2DepositHighCommand(lift, intake))),
@@ -184,7 +186,8 @@ public class LeftC25Cone extends LinearOpMode {
                         new PositionCommand(drivetrain, localizer, (position == SleeveDetection.ParkingPosition.CENTER) ? pickup[8] : (position == SleeveDetection.ParkingPosition.LEFT) ? pickup[9] : pickup[10], 0, 1250, voltage()),
 
                         //record
-                        new InstantCommand(() -> endtime = timer.milliseconds())
+                        new InstantCommand(() -> endtime = timer.milliseconds()),
+                        new InstantCommand(() -> requestOpModeStop())
                 )
         );
 

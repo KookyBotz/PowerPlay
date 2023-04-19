@@ -105,13 +105,22 @@ public class LeftC210Cone extends LinearOpMode {
 
                 //park
                 // mid
-                new Pose(-72, 58.25, Math.PI),
+                new Pose(-72, 59.25, Math.PI),
 
                 // left
-                new Pose(-48, 58.25, Math.PI),
+                new Pose(-48, 59.25, Math.PI),
 
                 // right (but on the other side)
-                new Pose(-24, 58.25, Math.PI),
+                new Pose(-24, 59.25, Math.PI),
+
+                // back to front
+                new Pose(-72, 59.25, Math.PI),
+
+                // left
+                new Pose(-48, 59.25, Math.PI),
+
+                // right (but on the other side)
+                new Pose(-24, 59.25, Math.PI),
         };
 
         Pose[] deposit_inter = new Pose[]{
@@ -122,7 +131,7 @@ public class LeftC210Cone extends LinearOpMode {
                 new Pose(-27.66, 52.8, 0),
                 new Pose(-27.66, 53.4, 0),
 
-                new Pose(-52, 52, 0),
+                new Pose(-52, 50, 0),
 
                 new Pose(-43.5, 53, Math.PI),
                 new Pose(-43.5, 53.6, Math.PI),
@@ -135,10 +144,10 @@ public class LeftC210Cone extends LinearOpMode {
                 //preload
                 new Pose(-2.5, 41, -Math.PI / 18),
 
-                new Pose(-25, 47, -Math.PI / 6.5),
-                new Pose(-25, 48, -Math.PI / 6.5),
-                new Pose(-26, 48, -Math.PI / 6.5),
-                new Pose(-26, 49.25, -Math.PI / 6.5),
+                new Pose(-25.5, 47, -Math.PI / 6.5),
+                new Pose(-25.5, 48, -Math.PI / 6.5),
+                new Pose(-26.5, 48, -Math.PI / 6.5),
+                new Pose(-26.5, 49.25, -Math.PI / 6.5),
 
                 new Pose(-49.25, 51, Math.PI / 6 + Math.PI),
 
@@ -154,7 +163,8 @@ public class LeftC210Cone extends LinearOpMode {
                 new GrabPosition(560, 0, 0.14, 0.37, 0),
                 new GrabPosition(560, 0, 0.11, 0.37, 0),
                 new GrabPosition(560, 0, 0.075, 0.37, 20),
-                new GrabPosition(560, 0, 0.05, 0.37, 20)
+                new GrabPosition(560, 0, 0.05, 0.37, 20),
+                new GrabPosition(545, 0, 0.172, 0.37, 0)
         };
 
         CommandScheduler.getInstance().schedule(
@@ -167,8 +177,8 @@ public class LeftC210Cone extends LinearOpMode {
                         new WaitUntilCommand(() -> SUPERYUMMY),
 
                         //1
-                        new PositionCommand(drivetrain, localizer, pickup[0], 0, 800, voltage()).andThen(new WaitCommand(0))
-                                .alongWith(new WaitCommand(300).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
+                        new PositionCommand(drivetrain, localizer, pickup[0], 0, 820, voltage()).andThen(new WaitCommand(0))
+                                .alongWith(new WaitCommand(300).andThen(new C2ExtendCommand(intake, grabPositions[5]))),
                         new WaitUntilCommand(() -> SUPERYUMMY),
                         new PositionCommand(drivetrain, localizer, deposit_inter[1], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[1], 0, 1250, voltage()))
@@ -248,7 +258,8 @@ public class LeftC210Cone extends LinearOpMode {
                         new WaitUntilCommand(() -> SUPERYUMMY),
                         new PositionCommand(drivetrain, localizer, deposit_inter[10], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[10], 0, 1250, voltage()))
-                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[4]).andThen(new C2DepositHighCommand(lift, intake))),
+                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[4])),
+                        // .andThen(new C2DepositHighCommand(lift, intake)))
                         new WaitUntilCommand(() -> SUPERYUMMY),
 
                         new PositionCommand(drivetrain, localizer, (position == SleeveDetection.ParkingPosition.CENTER) ? pickup[10] : (position == SleeveDetection.ParkingPosition.LEFT) ? pickup[11] : pickup[12], 0, 1250, voltage()),
@@ -273,10 +284,10 @@ public class LeftC210Cone extends LinearOpMode {
                 robot.loop(null, drivetrain, intake, lift);
                 localizer.periodic();
 
-//                boolean yummy = gamepad1.a;
-//                SUPERYUMMY = yummy && !lastYummy;
-//                lastYummy = yummy;
-                SUPERYUMMY = true;
+                boolean yummy = gamepad1.a;
+                SUPERYUMMY = yummy && !lastYummy;
+                lastYummy = yummy;
+//                SUPERYUMMY = true;
 
                 telemetry.addData("encoder pod", intake.getPos());
                 telemetry.addData("time", endtime);

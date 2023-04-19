@@ -95,6 +95,7 @@ public class OpMode extends CommandOpMode {
         drivetrain = new SwerveDrivetrain(robot);
 
         robot.enabled = true;
+        SwerveDrivetrain.imuOffset = robot.getAngle() + Math.PI;
 
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
