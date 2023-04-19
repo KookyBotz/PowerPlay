@@ -149,7 +149,7 @@ public class LeftC210Cone extends LinearOpMode {
                 new Pose(-26.5, 48, -Math.PI / 6.5),
                 new Pose(-26.5, 49.25, -Math.PI / 6.5),
 
-                new Pose(-49.25, 51, Math.PI / 6 + Math.PI),
+                new Pose(-49.25, 49.5, Math.PI / 6.2 + Math.PI),
 
                 new Pose(-46.5, 50.5, Math.PI / 6.35 + Math.PI),
                 new Pose(-47.5, 51.5, Math.PI / 6.35 + Math.PI),
@@ -284,10 +284,10 @@ public class LeftC210Cone extends LinearOpMode {
                 robot.loop(null, drivetrain, intake, lift);
                 localizer.periodic();
 
-                boolean yummy = gamepad1.a;
-                SUPERYUMMY = yummy && !lastYummy;
-                lastYummy = yummy;
-//                SUPERYUMMY = true;
+//                boolean yummy = gamepad1.a;
+//                SUPERYUMMY = yummy && !lastYummy;
+//                lastYummy = yummy;
+                SUPERYUMMY = true;
 
                 telemetry.addData("encoder pod", intake.getPos());
                 telemetry.addData("time", endtime);
