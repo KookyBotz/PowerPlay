@@ -6,16 +6,15 @@ import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.common.commandbase.auto.C2DepositExtendMediumCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.C2DepositHighCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.C2DepositMediumCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.auto.C2DepositRetractMediumCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.C2ExtendCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.C2RetractCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
@@ -30,9 +29,9 @@ import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 
-@Autonomous(name = "Left 1+10 C2 Coverage Auto Optimized")
+@Autonomous(name = "Left 1+10 C2 Funny Park")
 @Config
-public class LeftC2CoverageAutoOptimized extends LinearOpMode {
+public class LeftC210Cone extends LinearOpMode {
 
     private RobotHardware robot = RobotHardware.getInstance();
     private SwerveDrivetrain drivetrain;
@@ -44,6 +43,9 @@ public class LeftC2CoverageAutoOptimized extends LinearOpMode {
     private SleeveDetection sleeveDetection;
     private double loopTime;
     private double endtime = 0;
+
+    private boolean SUPERYUMMY = false;
+    private boolean lastYummy = false;
 
 
     @Override
@@ -75,32 +77,41 @@ public class LeftC2CoverageAutoOptimized extends LinearOpMode {
             drivetrain.updateModules();
 
             telemetry.addLine("Left C2 Auto 1+10");
+            telemetry.addData("Position", robot.sleeveDetection.getPosition());
             telemetry.update();
 
             robot.clearBulkCache();
             robot.write(drivetrain, intake, lift);
         }
 
-        //SleeveDetection.ParkingPosition position = sleeveDetection.getPosition();
+        SleeveDetection.ParkingPosition position = robot.sleeveDetection.getPosition();
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
+        robot.stopCameraStream();
         robot.reset();
 
         Pose[] pickup = new Pose[]{
-                new Pose(1, 57.25, 0),
+                new Pose(1, 56.75, 0),
                 new Pose(0.5, 55.25, 0),
                 new Pose(0.25, 55.75, 0),
                 new Pose(0, 56.355, 0),
                 new Pose(-0.25, 56.75, 0),
 
-                new Pose(-73.75, 56.75, Math.PI + 0.017),
-                new Pose(-72.25, 57.75, Math.PI + 0.017),
-                new Pose(-72.25, 58.25, Math.PI + 0.017),
-                new Pose(-72.25, 58.75, Math.PI + 0.017),
-                new Pose(-72.25, 59.25, Math.PI + 0.017),
+                new Pose(-71.75, 56.75, Math.PI + 0.01),
+                new Pose(-71.75, 57.75, Math.PI + 0.01),
+                new Pose(-71.75, 58.25, Math.PI + 0.01),
+                new Pose(-71.75, 58.75, Math.PI + 0.01),
+                new Pose(-71.75, 59.25, Math.PI + 0.01),
 
                 //park
+                // mid
                 new Pose(-72, 58.25, Math.PI),
+
+                // left
+                new Pose(-48, 58.25, Math.PI),
+
+                // right (but on the other side)
+                new Pose(-24, 58.25, Math.PI),
         };
 
         Pose[] deposit_inter = new Pose[]{
@@ -111,7 +122,7 @@ public class LeftC2CoverageAutoOptimized extends LinearOpMode {
                 new Pose(-27.66, 52.8, 0),
                 new Pose(-27.66, 53.4, 0),
 
-                new Pose(-47, 53, 0),
+                new Pose(-52, 53, 0),
 
                 new Pose(-43.5, 53, Math.PI),
                 new Pose(-43.5, 53.6, Math.PI),
@@ -124,18 +135,18 @@ public class LeftC2CoverageAutoOptimized extends LinearOpMode {
                 //preload
                 new Pose(-2.5, 41, -Math.PI / 18),
 
-                new Pose(-24, 47, -Math.PI / 6.5),
-                new Pose(-24.5, 48, -Math.PI / 6.5),
-                new Pose(-24.5, 49, -Math.PI / 6.5),
-                new Pose(-24.5, 50, -Math.PI / 6.5),
+                new Pose(-25, 47, -Math.PI / 6.5),
+                new Pose(-25, 48, -Math.PI / 6.5),
+                new Pose(-26, 48, -Math.PI / 6.5),
+                new Pose(-26, 49.25, -Math.PI / 6.5),
 
-                new Pose(-49, 50, Math.PI / 6.35 + Math.PI),
+                new Pose(-50.25, 51, Math.PI / 6 + Math.PI),
 
-                new Pose(-48, 51.2, Math.PI / 6.35 + Math.PI),
-                new Pose(-48, 52, Math.PI / 6.35 + Math.PI),
-                new Pose(-47.5, 52.1, Math.PI / 6.35 + Math.PI),
-                new Pose(-47.5, 52.6, Math.PI / 6.35 + Math.PI),
-                new Pose(-47.5, 53, Math.PI / 6.35 + Math.PI)
+                new Pose(-47.5, 50.5, Math.PI / 6.35 + Math.PI),
+                new Pose(-47.5, 51.5, Math.PI / 6.35 + Math.PI),
+                new Pose(-47, 51.5, Math.PI / 6.35 + Math.PI),
+                new Pose(-47, 52, Math.PI / 6.35 + Math.PI),
+                new Pose(-47, 52, Math.PI / 6.35 + Math.PI)
         };
 
         GrabPosition[] grabPositions = new GrabPosition[]{
@@ -143,7 +154,7 @@ public class LeftC2CoverageAutoOptimized extends LinearOpMode {
                 new GrabPosition(560, 0, 0.14, 0.37, 0),
                 new GrabPosition(560, 0, 0.11, 0.37, 0),
                 new GrabPosition(560, 0, 0.075, 0.37, 20),
-                new GrabPosition(560, 0, 0.05, 0.37, 50)
+                new GrabPosition(560, 0, 0.05, 0.37, 20)
         };
 
         CommandScheduler.getInstance().schedule(
@@ -183,13 +194,13 @@ public class LeftC2CoverageAutoOptimized extends LinearOpMode {
                         new PositionCommand(drivetrain, localizer, pickup[4], 0, 1250, voltage())
                                 .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[4]))),
                         new PositionCommand(drivetrain, localizer, deposit_inter[5], 0, 975, voltage())
+                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[4]))
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[5], 0, 1000, voltage())
-                                        .alongWith(new WaitCommand(650).andThen(new C2DepositHighCommand(lift, intake))))
-                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[4])),
+                                        .alongWith(new WaitCommand(650).andThen(new C2DepositHighCommand(lift, intake)))),
 
 
                         //second
-                        new PositionCommand(drivetrain, localizer, pickup[5], 0, 1250, voltage())
+                        new PositionCommand(drivetrain, localizer, pickup[5], 0, 1550, voltage())
                                 .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
                         new PositionCommand(drivetrain, localizer, deposit_inter[6], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[6], 0, 1250, voltage()))
@@ -219,8 +230,7 @@ public class LeftC2CoverageAutoOptimized extends LinearOpMode {
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[10], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[4]).andThen(new C2DepositHighCommand(lift, intake))),
 
-                        new PositionCommand(drivetrain, localizer, pickup[10], 0, 1250, voltage()),
-
+                        new PositionCommand(drivetrain, localizer, (position == SleeveDetection.ParkingPosition.CENTER) ? pickup[10] : (position == SleeveDetection.ParkingPosition.LEFT) ? pickup[11] : pickup[12], 0, 1250, voltage()),
 
                         //record
                         new InstantCommand(() -> endtime = timer.milliseconds())
@@ -231,23 +241,31 @@ public class LeftC2CoverageAutoOptimized extends LinearOpMode {
         robot.reset();
 
         while (opModeIsActive() && !isStopRequested()) {
-            if (timer == null) {
-                timer = new ElapsedTime();
+            try {
+
+                if (timer == null) {
+                    timer = new ElapsedTime();
+                }
+                robot.read(drivetrain, intake, lift);
+
+                CommandScheduler.getInstance().run();
+                robot.loop(null, drivetrain, intake, lift);
+                localizer.periodic();
+
+                boolean yummy = gamepad1.a;
+                SUPERYUMMY = yummy && !lastYummy;
+                lastYummy = yummy;
+
+                telemetry.addData("encoder pod", intake.getPos());
+                telemetry.addData("time", endtime);
+                double loop = System.nanoTime();
+                telemetry.addData("hz ", 1000000000 / (loop - loopTime));
+                loopTime = loop;
+                telemetry.update();
+                robot.write(drivetrain, intake, lift);
+                robot.clearBulkCache();
+            } catch (Exception ignore) {
             }
-            robot.read(drivetrain, intake, lift);
-
-            CommandScheduler.getInstance().run();
-            robot.loop(null, drivetrain, intake, lift);
-            localizer.periodic();
-
-            telemetry.addData("encoder pod", intake.getPos());
-            telemetry.addData("time", endtime);
-            double loop = System.nanoTime();
-            telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-            loopTime = loop;
-            telemetry.update();
-            robot.write(drivetrain, intake, lift);
-            robot.clearBulkCache();
         }
 
         robot.read(drivetrain, intake, lift);

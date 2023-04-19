@@ -70,6 +70,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public double time = 0.0;
 
     public boolean resetting = false;
+    public boolean fallen = false;
 
 
     public enum STATE {
@@ -101,7 +102,8 @@ public class IntakeSubsystem extends SubsystemBase {
         GROUND,
         INTERMEDIATE,
         PRE_TRANSFER,
-        TRANSFER
+        TRANSFER,
+        FALLEN
     }
 
     public enum PivotState {
@@ -209,6 +211,9 @@ public class IntakeSubsystem extends SubsystemBase {
                 break;
             case INTERMEDIATE:
                 newProfile(INTAKE_FOURBAR_INTERMEDIATE);
+                break;
+            case FALLEN:
+                newProfile(INTAKE_FOURBAR_FALLEN);
                 break;
         }
     }
@@ -347,5 +352,9 @@ public class IntakeSubsystem extends SubsystemBase {
     public void adjustPivotOffset(double offset) {
         robot.pivot.setPosition(robot.pivot.getPosition() + offset);
         pivotOffset += offset;
+    }
+
+    public double getFourbarPosition() {
+        return robot.fourbarLeft.getPosition();
     }
 }

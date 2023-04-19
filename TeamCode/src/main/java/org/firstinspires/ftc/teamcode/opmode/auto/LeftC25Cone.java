@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -28,7 +29,9 @@ import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 
 @Autonomous(name = "Left 1+5 C2")
-public class Left5C2 extends LinearOpMode {
+@Config
+public class LeftC25Cone extends LinearOpMode {
+
     private RobotHardware robot = RobotHardware.getInstance();
     private SwerveDrivetrain drivetrain;
     private IntakeSubsystem intake;
@@ -70,15 +73,17 @@ public class Left5C2 extends LinearOpMode {
             drivetrain.updateModules();
 
             telemetry.addLine("Left C2 Auto 1+10");
+            telemetry.addData("Position", robot.sleeveDetection.getPosition());
             telemetry.update();
 
             robot.clearBulkCache();
             robot.write(drivetrain, intake, lift);
         }
 
-//        SleeveDetection.ParkingPosition position = sleeveDetection.getPosition();
+        SleeveDetection.ParkingPosition position = robot.sleeveDetection.getPosition();
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
+        robot.stopCameraStream();
         robot.reset();
 
         Pose[] pickup = new Pose[]{
@@ -87,6 +92,15 @@ public class Left5C2 extends LinearOpMode {
                 new Pose(0.25, 55.75, 0),
                 new Pose(0, 56.355, 0),
                 new Pose(-0.25, 56.75, 0),
+
+                // mid
+                new Pose(0, 58.25, 0),
+
+                // left
+                new Pose(24, 58.25, 0),
+
+                //right
+                new Pose(-24, 58.25, 0),
         };
 
         Pose[] deposit_inter = new Pose[]{
@@ -96,26 +110,18 @@ public class Left5C2 extends LinearOpMode {
                 new Pose(-27.66, 52.2, 0),
                 new Pose(-27.66, 52.8, 0),
                 new Pose(-27.66, 53.4, 0),
-
-                new Pose(-27.66, 54, 0),
+                new Pose(-27.66, 53.8, 0)
         };
 
         Pose[] deposit = new Pose[]{
                 //preload
                 new Pose(-2.5, 41, -Math.PI / 18),
 
-                new Pose(-24, 47, -Math.PI / 6.5),
-                new Pose(-24, 48, -Math.PI / 6.5),
-                new Pose(-24, 49, -Math.PI / 6.5),
-                new Pose(-24, 50, -Math.PI / 6.5),
-
-                new Pose(-46, 50, Math.PI / 6.35 + Math.PI),
-
-                new Pose(-45, 51.2, Math.PI / 6.35 + Math.PI),
-                new Pose(-45, 52, Math.PI / 6.35 + Math.PI),
-                new Pose(-44.5, 52.1, Math.PI / 6.35 + Math.PI),
-                new Pose(-44.5, 52.6, Math.PI / 6.35 + Math.PI),
-                new Pose(-44.5, 53, Math.PI / 6.35 + Math.PI)
+                new Pose(-26, 47, -Math.PI / 6.5),
+                new Pose(-25, 48, -Math.PI / 6.5),
+                new Pose(-26, 48, -Math.PI / 6.5),
+                new Pose(-26, 49.25, -Math.PI / 6.5),
+                new Pose(-26, 50, -Math.PI / 6.5),
         };
 
         GrabPosition[] grabPositions = new GrabPosition[]{
@@ -123,7 +129,7 @@ public class Left5C2 extends LinearOpMode {
                 new GrabPosition(560, 0, 0.14, 0.37, 0),
                 new GrabPosition(560, 0, 0.11, 0.37, 0),
                 new GrabPosition(560, 0, 0.075, 0.37, 20),
-                new GrabPosition(560, 0, 0.05, 0.37, 50)
+                new GrabPosition(560, 0, 0.05, 0.37, 20)
         };
 
         CommandScheduler.getInstance().schedule(
@@ -159,47 +165,15 @@ public class Left5C2 extends LinearOpMode {
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[4], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[3]).andThen(new C2DepositHighCommand(lift, intake))),
 
-                        //funny
+                        //5
                         new PositionCommand(drivetrain, localizer, pickup[4], 0, 1250, voltage())
                                 .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[4]))),
-                        new PositionCommand(drivetrain, localizer, deposit_inter[5], 0, 975, voltage())
-                                .andThen(new PositionCommand(drivetrain, localizer, deposit[5], 0, 1000, voltage())
-                                        .alongWith(new WaitCommand(650).andThen(new C2DepositHighCommand(lift, intake))))
-                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[4])),
-
-
-                        //second
-                        new PositionCommand(drivetrain, localizer, pickup[5], 0, 1250, voltage())
-                                .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
-                        new PositionCommand(drivetrain, localizer, deposit_inter[6], 0, 250, voltage())
-                                .andThen(new PositionCommand(drivetrain, localizer, deposit[6], 0, 1250, voltage()))
-                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[0]).andThen(new C2DepositHighCommand(lift, intake))),
-
-                        new PositionCommand(drivetrain, localizer, pickup[6], 0, 1250, voltage())
-                                .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[1]))),
-                        new PositionCommand(drivetrain, localizer, deposit_inter[7], 0, 250, voltage())
-                                .andThen(new PositionCommand(drivetrain, localizer, deposit[7], 0, 1250, voltage()))
-                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[1]).andThen(new C2DepositHighCommand(lift, intake))),
-
-                        new PositionCommand(drivetrain, localizer, pickup[7], 0, 1250, voltage())
-                                .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[2]))),
-                        new PositionCommand(drivetrain, localizer, deposit_inter[8], 0, 250, voltage())
-                                .andThen(new PositionCommand(drivetrain, localizer, deposit[8], 0, 1250, voltage()))
-                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[2]).andThen(new C2DepositHighCommand(lift, intake))),
-
-                        new PositionCommand(drivetrain, localizer, pickup[8], 0, 1250, voltage())
-                                .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[3]))),
-                        new PositionCommand(drivetrain, localizer, deposit_inter[9], 0, 250, voltage())
-                                .andThen(new PositionCommand(drivetrain, localizer, deposit[9], 0, 1250, voltage()))
-                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[3]).andThen(new C2DepositHighCommand(lift, intake))),
-
-                        new PositionCommand(drivetrain, localizer, pickup[9], 0, 1250, voltage())
-                                .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[4]))),
-                        new PositionCommand(drivetrain, localizer, deposit_inter[10], 0, 250, voltage())
-                                .andThen(new PositionCommand(drivetrain, localizer, deposit[10], 0, 1250, voltage()))
+                        new PositionCommand(drivetrain, localizer, deposit_inter[5], 0, 250, voltage())
+                                .andThen(new PositionCommand(drivetrain, localizer, deposit[5], 0, 1250, voltage()))
                                 .alongWith(new C2RetractCommand(intake, lift, grabPositions[4]).andThen(new C2DepositHighCommand(lift, intake))),
 
-                        new PositionCommand(drivetrain, localizer, pickup[10], 0, 1250, voltage()),
+
+                        new PositionCommand(drivetrain, localizer, (position == SleeveDetection.ParkingPosition.CENTER) ? pickup[5] : (position == SleeveDetection.ParkingPosition.LEFT) ? pickup[6] : pickup[7], 0, 1250, voltage()),
 
                         //record
                         new InstantCommand(() -> endtime = timer.milliseconds())
@@ -210,23 +184,27 @@ public class Left5C2 extends LinearOpMode {
         robot.reset();
 
         while (opModeIsActive() && !isStopRequested()) {
-            if (timer == null) {
-                timer = new ElapsedTime();
+            try {
+
+                if (timer == null) {
+                    timer = new ElapsedTime();
+                }
+                robot.read(drivetrain, intake, lift);
+
+                CommandScheduler.getInstance().run();
+                robot.loop(null, drivetrain, intake, lift);
+                localizer.periodic();
+
+                telemetry.addData("encoder pod", intake.getPos());
+                telemetry.addData("time", endtime);
+                double loop = System.nanoTime();
+                telemetry.addData("hz ", 1000000000 / (loop - loopTime));
+                loopTime = loop;
+                telemetry.update();
+                robot.write(drivetrain, intake, lift);
+                robot.clearBulkCache();
+            } catch (Exception ignore) {
             }
-            robot.read(drivetrain, intake, lift);
-
-            CommandScheduler.getInstance().run();
-            robot.loop(null, drivetrain, intake, lift);
-            localizer.periodic();
-
-            telemetry.addData("encoder pod", intake.getPos());
-            telemetry.addData("time", endtime);
-            double loop = System.nanoTime();
-            telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-            loopTime = loop;
-            telemetry.update();
-            robot.write(drivetrain, intake, lift);
-            robot.clearBulkCache();
         }
 
         robot.read(drivetrain, intake, lift);

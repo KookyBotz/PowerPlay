@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -18,8 +19,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.SwerveXCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.HighPoleAutoCycleCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.FourbarCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LiftCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.GroundScoreCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.IntakeStateCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.IntermediateStateCommand;
@@ -52,13 +55,16 @@ public class OpMode extends CommandOpMode {
     private boolean lastYButton1 = false;
     private boolean lastAButton1 = false;
 
+    private boolean lastDpadRight2 = false;
+    private boolean lastDpadLeft2 = false;
+
     private boolean lastRightBumper2 = false;
     private boolean lastRightBumper1 = false;
     private boolean lastLeftBumper2 = false;
     private boolean lastLeftBumper1 = false;
 
     private boolean lastDpadLeft1 = false;
-    private boolean lastDpadRight2 = false;
+    private boolean lastdpadUp2 = false;
 
     private boolean lastRightTrigger2 = false;
     private boolean lastLeftTrigger2 = false;
@@ -207,6 +213,8 @@ public class OpMode extends CommandOpMode {
         }
         lastRightBumper2 = rightBumper;
 
+        
+        
         /*
          * INTAKING AND AUTO TRANSFER
          */
@@ -306,12 +314,29 @@ public class OpMode extends CommandOpMode {
         robot.loop(drive, drivetrain, intake, lift);
         robot.write(drivetrain, intake, lift);
 
-        if (gamepad2.dpad_left) {
-            robot.latch.setPosition(position);
-        }
-
         boolean dpadRight2 = gamepad2.dpad_right;
         if (dpadRight2 && !lastDpadRight2) {
+            schedule(
+                    new FourbarCommand(intake, IntakeSubsystem.FourbarState.FALLEN)
+            );
+        }
+        lastDpadRight2 = dpadRight2;
+
+        boolean dpadLeft2 = gamepad2.dpad_left;
+        if (dpadLeft2 && !lastDpadLeft2) {
+            intake.fallen = !intake.fallen;
+            schedule(
+                    new ConditionalCommand(
+                            new TurretCommand(intake, IntakeSubsystem.TurretState.INWARDS),
+                            new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
+                            () -> intake.fallen
+                    )
+            );
+        }
+        lastDpadLeft2 = dpadLeft2;
+        
+        boolean dpadUp2 = gamepad2.dpad_up;
+        if (dpadUp2 && !lastdpadUp2) {
             schedule(
                     new ParallelCommandGroup(
                             new SequentialCommandGroup(
@@ -333,7 +358,7 @@ public class OpMode extends CommandOpMode {
 
             );
         }
-        lastDpadRight2 = dpadRight2;
+        lastdpadUp2 = dpadUp2;
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
@@ -342,10 +367,11 @@ public class OpMode extends CommandOpMode {
 //        telemetry.addData("target pos", intake.getTargetPosition());
 //        telemetry.addData("hasCone", intake.coneDetected);
 
-        telemetry.addData("frontLeft", drivetrain.frontLeftModule.getModuleRotation());
-        telemetry.addData("frontRight", drivetrain.frontRightModule.getModuleRotation());
-        telemetry.addData("backRight", drivetrain.backRightModule.getModuleRotation());
-        telemetry.addData("backLeft", drivetrain.backLeftModule.getModuleRotation());
+//        telemetry.addData("frontLeft", drivetrain.frontLeftModule.getModuleRotation());
+//        telemetry.addData("frontRight", drivetrain.frontRightModule.getModuleRotation());
+//        telemetry.addData("backRight", drivetrain.backRightModule.getModuleRotation());
+//        telemetry.addData("backLeft", drivetrain.backLeftModule.getModuleRotation());
+        telemetry.addData("fourbar", intake.getFourbarPosition());
         loopTime = loop;
         telemetry.update();
 
