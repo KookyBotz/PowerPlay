@@ -151,7 +151,7 @@ public class LeftC210Cone extends LinearOpMode {
 
                 new Pose(-40.5, 55, -Math.PI / 2),
 
-                new Pose(-44, 50.5, Math.PI / 6.35 + Math.PI),
+                new Pose(-44, 50.25, Math.PI / 6.35 + Math.PI),
                 new Pose(-44, 51.5, Math.PI / 6.35 + Math.PI),
                 new Pose(-44, 51.5, Math.PI / 6.35 + Math.PI),
                 new Pose(-44, 52, Math.PI / 6.35 + Math.PI),
@@ -265,6 +265,7 @@ public class LeftC210Cone extends LinearOpMode {
 
                         //record
                         new InstantCommand(() -> endtime = timer.milliseconds()),
+                        new InstantCommand(()-> SwerveDrivetrain.imuOffset = Math.PI/2),
 
                         new InstantCommand(this::requestOpModeStop)
                 )

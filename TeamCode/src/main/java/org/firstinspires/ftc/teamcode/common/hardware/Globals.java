@@ -78,7 +78,7 @@ public class Globals {
     public static double INTAKE_FOURBAR_INTAKE = 0.04;
     public static double INTAKE_FOURBAR_LOW = 0.359;
     public static double INTAKE_FOURBAR_GROUND = 0.06;
-    public static double INTAKE_FOURBAR_FALLEN = 0.1;
+    public static double INTAKE_FOURBAR_FALLEN = 0.085;
 
     public static double F_OFFSET = 0 ;
 

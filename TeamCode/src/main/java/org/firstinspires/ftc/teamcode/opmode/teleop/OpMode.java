@@ -111,7 +111,6 @@ public class OpMode extends CommandOpMode {
 
             } catch (Exception ignored) {
             }
-            SwerveDrivetrain.imuOffset = Math.PI/2;
         }
 
         robot.read(drivetrain, intake, lift);
@@ -204,7 +203,7 @@ public class OpMode extends CommandOpMode {
          */
         boolean rightBumper = gamepad2.right_bumper;
         if (!lastRightBumper2 && rightBumper) {
-            if (intake.hasCone() || gamepad1.left_bumper) {
+            if (intake.hasCone() || gamepad1.left_bumper || gamepad2.dpad_up) {
                 CommandScheduler.getInstance().schedule(new TransferCommand(intake, lift));
             } else if (!intake.fourbarState.equals(IntakeSubsystem.FourbarState.INTAKE)) {
                 CommandScheduler.getInstance().schedule(
@@ -225,7 +224,7 @@ public class OpMode extends CommandOpMode {
             CommandScheduler.getInstance().schedule(
                     new InstantCommand(() -> intake.update(ClawState.CLOSED))
             );
-            if (intake.hasCone() || gamepad1.left_bumper) {
+            if (intake.hasCone() || gamepad1.left_bumper || gamepad2.dpad_up) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
                                 new WaitCommand(Globals.INTAKE_CLAW_CLOSE_TIME),
@@ -335,31 +334,6 @@ public class OpMode extends CommandOpMode {
             );
         }
         lastDpadLeft2 = dpadLeft2;
-        
-        boolean dpadUp2 = gamepad2.dpad_up;
-        if (dpadUp2 && !lastdpadUp2) {
-            schedule(
-                    new ParallelCommandGroup(
-                            new SequentialCommandGroup(
-                                    new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(560, 0, 0.172, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                    new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(542, 0, 0.139, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                    new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(533, 0, 0.106, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                    new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(532, 0, 0.075, 0.37, 20), LiftSubsystem.LiftState.HIGH),
-                                    new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(535, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH),
-                                    new LiftCommand(lift, LiftSubsystem.LiftState.HIGH)
-                                            .alongWith(new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED)),
-                                    new WaitUntilCommand(lift::isWithinTolerance),
-                                    new LatchCommand(lift, LiftSubsystem.LatchState.UNLATCHED),
-                                    new WaitCommand(75),
-                                    new LiftCommand(lift, LiftSubsystem.LiftState.RETRACTED)
-
-                            ),
-                            new SwerveXCommand(drivetrain)
-                    )
-
-            );
-        }
-        lastdpadUp2 = dpadUp2;
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));

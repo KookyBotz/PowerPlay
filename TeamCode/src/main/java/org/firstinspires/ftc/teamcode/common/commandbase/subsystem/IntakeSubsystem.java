@@ -52,7 +52,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private boolean hasCone = false;
     private boolean withinTolerance = false;
 
-    public double pivotOffset = 0;
+    public static double pivotOffset = 0.01;
 
 //    public static final GrabPosition[] CYCLE_GRAB_POSITIONS = {
 //            new GrabPosition(550, 150, 0.457, pivot_pitch_up, 0),
@@ -222,7 +222,7 @@ public class IntakeSubsystem extends SubsystemBase {
         this.controller.setPID(P, I, D);
 
         coneDetected.add(!robot.clawSensor.getState());
-        if(coneDetected.size()>7){
+        if(coneDetected.size()>100){
             coneDetected.remove(0);
         }
         hasCone = coneDetected.contains(true);

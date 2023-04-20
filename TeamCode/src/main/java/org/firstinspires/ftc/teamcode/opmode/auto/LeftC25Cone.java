@@ -122,12 +122,11 @@ public class LeftC25Cone extends LinearOpMode {
                 //preload
                 new Pose(-2.5, 41, -Math.PI / 18),
 
-                new Pose(-25.5, 47, -Math.PI / 6.5),
-                new Pose(-25.5, 48, -Math.PI / 6.5),
-                new Pose(-26.5, 48, -Math.PI / 6.5),
-                new Pose(-26.5, 49.25, -Math.PI / 6.5),
-
-                new Pose(-27, 50, -Math.PI / 6.5),
+                new Pose(-26, 46, -Math.PI / 6.5),
+                new Pose(-26, 47, -Math.PI / 6.5),
+                new Pose(-26, 47, -Math.PI / 6.5),
+                new Pose(-26, 48.25, -Math.PI / 6.5),
+                new Pose(-26, 49, -Math.PI / 6.5),
         };
 
         GrabPosition[] grabPositions = new GrabPosition[]{
@@ -142,6 +141,8 @@ public class LeftC25Cone extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
+                        new WaitCommand(10000),
+
                         new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 1),
 
                         //preload
@@ -187,7 +188,10 @@ public class LeftC25Cone extends LinearOpMode {
 
                         //record
                         new InstantCommand(() -> endtime = timer.milliseconds()),
-                        new InstantCommand(() -> requestOpModeStop())
+                        new InstantCommand(() -> SwerveDrivetrain.imuOffset = 0),
+
+
+                        new InstantCommand(this::requestOpModeStop)
                 )
         );
 
