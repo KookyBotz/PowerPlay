@@ -97,7 +97,7 @@ public class LeftC210Cone extends LinearOpMode {
                 new Pose(-0.75, 56.355, 0),
                 new Pose(-1.25, 56.75, 0),
 
-                new Pose(-71.75, 56.75, Math.PI + 0.01),
+                new Pose(-71.75, 55.75, Math.PI + 0.01),
                 new Pose(-71.75, 57.75, Math.PI + 0.01),
                 new Pose(-71.75, 58.25, Math.PI + 0.01),
                 new Pose(-71.75, 58.75, Math.PI + 0.01),
@@ -144,18 +144,18 @@ public class LeftC210Cone extends LinearOpMode {
                 //preload
                 new Pose(-2.5, 41, -Math.PI / 18),
 
-                new Pose(-25.5, 47, -Math.PI / 6.5),
-                new Pose(-25.5, 48, -Math.PI / 6.5),
-                new Pose(-26.5, 48, -Math.PI / 6.5),
-                new Pose(-26.5, 49.25, -Math.PI / 6.5),
+                new Pose(-26, 46, -Math.PI / 6.5),
+                new Pose(-26, 47, -Math.PI / 6.5),
+                new Pose(-26, 47, -Math.PI / 6.5),
+                new Pose(-26, 48.25, -Math.PI / 6.5),
 
-                new Pose(-49.25, 49.5, Math.PI / 6.2 + Math.PI),
+                new Pose(-40.5, 55, -Math.PI / 2),
 
-                new Pose(-46.5, 50.5, Math.PI / 6.35 + Math.PI),
-                new Pose(-47.5, 51.5, Math.PI / 6.35 + Math.PI),
-                new Pose(-47, 51.5, Math.PI / 6.35 + Math.PI),
-                new Pose(-47, 52, Math.PI / 6.35 + Math.PI),
-                new Pose(-47, 52, Math.PI / 6.35 + Math.PI)
+                new Pose(-44, 50.5, Math.PI / 6.35 + Math.PI),
+                new Pose(-44, 51.5, Math.PI / 6.35 + Math.PI),
+                new Pose(-44, 51.5, Math.PI / 6.35 + Math.PI),
+                new Pose(-44, 52, Math.PI / 6.35 + Math.PI),
+                new Pose(-44, 52, Math.PI / 6.35 + Math.PI)
         };
 
         GrabPosition[] grabPositions = new GrabPosition[]{
@@ -213,16 +213,16 @@ public class LeftC210Cone extends LinearOpMode {
                         new PositionCommand(drivetrain, localizer, pickup[4], 0, 1250, voltage())
                                 .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[4]))),
                         new WaitUntilCommand(() -> SUPERYUMMY),
-                        new PositionCommand(drivetrain, localizer, deposit_inter[5], 0, 975, voltage())
-                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[4]))
-                                .andThen(new PositionCommand(drivetrain, localizer, deposit[5], 0, 1000, voltage())
-                                        .alongWith(new WaitCommand(650).andThen(new C2DepositHighCommand(lift, intake)))),
+
+                        new PositionCommand(drivetrain, localizer, deposit_inter[5], 0, 500, voltage())
+                                .andThen(new PositionCommand(drivetrain, localizer, deposit[5], 0, 1000, voltage()))
+                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[4]).andThen(new WaitCommand(300)).andThen(new C2DepositHighCommand(lift, intake))),
                         new WaitUntilCommand(() -> SUPERYUMMY),
 
 
                         //second
                         new PositionCommand(drivetrain, localizer, pickup[5], 0, 1550, voltage())
-                                .alongWith(new WaitCommand(600).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
+                                .alongWith(new WaitCommand(900).andThen(new C2ExtendCommand(intake, grabPositions[0]))),
                         new WaitUntilCommand(() -> SUPERYUMMY),
                         new PositionCommand(drivetrain, localizer, deposit_inter[6], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[6], 0, 1250, voltage()))
@@ -258,14 +258,15 @@ public class LeftC210Cone extends LinearOpMode {
                         new WaitUntilCommand(() -> SUPERYUMMY),
                         new PositionCommand(drivetrain, localizer, deposit_inter[10], 0, 250, voltage())
                                 .andThen(new PositionCommand(drivetrain, localizer, deposit[10], 0, 1250, voltage()))
-                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[4])),
-                        // .andThen(new C2DepositHighCommand(lift, intake)))
+                                .alongWith(new C2RetractCommand(intake, lift, grabPositions[4]).andThen(new C2DepositHighCommand(lift, intake))),
                         new WaitUntilCommand(() -> SUPERYUMMY),
 
                         new PositionCommand(drivetrain, localizer, (position == SleeveDetection.ParkingPosition.CENTER) ? pickup[10] : (position == SleeveDetection.ParkingPosition.LEFT) ? pickup[11] : pickup[12], 0, 1250, voltage()),
 
                         //record
-                        new InstantCommand(() -> endtime = timer.milliseconds())
+                        new InstantCommand(() -> endtime = timer.milliseconds()),
+
+                        new InstantCommand(this::requestOpModeStop)
                 )
         );
 
