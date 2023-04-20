@@ -32,6 +32,8 @@ public class AutoTransferCommand extends SequentialCommandGroup {
                 new ClawCommand(intake, IntakeSubsystem.ClawState.OPEN),
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.INTERMEDIATE),
                 new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT),
+                new WaitCommand(50),
+                new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
                 new InstantCommand(() -> Globals.MANUAL_ENABLED = true)
         );
     }

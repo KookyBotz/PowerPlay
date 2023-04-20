@@ -137,7 +137,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void update(PivotState state) {
         if (state != pivotState) {
-            pivotOffset = 0;
+            pivotOffset = 0.01;
         }
         pivotState = state;
         switch (state) {
