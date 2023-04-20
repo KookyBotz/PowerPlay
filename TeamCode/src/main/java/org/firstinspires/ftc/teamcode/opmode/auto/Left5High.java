@@ -77,7 +77,7 @@ public class Left5High extends LinearOpMode {
             }
             drivetrain.updateModules();
 
-            telemetry.addLine("1+10 LEFT SIDE HIGH");
+            telemetry.addLine("1+5 LEFT SIDE HIGH");
             telemetry.update();
 
             robot.clearBulkCache();
