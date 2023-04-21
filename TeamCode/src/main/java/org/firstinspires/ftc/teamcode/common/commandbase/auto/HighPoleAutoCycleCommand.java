@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.common.commandbase.auto;
 
+import static java.lang.Math.PI;
+
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -15,11 +17,13 @@ import org.firstinspires.ftc.teamcode.common.commandbase.newbot.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.AutoTransferCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
+import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 
 public class HighPoleAutoCycleCommand extends ParallelCommandGroup {
-    public HighPoleAutoCycleCommand(LiftSubsystem lift, IntakeSubsystem intake, GrabPosition grabPosition, LiftSubsystem.LiftState liftState) {
+    private SwerveDrivetrain drivetrain;
+    public HighPoleAutoCycleCommand(SwerveDrivetrain drivetrain, LiftSubsystem lift, IntakeSubsystem intake, GrabPosition grabPosition, LiftSubsystem.LiftState liftState) {
         super(
                 new SequentialCommandGroup(
                         // Extend Outwards
@@ -57,5 +61,22 @@ public class HighPoleAutoCycleCommand extends ParallelCommandGroup {
                         new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED))
                 )
         );
+
+        this.drivetrain = drivetrain;
+    }
+
+    @Override
+    public void initialize(){
+        super.initialize();
+        drivetrain.frontLeftModule.setTargetRotation(-PI / 4);
+        drivetrain.frontRightModule.setTargetRotation(PI / 4);
+        drivetrain.backRightModule.setTargetRotation(-PI / 4);
+        drivetrain.backLeftModule.setTargetRotation(PI / 4);
+        drivetrain.updateModules();
+    }
+
+    @Override
+    public void end(boolean interrupted){
+        super.end(interrupted);
     }
 }

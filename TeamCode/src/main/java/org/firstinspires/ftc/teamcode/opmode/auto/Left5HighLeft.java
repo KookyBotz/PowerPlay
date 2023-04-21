@@ -16,9 +16,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.HighPoleAutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.PrecisePositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.SwerveXCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LiftCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.PivotCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
@@ -30,9 +33,11 @@ import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 
-@Autonomous(name = "Time to cook five")
+import java.util.function.BooleanSupplier;
+
+@Autonomous(name = "Wartime Auto Left")
 @Config
-public class Left5High extends LinearOpMode {
+public class Left5HighLeft extends LinearOpMode {
 
     private RobotHardware robot = RobotHardware.getInstance();
     private SwerveDrivetrain drivetrain;
@@ -73,7 +78,7 @@ public class Left5High extends LinearOpMode {
         while (!isStarted()) {
             robot.read(drivetrain, intake, lift);
             for (SwerveModule module : drivetrain.modules) {
-                module.setTargetRotation(Math.PI / 2);
+                module.setTargetRotation(Math.PI / 1.75);
             }
             drivetrain.updateModules();
 
@@ -85,20 +90,39 @@ public class Left5High extends LinearOpMode {
         }
 
 //        SleeveDetection.ParkingPosition position = sleeveDetection.getPosition();
+
+        final Pose[] cycleTarget = new Pose[]{new Pose()};
+
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(0, 59.35, 0.235), 250, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(0, 59.35, 0.235), 1000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new InstantCommand(() -> cycleTarget[0] = localizer.getPos()),
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
-                                        new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(540, 0, 0.163, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                        new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(522, 0, 0.135, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                        new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(513, 0, 0.1, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                        new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(512, 0, 0.07, 0.37, 20), LiftSubsystem.LiftState.HIGH),
-                                        new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(515, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH)
-                                ),
-                                new SwerveXCommand(drivetrain)
+                                        new PrecisePositionCommand(drivetrain, localizer, cycleTarget, 0, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(540, 0, 0.163, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new PrecisePositionCommand(drivetrain, localizer, cycleTarget, 0, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(522, 0, 0.135, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new PrecisePositionCommand(drivetrain, localizer, cycleTarget, 0, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(513, 0, 0.1, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new PrecisePositionCommand(drivetrain, localizer, cycleTarget, 0, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(512, 0, 0.07, 0.37, 20), LiftSubsystem.LiftState.HIGH),
+                                        new PrecisePositionCommand(drivetrain, localizer, cycleTarget, 0, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(515, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH),
+                                        new PrecisePositionCommand(drivetrain, localizer, cycleTarget, 0, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                                        new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT_AUTO),
+                                        new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
+                                        new LiftCommand(lift, LiftSubsystem.LiftState.HIGH),
+                                        new WaitCommand(150),
+                                        new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE),
+                                        new WaitUntilCommand(lift::isWithinTolerance),
+                                        new WaitCommand(25),
+                                        new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
+                                        new WaitCommand(75),
+                                        new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED))
+                                )
                         ),
                         new InstantCommand(() -> endtime = timer.milliseconds())
                 )
@@ -118,6 +142,7 @@ public class Left5High extends LinearOpMode {
 
             telemetry.addData("encoder pod", intake.getPos());
             telemetry.addData("time", endtime);
+            telemetry.addLine(cycleTarget[0].toString());
             double loop = System.nanoTime();
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
             loopTime = loop;

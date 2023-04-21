@@ -35,7 +35,7 @@ public class SwerveDrivetrain implements Drivetrain {
     double[] wa = new double[4];
     double max = 0.0;
 
-    public static double minPow = 0.07;
+    public static double minPow = 0.09;
     public static double imuOffset = 0.0;
 
     public SwerveDrivetrain(RobotHardware robot) {

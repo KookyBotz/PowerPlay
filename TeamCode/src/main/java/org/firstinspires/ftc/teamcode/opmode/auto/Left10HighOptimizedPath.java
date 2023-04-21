@@ -92,11 +92,11 @@ public class Left10HighOptimizedPath extends LinearOpMode {
                         new PositionCommand(drivetrain, localizer, new Pose(0, 59.35, 0.235), 250, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
-                                        new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(540, 0, 0.163, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                        new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(522, 0, 0.135, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                        new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(513, 0, 0.1, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                        new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(512, 0, 0.07, 0.37, 20), LiftSubsystem.LiftState.HIGH),
-                                        new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(515, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH)
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(540, 0, 0.163, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(522, 0, 0.135, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(513, 0, 0.1, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(512, 0, 0.07, 0.37, 20), LiftSubsystem.LiftState.HIGH),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(515, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH)
                                 ),
                                 new SwerveXCommand(drivetrain)
                         ),
@@ -108,11 +108,11 @@ public class Left10HighOptimizedPath extends LinearOpMode {
                         new PositionCommand(drivetrain, localizer, new Pose(-69, 62.7, Math.PI - 0.23), 250, 800, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
-                                        new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(540, 0, 0.172, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                        new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(522, 0, 0.139, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                        new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(513, 0, 0.106, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                                        new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(512, 0, 0.075, 0.37, 20), LiftSubsystem.LiftState.HIGH),
-                                        new HighPoleAutoCycleCommand(lift, intake, new GrabPosition(515, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(540, 0, 0.172, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(522, 0, 0.139, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(513, 0, 0.106, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(512, 0, 0.075, 0.37, 20), LiftSubsystem.LiftState.HIGH),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(515, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH),
                                         new LiftCommand(lift, LiftSubsystem.LiftState.HIGH),
                                         new WaitCommand(150),
                                         new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE),
