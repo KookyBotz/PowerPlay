@@ -79,6 +79,7 @@ public class Left5HighRight extends LinearOpMode {
             drivetrain.updateModules();
 
             telemetry.addLine("1+5 RIGHT SIDE HIGH");
+            telemetry.addData("position", robot.sleeveDetection.getPosition());
             telemetry.update();
 
             robot.clearBulkCache();
@@ -92,6 +93,7 @@ public class Left5HighRight extends LinearOpMode {
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         CommandScheduler.getInstance().schedule(
+                new WaitCommand(10000),
                 new SequentialCommandGroup(
                         new PositionCommand(drivetrain, localizer, new Pose(2.25, -59.2, -0.235), 1000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new InstantCommand(() -> cycleTarget[0] = localizer.getPos()),
@@ -124,9 +126,10 @@ public class Left5HighRight extends LinearOpMode {
                         new PositionCommand(drivetrain, localizer,
                                 (position.equals(SleeveDetection.ParkingPosition.LEFT) ? new Pose(-22, -29.35, -Math.PI / 2) :
                                         (position.equals(SleeveDetection.ParkingPosition.CENTER) ? new Pose(0, -29.35, -Math.PI / 2) :
-                                                new Pose(22, -29.35, -Math.PI / 2))), 2000, 2000,
+                                                new Pose(25, -29.35, -Math.PI / 2))), 2000, 2000,
                                 hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                        new InstantCommand(() -> endtime = timer.milliseconds())
+                        new InstantCommand(() -> endtime = timer.milliseconds()),
+                        new InstantCommand(() -> requestOpModeStop())
                 )
         );
 

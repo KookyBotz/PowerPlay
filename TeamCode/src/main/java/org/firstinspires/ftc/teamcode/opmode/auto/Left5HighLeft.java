@@ -95,6 +95,7 @@ public class Left5HighLeft extends LinearOpMode {
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         CommandScheduler.getInstance().schedule(
+                new WaitCommand(10000),
                 new SequentialCommandGroup(
                         new PositionCommand(drivetrain, localizer, new Pose(-0.63, 59.35, 0.235), 1000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new InstantCommand(() -> cycleTarget[0] = localizer.getPos()),
@@ -129,7 +130,8 @@ public class Left5HighLeft extends LinearOpMode {
                                 (position.equals(SleeveDetection.ParkingPosition.CENTER) ? new Pose(0, 29.35, Math.PI / 2) :
                                                                                             new Pose(-22, 29.35, Math.PI / 2))), 2000, 2000,
                         hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                        new InstantCommand(() -> endtime = timer.milliseconds())
+                        new InstantCommand(() -> endtime = timer.milliseconds()),
+                        new InstantCommand(() -> requestOpModeStop())
                 )
         );
 
