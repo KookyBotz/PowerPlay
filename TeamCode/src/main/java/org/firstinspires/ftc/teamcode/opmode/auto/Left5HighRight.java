@@ -43,7 +43,6 @@ public class Left5HighRight extends LinearOpMode {
     private TwoWheelLocalizer localizer;
     private ElapsedTime timer;
 
-    private SleeveDetection sleeveDetection;
     private double loopTime;
     private double endtime = 0;
 
@@ -86,7 +85,7 @@ public class Left5HighRight extends LinearOpMode {
             robot.write(drivetrain, intake, lift);
         }
 
-//        SleeveDetection.ParkingPosition position = sleeveDetection.getPosition();
+        SleeveDetection.ParkingPosition position = robot.sleeveDetection.getPosition();
 
         final Pose[] cycleTarget = new Pose[]{new Pose()};
 
@@ -121,6 +120,12 @@ public class Left5HighRight extends LinearOpMode {
                                         new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED))
                                 )
                         ),
+                        new PositionCommand(drivetrain, localizer, new Pose(0, -29.35, -Math.PI / 2), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new PositionCommand(drivetrain, localizer,
+                                (position.equals(SleeveDetection.ParkingPosition.LEFT) ? new Pose(-22, -29.35, -Math.PI / 2) :
+                                        (position.equals(SleeveDetection.ParkingPosition.CENTER) ? new Pose(0, -29.35, -Math.PI / 2) :
+                                                new Pose(22, -29.35, -Math.PI / 2))), 2000, 2000,
+                                hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new InstantCommand(() -> endtime = timer.milliseconds())
                 )
         );

@@ -343,13 +343,16 @@ public class OpMode extends CommandOpMode {
 //        telemetry.addData("intakeCurrent", robot.extension.motorEx.getCurrent(CurrentUnit.AMPS));
 //        telemetry.addData("current pos", intake.getPos());
 //        telemetry.addData("target pos", intake.getTargetPosition());
-        telemetry.addData("hasCone", intake.hasCone());
+//        telemetry.addData("hasCone", intake.hasCone());
 
 //        telemetry.addData("frontLeft", drivetrain.frontLeftModule.getModuleRotation());
 //        telemetry.addData("frontRight", drivetrain.frontRightModule.getModuleRotation());
 //        telemetry.addData("backRight", drivetrain.backRightModule.getModuleRotation());
 //        telemetry.addData("backLeft", drivetrain.backLeftModule.getModuleRotation());
-        telemetry.addData("fourbar", intake.getFourbarPosition());
+//        telemetry.addData("fourbar", intake.getFourbarPosition());
+//        telemetry.addData("intakeTime", intake.intakeTime);
+//        telemetry.addData("intakeStateX", intake.intakeMotionState.x);
+        telemetry.addData("time for lift", lift.time);
         loopTime = loop;
         telemetry.update();
 

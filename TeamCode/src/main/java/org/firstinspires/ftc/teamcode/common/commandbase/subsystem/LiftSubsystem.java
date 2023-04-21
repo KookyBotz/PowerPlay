@@ -39,6 +39,8 @@ public class LiftSubsystem extends SubsystemBase {
     private boolean hasCone = false;
     private boolean withinTolerance = false;
 
+    public double time = 0.0;
+
     public static double P = 0.01;
     public static double I = 0.1;
     public static double D = 0.000125;
@@ -116,6 +118,7 @@ public class LiftSubsystem extends SubsystemBase {
         liftMotionState = liftProfile.calculate(timer.time());
         if (liftMotionState.v != 0) {
             setTargetPos((int) liftMotionState.x);
+            time = timer.time();
         }
 
         withinTolerance = Math.abs(getPos() - getTargetPos()) < LIFT_ERROR_TOLERANCE;

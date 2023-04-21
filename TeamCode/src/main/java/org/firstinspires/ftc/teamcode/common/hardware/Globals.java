@@ -30,9 +30,9 @@ public class Globals {
     public static int LIFT_MID_POS = 365;
     public static int LIFT_RETRACT_POS = 0;
 
-    public static double LIFT_MAX_V = 0.0;
-    public static double LIFT_MAX_A = 0.0;
-    public static double LIFT_MAX_D = 0.0;
+    public static double LIFT_MAX_V = 50.0;
+    public static double LIFT_MAX_A = 50.0;
+    public static double LIFT_MAX_D = 50.0;
 
     public static double LIFT_LATCHED = 0.78;
     public static double LIFT_INTERMEDIATE = 0.795;
@@ -48,9 +48,9 @@ public class Globals {
     public static double LIFT_ERROR_TOLERANCE = 20;
 
     // Intake Subsystem Constants
-    public static double INTAKE_EXTENSION_MAX_V = 0;
-    public static double INTAKE_EXTENSION_MAX_A = 0;
-    public static double INTAKE_EXTENSION_MAX_D = 0;
+    public static double INTAKE_EXTENSION_MAX_V = 50;
+    public static double INTAKE_EXTENSION_MAX_A = 50;
+    public static double INTAKE_EXTENSION_MAX_D = 50;
 
     public static double INTAKE_FOURBAR_MAX_V = 6;
     public static double INTAKE_FOURBAR_MAX_A = 9999;

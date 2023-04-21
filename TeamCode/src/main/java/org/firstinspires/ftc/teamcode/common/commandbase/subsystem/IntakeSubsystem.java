@@ -52,7 +52,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private boolean hasCone = false;
     private boolean withinTolerance = false;
 
-    public static double pivotOffset = -0.05;
+    public static double pivotOffset = -0.065;
 
     private final double turret_deposit = 0;
     private final double turret_intake = 0.62;
@@ -60,6 +60,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public double power = 0.0;
     public double targetPosition = 0.0;
     public double time = 0.0;
+    public double intakeTime = 0.0;
 
     public boolean resetting = false;
     public boolean fallen = false;
@@ -129,7 +130,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void update(PivotState state) {
         if (state != pivotState) {
-            pivotOffset = -0.05;
+            pivotOffset = -0.065;
         }
         pivotState = state;
         switch (state) {
@@ -224,6 +225,12 @@ public class IntakeSubsystem extends SubsystemBase {
             setFourbar(fourbarMotionState.x);
         }
 
+//        intakeMotionState = intakeProfile.calculate(intakeTimer.time() + INTAKE_DELAY);
+//        if (intakeMotionState.v != 0) {
+//            targetPosition = intakeMotionState.x;
+//            intakeTime = intakeTimer.time();
+//        }
+
         withinTolerance = Math.abs(getPos() - getTargetPosition()) <= INTAKE_ERROR_TOLERANCE;
 
         power = Range.clip((-controller.calculate(intakePosition, targetPosition) + (F * Math.signum(targetPosition - intakePosition)) / robot.getVoltage() * 14), -1, 1);
@@ -254,6 +261,10 @@ public class IntakeSubsystem extends SubsystemBase {
         try {
             robot.extension.set(power);
         } catch (Exception e) {}
+    }
+
+    public void retractIntakeExtension() {
+        newIntakeProfile(0);
     }
 
     public void setFourbar(double pos) {
@@ -339,6 +350,12 @@ public class IntakeSubsystem extends SubsystemBase {
         Constraints constraints = new Constraints(INTAKE_FOURBAR_MAX_V, INTAKE_FOURBAR_MAX_A, (fourbarState.equals(FourbarState.INTERMEDIATE) ? INTAKE_FOURBAR_MAX_D_UP : INTAKE_FOURBAR_MAX_D_DOWN));
         fourbarProfile = new AsymmetricMotionProfile(robot.fourbarLeft.getPosition(), targetPos, constraints);
         fourbarTimer.reset();
+    }
+
+    public void newIntakeProfile(double targetPosition) {
+        Constraints constraints = new Constraints(INTAKE_EXTENSION_MAX_V, INTAKE_EXTENSION_MAX_A, INTAKE_EXTENSION_MAX_D);
+        intakeProfile = new AsymmetricMotionProfile(getPos(), targetPosition, constraints);
+        intakeTimer.reset();
     }
 
     public void adjustPivotOffset(double offset) {
