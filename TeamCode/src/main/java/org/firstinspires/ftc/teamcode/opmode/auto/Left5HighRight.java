@@ -93,7 +93,6 @@ public class Left5HighRight extends LinearOpMode {
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         CommandScheduler.getInstance().schedule(
-                new WaitCommand(10000),
                 new SequentialCommandGroup(
                         new PositionCommand(drivetrain, localizer, new Pose(2.25, -59.2, -0.235), 1000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new InstantCommand(() -> cycleTarget[0] = localizer.getPos()),
@@ -129,7 +128,7 @@ public class Left5HighRight extends LinearOpMode {
                                                 new Pose(25, -29.35, -Math.PI / 2))), 2000, 2000,
                                 hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new InstantCommand(() -> endtime = timer.milliseconds()),
-                        new InstantCommand(() -> requestOpModeStop())
+                        new InstantCommand(this::requestOpModeStop)
                 )
         );
 
@@ -145,8 +144,8 @@ public class Left5HighRight extends LinearOpMode {
             robot.loop(null, drivetrain, intake, lift);
             localizer.periodic();
 
-            telemetry.addData("encoder pod", intake.getPos());
-            telemetry.addData("time", endtime);
+//            telemetry.addData("encoder pod", intake.getPos());
+//            telemetry.addData("time", endtime);
             telemetry.addLine(cycleTarget[0].toString());
             double loop = System.nanoTime();
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
