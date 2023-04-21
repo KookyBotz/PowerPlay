@@ -7,7 +7,6 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.ClawCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.FourbarCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.PivotCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
