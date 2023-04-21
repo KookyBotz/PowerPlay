@@ -72,7 +72,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public boolean resetting = false;
     public boolean fallen = false;
 
-
     public enum STATE {
         GOOD,
         FAILED_EXTEND,
@@ -232,6 +231,11 @@ public class IntakeSubsystem extends SubsystemBase {
             setFourbar(fourbarMotionState.x);
         }
 
+        intakeMotionState = intakeProfile.calculate(intakeTimer.time() + INTAKE_DELAY);
+        if (intakeMotionState.v != 0) {
+            targetPosition = intakeMotionState.x;
+        }
+
         withinTolerance = Math.abs(getPos() - getTargetPosition()) <= INTAKE_ERROR_TOLERANCE;
 
         power = Range.clip((-controller.calculate(intakePosition, targetPosition) + (F * Math.signum(targetPosition - intakePosition)) / robot.getVoltage() * 14), -1, 1);
@@ -325,6 +329,10 @@ public class IntakeSubsystem extends SubsystemBase {
         }
     }
 
+    public void retractIntakeExtension() {
+        newIntakeProfile(0);
+    }
+
     public void newProfile(double targetPos, double max_v, double max_a, ProfileTarget target) {
         this.newProfile(targetPos, new Constraints(max_v, max_a, max_a), target);
     }
@@ -341,6 +349,12 @@ public class IntakeSubsystem extends SubsystemBase {
                 intakeTimer.reset();
                 break;
         }
+    }
+
+    public void newIntakeProfile(double targetPosition) {
+        Constraints constraints = new Constraints(INTAKE_EXTENSION_MAX_V, INTAKE_EXTENSION_MAX_A, INTAKE_EXTENSION_MAX_D);
+        intakeProfile = new AsymmetricMotionProfile(getPos(), targetPosition, constraints);
+        intakeTimer.reset();
     }
 
     public void newProfile(double targetPos) {

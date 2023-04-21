@@ -19,7 +19,7 @@ public class AutoTransferCommand extends SequentialCommandGroup {
     public AutoTransferCommand(IntakeSubsystem intake, LiftSubsystem lift, GrabPosition position) {
         super(
                 new InstantCommand(() -> Globals.MANUAL_ENABLED = false),
-                new InstantCommand(() -> intake.setTargetPosition(0)),
+                new InstantCommand(() -> intake.retractIntakeExtension()),
                 new PivotCommand(intake, IntakeSubsystem.PivotState.PRE_TRANSFER),
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.PRE_TRANSFER),
                 new WaitCommand(position.turretDelay),
