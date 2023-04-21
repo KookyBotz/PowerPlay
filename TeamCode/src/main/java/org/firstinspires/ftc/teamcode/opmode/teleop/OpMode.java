@@ -182,7 +182,7 @@ public class OpMode extends CommandOpMode {
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> intake.update(ClawState.OPEN)),
                                 new WaitCommand(300),
-                                new InstantCommand(() -> intake.setTargetPosition(0)),
+                                new InstantCommand(() -> intake.retractIntakeExtension()),
                                 new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
                                 new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
                                 new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS))
@@ -346,6 +346,7 @@ public class OpMode extends CommandOpMode {
 //        telemetry.addData("frontRight", drivetrain.frontRightModule.getModuleRotation());
 //        telemetry.addData("backRight", drivetrain.backRightModule.getModuleRotation());
 //        telemetry.addData("backLeft", drivetrain.backLeftModule.getModuleRotation());
+        telemetry.addData("intakeTime", intake.intakeTime);
         telemetry.addData("fourbar", intake.getFourbarPosition());
         loopTime = loop;
         telemetry.update();

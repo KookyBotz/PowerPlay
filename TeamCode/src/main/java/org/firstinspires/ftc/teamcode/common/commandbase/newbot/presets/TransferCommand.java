@@ -32,7 +32,7 @@ public class TransferCommand extends SequentialCommandGroup {
                         () -> intake.turretState == IntakeSubsystem.TurretState.INTERMEDIATE
                 ),
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.PRE_TRANSFER),
-                new InstantCommand(() -> intake.setTargetPosition(-5)),
+                new InstantCommand(() -> intake.retractIntakeExtension()),
                 new WaitUntilCommand(() -> intake.isWithinTolerance() && Math.abs(intake.fourbarMotionState.v) <= 0.3),
 
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.TRANSFER),

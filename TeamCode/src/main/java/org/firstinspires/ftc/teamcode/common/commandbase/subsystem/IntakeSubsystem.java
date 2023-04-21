@@ -51,6 +51,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public final List<Boolean> coneDetected = new ArrayList<>();
     private boolean hasCone = false;
     private boolean withinTolerance = false;
+    public double intakeTime = 0;
 
     public static double pivotOffset = 0.01;
 
@@ -234,6 +235,7 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotionState = intakeProfile.calculate(intakeTimer.time() + INTAKE_DELAY);
         if (intakeMotionState.v != 0) {
             targetPosition = intakeMotionState.x;
+            intakeTime = intakeTimer.time();
         }
 
         withinTolerance = Math.abs(getPos() - getTargetPosition()) <= INTAKE_ERROR_TOLERANCE;
