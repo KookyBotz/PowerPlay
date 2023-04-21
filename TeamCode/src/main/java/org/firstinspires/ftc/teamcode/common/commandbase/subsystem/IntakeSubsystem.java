@@ -52,15 +52,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private boolean hasCone = false;
     private boolean withinTolerance = false;
 
-    public static double pivotOffset = 0.01;
-
-//    public static final GrabPosition[] CYCLE_GRAB_POSITIONS = {
-//            new GrabPosition(550, 150, 0.457, pivot_pitch_up, 0),
-//            new GrabPosition(530, 150, 0.397, pivot_pitch_up, 0),
-//            new GrabPosition(520, 150, 0.345, pivot_pitch_up, 0),
-//            new GrabPosition(520, 150, 0.302, pivot_pitch_up, 0),
-//            new GrabPosition(520, 150, 0.242, pivot_pitch_up, 0)
-//    };
+    public static double pivotOffset = -0.05;
 
     private final double turret_deposit = 0;
     private final double turret_intake = 0.62;
@@ -137,7 +129,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void update(PivotState state) {
         if (state != pivotState) {
-            pivotOffset = 0.01;
+            pivotOffset = -0.05;
         }
         pivotState = state;
         switch (state) {

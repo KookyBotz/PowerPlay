@@ -97,7 +97,7 @@ public class Left5HighLeft extends LinearOpMode {
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(0, 59.35, 0.235), 1000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(-0.63, 59.35, 0.235), 1000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new InstantCommand(() -> cycleTarget[0] = localizer.getPos()),
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(

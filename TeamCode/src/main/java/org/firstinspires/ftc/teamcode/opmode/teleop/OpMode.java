@@ -194,7 +194,7 @@ public class OpMode extends CommandOpMode {
         if (gamepad2.dpad_down) {
             intake.resetting = true;
             robot.intakeEncoder.reset();
-        }else{
+        } else {
             intake.resetting = false;
         }
 
@@ -203,9 +203,12 @@ public class OpMode extends CommandOpMode {
          */
         boolean rightBumper = gamepad2.right_bumper;
         if (!lastRightBumper2 && rightBumper) {
-            if (intake.hasCone() || gamepad1.left_bumper || gamepad2.dpad_up) {
-                CommandScheduler.getInstance().schedule(new TransferCommand(intake, lift));
-            } else if (!intake.fourbarState.equals(IntakeSubsystem.FourbarState.INTAKE)) {
+            if ((intake.hasCone() || gamepad2.dpad_up) && intake.fourbarState.equals(IntakeSubsystem.FourbarState.INTERMEDIATE)){
+                CommandScheduler.getInstance().schedule(
+                        new TransferCommand(intake, lift)
+                );
+            }
+            else if (!intake.fourbarState.equals(IntakeSubsystem.FourbarState.INTAKE)) {
                 CommandScheduler.getInstance().schedule(
                         new IntakeStateCommand(intake)
                 );
@@ -213,8 +216,8 @@ public class OpMode extends CommandOpMode {
         }
         lastRightBumper2 = rightBumper;
 
-        
-        
+
+
         /*
          * INTAKING AND AUTO TRANSFER
          */
@@ -340,7 +343,7 @@ public class OpMode extends CommandOpMode {
 //        telemetry.addData("intakeCurrent", robot.extension.motorEx.getCurrent(CurrentUnit.AMPS));
 //        telemetry.addData("current pos", intake.getPos());
 //        telemetry.addData("target pos", intake.getTargetPosition());
-//        telemetry.addData("hasCone", intake.coneDetected);
+        telemetry.addData("hasCone", intake.hasCone());
 
 //        telemetry.addData("frontLeft", drivetrain.frontLeftModule.getModuleRotation());
 //        telemetry.addData("frontRight", drivetrain.frontRightModule.getModuleRotation());

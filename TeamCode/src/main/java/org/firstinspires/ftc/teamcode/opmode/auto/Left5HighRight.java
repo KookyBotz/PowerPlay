@@ -79,7 +79,7 @@ public class Left5HighRight extends LinearOpMode {
             }
             drivetrain.updateModules();
 
-            telemetry.addLine("1+5 LEFT SIDE HIGH");
+            telemetry.addLine("1+5 RIGHT SIDE HIGH");
             telemetry.update();
 
             robot.clearBulkCache();
@@ -94,7 +94,7 @@ public class Left5HighRight extends LinearOpMode {
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(3, -59.35, -0.235), 1000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(2.25, -59.2, -0.235), 1000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                         new InstantCommand(() -> cycleTarget[0] = localizer.getPos()),
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
