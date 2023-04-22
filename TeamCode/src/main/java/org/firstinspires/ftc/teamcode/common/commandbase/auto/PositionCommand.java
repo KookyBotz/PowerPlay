@@ -1,14 +1,11 @@
 package org.firstinspires.ftc.teamcode.common.commandbase.auto;
 
-import static java.lang.Math.PI;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.drive.drive.Drivetrain;
-import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.drive.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
@@ -30,11 +27,10 @@ public class PositionCommand extends CommandBase {
     public static double hD = 0.05;
     public static double hF = 0;
 
-
     public static PIDFController xController = new PIDFController(xP, 0.0, xD, xF);
     public static PIDFController yController = new PIDFController(yP, 0.0, yD, yF);
     public static PIDFController hController = new PIDFController(hP, 0.0, hD, hF);
-    public static double max_power = 1;
+    public static double max_power = 0.7;
     public static double max_heading = 0.5;
 
     Drivetrain drivetrain;
@@ -47,6 +43,7 @@ public class PositionCommand extends CommandBase {
     private ElapsedTime delayTimer;
 
     private final double v;
+    private final boolean lock;
 
     public PositionCommand(Drivetrain drivetrain, Localizer localizer, Pose targetPose, double delay, double dead, double voltage) {
         this.drivetrain = drivetrain;
@@ -55,6 +52,17 @@ public class PositionCommand extends CommandBase {
         this.ms = dead;
         this.delay = delay;
         this.v = voltage;
+        this.lock = false;
+    }
+
+    public PositionCommand(Drivetrain drivetrain, Localizer localizer, Pose targetPose, double delay, double voltage) {
+        this.drivetrain = drivetrain;
+        this.localizer = localizer;
+        this.targetPose = targetPose;
+        this.ms = Integer.MAX_VALUE;
+        this.delay = delay;
+        this.v = voltage;
+        this.lock = true;
     }
 
     @Override
@@ -88,6 +96,7 @@ public class PositionCommand extends CommandBase {
         }
 
         boolean delayed = delayTimer != null && delayTimer.milliseconds() > delay;
+//        return lock ? reached : ((deadTimer.milliseconds() > ms) || delayed);
         return (deadTimer.milliseconds() > ms) || delayed;
     }
 

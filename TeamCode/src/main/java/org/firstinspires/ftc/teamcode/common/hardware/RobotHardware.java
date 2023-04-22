@@ -82,6 +82,8 @@ public class RobotHardware {
 
     public boolean enabled;
 
+    private HardwareMap hardwareMap;
+
     public static RobotHardware getInstance() {
         if (instance == null) {
             instance = new RobotHardware();
@@ -91,6 +93,7 @@ public class RobotHardware {
     }
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
+        this.hardwareMap = hardwareMap;
         if (Globals.USING_IMU) {
             synchronized (imuLock) {
                 imu = hardwareMap.get(BNO055IMU.class, "imu");
@@ -263,6 +266,12 @@ public class RobotHardware {
     }
 
     public double getVoltage() {
-        return voltage;
+        return hardwareMap.voltageSensor.iterator().next().getVoltage();
+    }
+
+    public void zero() {
+        extension.motor.setPower(0.01);
+        liftLeft.motor.setPower(0.01);
+        liftRight.motor.setPower(-0.01);
     }
 }

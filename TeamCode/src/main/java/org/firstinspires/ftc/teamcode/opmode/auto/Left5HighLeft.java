@@ -56,7 +56,6 @@ public class Left5HighLeft extends LinearOpMode {
         PositionCommand.yController.setPIDF(0.02, 0, 0.03, 0);
         PositionCommand.hController.setPIDF(0.3, 0, 0.05, 0);
 
-
         CommandScheduler.getInstance().reset();
         Globals.SIDE = Globals.Side.LEFT;
         Globals.AUTO = true;
@@ -101,15 +100,15 @@ public class Left5HighLeft extends LinearOpMode {
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new PrecisePositionCommand(drivetrain, localizer, cycleTarget, 0, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(540, 0, 0.163, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(560, 0, 0.163, 0.37, 0), LiftSubsystem.LiftState.HIGH),
                                         new PrecisePositionCommand(drivetrain, localizer, cycleTarget, 0, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(522, 0, 0.135, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(542, 0, 0.135, 0.37, 0), LiftSubsystem.LiftState.HIGH),
                                         new PrecisePositionCommand(drivetrain, localizer, cycleTarget, 0, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(513, 0, 0.1, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(533, 0, 0.1, 0.37, 0), LiftSubsystem.LiftState.HIGH),
                                         new PrecisePositionCommand(drivetrain, localizer, cycleTarget, 0, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(512, 0, 0.07, 0.37, 20), LiftSubsystem.LiftState.HIGH),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(532, 0, 0.07, 0.37, 20), LiftSubsystem.LiftState.HIGH),
                                         new PrecisePositionCommand(drivetrain, localizer, cycleTarget, 0, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(515, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH),
+                                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(535, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH),
                                         new PrecisePositionCommand(drivetrain, localizer, cycleTarget, 0, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                                         new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT_AUTO),
                                         new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),

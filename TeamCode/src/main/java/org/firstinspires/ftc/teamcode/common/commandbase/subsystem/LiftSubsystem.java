@@ -32,7 +32,7 @@ public class LiftSubsystem extends SubsystemBase {
     private PIDController controller;
 
     private int liftPosition;
-    private double power = 0.0;
+    public double power = 0.0;
     private int targetPosition = 0;
 
     private boolean isExtended = false;
