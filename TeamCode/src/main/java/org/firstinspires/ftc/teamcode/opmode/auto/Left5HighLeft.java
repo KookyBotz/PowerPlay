@@ -11,6 +11,7 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -37,6 +38,7 @@ import java.util.function.BooleanSupplier;
 
 @Autonomous(name = "Wartime Auto Left")
 @Config
+@Disabled
 public class Left5HighLeft extends LinearOpMode {
 
     private RobotHardware robot = RobotHardware.getInstance();

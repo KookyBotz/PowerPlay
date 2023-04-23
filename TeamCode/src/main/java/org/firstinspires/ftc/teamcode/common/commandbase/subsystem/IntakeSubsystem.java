@@ -258,9 +258,14 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void write() {
-        try {
-            robot.extension.set(power);
-        } catch (Exception e) {}
+        if(robot.enabled) {
+            try {
+                robot.extension.set(power);
+            } catch (Exception e) {
+            }
+        }else{
+            robot.extension.set(0);
+        }
     }
 
     public void retractIntakeExtension() {

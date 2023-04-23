@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.auto.HighPoleAutoCycleC
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.HighPoleAutoExtendCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PrecisePositionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.WartimeCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.PivotCommand;
@@ -95,6 +96,7 @@ public class Right5HighCooking extends LinearOpMode {
                     new PositionCommand(drivetrain, localizer, new Pose(1, -64, 0), 250, robot.getVoltage()),
                     new ParallelCommandGroup(
                             new SequentialCommandGroup(
+                                    new WartimeCommand(drivetrain, 0),
                                     new LiftCommand(lift, LiftSubsystem.LiftState.HIGH),
                                     new WaitCommand(75),
                                     new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT_AUTO),
@@ -108,17 +110,23 @@ public class Right5HighCooking extends LinearOpMode {
                     new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
                     new WaitCommand(20),
                     new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED)),
-                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.65, -61.75, -0.23)}, 100, robot.getVoltage()),
+                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(1.15, -61.25, -0.23)}, 100, robot.getVoltage()),
+                    new WartimeCommand(drivetrain,- 0.23),
                     new HighPoleAutoExtendCommand(drivetrain, lift, intake, new GrabPosition(560, 0, 0.163, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.65, -61.75, -0.23)}, 100, robot.getVoltage()),
+                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(1.15, -61.25, -0.23)}, 100, robot.getVoltage()),
+                    new WartimeCommand(drivetrain,- 0.23),
                     new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(542, 0, 0.135, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.65, -61.75, -0.23)}, 100, robot.getVoltage()),
+                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(1.15, -61.25, -0.23)}, 100, robot.getVoltage()),
+                    new WartimeCommand(drivetrain,- 0.23),
                     new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(533, 0, 0.1, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.65, -61.75, -0.23)}, 100, robot.getVoltage()),
+                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(1.15, -61.25, -0.23)}, 100, robot.getVoltage()),
+                    new WartimeCommand(drivetrain,- 0.23),
                     new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(532, 0, 0.07, 0.37, 20), LiftSubsystem.LiftState.HIGH),
-                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.65, -61.75, -0.23)}, 100, robot.getVoltage()),
+                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(1.15, -61.25, -0.23)}, 100, robot.getVoltage()),
+                    new WartimeCommand(drivetrain,- 0.23),
                     new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(535, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH),
-                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.65, -61.75, -0.23)}, 100, robot.getVoltage()),
+                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(1.15, -61.25, -0.23)}, 100, robot.getVoltage()),
+                    new WartimeCommand(drivetrain,- 0.23),
                     new LiftCommand(lift, LiftSubsystem.LiftState.HIGH),
                     new WaitCommand(75),
                     new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE),
@@ -134,8 +142,11 @@ public class Right5HighCooking extends LinearOpMode {
                                     (position.equals(SleeveDetection.ParkingPosition.CENTER) ? new Pose(0, -29.35, -Math.PI / 2) :
                                             new Pose(22, -29.35, -Math.PI / 2))), 2000, 2000,
                             hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                    new InstantCommand(() -> intake.power = 0),
-                    new InstantCommand(() -> lift.power = 0),
+//                    new InstantCommand(() -> intake.power = 0),
+//                    new InstantCommand(() -> lift.power = 0),
+//                    new InstantCommand(() -> lift.setTargetPos((int)lift.getPos())),
+                    new InstantCommand(()->robot.enabled = false),
+                    new InstantCommand(()->SwerveDrivetrain.imuOffset = robot.getAngle() + Math.PI/2 + Math.PI),
                     new InstantCommand(this::requestOpModeStop)
             )
         );
@@ -151,14 +162,14 @@ public class Right5HighCooking extends LinearOpMode {
                 CommandScheduler.getInstance().reset();
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
+                                new IntermediateStateCommand(intake),
+                                new LiftCommand(lift, LiftSubsystem.LiftState.RETRACTED),
                                 new PositionCommand(drivetrain, localizer, new Pose(0, 29.35, Math.PI / 2), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                                 new PositionCommand(drivetrain, localizer,
-                                        (position.equals(SleeveDetection.ParkingPosition.LEFT) ? new Pose(22, 29.35, -Math.PI / 2) :
+                                        (position.equals(SleeveDetection.ParkingPosition.LEFT) ? new Pose(-22, 29.35, -Math.PI / 2) :
                                                 (position.equals(SleeveDetection.ParkingPosition.CENTER) ? new Pose(0, 29.35, -Math.PI / 2) :
-                                                        new Pose(-22, 29.35, -Math.PI / 2))), 2000, 2000,
-                                        hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                                new IntermediateStateCommand(intake),
-                                new LiftCommand(lift, LiftSubsystem.LiftState.RETRACTED)
+                                                        new Pose(22, 29.35, -Math.PI / 2))), 2000, 2000,
+                                        hardwareMap.voltageSensor.iterator().next().getVoltage())
                         )
                 );
             }
@@ -171,5 +182,7 @@ public class Right5HighCooking extends LinearOpMode {
             robot.write(drivetrain, intake, lift);
             robot.clearBulkCache();
         }
+
+        CommandScheduler.getInstance().reset();
     }
 }

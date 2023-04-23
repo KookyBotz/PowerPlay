@@ -103,6 +103,8 @@ public class Globals {
     public static boolean HAS_AUTO_ERROR = false;
     public static boolean IS_PARKING = false;
 
+    public static boolean SWERVE_X = false;
+
     public static int wait1 = 100;
     public static int wait2 = 300;
     public static int wait3 = 50;

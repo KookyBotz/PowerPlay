@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -30,6 +31,7 @@ import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 
 @Autonomous(name = "Left 1+5 C2")
 @Config
+@Disabled
 public class LeftC25Cone extends LinearOpMode {
 
     private RobotHardware robot = RobotHardware.getInstance();

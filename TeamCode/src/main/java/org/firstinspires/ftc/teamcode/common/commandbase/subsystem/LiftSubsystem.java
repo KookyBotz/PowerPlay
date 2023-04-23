@@ -40,6 +40,7 @@ public class LiftSubsystem extends SubsystemBase {
     private boolean withinTolerance = false;
 
     public double time = 0.0;
+    public boolean resetting = false;
 
     public static double P = 0.01;
     public static double I = 0.1;
@@ -124,6 +125,11 @@ public class LiftSubsystem extends SubsystemBase {
         withinTolerance = Math.abs(getPos() - getTargetPos()) < LIFT_ERROR_TOLERANCE;
 
         power = Range.clip(((-controller.calculate(liftPosition, targetPosition) + (F * Math.signum(targetPosition - liftPosition))) / robot.getVoltage() * 14), -1, 1);
+
+        if (resetting) {
+            // positive is retracting
+            power = 0.4;
+        }
     }
 
     public void read() {
@@ -135,10 +141,15 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void write() {
-        try {
-            robot.liftLeft.set(power);
-            robot.liftRight.set(-power);
-        } catch (Exception e) {}
+        if(robot.enabled) {
+            try {
+                robot.liftLeft.set(power);
+                robot.liftRight.set(-power);
+            } catch (Exception e) {
+            }
+        }else{
+            robot.extension.set(0);
+        }
     }
 
     public double getPos() {

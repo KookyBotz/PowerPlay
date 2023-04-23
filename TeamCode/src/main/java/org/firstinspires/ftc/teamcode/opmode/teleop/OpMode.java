@@ -148,6 +148,8 @@ public class OpMode extends CommandOpMode {
 //        }
 //        lastLeftBumper1 = leftBumper1;
 
+
+
         if (gamepad1.right_stick_button && Globals.USING_IMU) {
             SwerveDrivetrain.imuOffset = robot.getAngle() + Math.PI;
         }
@@ -198,6 +200,13 @@ public class OpMode extends CommandOpMode {
             intake.resetting = false;
         }
 
+        if (gamepad1.left_bumper) {
+            lift.resetting = true;
+            robot.liftEncoder.reset();
+        } else {
+            lift.resetting = false;
+        }
+
         /*
          * Transfer to Intake Sequences - G2
          */
@@ -227,7 +236,7 @@ public class OpMode extends CommandOpMode {
             CommandScheduler.getInstance().schedule(
                     new InstantCommand(() -> intake.update(ClawState.CLOSED))
             );
-            if (intake.hasCone() || gamepad1.left_bumper || gamepad2.dpad_up) {
+            if (intake.hasCone() || gamepad2.dpad_up) {
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
                                 new WaitCommand(Globals.INTAKE_CLAW_CLOSE_TIME),

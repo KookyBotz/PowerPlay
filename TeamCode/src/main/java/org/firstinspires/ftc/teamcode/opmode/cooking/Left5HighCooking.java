@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.auto.HighPoleAutoExtend
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.HoldPositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PrecisePositionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.WartimeCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.PivotCommand;
@@ -91,55 +92,64 @@ public class Left5HighCooking extends LinearOpMode {
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
 
         CommandScheduler.getInstance().schedule(
-            new SequentialCommandGroup(
-                    new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 1),
-                    new InstantCommand(() -> PositionCommand.ALLOWED_HEADING_ERROR = Math.toRadians(2.5)),
-                    new PositionCommand(drivetrain, localizer, new Pose(0, 64, 0), 250, robot.getVoltage()),
-                    new ParallelCommandGroup(
-                            new SequentialCommandGroup(
-                                    new LiftCommand(lift, LiftSubsystem.LiftState.HIGH),
-                                    new WaitCommand(75),
-                                    new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT_AUTO),
-                                    new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
-                                    new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED),
-                                    new WaitUntilCommand(lift::isWithinTolerance),
-                                    new WaitCommand(70)
-                            ),
-                            new WaitCommand(1000)
-                    ),
-                    new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
-                    new WaitCommand(20),
-                    new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED)),
-                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.85, 61.75, 0.23)}, 100, robot.getVoltage()),
-                    new HighPoleAutoExtendCommand(drivetrain, lift, intake, new GrabPosition(560, 0, 0.163, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.85, 61.75, 0.23)}, 100, robot.getVoltage()),
-                    new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(542, 0, 0.135, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.85, 61.75, 0.23)}, 100, robot.getVoltage()),
-                    new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(533, 0, 0.1, 0.37, 0), LiftSubsystem.LiftState.HIGH),
-                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.85, 61.75, 0.23)}, 100, robot.getVoltage()),
-                    new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(532, 0, 0.07, 0.37, 20), LiftSubsystem.LiftState.HIGH),
-                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.85, 61.75, 0.23)}, 100, robot.getVoltage()),
-                    new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(535, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH),
-                    new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.85, 61.75, 0.23)}, 100, robot.getVoltage()),
-                    new LiftCommand(lift, LiftSubsystem.LiftState.HIGH),
-                    new WaitCommand(75),
-                    new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE),
-                    new WaitUntilCommand(lift::isWithinTolerance),
-                    new WaitCommand(100),
-                    new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
-                    new WaitCommand(75),
-                    new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED)),
-                    new WaitUntilCommand(() -> lift.isWithinTolerance()),
-                    new PositionCommand(drivetrain, localizer, new Pose(0, 29.35, Math.PI / 2), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                    new PositionCommand(drivetrain, localizer,
-                            (position.equals(SleeveDetection.ParkingPosition.LEFT) ? new Pose(22, 29.35, Math.PI / 2) :
-                                    (position.equals(SleeveDetection.ParkingPosition.CENTER) ? new Pose(0, 29.35, Math.PI / 2) :
-                                            new Pose(-22, 29.35, Math.PI / 2))), 2000, 2000,
-                            hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                    new InstantCommand(() -> intake.power = 0),
-                    new InstantCommand(() -> lift.power = 0),
-                    new InstantCommand(this::requestOpModeStop)
-            )
+                new SequentialCommandGroup(
+                        new InstantCommand(() -> PositionCommand.ALLOWED_TRANSLATIONAL_ERROR = 1),
+                        new InstantCommand(() -> PositionCommand.ALLOWED_HEADING_ERROR = Math.toRadians(2.5)),
+                        new PositionCommand(drivetrain, localizer, new Pose(0, 64, 0), 250, robot.getVoltage()),
+                        new ParallelCommandGroup(
+                                new SequentialCommandGroup(
+                                        new WartimeCommand(drivetrain, 0),
+                                        new LiftCommand(lift, LiftSubsystem.LiftState.HIGH),
+                                        new WaitCommand(75),
+                                        new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT_AUTO),
+                                        new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
+                                        new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED),
+                                        new WaitUntilCommand(lift::isWithinTolerance),
+                                        new WaitCommand(70)
+                                ),
+                                new WaitCommand(1000)
+                        ),
+                        new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
+                        new WaitCommand(20),
+                        new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED)),
+                        new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.35, 61.25, 0.23)}, 100, robot.getVoltage()),
+                        new WartimeCommand(drivetrain, 0.23),
+                        new HighPoleAutoExtendCommand(drivetrain, lift, intake, new GrabPosition(560, 0, 0.163, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                        new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.35, 61.25, 0.23)}, 100, robot.getVoltage()),
+                        new WartimeCommand(drivetrain, 0.23),
+                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(542, 0, 0.135, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                        new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.35, 61.25, 0.23)}, 100, robot.getVoltage()),
+                        new WartimeCommand(drivetrain, 0.23),
+                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(533, 0, 0.1, 0.37, 0), LiftSubsystem.LiftState.HIGH),
+                        new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.35, 61.25, 0.23)}, 100, robot.getVoltage()),
+                        new WartimeCommand(drivetrain, 0.23),
+                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(532, 0, 0.07, 0.37, 20), LiftSubsystem.LiftState.HIGH),
+                        new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.35, 61.25, 0.23)}, 100, robot.getVoltage()),
+                        new WartimeCommand(drivetrain, 0.23),
+                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, new GrabPosition(535, 0, 0.035, 0.37, 20), LiftSubsystem.LiftState.HIGH),
+                        new PrecisePositionCommand(drivetrain, localizer, new Pose[]{new Pose(0.35, 61.25, 0.23)}, 100, robot.getVoltage()),
+                        new WartimeCommand(drivetrain, 0.23),
+                        new LiftCommand(lift, LiftSubsystem.LiftState.HIGH),
+                        new WaitCommand(75),
+                        new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE),
+                        new WaitUntilCommand(lift::isWithinTolerance),
+                        new WaitCommand(100),
+                        new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
+                        new WaitCommand(75),
+                        new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED)),
+                        new WaitUntilCommand(() -> lift.isWithinTolerance()),
+                        new PositionCommand(drivetrain, localizer, new Pose(0, 29.35, Math.PI / 2), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
+                        new PositionCommand(drivetrain, localizer,
+                                (position.equals(SleeveDetection.ParkingPosition.LEFT) ? new Pose(22, 29.35, Math.PI / 2) :
+                                        (position.equals(SleeveDetection.ParkingPosition.CENTER) ? new Pose(0, 29.35, Math.PI / 2) :
+                                                new Pose(-22, 29.35, Math.PI / 2))), 2000, 2000,
+                                hardwareMap.voltageSensor.iterator().next().getVoltage()),
+//                    new InstantCommand(() -> intake.power = 0),
+//                    new InstantCommand(() -> lift.power = 0),
+                        new InstantCommand(() -> robot.enabled = false),
+                        new InstantCommand(()->SwerveDrivetrain.imuOffset = robot.getAngle() - Math.PI/2 + Math.PI),
+                        new InstantCommand(this::requestOpModeStop)
+                )
         );
 
         robot.reset();
@@ -153,14 +163,14 @@ public class Left5HighCooking extends LinearOpMode {
                 CommandScheduler.getInstance().reset();
                 CommandScheduler.getInstance().schedule(
                         new SequentialCommandGroup(
+                                new IntermediateStateCommand(intake),
+                                new LiftCommand(lift, LiftSubsystem.LiftState.RETRACTED),
                                 new PositionCommand(drivetrain, localizer, new Pose(0, 29.35, Math.PI / 2), 2000, 2000, hardwareMap.voltageSensor.iterator().next().getVoltage()),
                                 new PositionCommand(drivetrain, localizer,
                                         (position.equals(SleeveDetection.ParkingPosition.LEFT) ? new Pose(22, 29.35, Math.PI / 2) :
                                                 (position.equals(SleeveDetection.ParkingPosition.CENTER) ? new Pose(0, 29.35, Math.PI / 2) :
                                                         new Pose(-22, 29.35, Math.PI / 2))), 2000, 2000,
-                                        hardwareMap.voltageSensor.iterator().next().getVoltage()),
-                                new IntermediateStateCommand(intake),
-                                new LiftCommand(lift, LiftSubsystem.LiftState.RETRACTED)
+                                        hardwareMap.voltageSensor.iterator().next().getVoltage())
                         )
                 );
             }
@@ -173,5 +183,7 @@ public class Left5HighCooking extends LinearOpMode {
             robot.write(drivetrain, intake, lift);
             robot.clearBulkCache();
         }
+
+        CommandScheduler.getInstance().reset();
     }
 }

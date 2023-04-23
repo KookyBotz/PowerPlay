@@ -11,6 +11,7 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -34,6 +35,7 @@ import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 
 @Autonomous(name = "Wartime Auto Right")
 @Config
+@Disabled
 public class Left5HighRight extends LinearOpMode {
 
     private RobotHardware robot = RobotHardware.getInstance();

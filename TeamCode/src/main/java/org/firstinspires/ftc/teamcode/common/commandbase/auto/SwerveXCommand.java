@@ -13,24 +13,26 @@ public class SwerveXCommand extends CommandBase {
     private SwerveDrivetrain drivetrain;
     private ElapsedTime timeout;
     private BooleanSupplier retargeting;
+    private double angle;
 
-    public SwerveXCommand(SwerveDrivetrain swerveDrivetrain, BooleanSupplier retargeting) {
+    public SwerveXCommand(SwerveDrivetrain swerveDrivetrain, BooleanSupplier retargeting, double angle) {
         drivetrain = swerveDrivetrain;
         this.retargeting = retargeting;
+        this.angle = angle;
     }
 
     public SwerveXCommand(SwerveDrivetrain swerveDrivetrain){
-        this(swerveDrivetrain, ()->false);
+        this(swerveDrivetrain, ()->false, 0.23);
     }
 
     @Override
     public void execute() {
         if (!retargeting.getAsBoolean()) {
             if (timeout == null) timeout = new ElapsedTime();
-            drivetrain.frontLeftModule.setTargetRotation(-PI / 4);
-            drivetrain.frontRightModule.setTargetRotation(PI / 4);
-            drivetrain.backRightModule.setTargetRotation(-PI / 4);
-            drivetrain.backLeftModule.setTargetRotation(PI / 4);
+            drivetrain.frontLeftModule.setTargetRotation(angle);
+            drivetrain.frontRightModule.setTargetRotation(angle);
+            drivetrain.backRightModule.setTargetRotation(angle);
+            drivetrain.backLeftModule.setTargetRotation(angle);
             drivetrain.updateModules();
         }
     }
