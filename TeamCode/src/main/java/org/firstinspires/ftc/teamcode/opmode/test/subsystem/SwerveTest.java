@@ -4,7 +4,9 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.PwmControl;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
@@ -17,15 +19,15 @@ public class SwerveTest extends OpMode {
     public DcMotorEx backLeftMotor;
     public DcMotorEx backRightMotor;
 
-    public CRServo frontLeftServo;
-    public CRServo frontRightServo;
-    public CRServo backLeftServo;
-    public CRServo backRightServo;
+    public Servo frontLeftServoImplEx;
+    public Servo frontRightServoImplEx;
+    public Servo backLeftServoImplEx;
+    public Servo backRightServoImplEx;
 
-    public AnalogInput frontLeftEncoder;
-    public AnalogInput frontRightEncoder;
-    public AnalogInput backLeftEncoder;
-    public AnalogInput backRightEncoder;
+//    public AnalogInput frontLeftEncoder;
+//    public AnalogInput frontRightEncoder;
+//    public AnalogInput backLeftEncoder;
+//    public AnalogInput backRightEncoder;
 
     @Override
     public void init() {
@@ -34,49 +36,54 @@ public class SwerveTest extends OpMode {
         backLeftMotor = hardwareMap.get(DcMotorEx.class, "backLeftMotor");
         backRightMotor = hardwareMap.get(DcMotorEx.class, "backRightMotor");
 
-        frontLeftServo = hardwareMap.get(CRServo.class, "frontLeftServo");
-        frontRightServo = hardwareMap.get(CRServo.class, "frontRightServo");
-        backLeftServo = hardwareMap.get(CRServo.class, "backLeftServo");
-        backRightServo = hardwareMap.get(CRServo.class, "backRightServo");
+        frontLeftServoImplEx = hardwareMap.get(Servo.class, "frontLeftServo");
+        frontRightServoImplEx =  hardwareMap.get(Servo.class, "frontRightServo");
+        backLeftServoImplEx =  hardwareMap.get(Servo.class, "backLeftServo");
+        backRightServoImplEx =hardwareMap.get(Servo.class, "backRightServo");
 
-        frontLeftEncoder = hardwareMap.get(AnalogInput.class, "frontLeftEncoder");
-        frontRightEncoder = hardwareMap.get(AnalogInput.class, "frontRightEncoder");
-        backLeftEncoder = hardwareMap.get(AnalogInput.class, "backLeftEncoder");
-        backRightEncoder = hardwareMap.get(AnalogInput.class, "backRightEncoder");
+//        ( (ServoImplEx) frontLeftServoImplEx).setPwmRange(new PwmControl.PwmRange(500, 2500));
+//        ( (ServoImplEx) frontRightServoImplEx).setPwmRange(new PwmControl.PwmRange(500, 2500));
+//        ( (ServoImplEx) backLeftServoImplEx).setPwmRange(new PwmControl.PwmRange(500, 2500));
+//        ( (ServoImplEx) backRightServoImplEx).setPwmRange(new PwmControl.PwmRange(500, 2500));
+
+//        frontLeftEncoder = hardwareMap.get(AnalogInput.class, "frontLeftEncoder");
+//        frontRightEncoder = hardwareMap.get(AnalogInput.class, "frontRightEncoder");
+//        backLeftEncoder = hardwareMap.get(AnalogInput.class, "backLeftEncoder");
+//        backRightEncoder = hardwareMap.get(AnalogInput.class, "backRightEncoder");
     }
 
     @Override
     public void loop() {
         if (gamepad1.a) {
             frontLeftMotor.setPower(1);
-//            frontLeftServo.setPower(1);
+            frontLeftServoImplEx.setPosition(1);
         } else {
             frontLeftMotor.setPower(0);
-            frontLeftServo.setPower(0);
+            frontLeftServoImplEx.setPosition(0.5);
         }
 
         if (gamepad1.b) {
             frontRightMotor.setPower(1);
-//            frontRightServo.setPower(1);
+            frontRightServoImplEx.setPosition(1);
         } else {
             frontRightMotor.setPower(0);
-            frontRightServo.setPower(0);
+            frontRightServoImplEx.setPosition(0.5);
         }
 
         if (gamepad1.x) {
             backLeftMotor.setPower(1);
-//            backLeftServo.setPower(1);
+            backLeftServoImplEx.setPosition(1);
         } else {
             backLeftMotor.setPower(0);
-            backLeftServo.setPower(0);
+            backLeftServoImplEx.setPosition(0.5);
         }
 
         if (gamepad1.y) {
             backRightMotor.setPower(1);
-//            backRightServo.setPower(1);
+            backRightServoImplEx.setPosition(1);
         } else {
             backRightMotor.setPower(0);
-            backRightServo.setPower(0);
+            backRightServoImplEx.setPosition(0.5);
         }
 
 //        telemetry.addData("frontLeft", frontLeftEncoder.getVoltage());
@@ -89,10 +96,10 @@ public class SwerveTest extends OpMode {
         telemetry.addData("backLeftCurrent", backLeftMotor.getCurrent(CurrentUnit.AMPS));
 
 
-        telemetry.addData("frontLeft", frontLeftEncoder.getVoltage());
-        telemetry.addData("frontRight", frontRightEncoder.getVoltage());
-        telemetry.addData("backRight", backRightEncoder.getVoltage());
-        telemetry.addData("backLeft", backLeftEncoder.getVoltage());
+//        telemetry.addData("frontLeft", frontLeftEncoder.getVoltage());
+//        telemetry.addData("frontRight", frontRightEncoder.getVoltage());
+//        telemetry.addData("backRight", backRightEncoder.getVoltage());
+//        telemetry.addData("backLeft", backLeftEncoder.getVoltage());
         telemetry.update();
     }
 }

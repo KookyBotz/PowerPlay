@@ -15,12 +15,12 @@ public class PositionCommand extends CommandBase {
     public static double ALLOWED_TRANSLATIONAL_ERROR = 0.25;
     public static double ALLOWED_HEADING_ERROR = Math.toRadians(1);
 
-    public static double xP = 0.022;
-    public static double xD = 0.03;
+    public static double xP = 0.02;
+    public static double xD = 0.05;
     public static double xF = 0;
 
-    public static double yP = 0.022;
-    public static double yD = 0.03;
+    public static double yP = 0.02;
+    public static double yD = 0.05;
     public static double yF = 0;
 
     public static double hP = 0.3;
@@ -105,7 +105,7 @@ public class PositionCommand extends CommandBase {
         drivetrain.set(new Pose());
     }
 
-    private static Pose relDistanceToTarget(Pose robot, Pose target) {
+    public static Pose relDistanceToTarget(Pose robot, Pose target) {
         return target.subtract(robot);
     }
 
