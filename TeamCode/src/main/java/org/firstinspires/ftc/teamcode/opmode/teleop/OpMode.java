@@ -119,7 +119,8 @@ public class OpMode extends CommandOpMode {
 
         double error = normalizeRadians(normalizeRadians(targetHeading) - normalizeRadians(robot.getAngle()));
         double headingCorrection = -hController.calculate(0, error);
-        if(Math.abs(headingCorrection) < 0.02){
+//        headingCorrection += 0.02 * Math.signum(headingCorrection);
+        if(Math.abs(headingCorrection) < 0.01){
             headingCorrection = 0;
         }
 
