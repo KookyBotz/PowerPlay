@@ -6,8 +6,9 @@ public class AsymmetricMotionProfile {
     public double distance;
     public double t1, t2, t3;
     public double totalTime;
-    public double accelStopPosition;
-    public double accelStopVelocity;
+    public double t1_stop_position;
+    public double max_velocity;
+    public double t2_stop_position;
     public boolean flipped = false;
     public double originalPos = 0;
 
@@ -55,18 +56,21 @@ public class AsymmetricMotionProfile {
             // System.out.println("t3 " + t3);
 
             // ending accel position (middle peak)
-            accelStopPosition = (constraints.accel * Math.pow(t1, 2)) / 2;
+            t1_stop_position = (constraints.accel * Math.pow(t1, 2)) / 2;
             // System.out.println("xA " + accelStopPosition);
 
             // ending accel velocity (middle peak)
-            accelStopVelocity = constraints.accel * t1;
+            max_velocity = constraints.accel * t1;
             // System.out.println("vA " + accelStopVelocity);
+
+            t2_stop_position = t1_stop_position;
         } else {
             System.out.println("Max Velocity Profile");
             // time constants already calculated
 
-            accelStopVelocity = constraints.velo;
-            accelStopPosition = (constraints.velo * t1) / 2;
+            max_velocity = constraints.velo;
+            t1_stop_position = (constraints.velo * t1) / 2;
+            t2_stop_position = t1_stop_position + t2 * max_velocity;
         }
 
         totalTime = t1 + t2 + t3;
@@ -75,21 +79,22 @@ public class AsymmetricMotionProfile {
     }
 
     public State calculate(final double time) {
-        double position = 0;
-        double velocity = 0;
-        double acceleration = 0;
+        double position, velocity, acceleration, stage_time;
         if (time <= t1) {
+            stage_time = time;
             acceleration = constraints.accel;
-            velocity = time * constraints.accel;
-            position = (constraints.accel * Math.pow(time, 2)) / 2;
+            velocity = acceleration * stage_time;
+            position = velocity * stage_time / 2;
         } else if (time <= t1 + t2) {
+            stage_time = time - t1;
             acceleration = 0;
             velocity = constraints.velo;
-            position = accelStopPosition + (time - t1) * constraints.velo;
+            position = t1_stop_position + stage_time * velocity;
         } else if (time <= totalTime) {
+            stage_time = time - t1 - t2;
             acceleration = -constraints.decel;
-            velocity = accelStopVelocity - (time - t1 - t2) * constraints.decel;
-            position = accelStopPosition + (t1 * constraints.accel) * (time - t1) - (constraints.decel * Math.pow(time - t1 - t2, 2)) / 2;
+            velocity = max_velocity - stage_time * constraints.decel;
+            position = t2_stop_position + (max_velocity + velocity) / 2 * stage_time;
         } else {
             acceleration = 0;
             velocity = 0;

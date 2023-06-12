@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -68,14 +69,12 @@ public class RobotHardware {
     private double imuAngle = 0;
     private double imuOffset = 0;
     private double voltage = 0.0;
+    private ElapsedTime voltageTimer;
 
     public OpenCvCamera cameraLeft;
     public OpenCvCamera cameraRight;
 
     public DigitalChannel clawSensor;
-
-    public VoltageSensor voltageSensor;
-
     public SleeveDetection sleeveDetection;
 
     private static RobotHardware instance = null;
@@ -102,6 +101,8 @@ public class RobotHardware {
                 imu.initialize(parameters);
             }
         }
+
+        voltageTimer = new ElapsedTime();
 
         liftLeft = new MotorEx(hardwareMap, "motorLiftLeft");
         liftLeft.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -180,8 +181,6 @@ public class RobotHardware {
                 });
             }
         }
-
-        voltage = (voltageSensor = hardwareMap.voltageSensor.iterator().next()).getVoltage();
     }
 
     public void loop(Pose drive, SwerveDrivetrain drivetrain, IntakeSubsystem intake, LiftSubsystem lift) {
@@ -197,6 +196,11 @@ public class RobotHardware {
         try {
             lift.loop();
         } catch (Exception ignored) {}
+
+        if(voltageTimer.seconds() > 5){
+            voltageTimer.reset();
+            voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
+        }
     }
 
     public void read(SwerveDrivetrain drivetrain, IntakeSubsystem intake, LiftSubsystem lift) {
@@ -266,7 +270,7 @@ public class RobotHardware {
     }
 
     public double getVoltage() {
-        return hardwareMap.voltageSensor.iterator().next().getVoltage();
+        return voltage;
     }
 
     public void zero() {

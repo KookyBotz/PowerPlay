@@ -52,9 +52,9 @@ public class Globals {
     public static double INTAKE_EXTENSION_MAX_A = 50;
     public static double INTAKE_EXTENSION_MAX_D = 50;
 
-    public static double INTAKE_FOURBAR_MAX_V = 6;
-    public static double INTAKE_FOURBAR_MAX_A = 9999;
-    public static double INTAKE_FOURBAR_MAX_D_UP = 5;
+    public static double INTAKE_FOURBAR_MAX_V = 7;
+    public static double INTAKE_FOURBAR_MAX_A = 9;
+    public static double INTAKE_FOURBAR_MAX_D_UP = 7;
     public static double INTAKE_FOURBAR_MAX_D_DOWN = 7;
 
     public static double INTAKE_CLAW_OPEN = 0.5;

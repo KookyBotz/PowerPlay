@@ -214,11 +214,11 @@ public class IntakeSubsystem extends SubsystemBase {
     public void loop2 () {
         this.controller.setPID(P, I, D);
 
-        coneDetected.add(!robot.clawSensor.getState());
-        if(coneDetected.size()>100){
-            coneDetected.remove(0);
-        }
-        hasCone = coneDetected.contains(true);
+//        coneDetected.add(!robot.clawSensor.getState());
+//        if(coneDetected.size()>100){
+//            coneDetected.remove(0);
+//        }
+//        hasCone = coneDetected.contains(true);
 
         fourbarMotionState = fourbarProfile.calculate(fourbarTimer.time() + INTAKE_DELAY);
         if (fourbarMotionState.v != 0) {
