@@ -15,6 +15,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.TeleOpAutoDepositCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.TeleOpAutoGrabCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
@@ -24,6 +25,9 @@ import org.firstinspires.ftc.teamcode.common.drive.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
+import org.firstinspires.ftc.teamcode.common.powerplay.Junction;
+
+import java.util.function.BooleanSupplier;
 
 @Config
 @TeleOp(name = "OpMode")
@@ -70,8 +74,18 @@ public class OpMode extends CommandOpMode {
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
 
+        BooleanSupplier depositSupplier = () -> gamepad1.right_bumper;
+
         gamepadEx.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(()->schedule(new TeleOpAutoGrabCommand(intake)));
+                .whenPressed(() -> schedule(new TeleOpAutoGrabCommand(intake)));
+        gamepadEx.getGamepadButton(GamepadKeys.Button.B)
+                .whenPressed(() -> schedule(new TeleOpAutoDepositCommand(lift, intake, Junction.HIGH, depositSupplier)));
+        gamepadEx.getGamepadButton(GamepadKeys.Button.X)
+                .whenPressed(() -> schedule(new TeleOpAutoDepositCommand(lift, intake, Junction.MEDIUM, depositSupplier)));
+        gamepadEx.getGamepadButton(GamepadKeys.Button.Y)
+                .whenPressed(() -> schedule(new TeleOpAutoDepositCommand(lift, intake, Junction.LOW, depositSupplier)));
+        gamepadEx.getGamepadButton(GamepadKeys.Button.START)
+                .whenPressed(() -> schedule(new TeleOpAutoDepositCommand(lift, intake, Junction.GROUND, depositSupplier)));
     }
 
     @Override
@@ -79,12 +93,8 @@ public class OpMode extends CommandOpMode {
         super.run();
         if (timer == null) {
             timer = new ElapsedTime();
-            try {
-                robot.reset();
-                robot.startIMUThread(this);
-            } catch (Exception ignored) {
-            }
-
+            robot.reset();
+            robot.startIMUThread(this);
             fw = new SlewRateLimiter(fw_r);
             str = new SlewRateLimiter(str_r);
         }
@@ -120,7 +130,7 @@ public class OpMode extends CommandOpMode {
                 new Point(joystickScalar(gamepad1.left_stick_y, 0.001),
                         joystickScalar(gamepad1.left_stick_x, 0.001)).rotate(rotationAmount),
                 lock_robot_heading ? headingCorrection :
-                joystickScalar(turn, 0.01)
+                        joystickScalar(turn, 0.01)
         );
 
         drive = new Pose(
@@ -129,16 +139,13 @@ public class OpMode extends CommandOpMode {
                 drive.heading
         );
 
-
-        double loop = System.nanoTime();
-        telemetry.addData("hz ", 1000000000 / (loop - loopTime));
         robot.loop(drive, drivetrain, intake, lift);
         robot.write(drivetrain, intake, lift);
 
-        loop = System.nanoTime();
+        double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-        telemetry.addData("x", intake.fourbarMotionState.x);
-        telemetry.addData("v", intake.fourbarMotionState.v);
+        telemetry.addData("x", lift.getTargetPos());
+        telemetry.addData("c", lift.getPos());
         loopTime = loop;
         telemetry.update();
 

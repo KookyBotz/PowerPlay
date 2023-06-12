@@ -9,10 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.AsymmetricMotionProfile;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Constraints;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.State;
-import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
-
-import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
 
 import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
 
@@ -29,7 +26,7 @@ public class LiftSubsystem extends SubsystemBase {
     private AsymmetricMotionProfile liftProfile;
     public State liftMotionState;
     private final ElapsedTime timer;
-    private PIDController controller;
+    private final PIDController controller;
 
     private int liftPosition;
     public double power = 0.0;
@@ -37,15 +34,16 @@ public class LiftSubsystem extends SubsystemBase {
 
     private boolean isExtended = false;
     private boolean hasCone = false;
+    private boolean isReady = false;
     private boolean withinTolerance = false;
 
     public double time = 0.0;
     public boolean resetting = false;
 
-    public static double P = 0.01;
-    public static double I = 0.1;
-    public static double D = 0.000125;
-    public static double F = 0.1;
+    public static double P = 0.015;
+    public static double I = 0;
+    public static double D = 0.0004;
+    public static double F = 0;
 
     public enum STATE {
         GOOD,
@@ -108,7 +106,7 @@ public class LiftSubsystem extends SubsystemBase {
                 break;
             case RETRACTED:
                 setTargetPos(LIFT_RETRACT_POS);
-//                newProfile(LIFT_RETRACT_POS, new Constraints(LIFT_MAX_V, LIFT_MAX_A, LIFT_MAX_D));
+                newProfile(LIFT_RETRACT_POS, new Constraints(LIFT_MAX_V, LIFT_MAX_A, LIFT_MAX_D));
                 break;
         }
     }
@@ -181,6 +179,14 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public boolean hasCone() { return hasCone; }
+
+    public void setReady(boolean ready){
+        isReady = ready;
+    }
+
+    public boolean isReady(){
+        return isReady;
+    }
 
     public boolean isWithinTolerance() { return withinTolerance; }
 
