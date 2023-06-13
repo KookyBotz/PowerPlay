@@ -23,8 +23,8 @@ public class PositionCommand extends CommandBase {
     public static double yD = 0.05;
     public static double yF = 0;
 
-    public static double hP = 0.35;
-    public static double hD = 0.05;
+    public static double hP = 0.5;
+    public static double hD = 0.1;
     public static double hF = 0;
 
     public static PIDFController xController = new PIDFController(xP, 0.0, xD, xF);

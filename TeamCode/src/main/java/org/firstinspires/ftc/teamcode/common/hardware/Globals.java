@@ -28,7 +28,7 @@ public class Globals {
     // Lift Subsystem Constants
     public static int LIFT_HIGH_POS = 597;
     public static int LIFT_MID_POS = 365;
-    public static int LIFT_RETRACT_POS = 0;
+    public static int LIFT_RETRACT_POS = -5;
 
     // in/s and in/s^2
     public static double LIFT_MAX_V = 100;
@@ -76,7 +76,7 @@ public class Globals {
     public static double INTAKE_FOURBAR_PRE_TRANSFER = 0.40;
     public static double INTAKE_FOURBAR_TRANSFER = 0.472;
     public static double INTAKE_FOURBAR_INTERMEDIATE = 0.33;
-    public static double INTAKE_FOURBAR_INTAKE = 0.04;
+    public static double INTAKE_FOURBAR_INTAKE = 0.035;
     public static double INTAKE_FOURBAR_LOW = 0.359;
     public static double INTAKE_FOURBAR_GROUND = 0.06;
     public static double INTAKE_FOURBAR_FALLEN = 0.085;

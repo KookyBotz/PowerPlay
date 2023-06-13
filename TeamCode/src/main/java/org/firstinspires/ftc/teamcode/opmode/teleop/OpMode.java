@@ -104,18 +104,24 @@ public class OpMode extends CommandOpMode {
         if (gamepad1.right_stick_button && Globals.USING_IMU)
             SwerveDrivetrain.imuOffset = robot.getAngle();
 
+        if(gamepad1.right_stick_y > 0.25)
+            targetHeading = Math.PI;
+
+        if(gamepad1.right_stick_y < -0.25)
+            targetHeading = 0;
+
+
         double turn = gamepad1.right_trigger - gamepad1.left_trigger;
         boolean lock_robot_heading = Math.abs(turn) < 0.002;
 
         if (lock_robot_heading && !pHeadingLock) targetHeading = robot.getAngle();
 
         double error = normalizeRadians(normalizeRadians(targetHeading) - normalizeRadians(robot.getAngle()));
-        double headingCorrection = -hController.calculate(0, error);
+        double headingCorrection = -hController.calculate(0, error) * 12.4 / robot.getVoltage();
 
         if (Math.abs(headingCorrection) < 0.01) {
             headingCorrection = 0;
         }
-
         pHeadingLock = lock_robot_heading;
 
         SwerveDrivetrain.maintainHeading =

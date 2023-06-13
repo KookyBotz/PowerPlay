@@ -53,28 +53,28 @@ public class TeleOpAutoDepositCommand extends SequentialCommandGroup {
                 );
             } else if (junction == Junction.LOW) {
                 addCommands(
-                        new InstantCommand(() -> intake.setTargetPosition(0)),
+                        new InstantCommand(() -> intake.setTargetPosition(-5)),
                         new PivotCommand(intake, IntakeSubsystem.PivotState.LOW),
                         new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
                         new FourbarCommand(intake, IntakeSubsystem.FourbarState.LOW),
                         new WaitUntilCommand(deposit),
                         new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.OPEN)),
                         new WaitCommand(300),
-                        new InstantCommand(() -> intake.setTargetPosition(0)),
+                        new InstantCommand(() -> intake.setTargetPosition(-5)),
                         new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
                         new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
                         new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS))
                 );
             } else {
                 addCommands(
-                        new InstantCommand(() -> intake.setTargetPosition(0)),
+                        new InstantCommand(() -> intake.setTargetPosition(-5)),
                         new FourbarCommand(intake, IntakeSubsystem.FourbarState.GROUND),
                         new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
                         new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT),
                         new WaitUntilCommand(deposit),
                         new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.OPEN)),
                         new WaitCommand(300),
-                        new InstantCommand(() -> intake.setTargetPosition(0)),
+                        new InstantCommand(() -> intake.setTargetPosition(-5)),
                         new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
                         new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
                         new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS))

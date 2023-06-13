@@ -43,7 +43,8 @@ public class TransferCommand extends SequentialCommandGroup {
                 new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT),
                 new WaitCommand(50),
                 new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE),
-                new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS)
+                new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
+                new InstantCommand(intake::retractReset)
         );
     }
 }
