@@ -14,10 +14,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.common.commandbase.auto.C2DepositHighCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.HighPoleAutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.HighPoleAutoExtendCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.auto.HoldPositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PrecisePositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.WartimeCommand;
