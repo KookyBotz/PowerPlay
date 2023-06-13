@@ -52,7 +52,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private boolean hasCone = false;
     private boolean withinTolerance = false;
 
-    public static double pivotOffset = -0.065;
+    public static double pivotOffset = -0.045;
 
     private final double turret_deposit = 0;
     private final double turret_intake = 0.62;
@@ -86,7 +86,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public enum ClawState {
         OPEN,
         CLOSED,
-        AUTO
+        AUTO,
+        CLEAR
     }
 
     public enum FourbarState {
@@ -94,6 +95,7 @@ public class IntakeSubsystem extends SubsystemBase {
         LOW,
         GROUND,
         INTERMEDIATE,
+        CLEAR,
         PRE_TRANSFER,
         TRANSFER,
         FALLEN
@@ -130,7 +132,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void update(PivotState state) {
         if (state != pivotState) {
-            pivotOffset = -0.065;
+            pivotOffset = -0.045;
         }
         pivotState = state;
         switch (state) {
@@ -181,6 +183,9 @@ public class IntakeSubsystem extends SubsystemBase {
             case AUTO:
                 robot.claw.setPosition(INTAKE_CLAW_AUTO);
                 break;
+            case CLEAR:
+                robot.claw.setPosition(INTAKE_CLAW_CLEAR);
+                break;
         }
     }
 
@@ -207,6 +212,9 @@ public class IntakeSubsystem extends SubsystemBase {
                 break;
             case FALLEN:
                 newProfile(INTAKE_FOURBAR_FALLEN);
+                break;
+            case CLEAR:
+                newProfile(INTAKE_FOURBAR_CLEAR_POS);
                 break;
         }
     }

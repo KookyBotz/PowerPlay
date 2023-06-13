@@ -29,8 +29,8 @@ public class TeleOpAutoGrabCommand extends SequentialCommandGroup {
                             new SequentialCommandGroup(
                                     new WaitUntilCommand(intake::hasCone),
                                     new ClawCommand(intake, IntakeSubsystem.ClawState.CLOSED),
-                                    new InstantCommand(() -> intake.setTargetPosition(-5)),
                                     new WaitCommand(25),
+                                    new InstantCommand(() -> intake.setTargetPosition(-5)),
                                     new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.INTERMEDIATE)),
                                     new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
                                     new WaitUntilCommand(() -> intake.getTargetPosition() <= Globals.INTAKE_EXTENDED_TOLERANCE)

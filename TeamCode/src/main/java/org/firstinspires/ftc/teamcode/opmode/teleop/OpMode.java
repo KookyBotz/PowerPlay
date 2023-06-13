@@ -86,6 +86,12 @@ public class OpMode extends CommandOpMode {
                 .whenPressed(() -> schedule(new TeleOpAutoDepositCommand(lift, intake, Junction.LOW, depositSupplier)));
         gamepadEx.getGamepadButton(GamepadKeys.Button.START)
                 .whenPressed(() -> schedule(new TeleOpAutoDepositCommand(lift, intake, Junction.GROUND, depositSupplier)));
+        gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+                .whenPressed(()->intake.update(IntakeSubsystem.ClawState.CLOSED));
+        gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+                .whenPressed(()->intake.update(IntakeSubsystem.ClawState.OPEN));
+        gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(()->intake.update(IntakeSubsystem.FourbarState.INTAKE));
     }
 
     @Override
