@@ -65,7 +65,7 @@ public class TeleOpAutoDepositCommand extends SequentialCommandGroup {
                         new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
                         new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS))
                 );
-            } else {
+            } else if (junction == Junction.GROUND){
                 addCommands(
                         new InstantCommand(() -> intake.setTargetPosition(-5)),
                         new FourbarCommand(intake, IntakeSubsystem.FourbarState.GROUND),
