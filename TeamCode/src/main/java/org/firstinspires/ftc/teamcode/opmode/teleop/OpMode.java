@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.normalizeRadians;
-import static org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand.hController;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
@@ -15,14 +15,17 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.TeleOpAutoDepositCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.TeleOpAutoGrabCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.HoldPositionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.teleop_commands.TeleOpAutoDepositCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.teleop_commands.TeleOpAutoGrabCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SlewRateLimiter;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Point;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
+import org.firstinspires.ftc.teamcode.common.drive.localizer.Localizer;
+import org.firstinspires.ftc.teamcode.common.drive.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.common.powerplay.Junction;
@@ -47,11 +50,13 @@ public class OpMode extends CommandOpMode {
 
     private SlewRateLimiter fw;
     private SlewRateLimiter str;
+    private PIDFController hController = new PIDFController(0.5, 0, 0.1, 0);
 
     public static double fw_r = 4;
     public static double str_r = 4;
 
     GamepadEx gamepadEx;
+    Localizer localizer;
 
 
     @Override
@@ -67,6 +72,7 @@ public class OpMode extends CommandOpMode {
         intake = new IntakeSubsystem(robot);
         lift = new LiftSubsystem(robot);
         gamepadEx = new GamepadEx(gamepad1);
+        localizer = new TwoWheelLocalizer(robot);
 
         robot.enabled = true;
 
@@ -86,12 +92,6 @@ public class OpMode extends CommandOpMode {
                 .whenPressed(() -> schedule(new TeleOpAutoDepositCommand(lift, intake, Junction.LOW, depositSupplier)));
         gamepadEx.getGamepadButton(GamepadKeys.Button.START)
                 .whenPressed(() -> schedule(new TeleOpAutoDepositCommand(lift, intake, Junction.GROUND, depositSupplier)));
-        gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(()->intake.update(IntakeSubsystem.ClawState.CLOSED));
-        gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenPressed(()->intake.update(IntakeSubsystem.ClawState.OPEN));
-        gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(()->intake.update(IntakeSubsystem.FourbarState.INTAKE));
     }
 
     @Override
@@ -151,13 +151,15 @@ public class OpMode extends CommandOpMode {
                 drive.heading
         );
 
-        robot.loop(drive, drivetrain, intake, lift);
+        robot.loop(null, drivetrain, intake, lift);
         robot.write(drivetrain, intake, lift);
+        localizer.periodic();
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
         telemetry.addData("x", lift.getTargetPos());
         telemetry.addData("c", lift.getPos());
+        telemetry.addData("p", localizer.getPos());
         loopTime = loop;
         telemetry.update();
 

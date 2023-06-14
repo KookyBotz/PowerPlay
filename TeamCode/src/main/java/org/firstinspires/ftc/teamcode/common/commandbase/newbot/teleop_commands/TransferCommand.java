@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets;
+package org.firstinspires.ftc.teamcode.common.commandbase.newbot.teleop_commands;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -27,7 +27,7 @@ public class TransferCommand extends SequentialCommandGroup {
                 new WaitUntilCommand(() -> intake.fourbarMotionState.v == 0),
                 new ClawCommand(intake, IntakeSubsystem.ClawState.CLEAR),
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.CLEAR),
-                new WaitCommand(50),
+                new WaitCommand(100),
                 new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE)
         );
     }

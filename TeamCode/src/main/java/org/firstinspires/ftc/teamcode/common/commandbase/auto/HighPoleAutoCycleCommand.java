@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.PivotCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.TurretCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.newbot.presets.AutoTransferCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
