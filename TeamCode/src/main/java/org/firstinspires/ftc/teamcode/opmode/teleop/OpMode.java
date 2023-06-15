@@ -54,6 +54,7 @@ public class OpMode extends CommandOpMode {
 
     public static double fw_r = 4;
     public static double str_r = 4;
+    private boolean lock_robot_heading = false;
 
     GamepadEx gamepadEx;
     Localizer localizer;
@@ -114,17 +115,20 @@ public class OpMode extends CommandOpMode {
         if (gamepad1.right_stick_button && Globals.USING_IMU)
             SwerveDrivetrain.imuOffset = robot.getAngle();
 
-        if (gamepad1.right_stick_y > 0.25)
-            targetHeading = Math.PI;
 
-        if (gamepad1.right_stick_y < -0.25)
+        if (gamepad1.right_stick_y > 0.25) {
+            lock_robot_heading = true;
             targetHeading = 0;
-
+        }
+        if (gamepad1.right_stick_y < -0.25) {
+            lock_robot_heading = true;
+            targetHeading = Math.PI;
+        }
 
         double turn = gamepad1.right_trigger - gamepad1.left_trigger;
-        boolean lock_robot_heading = Math.abs(turn) < 0.002;
-
-        if (lock_robot_heading && !pHeadingLock) targetHeading = robot.getAngle();
+        if (Math.abs(turn) > 0.002) {
+            lock_robot_heading = false;
+        }
 
         double error = normalizeRadians(normalizeRadians(targetHeading) - normalizeRadians(robot.getAngle()));
         double headingCorrection = -hController.calculate(0, error) * 12.4 / robot.getVoltage();
@@ -132,7 +136,6 @@ public class OpMode extends CommandOpMode {
         if (Math.abs(headingCorrection) < 0.01) {
             headingCorrection = 0;
         }
-        pHeadingLock = lock_robot_heading;
 
         SwerveDrivetrain.maintainHeading =
                 (Math.abs(gamepad1.left_stick_x) < 0.002 &&

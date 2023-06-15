@@ -48,8 +48,8 @@ public class TeleOpAutoDepositCommand extends SequentialCommandGroup {
         } else {
             if (junction == Junction.HIGH || junction == Junction.MEDIUM && intake.getPos() <= Globals.INTAKE_ERROR_TOLERANCE) {
                 addCommands(
-                        new TransferCommand(intake, lift),
-                        new InstantCommand(() -> lift.setReady(true))
+                        new InstantCommand(() -> lift.setReady(true)),
+                        new TransferCommand(intake, lift)
                 );
             } else if (junction == Junction.LOW) {
                 addCommands(
@@ -65,7 +65,7 @@ public class TeleOpAutoDepositCommand extends SequentialCommandGroup {
                         new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
                         new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS))
                 );
-            } else if (junction == Junction.GROUND){
+            } else if (junction == Junction.GROUND) {
                 addCommands(
                         new InstantCommand(() -> intake.setTargetPosition(-5)),
                         new FourbarCommand(intake, IntakeSubsystem.FourbarState.GROUND),
