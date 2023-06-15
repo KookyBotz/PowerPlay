@@ -78,9 +78,9 @@ public class SwerveDrivetrain implements Drivetrain {
                 d = y + head * (TRACK_WIDTH / R);
 
         ws = new double[]{hypot(b, c), hypot(b, d), hypot(a, d), hypot(a, c)};
-        if (!maintainHeading) {
+        if (!maintainHeading)
             wa = new double[]{atan2(b, c), atan2(b, d), atan2(a, d), atan2(a, c)};
-        }
+
 
         max = MathUtils.max(ws);
     }

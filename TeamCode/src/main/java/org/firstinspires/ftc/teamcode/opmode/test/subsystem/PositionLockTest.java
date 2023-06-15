@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.auto;
+package org.firstinspires.ftc.teamcode.opmode.test.subsystem;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -10,7 +10,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.common.commandbase.auto.HoldPositionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionLock;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.drive.localizer.Localizer;
@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 
 @Config
 @TeleOp(name = "pos_lock")
-public class poslock extends CommandOpMode {
+public class PositionLockTest extends CommandOpMode {
     private ElapsedTime timer;
     private double loopTime = 0;
 
@@ -59,7 +59,7 @@ public class poslock extends CommandOpMode {
             robot.startIMUThread(this);
         }
 
-        Pose powers = HoldPositionCommand.pos_lock(localizer.getPos(), new Pose(), 13);
+        Pose powers = PositionLock.calculate(localizer.getPos(), new Pose(), 13);
 
         drivetrain.read();
         drivetrain.set(powers);
