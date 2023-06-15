@@ -52,7 +52,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private boolean hasCone = false;
     private boolean withinTolerance = false;
 
-    public static double pivotOffset = -0.045;
+    public static double pivotOffset = -0.05;
 
     private final double turret_deposit = 0;
     private final double turret_intake = 0.62;
@@ -132,7 +132,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void update(PivotState state) {
         if (state != pivotState) {
-            pivotOffset = -0.045;
+            pivotOffset = -0.05;
         }
         pivotState = state;
         switch (state) {
@@ -282,7 +282,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void setFourbar(double pos) {
         robot.fourbarLeft.setPosition(pos - F_OFFSET);
-        robot.fourbarRight.setPosition(1 - (pos - 0.01 - F_OFFSET));
+        robot.fourbarRight.setPosition(1 - (pos + 0.005 - F_OFFSET));
     }
 
     public void retractReset() {

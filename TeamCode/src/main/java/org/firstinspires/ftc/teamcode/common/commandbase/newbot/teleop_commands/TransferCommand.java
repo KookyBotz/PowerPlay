@@ -27,7 +27,7 @@ public class TransferCommand extends SequentialCommandGroup {
                 new WaitUntilCommand(() -> intake.fourbarMotionState.v == 0),
                 new ClawCommand(intake, IntakeSubsystem.ClawState.CLEAR),
                 new FourbarCommand(intake, IntakeSubsystem.FourbarState.CLEAR),
-                new WaitCommand(100),
+                new WaitCommand(250),
                 new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE)
         );
     }

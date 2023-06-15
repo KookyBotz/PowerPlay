@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -91,6 +92,10 @@ public class OpMode extends CommandOpMode {
                 .whenPressed(() -> schedule(new TeleOpAutoDepositCommand(lift, intake, Junction.LOW, depositSupplier)));
         gamepadEx.getGamepadButton(GamepadKeys.Button.START)
                 .whenPressed(() -> schedule(new TeleOpAutoDepositCommand(lift, intake, Junction.GROUND, depositSupplier)));
+        gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+                .whenPressed(() -> schedule(new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.OPEN))));
+        gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+                .whenPressed(() -> schedule(new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.CLOSED))));
     }
 
     @Override
@@ -109,10 +114,10 @@ public class OpMode extends CommandOpMode {
         if (gamepad1.right_stick_button && Globals.USING_IMU)
             SwerveDrivetrain.imuOffset = robot.getAngle();
 
-        if(gamepad1.right_stick_y > 0.25)
+        if (gamepad1.right_stick_y > 0.25)
             targetHeading = Math.PI;
 
-        if(gamepad1.right_stick_y < -0.25)
+        if (gamepad1.right_stick_y < -0.25)
             targetHeading = 0;
 
 
@@ -150,7 +155,7 @@ public class OpMode extends CommandOpMode {
                 drive.heading
         );
 
-        robot.loop(null, drivetrain, intake, lift);
+        robot.loop(drive, drivetrain, intake, lift);
         robot.write(drivetrain, intake, lift);
         localizer.periodic();
 

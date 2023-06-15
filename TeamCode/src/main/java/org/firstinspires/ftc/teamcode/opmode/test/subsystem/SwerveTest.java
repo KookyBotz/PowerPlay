@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode.test.subsystem;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -21,10 +22,10 @@ public class SwerveTest extends OpMode {
     public CRServo backLeftServo;
     public CRServo backRightServo;
 
-//    public AnalogInput frontLeftEncoder;
-//    public AnalogInput frontRightEncoder;
-//    public AnalogInput backLeftEncoder;
-//    public AnalogInput backRightEncoder;
+    public AnalogInput frontLeftEncoder;
+    public AnalogInput frontRightEncoder;
+    public AnalogInput backLeftEncoder;
+    public AnalogInput backRightEncoder;
 
     @Override
     public void init() {
@@ -43,10 +44,10 @@ public class SwerveTest extends OpMode {
 //        ( (CRServoImplEx) backLeftCRServoImplEx).setPwmRange(new PwmControl.PwmRange(500, 2500));
 //        ( (CRServoImplEx) backRightCRServoImplEx).setPwmRange(new PwmControl.PwmRange(500, 2500));
 
-//        frontLeftEncoder = hardwareMap.get(AnalogInput.class, "frontLeftEncoder");
-//        frontRightEncoder = hardwareMap.get(AnalogInput.class, "frontRightEncoder");
-//        backLeftEncoder = hardwareMap.get(AnalogInput.class, "backLeftEncoder");
-//        backRightEncoder = hardwareMap.get(AnalogInput.class, "backRightEncoder");
+        frontLeftEncoder = hardwareMap.get(AnalogInput.class, "frontLeftEncoder");
+        frontRightEncoder = hardwareMap.get(AnalogInput.class, "frontRightEncoder");
+        backLeftEncoder = hardwareMap.get(AnalogInput.class, "backLeftEncoder");
+        backRightEncoder = hardwareMap.get(AnalogInput.class, "backRightEncoder");
     }
 
     @Override
@@ -83,10 +84,10 @@ public class SwerveTest extends OpMode {
 //            backRightCRServoImplEx.setPosition(0.5);
         }
 
-//        telemetry.addData("frontLeft", frontLeftEncoder.getVoltage());
-//        telemetry.addData("frontRight", frontRightEncoder.getVoltage());
-//        telemetry.addData("backRight", backRightEncoder.getVoltage());
-//        telemetry.addData("backLeft", backLeftEncoder.getVoltage());
+        telemetry.addData("frontLeft", frontLeftEncoder.getVoltage());
+        telemetry.addData("frontRight", frontRightEncoder.getVoltage());
+        telemetry.addData("backRight", backRightEncoder.getVoltage());
+        telemetry.addData("backLeft", backLeftEncoder.getVoltage());
         telemetry.addData("frontLeftCurrent", frontLeftMotor.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("frontRightCurrent", frontRightMotor.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("backRightCurrent", backRightMotor.getCurrent(CurrentUnit.AMPS));
