@@ -45,7 +45,7 @@ public class HighPoleAutoCycleCommand extends ParallelCommandGroup {
                         new WaitUntilCommand(intake::isWithinTolerance),
                         new InstantCommand(() -> intake.setFourbar(Globals.INTAKE_FOURBAR_TRANSFER)),
                         new PivotCommand(intake, IntakeSubsystem.PivotState.TRANSFER),
-                        new WaitCommand(50),
+                        new WaitCommand(75),
                         new ClawCommand(intake, IntakeSubsystem.ClawState.OPEN),
                         new InstantCommand(() -> intake.setFourbar(Globals.INTAKE_FOURBAR_INTERMEDIATE)),
                         new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT),

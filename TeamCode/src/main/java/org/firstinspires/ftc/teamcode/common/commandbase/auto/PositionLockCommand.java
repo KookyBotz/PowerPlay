@@ -9,76 +9,49 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.common.drive.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.drive.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 
-public class PositionCommand extends CommandBase {
-    public final double ALLOWED_TRANSLATIONAL_ERROR = 1;
-    public final double ALLOWED_HEADING_ERROR = Math.toRadians(1);
+import java.util.function.BooleanSupplier;
 
-    public final PIDFController mController = new PIDFController(0.025, 0, 0.5, 0);
-    public final PIDFController hController = new PIDFController(0.4, 0, 0.2, 0);
+public class PositionLockCommand extends CommandBase {
+    public final PIDFController hController = new PIDFController(0.5, 0, 0.25, 0);
+    public final PIDFController mController = new PIDFController(0.25, 0, 0.2, 0);
 
     SwerveDrivetrain drivetrain;
     Localizer localizer;
     Pose targetPose;
-    ElapsedTime deadTimer;
 
-    private final double ms;
-    private final double delay;
-    private ElapsedTime delayTimer;
+    private final BooleanSupplier endSupplier;
 
     private final double v;
 
-    public PositionCommand(SwerveDrivetrain drivetrain, Localizer localizer, Pose targetPose, double delay, double dead, double voltage) {
+    public PositionLockCommand(SwerveDrivetrain drivetrain, Localizer localizer, Pose targetPose, BooleanSupplier end, double voltage) {
         this.drivetrain = drivetrain;
         this.localizer = localizer;
         this.targetPose = targetPose;
-        this.ms = dead;
-        this.delay = delay;
         this.v = voltage;
-    }
-
-    public PositionCommand(SwerveDrivetrain drivetrain, Localizer localizer, Pose targetPose, double delay, double voltage) {
-        this.drivetrain = drivetrain;
-        this.localizer = localizer;
-        this.targetPose = targetPose;
-        this.ms = Integer.MAX_VALUE;
-        this.delay = delay;
-        this.v = voltage;
+        this.endSupplier = end;
     }
 
     @Override
     public void execute() {
-        if (deadTimer == null) {
-            deadTimer = new ElapsedTime();
-        }
-
         Pose powers = goToPosition(localizer.getPos(), targetPose);
-        System.out.println(powers.toString());
+//        if (powers.x == 0 && powers.y == 0 && powers.heading == 0) {
+//            drivetrain.frontLeftModule.setTargetRotation(Math.PI / 8);
+//            drivetrain.frontRightModule.setTargetRotation(-Math.PI / 8);
+//            drivetrain.backRightModule.setTargetRotation(Math.PI / 8);
+//            drivetrain.backLeftModule.setTargetRotation(-Math.PI / 8);
+//        }
         drivetrain.set(powers);
     }
 
     @Override
     public boolean isFinished() {
-        Pose error = targetPose.subtract(localizer.getPos());
-        Globals.error = error;
-        Globals.targetPose = targetPose;
-
-        boolean reached = ((Math.hypot(error.x, error.y) < ALLOWED_TRANSLATIONAL_ERROR) && (Math.abs(error.heading) < ALLOWED_HEADING_ERROR));
-        Globals.reached = reached;
-
-        if (reached && delayTimer == null) {
-            delayTimer = new ElapsedTime();
-        }
-        if (!reached && delayTimer != null) {
-            delayTimer.reset();
-        }
-
-        boolean delayed = delayTimer != null && delayTimer.milliseconds() > delay;
-        return (deadTimer.milliseconds() > ms) || delayed;
+        return endSupplier.getAsBoolean();
     }
 
     @Override
@@ -97,9 +70,7 @@ public class PositionCommand extends CommandBase {
 
         double power = mController.calculate(0, magnitude);
 
-//        if (Math.abs(magnitude) > 10) power = mLimiter.calculate(MathUtils.clamp(power, -1.414, 1.414));
-
-        if (Math.abs(power) < 0.01) power = 0;
+        if (Math.abs(power) < 0.075) power = 0;
 
         double y_component = cos(dir) * power;
         double x_component = sin(dir) * power;
@@ -108,9 +79,9 @@ public class PositionCommand extends CommandBase {
         if (Math.abs(heading_component) < 0.015) heading_component = 0;
 
         Pose powers = new Pose(
-                x_component / v * 12,
-                -y_component / v * 12,
-                -heading_component / v * 12
+                x_component / v * 12.5,
+                -y_component / v * 12.5,
+                -heading_component / v * 12.5
         );
 
         return new Pose(powers.x, powers.y, powers.heading);

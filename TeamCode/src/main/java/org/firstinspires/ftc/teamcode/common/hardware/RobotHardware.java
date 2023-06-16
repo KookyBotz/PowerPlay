@@ -164,7 +164,8 @@ public class RobotHardware {
                     }
 
                     @Override
-                    public void onError(int errorCode) {}
+                    public void onError(int errorCode) {
+                    }
                 });
             } else {
                 int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -177,10 +178,12 @@ public class RobotHardware {
                     }
 
                     @Override
-                    public void onError(int errorCode) {}
+                    public void onError(int errorCode) {
+                    }
                 });
             }
         }
+        voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
     }
 
     public void loop(Pose drive, SwerveDrivetrain drivetrain, IntakeSubsystem intake, LiftSubsystem lift) {
@@ -189,15 +192,18 @@ public class RobotHardware {
                 drivetrain.set(drive);
             }
             drivetrain.updateModules();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         try {
             intake.loop2();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         try {
             lift.loop();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
-        if(voltageTimer.seconds() > 5){
+        if (voltageTimer.seconds() > 5) {
             voltageTimer.reset();
             voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
         }
@@ -206,27 +212,33 @@ public class RobotHardware {
     public void read(SwerveDrivetrain drivetrain, IntakeSubsystem intake, LiftSubsystem lift) {
         try {
             intake.read();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         try {
             lift.read();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         try {
             drivetrain.read();
 
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     public void write(SwerveDrivetrain drivetrain, IntakeSubsystem intake, LiftSubsystem lift) {
         try {
             intake.write();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         try {
             lift.write();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         try {
             drivetrain.write();
 
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     public void reset() {
@@ -235,7 +247,8 @@ public class RobotHardware {
             liftEncoder.reset();
             parallelPod.reset();
             perpindicularPod.reset();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         imuOffset = imu.getAngularOrientation().firstAngle;
     }
 

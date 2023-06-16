@@ -35,7 +35,7 @@ public class SwerveDrivetrain implements Drivetrain {
     double[] wa = new double[4];
     double max = 0.0;
 
-    public static double minPow = 0.06;
+    public static double minPow = 0.09;
     public static double imuOffset = 0.0;
 
     public SwerveDrivetrain(RobotHardware robot) {
@@ -68,8 +68,10 @@ public class SwerveDrivetrain implements Drivetrain {
         double x = pose.x, y = pose.y, head = pose.heading;
         if (maxPower != -1) {
             double r = Math.hypot(x, y);
-            x = x / r * maxPower;
-            y = y / r * maxPower;
+            if (Math.abs(r) > 1) {
+                x = x / r * maxPower;
+                y = y / r * maxPower;
+            }
         }
 
         double a = x - head * (WHEEL_BASE / R),

@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionLock;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.drive.localizer.Localizer;
@@ -50,6 +49,17 @@ public class PositionCommandTest extends CommandOpMode {
         PhotonCore.CONTROL_HUB.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
+
+        drivetrain.frontLeftModule.setTargetRotation(Math.PI / 2);
+        drivetrain.frontRightModule.setTargetRotation(Math.PI / 2);
+        drivetrain.backRightModule.setTargetRotation(Math.PI / 2);
+        drivetrain.backLeftModule.setTargetRotation(Math.PI / 2);
+
+        while (!this.isStarted()) {
+            drivetrain.read();
+            drivetrain.updateModules();
+            robot.clearBulkCache();
+        }
     }
 
     @Override
@@ -59,9 +69,8 @@ public class PositionCommandTest extends CommandOpMode {
             timer = new ElapsedTime();
             robot.reset();
             robot.startIMUThread(this);
-            schedule(new PositionCommand(drivetrain, localizer, new Pose(0, 60, 0), 500, 12.5));
+            schedule(new PositionCommand(drivetrain, localizer, new Pose(3.5, 64, 0), 500, 12.5));
         }
-
 
 
         drivetrain.read();

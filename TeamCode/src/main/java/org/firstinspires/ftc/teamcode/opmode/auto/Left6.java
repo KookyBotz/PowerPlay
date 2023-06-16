@@ -12,11 +12,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.HighPoleAutoCycleCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionLockCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveModule;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
+import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.drive.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
@@ -39,7 +42,6 @@ public class Left6 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         CommandScheduler.getInstance().reset();
-        Globals.SIDE = Globals.Side.LEFT;
         Globals.AUTO = false;
         Globals.USING_IMU = true;
         Globals.USE_WHEEL_FEEDFORWARD = true;
@@ -75,37 +77,34 @@ public class Left6 extends LinearOpMode {
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
 
         GrabPosition[] grabPositions = new GrabPosition[]{
-                new GrabPosition(570, 0, 0.172, 0.37, 0),
-                new GrabPosition(555, 0, 0.135, 0.37, 0),
-                new GrabPosition(550, 0, 0.1, 0.37, 0),
-                new GrabPosition(550, 0, 0.07, 0.37, 0),
-                new GrabPosition(550, 0, 0.035, 0.37, 0)
+                new GrabPosition(570, 0, 0.173, 0.37, 0),
+                new GrabPosition(555, 0, 0.14, 0.37, 0),
+                new GrabPosition(550, 0, 0.105, 0.37, 0),
+                new GrabPosition(550, 0, 0.075, 0.37, 0),
+                new GrabPosition(560, 0, 0.04, 0.37, 0)
         };
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, grabPositions[0], LiftSubsystem.LiftState.HIGH),
-                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, grabPositions[1], LiftSubsystem.LiftState.HIGH),
-                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, grabPositions[2], LiftSubsystem.LiftState.HIGH),
-                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, grabPositions[3], LiftSubsystem.LiftState.HIGH),
-                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, grabPositions[4], LiftSubsystem.LiftState.HIGH),
+                        new PositionCommand(drivetrain, localizer, new Pose(3.5, 64, 0), 500, robot.getVoltage()),
+                        new InstantCommand(()->Globals.USE_WHEEL_FEEDFORWARD = false),
+                        new PositionLockCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0.24), () -> false, robot.getVoltage()),
+//                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, grabPositions[0], LiftSubsystem.LiftState.HIGH),
+//                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, grabPositions[1], LiftSubsystem.LiftState.HIGH),
+//                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, grabPositions[2], LiftSubsystem.LiftState.HIGH),
+//                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, grabPositions[3], LiftSubsystem.LiftState.HIGH),
+//                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, grabPositions[4], LiftSubsystem.LiftState.HIGH),
                         new InstantCommand(() -> endtime = timer.milliseconds())
                 )
         );
 
         robot.reset();
+        timer = new ElapsedTime();
 
         while (opModeIsActive()) {
-            if (timer == null) {
-                timer = new ElapsedTime();
-            }
             robot.read(drivetrain, intake, lift);
 
             CommandScheduler.getInstance().run();
-            drivetrain.frontLeftModule.setTargetRotation(Math.PI / 4);
-            drivetrain.frontRightModule.setTargetRotation(-Math.PI / 4);
-            drivetrain.backRightModule.setTargetRotation(Math.PI / 4);
-            drivetrain.backLeftModule.setTargetRotation(-Math.PI / 4);
             robot.loop(null, drivetrain, intake, lift);
             localizer.periodic();
 
