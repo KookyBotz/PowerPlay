@@ -5,9 +5,9 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.common.commandbase.newbot.FourbarCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.FourbarProfiledCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LiftCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LiftProfiledCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.PivotCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
@@ -22,7 +22,7 @@ public class TeleOpAutoDepositCommand extends SequentialCommandGroup {
         if (lift.isReady()) {
             if (junction == Junction.HIGH) {
                 addCommands(
-                        new LiftCommand(lift, LiftSubsystem.LiftState.HIGH)
+                        new LiftProfiledCommand(lift, LiftSubsystem.LiftState.HIGH)
                                 .alongWith(new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED))
                                 .alongWith(new WaitUntilCommand(lift::isWithinTolerance)
                                         .andThen(new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE))),
@@ -34,7 +34,7 @@ public class TeleOpAutoDepositCommand extends SequentialCommandGroup {
                 );
             } else if (junction == Junction.MEDIUM) {
                 addCommands(
-                        new LiftCommand(lift, LiftSubsystem.LiftState.MID)
+                        new LiftProfiledCommand(lift, LiftSubsystem.LiftState.MID)
                                 .alongWith(new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED))
                                 .alongWith(new WaitUntilCommand(lift::isWithinTolerance)
                                         .andThen(new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE))),
@@ -56,7 +56,7 @@ public class TeleOpAutoDepositCommand extends SequentialCommandGroup {
                         new InstantCommand(() -> intake.setTargetPosition(-5)),
                         new PivotCommand(intake, IntakeSubsystem.PivotState.LOW),
                         new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
-                        new FourbarCommand(intake, IntakeSubsystem.FourbarState.LOW),
+                        new FourbarProfiledCommand(intake, IntakeSubsystem.FourbarState.LOW),
                         new WaitUntilCommand(deposit),
                         new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.OPEN)),
                         new WaitCommand(300),
@@ -68,7 +68,7 @@ public class TeleOpAutoDepositCommand extends SequentialCommandGroup {
             } else if (junction == Junction.GROUND) {
                 addCommands(
                         new InstantCommand(() -> intake.setTargetPosition(-5)),
-                        new FourbarCommand(intake, IntakeSubsystem.FourbarState.GROUND),
+                        new FourbarProfiledCommand(intake, IntakeSubsystem.FourbarState.GROUND),
                         new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
                         new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT),
                         new WaitUntilCommand(deposit),

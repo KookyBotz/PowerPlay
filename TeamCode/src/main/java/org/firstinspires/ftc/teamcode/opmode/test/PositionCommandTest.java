@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.test.subsystem;
+package org.firstinspires.ftc.teamcode.opmode.test;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -10,6 +10,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionLock;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
@@ -19,8 +20,8 @@ import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 
 @Config
-@TeleOp(name = "pos_lock")
-public class PositionLockTest extends CommandOpMode {
+@TeleOp(name = "pos command")
+public class PositionCommandTest extends CommandOpMode {
     private ElapsedTime timer;
     private double loopTime = 0;
 
@@ -37,6 +38,7 @@ public class PositionLockTest extends CommandOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         Globals.AUTO = false;
+        Globals.USE_WHEEL_FEEDFORWARD = true;
         Globals.USING_IMU = true;
 
         robot.init(hardwareMap, telemetry);
@@ -57,20 +59,21 @@ public class PositionLockTest extends CommandOpMode {
             timer = new ElapsedTime();
             robot.reset();
             robot.startIMUThread(this);
+            schedule(new PositionCommand(drivetrain, localizer, new Pose(0, 60, 0), 500, 12.5));
         }
 
-        Pose powers = PositionLock.calculate(localizer.getPos(), new Pose(), 13);
+
 
         drivetrain.read();
-        drivetrain.set(powers);
         drivetrain.updateModules();
         drivetrain.write();
         localizer.periodic();
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-        telemetry.addData("p", localizer.getPos());
-        telemetry.addData("powers", powers);
+        telemetry.addData("x", localizer.getPos().x);
+        telemetry.addData("y", localizer.getPos().y);
+        telemetry.addData("h", localizer.getPos().heading);
         loopTime = loop;
         telemetry.update();
 

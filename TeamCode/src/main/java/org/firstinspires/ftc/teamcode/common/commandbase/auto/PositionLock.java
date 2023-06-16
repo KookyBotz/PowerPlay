@@ -14,12 +14,12 @@ import java.util.Locale;
 
 @Config
 public class PositionLock {
-    public static double hP = 0.4;
-    public static double hD = 0.2;
+    public static double hP = 0.45;
+    public static double hD = 0.25;
     public static double hI = 0;
 
-    public static double mP = 0.15;
-    public static double mD = 0.0;
+    public static double mP = 0.25;
+    public static double mD = 0.2;
     public static double mI = 0.0;
 
     public static PIDFController hController = new PIDFController(hP, hI, hD, 0);
@@ -36,15 +36,18 @@ public class PositionLock {
 
         double power = mController.calculate(0, magnitude);
 
+        if (Math.abs(power) < 0.075) power = 0;
+
         double y_component = cos(dir) * power;
         double x_component = sin(dir) * power;
+        double heading_component = hController.calculate(0, deltaPose.heading);
 
-//        System.out.printf(Locale.ENGLISH, "mag: %.2f, dir: %.2f, pow: %.2f, x: %.2f, y: %.2f%n", magnitude, dir, power, x_component, y_component);
+        if (Math.abs(heading_component) < 0.015) heading_component = 0;
 
         Pose powers = new Pose(
                 x_component / voltage * 12.5,
                 -y_component / voltage * 12.5,
-                -hController.calculate(0, deltaPose.heading) / voltage * 12.5
+                -heading_component / voltage * 12.5
         );
 
         return new Pose(powers.x, powers.y, powers.heading);

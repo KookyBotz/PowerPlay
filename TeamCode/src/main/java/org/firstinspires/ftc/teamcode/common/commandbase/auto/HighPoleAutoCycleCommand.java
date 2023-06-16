@@ -9,9 +9,9 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.ClawCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.newbot.FourbarCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.FourbarProfiledCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LiftCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LiftProfiledCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.PivotCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
@@ -22,35 +22,38 @@ import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 
 public class HighPoleAutoCycleCommand extends ParallelCommandGroup {
     private SwerveDrivetrain drivetrain;
+
     public HighPoleAutoCycleCommand(SwerveDrivetrain drivetrain, LiftSubsystem lift, IntakeSubsystem intake, GrabPosition grabPosition, LiftSubsystem.LiftState liftState) {
         super(
                 new SequentialCommandGroup(
-                        // Extend Outwards
+                        new InstantCommand(() -> intake.setFourbar(grabPosition.fourbarPos)),
+                        new InstantCommand(() -> intake.setTargetPosition(grabPosition.intakeTargetPosition)),
                         new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT_AUTO),
                         new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
-
-                        new WaitCommand(100),
-
-                        new InstantCommand(() -> intake.setTargetPosition(grabPosition.intakeTargetPosition)),
-                        new InstantCommand(() -> intake.setFourbarTargetPosition(grabPosition.fourbarPos)),
-
-
-                        // Wait until the lift is retracting and the intake is within tolerance
-                        // NOTE - IsWithinTolerance, checks for when it has 20 ticks or less of error. Can be adjusted
-                        // via the Globals.INTAKE_ERROR_TOLERANCE variable in FTCDash.
+                        new ClawCommand(intake, IntakeSubsystem.ClawState.OPEN_AUTO),
                         new WaitUntilCommand(() -> lift.liftState == LiftSubsystem.LiftState.RETRACTED && intake.isWithinTolerance()),
-                        new ClawCommand(intake, IntakeSubsystem.ClawState.AUTO),
-                        new WaitCommand(Globals.INTAKE_CLAW_CLOSE_TIME + 150),
-//                        new InstantCommand(() -> intake.setFourbar(grabPosition.fourbarPos + 0.0975)),
-                        new FourbarCommand(intake, IntakeSubsystem.FourbarState.PRE_TRANSFER),
-//                        new WaitCommand(50),
+                        new ClawCommand(intake, IntakeSubsystem.ClawState.CLOSED),
+                        new WaitCommand(Globals.INTAKE_CLAW_CLOSE_TIME),
+                        new InstantCommand(() -> intake.setFourbarTargetPosition(Globals.INTAKE_FOURBAR_PRE_TRANSFER)),
                         new InstantCommand(() -> intake.setPivot(grabPosition.pivotPos)),
                         new WaitCommand(50),
-                        new AutoTransferCommand(intake, lift, grabPosition),
-                        new InstantCommand(intake::retractReset)
+                        new InstantCommand(() -> intake.setTargetPosition(0)),
+                        new WaitCommand(25),
+                        new PivotCommand(intake, IntakeSubsystem.PivotState.PRE_TRANSFER),
+                        new WaitCommand(grabPosition.turretDelay),
+                        new TurretCommand(intake, IntakeSubsystem.TurretState.INWARDS),
+                        new WaitUntilCommand(intake::isWithinTolerance),
+                        new InstantCommand(() -> intake.setFourbar(Globals.INTAKE_FOURBAR_TRANSFER)),
+                        new PivotCommand(intake, IntakeSubsystem.PivotState.TRANSFER),
+                        new WaitCommand(50),
+                        new ClawCommand(intake, IntakeSubsystem.ClawState.OPEN),
+                        new InstantCommand(() -> intake.setFourbar(Globals.INTAKE_FOURBAR_INTERMEDIATE)),
+                        new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT),
+                        new WaitCommand(50),
+                        new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS)
                 ),
                 new SequentialCommandGroup(
-                        new LiftCommand(lift, liftState),
+                        new LiftProfiledCommand(lift, liftState),
                         new WaitCommand(75),
                         new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE),
                         new WaitUntilCommand(lift::isWithinTolerance),
@@ -65,7 +68,7 @@ public class HighPoleAutoCycleCommand extends ParallelCommandGroup {
     }
 
     @Override
-    public void initialize(){
+    public void initialize() {
         super.initialize();
         drivetrain.frontLeftModule.setTargetRotation(-PI / 4);
         drivetrain.frontRightModule.setTargetRotation(PI / 4);
@@ -75,7 +78,7 @@ public class HighPoleAutoCycleCommand extends ParallelCommandGroup {
     }
 
     @Override
-    public void end(boolean interrupted){
+    public void end(boolean interrupted) {
         super.end(interrupted);
     }
 }

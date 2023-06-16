@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.test.subsystem;
+package org.firstinspires.ftc.teamcode.opmode.test;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;

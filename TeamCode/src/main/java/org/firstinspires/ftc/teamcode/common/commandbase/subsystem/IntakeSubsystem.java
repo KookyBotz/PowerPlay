@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.AsymmetricMotionProfile;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Constraints;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.State;
-import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 
 import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
@@ -86,7 +85,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public enum ClawState {
         OPEN,
         CLOSED,
-        AUTO,
+        OPEN_AUTO,
         CLEAR
     }
 
@@ -180,8 +179,8 @@ public class IntakeSubsystem extends SubsystemBase {
             case CLOSED:
                 robot.claw.setPosition(INTAKE_CLAW_CLOSED);
                 break;
-            case AUTO:
-                robot.claw.setPosition(INTAKE_CLAW_AUTO);
+            case OPEN_AUTO:
+                robot.claw.setPosition(INTAKE_CLAW_OPEN_AUTO);
                 break;
             case CLEAR:
                 robot.claw.setPosition(INTAKE_CLAW_CLEAR);
@@ -222,22 +221,11 @@ public class IntakeSubsystem extends SubsystemBase {
     public void loop2 () {
         this.controller.setPID(P, I, D);
 
-//        coneDetected.add(!robot.clawSensor.getState());
-//        if(coneDetected.size()>100){
-//            coneDetected.remove(0);
-//        }
-//        hasCone = coneDetected.contains(true);
 
-        fourbarMotionState = fourbarProfile.calculate(fourbarTimer.time() + INTAKE_DELAY);
+        fourbarMotionState = fourbarProfile.calculate(fourbarTimer.time());
         if (fourbarMotionState.v != 0) {
             setFourbar(fourbarMotionState.x);
         }
-
-//        intakeMotionState = intakeProfile.calculate(intakeTimer.time() + INTAKE_DELAY);
-//        if (intakeMotionState.v != 0) {
-//            targetPosition = intakeMotionState.x;
-//            intakeTime = intakeTimer.time();
-//        }
 
         withinTolerance = Math.abs(getPos() - getTargetPosition()) <= INTAKE_ERROR_TOLERANCE;
 

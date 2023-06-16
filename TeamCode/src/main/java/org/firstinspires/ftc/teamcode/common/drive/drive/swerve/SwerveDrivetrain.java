@@ -35,7 +35,7 @@ public class SwerveDrivetrain implements Drivetrain {
     double[] wa = new double[4];
     double max = 0.0;
 
-    public static double minPow = 0.09;
+    public static double minPow = 0.06;
     public static double imuOffset = 0.0;
 
     public SwerveDrivetrain(RobotHardware robot) {
@@ -89,7 +89,7 @@ public class SwerveDrivetrain implements Drivetrain {
         for (int i = 0; i < 4; i++) {
             SwerveModule m = modules[i];
             if (Math.abs(max) > 1) ws[i] /= max;
-            m.setMotorPower(Math.abs(ws[i]) + ((AUTO) ? minPow * Math.signum(ws[i]) : 0));
+            m.setMotorPower(Math.abs(ws[i]) + ((USE_WHEEL_FEEDFORWARD) ? minPow * Math.signum(ws[i]) : 0));
             m.setTargetRotation(MathUtils.norm(wa[i]));
         }
     }

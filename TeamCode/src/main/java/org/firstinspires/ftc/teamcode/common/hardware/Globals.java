@@ -60,7 +60,7 @@ public class Globals {
 
     public static double INTAKE_CLAW_OPEN = 0.39;
     public static double INTAKE_CLAW_CLOSED = 0.31;
-    public static double INTAKE_CLAW_AUTO = 0.31;
+    public static double INTAKE_CLAW_OPEN_AUTO = 0.43;
     public static double INTAKE_CLAW_CLEAR = 0.5;
 
     public static double INTAKE_PIVOT_LOW = 0.355;
@@ -85,7 +85,7 @@ public class Globals {
 
     public static double F_OFFSET = 0.0;
 
-    public static long INTAKE_CLAW_CLOSE_TIME = 50; // ms
+    public static long INTAKE_CLAW_CLOSE_TIME = 150; // ms
 
     public static final double EXTENSION_TICKS_PER_INCH = 23.54;
 
@@ -105,6 +105,7 @@ public class Globals {
     public static boolean MANUAL_ENABLED = true;
     public static boolean HAS_AUTO_ERROR = false;
     public static boolean IS_PARKING = false;
+    public static boolean USE_WHEEL_FEEDFORWARD = false;
 
     public static boolean SWERVE_X = false;
 

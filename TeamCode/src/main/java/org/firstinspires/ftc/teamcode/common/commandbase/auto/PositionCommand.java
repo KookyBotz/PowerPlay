@@ -1,5 +1,10 @@
 package org.firstinspires.ftc.teamcode.common.commandbase.auto;
 
+import static java.lang.Math.atan2;
+import static java.lang.Math.cos;
+import static java.lang.Math.hypot;
+import static java.lang.Math.sin;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
@@ -15,21 +20,16 @@ public class PositionCommand extends CommandBase {
     public static double ALLOWED_TRANSLATIONAL_ERROR = 0.25;
     public static double ALLOWED_HEADING_ERROR = Math.toRadians(1);
 
-    public static double xP = 0.02;
-    public static double xD = 0.05;
-    public static double xF = 0;
+    public static double hP = 0.4;
+    public static double hD = 0.2;
+    public static double hI = 0;
 
-    public static double yP = 0.02;
-    public static double yD = 0.05;
-    public static double yF = 0;
+    public static double mP = 0.15;
+    public static double mD = 0.2;
+    public static double mI = 0.0;
 
-    public static double hP = 0.5;
-    public static double hD = 0.1;
-    public static double hF = 0;
-
-    public static PIDFController xController = new PIDFController(xP, 0.0, xD, xF);
-    public static PIDFController yController = new PIDFController(yP, 0.0, yD, yF);
-    public static PIDFController hController = new PIDFController(hP, 0.0, hD, hF);
+    public static PIDFController mController = new PIDFController(mP, mI, mD, 0);
+    public static PIDFController hController = new PIDFController(hP, hI, hD, 0);
     public static double max_power = 0.7;
     public static double max_heading = 0.5;
 
@@ -71,11 +71,8 @@ public class PositionCommand extends CommandBase {
             deadTimer = new ElapsedTime();
         }
 
-        Pose yummypose = targetPose.subtract(localizer.getPos());
-//        System.out.println(yummypose);
         Pose powers = goToPosition(localizer.getPos(), targetPose);
         drivetrain.set(powers);
-        Globals.yummypose = powers;
     }
 
     @Override
@@ -83,7 +80,6 @@ public class PositionCommand extends CommandBase {
         Pose error = targetPose.subtract(localizer.getPos());
         Globals.error = error;
         Globals.targetPose = targetPose;
-//        error.divide(new Pose(1, -1, 1));
 
         boolean reached = ((Math.hypot(error.x, error.y) < ALLOWED_TRANSLATIONAL_ERROR) && (Math.abs(error.heading) < ALLOWED_HEADING_ERROR));
         Globals.reached = reached;
@@ -96,7 +92,6 @@ public class PositionCommand extends CommandBase {
         }
 
         boolean delayed = delayTimer != null && delayTimer.milliseconds() > delay;
-//        return lock ? reached : ((deadTimer.milliseconds() > ms) || delayed);
         return (deadTimer.milliseconds() > ms) || delayed;
     }
 
@@ -105,27 +100,31 @@ public class PositionCommand extends CommandBase {
         drivetrain.set(new Pose());
     }
 
-    public static Pose relDistanceToTarget(Pose robot, Pose target) {
-        return target.subtract(robot);
-    }
-
     public Pose goToPosition(Pose robotPose, Pose targetPose) {
-        Pose deltaPose = relDistanceToTarget(robotPose, targetPose);
+        Pose deltaPose = targetPose.subtract(robotPose);
+
+        double x_rotated = deltaPose.x * cos(robotPose.heading) - deltaPose.y * sin(robotPose.heading);
+        double y_rotated = deltaPose.x * sin(robotPose.heading) + deltaPose.y * cos(robotPose.heading);
+
+        double magnitude = hypot(y_rotated, x_rotated);
+        double dir = atan2(y_rotated, x_rotated);
+
+        double power = mController.calculate(0, magnitude);
+
+        if (Math.abs(power) < 0.075) power = 0;
+
+        double y_component = cos(dir) * power;
+        double x_component = sin(dir) * power;
+        double heading_component = hController.calculate(0, deltaPose.heading);
+
+        if (Math.abs(heading_component) < 0.015) heading_component = 0;
+
         Pose powers = new Pose(
-                xController.calculate(0, deltaPose.x),
-                yController.calculate(0, deltaPose.y),
-                hController.calculate(0, deltaPose.heading)
+                x_component / v * 12.5,
+                -y_component / v * 12.5,
+                -heading_component / v * 12.5
         );
-        double x_rotated = powers.x * Math.cos(robotPose.heading) - powers.y * Math.sin(robotPose.heading);
-        double y_rotated = powers.x * Math.sin(robotPose.heading) + powers.y * Math.cos(robotPose.heading);
-        double x_power = -x_rotated < -max_power ? -max_power :
-                Math.min(-x_rotated, max_power);
-        double y_power = -y_rotated < -max_power ? -max_power :
-                Math.min(-y_rotated, max_power);
-        double heading_power = powers.heading;
 
-        heading_power = Math.max(Math.min(max_heading, heading_power), -max_heading);
-
-        return new Pose(-y_power / v * 12.5, x_power / v * 12.5, -heading_power / v * 12.5);
+        return new Pose(powers.x, powers.y, powers.heading);
     }
 }
