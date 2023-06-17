@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.ClawCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.LatchCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.PivotCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.TurretCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
@@ -28,7 +29,7 @@ public class CancelableGrabCommand extends SequentialCommandGroup {
                 new ClawCommand(intake, IntakeSubsystem.ClawState.CLOSED),
                 new WaitCommand(Globals.INTAKE_CLAW_CLOSE_TIME),
                 new InstantCommand(() -> command.canRetractIntake = false),
-                new InstantCommand(()->command.stackHeight--),
+                new InstantCommand(() -> command.stackHeight--),
                 new InstantCommand(() -> intake.setFourbarTargetPosition(Globals.INTAKE_FOURBAR_PRE_TRANSFER)),
                 new InstantCommand(() -> intake.setPivot(grabPosition.pivotPos)),
                 new WaitCommand(50),
@@ -44,10 +45,11 @@ public class CancelableGrabCommand extends SequentialCommandGroup {
                 new ClawCommand(intake, IntakeSubsystem.ClawState.OPEN),
                 new InstantCommand(() -> intake.setFourbar(Globals.INTAKE_FOURBAR_INTERMEDIATE)),
                 new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT),
+                new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED),
                 new WaitCommand(50),
                 new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),
-                new InstantCommand(()->command.canDeposit = true),
-                new InstantCommand(()->command.intaking = false)
+                new InstantCommand(() -> command.canDeposit = true),
+                new InstantCommand(() -> command.intaking = false)
         );
     }
 

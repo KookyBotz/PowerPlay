@@ -1,10 +1,5 @@
 package org.firstinspires.ftc.teamcode.common.commandbase.auto;
 
-import static java.lang.Math.atan2;
-import static java.lang.Math.cos;
-import static java.lang.Math.hypot;
-import static java.lang.Math.sin;
-
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -17,11 +12,24 @@ import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import java.util.function.BooleanSupplier;
 
 public class PositionLockCommand extends CommandBase {
-    public final double ALLOWED_TRANSLATIONAL_ERROR = 2;
+    public final double ALLOWED_TRANSLATIONAL_ERROR = 1;
     public final double ALLOWED_HEADING_ERROR = Math.toRadians(2);
 
-    public final PIDFController hController = new PIDFController(0.5, 0, 0.25, 0);
-    public final PIDFController mController = new PIDFController(0.3, 0, 0.2, 0);
+    public static double xP = 0.04;
+    public static double xD = 0.03;
+    public static double xF = 0;
+
+    public static double yP = 0.04;
+    public static double yD = 0.03;
+    public static double yF = 0;
+
+    public static double hP = 0.7;
+    public static double hD = 0.2;
+    public static double hF = 0;
+
+    public static PIDFController xController = new PIDFController(xP, 0.0, xD, xF);
+    public static PIDFController yController = new PIDFController(yP, 0.0, yD, yF);
+    public static PIDFController hController = new PIDFController(hP, 0.0, hD, hF);
 
     private final SwerveDrivetrain drivetrain;
     private final Localizer localizer;
@@ -43,10 +51,6 @@ public class PositionLockCommand extends CommandBase {
 
     public static void setTargetPose(Pose target) {
         PositionLockCommand.targetPose = target;
-    }
-
-    public static Pose getTargetPose() {
-        return targetPose;
     }
 
     @Override
@@ -81,28 +85,23 @@ public class PositionLockCommand extends CommandBase {
         Globals.USE_WHEEL_FEEDFORWARD = false;
     }
 
+    private static Pose relDistanceToTarget(Pose robot, Pose target) {
+        return target.subtract(robot);
+    }
+
     public Pose goToPosition(Pose robotPose, Pose targetPose) {
-        Pose deltaPose = targetPose.subtract(robotPose);
+        Pose deltaPose = relDistanceToTarget(robotPose, targetPose);
 
         reached = Math.hypot(deltaPose.x, deltaPose.y) < ALLOWED_TRANSLATIONAL_ERROR && Math.abs(deltaPose.heading) < ALLOWED_HEADING_ERROR;
 
-        double x_rotated = deltaPose.x * cos(robotPose.heading) - deltaPose.y * sin(robotPose.heading);
-        double y_rotated = deltaPose.x * sin(robotPose.heading) + deltaPose.y * cos(robotPose.heading);
-
-        double magnitude = hypot(y_rotated, x_rotated);
-        double dir = atan2(y_rotated, x_rotated);
-        double power = mController.calculate(0, magnitude);
-
-        double y_component = cos(dir) * power;
-        double x_component = sin(dir) * power;
-        double heading_component = hController.calculate(0, deltaPose.heading);
-
         Pose powers = new Pose(
-                x_component / v * 12.5,
-                -y_component / v * 12.5,
-                -heading_component / v * 12.5
+                xController.calculate(0, deltaPose.x),
+                yController.calculate(0, deltaPose.y),
+                hController.calculate(0, deltaPose.heading)
         );
+        double x_rotated = powers.x * Math.cos(robotPose.heading) - powers.y * Math.sin(robotPose.heading);
+        double y_rotated = powers.x * Math.sin(robotPose.heading) + powers.y * Math.cos(robotPose.heading);
 
-        return new Pose(powers.x, powers.y, powers.heading);
+        return new Pose(-y_rotated / v * 12, x_rotated / v * 12, -powers.heading / v * 12);
     }
 }

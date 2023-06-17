@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -15,16 +14,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.common.commandbase.auto.HighPoleAutoCycleCommand;
-import org.firstinspires.ftc.teamcode.common.commandbase.auto.LimitedPositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionLockCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.SixConeAutoCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
-import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveModule;
-import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.drive.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
@@ -95,7 +90,7 @@ public class Left6 extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new LimitedPositionCommand(drivetrain, localizer, new Pose(2, 64, 0), 500, 2500, robot.getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(3, 70, 0), 500, 2500, robot.getVoltage()),
                         new PositionCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0.24), 0, 1000, robot.getVoltage()),
                         new InstantCommand(()->PositionLockCommand.setTargetPose(new Pose(3.5, 60.8, 0.26))),
                         new PositionLockCommand(drivetrain, localizer, sixConeAutoCommand::isFinished, robot.getVoltage())

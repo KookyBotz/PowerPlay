@@ -22,12 +22,10 @@ public class SixConeAutoCommand extends CommandBase {
 
     private final Pose RISKY_CYCLE_POS = new Pose(3.5, 60.8, 0.26);
     private final Pose RAM_POSE_START = new Pose(3.5, 40, 0);
-    private final Pose RAM_POSE_END = new Pose(2, 60.8, 0);
-    private final Pose SAFE_INTAKE_POS = new Pose(3.5, 52, 0);
-    private final Pose SAFE_DEPOSIT_POS = new Pose(3.5, 52, Math.PI / 4);
+    private final Pose RAM_POSE_END = new Pose(3, 70, 0);
 
     enum STATE {
-        RISKY, RAM, RISKY2, RAM2, RISKY3, SAFE, PARK;
+        RISKY, RAM, RISKY2, RAM2, RISKY3, PARK;
 
         public STATE next() {
             switch (this) {
@@ -39,8 +37,6 @@ public class SixConeAutoCommand extends CommandBase {
                     return RAM2;
                 case RAM2:
                     return RISKY3;
-                case RISKY3:
-                    return SAFE;
                 default:
                     return PARK;
             }
@@ -54,9 +50,9 @@ public class SixConeAutoCommand extends CommandBase {
     private final GrabPosition[] GRAB_POSITIONS = new GrabPosition[]{
             new GrabPosition(570, 0, 0.173, 0.37, 0),
             new GrabPosition(555, 0, 0.14, 0.37, 0),
-            new GrabPosition(557, 0, 0.11, 0.37, 0),
-            new GrabPosition(557, 0, 0.08, 0.37, 0),
-            new GrabPosition(560, 0, 0.045, 0.37, 0)
+            new GrabPosition(552, 0, 0.11, 0.37, 0),
+            new GrabPosition(552, 0, 0.08, 0.37, 0),
+            new GrabPosition(555, 0, 0.045, 0.37, 0)
     };
 
 
@@ -103,9 +99,12 @@ public class SixConeAutoCommand extends CommandBase {
 
         // reset state timer
         if (inPosition) stateTime.reset();
+        if (ramming) stateTime.reset();
+
+        if (inPosition && state != STATE.RAM && state != STATE.RAM2) ramming = false;
 
         // definitely not chilling
-        if ((state == STATE.RISKY || state == STATE.RISKY2 || state == STATE.RISKY3 || state == STATE.SAFE) && stateTime.seconds() > 3) {
+        if ((state == STATE.RISKY || state == STATE.RISKY2 || state == STATE.RISKY3) && stateTime.seconds() > 3) {
             log += "\n yikes, entering" + state.next().toString();
             state = state.next();
             stateTime.reset();
@@ -121,9 +120,7 @@ public class SixConeAutoCommand extends CommandBase {
                             new PositionCommand(drive, localizer, RAM_POSE_START, 0, 1500, robot.getVoltage()),
                             new PositionCommand(drive, localizer, RAM_POSE_END, 0, 1500, robot.getVoltage()),
                             new InstantCommand(() -> PositionLockCommand.setTargetPose(RISKY_CYCLE_POS)),
-                            new InstantCommand(() -> state = state.next()),
-                            new InstantCommand(() -> stateTime.reset()),
-                            new InstantCommand(() -> ramming = false)
+                            new InstantCommand(() -> state = state.next())
                     )
             );
         }
@@ -168,7 +165,7 @@ public class SixConeAutoCommand extends CommandBase {
             //deposit
             if (inPosition && canDeposit && TIME_LEFT.getAsDouble() >= 2.5) {
                 log += "\n deposit";
-                DEPOSIT_COMMAND = new CancelableDepositCommand(lift, LiftSubsystem.LiftState.HIGH, this);
+                DEPOSIT_COMMAND = new CancelableDepositCommand(lift, this);
                 CommandScheduler.getInstance().schedule(DEPOSIT_COMMAND);
                 canDeposit = false;
             }

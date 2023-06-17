@@ -51,10 +51,10 @@ public class PositionCommandTest extends CommandOpMode {
         PhotonCore.experimental.setMaximumParallelCommands(8);
         PhotonCore.enable();
 
-        drivetrain.frontLeftModule.setTargetRotation(Math.PI / 2);
-        drivetrain.frontRightModule.setTargetRotation(Math.PI / 2);
-        drivetrain.backRightModule.setTargetRotation(Math.PI / 2);
-        drivetrain.backLeftModule.setTargetRotation(Math.PI / 2);
+        drivetrain.frontLeftModule.setTargetRotation(0);
+        drivetrain.frontRightModule.setTargetRotation(0);
+        drivetrain.backRightModule.setTargetRotation(0);
+        drivetrain.backLeftModule.setTargetRotation(0);
 
         while (!this.isStarted()) {
             drivetrain.read();
@@ -75,7 +75,7 @@ public class PositionCommandTest extends CommandOpMode {
             robot.reset();
             robot.startIMUThread(this);
             localizer.setPoseEstimate(new Pose2d(0, 0, 0));
-            schedule(new PositionCommand(drivetrain, localizer, new Pose(0, 60, 0), 500, 12.5));
+            schedule(new PositionCommand(drivetrain, localizer, new Pose(40, 0, 0), 500, 12.5));
         }
 
 
