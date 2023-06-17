@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.HighPoleAutoCycleCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.LimitedPositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionLockCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.SixConeAutoCommand;
@@ -94,9 +95,9 @@ public class Left6 extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(2.75, 64, 0), 500, 2000, robot.getVoltage()),
+                        new LimitedPositionCommand(drivetrain, localizer, new Pose(2, 64, 0), 500, 5000, robot.getVoltage()),
                         new PositionCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0.24), 0, 1000, robot.getVoltage()),
-                        new PositionLockCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0.24), sixConeAutoCommand::isFinished, robot.getVoltage())
+                        new PositionLockCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0.26), sixConeAutoCommand::isFinished, robot.getVoltage())
                                 .alongWith(new WaitCommand(1000).andThen(sixConeAutoCommand)),
                         new InstantCommand(() -> endtime = timer.seconds())
                 )
@@ -116,6 +117,7 @@ public class Left6 extends LinearOpMode {
             telemetry.addData("endtime", endtime);
             telemetry.addData("x", localizer.getPos().x);
             telemetry.addData("y", localizer.getPos().y);
+            telemetry.addData("h", localizer.getPos().heading);
             loopTime = loop;
             telemetry.update();
             robot.write(drivetrain, intake, lift);
