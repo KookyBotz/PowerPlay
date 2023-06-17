@@ -19,8 +19,6 @@ import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
 
 @Config
 public class SwerveDrivetrain implements Drivetrain {
-
-    private RobotHardware robot;
     public SwerveModule frontLeftModule, backLeftModule, backRightModule, frontRightModule;
     public SwerveModule[] modules;
 
@@ -28,18 +26,18 @@ public class SwerveDrivetrain implements Drivetrain {
     private final double R;
     public static double frontLeftOffset = -0.05, frontRightOffset = 0, backLeftOffset = 0, backRightOffset = -0.055;
 
-    public static double K_STATIC = 0.03;
     public static boolean maintainHeading = false;
 
     double[] ws = new double[4];
     double[] wa = new double[4];
     double max = 0.0;
 
-    public static double minPow = 0.09;
+    public final double minPow = 0.09;
     public static double imuOffset = 0.0;
 
+    private boolean locked = false;
+
     public SwerveDrivetrain(RobotHardware robot) {
-        this.robot = robot;
         frontLeftModule = new SwerveModule(robot.frontLeftMotor, robot.frontLeftServo, new AbsoluteAnalogEncoder(robot.frontLeftEncoder, 3.3).zero(frontLeftOffset).setInverted(true));
         backLeftModule = new SwerveModule(robot.backLeftMotor, robot.backLeftServo, new AbsoluteAnalogEncoder(robot.backLeftEncoder, 3.3).zero(backLeftOffset).setInverted(true));
         backRightModule = new SwerveModule(robot.backRightMotor, robot.backRightServo, new AbsoluteAnalogEncoder(robot.backRightEncoder, 3.3).zero(backRightOffset).setInverted(true));
@@ -54,35 +52,23 @@ public class SwerveDrivetrain implements Drivetrain {
         for (SwerveModule module : modules) module.read();
     }
 
-    public void setIMUOffset(double offset) {
-        imuOffset = offset;
-    }
 
     @Override
     public void set(Pose pose) {
-        set(pose, -1);
-    }
-
-    @Override
-    public void set(Pose pose, double maxPower) {
         double x = pose.x, y = pose.y, head = pose.heading;
-        if (maxPower != -1) {
-            double r = Math.hypot(x, y);
-            if (Math.abs(r) > 1) {
-                x = x / r * maxPower;
-                y = y / r * maxPower;
-            }
-        }
 
         double a = x - head * (WHEEL_BASE / R),
                 b = x + head * (WHEEL_BASE / R),
                 c = y - head * (TRACK_WIDTH / R),
                 d = y + head * (TRACK_WIDTH / R);
 
-        ws = new double[]{hypot(b, c), hypot(b, d), hypot(a, d), hypot(a, c)};
-        if (!maintainHeading)
-            wa = new double[]{atan2(b, c), atan2(b, d), atan2(a, d), atan2(a, c)};
-
+        if (locked) {
+            ws = new double[]{0, 0, 0, 0};
+            wa = new double[]{Math.PI / 4, -Math.PI / 4, Math.PI / 4, -Math.PI / 4};
+        } else {
+            ws = new double[]{hypot(b, c), hypot(b, d), hypot(a, d), hypot(a, c)};
+            if (!maintainHeading) wa = new double[]{atan2(b, c), atan2(b, d), atan2(a, d), atan2(a, c)};
+        }
 
         max = MathUtils.max(ws);
     }
@@ -98,7 +84,14 @@ public class SwerveDrivetrain implements Drivetrain {
 
     public void updateModules() {
         for (SwerveModule m : modules) m.update();
-        SwerveModule.K_STATIC = K_STATIC;
+    }
+
+    public void setLocked(boolean locked){
+        this.locked = locked;
+    }
+
+    public boolean isLocked(){
+        return locked;
     }
 
     public String getTelemetry() {

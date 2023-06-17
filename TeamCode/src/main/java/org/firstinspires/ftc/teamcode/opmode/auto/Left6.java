@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode.opmode.auto;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -14,6 +16,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.HighPoleAutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionLockCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.SixConeAutoCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
@@ -24,7 +27,9 @@ import org.firstinspires.ftc.teamcode.common.drive.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 
-@Autonomous(name = "Auto Left")
+import java.util.function.DoubleSupplier;
+
+@Autonomous(name = "Left6")
 @Config
 public class Left6 extends LinearOpMode {
 
@@ -44,7 +49,6 @@ public class Left6 extends LinearOpMode {
         CommandScheduler.getInstance().reset();
         Globals.AUTO = false;
         Globals.USING_IMU = true;
-        Globals.USE_WHEEL_FEEDFORWARD = true;
 
         robot.init(hardwareMap, telemetry);
         drivetrain = new SwerveDrivetrain(robot);
@@ -75,31 +79,22 @@ public class Left6 extends LinearOpMode {
 
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
+        robot.reset();
+        timer = new ElapsedTime();
 
-        GrabPosition[] grabPositions = new GrabPosition[]{
-                new GrabPosition(570, 0, 0.173, 0.37, 0),
-                new GrabPosition(555, 0, 0.14, 0.37, 0),
-                new GrabPosition(550, 0, 0.105, 0.37, 0),
-                new GrabPosition(550, 0, 0.075, 0.37, 0),
-                new GrabPosition(560, 0, 0.04, 0.37, 0)
-        };
+        DoubleSupplier time_left = () -> 30 - timer.seconds();
+        SixConeAutoCommand auto = new SixConeAutoCommand(robot, drivetrain, intake, lift, time_left);
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(3.5, 64, 0), 500, robot.getVoltage()),
-                        new InstantCommand(()->Globals.USE_WHEEL_FEEDFORWARD = false),
-                        new PositionLockCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0.24), () -> false, robot.getVoltage()),
-//                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, grabPositions[0], LiftSubsystem.LiftState.HIGH),
-//                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, grabPositions[1], LiftSubsystem.LiftState.HIGH),
-//                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, grabPositions[2], LiftSubsystem.LiftState.HIGH),
-//                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, grabPositions[3], LiftSubsystem.LiftState.HIGH),
-//                        new HighPoleAutoCycleCommand(drivetrain, lift, intake, grabPositions[4], LiftSubsystem.LiftState.HIGH),
-                        new InstantCommand(() -> endtime = timer.milliseconds())
+                        new PositionCommand(drivetrain, localizer, new Pose(2.5, 64, 0), 500, 2000, robot.getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0), 0, 500, robot.getVoltage()),
+                        new PositionLockCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0.24), auto::isFinished, robot.getVoltage())
+                                .alongWith(new WaitCommand(1000).andThen(auto)),
+                        new InstantCommand(() -> endtime = timer.seconds())
                 )
         );
 
-        robot.reset();
-        timer = new ElapsedTime();
 
         while (opModeIsActive()) {
             robot.read(drivetrain, intake, lift);
@@ -110,7 +105,8 @@ public class Left6 extends LinearOpMode {
 
             double loop = System.nanoTime();
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-            telemetry.addData("end", endtime);
+            telemetry.addLine(auto.getTelemetry());
+            telemetry.addData("endtime", endtime);
             loopTime = loop;
             telemetry.update();
             robot.write(drivetrain, intake, lift);

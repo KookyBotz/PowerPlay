@@ -51,6 +51,11 @@ public class PositionCommand extends CommandBase {
     }
 
     @Override
+    public void initialize(){
+        Globals.USE_WHEEL_FEEDFORWARD = true;
+    }
+
+    @Override
     public void execute() {
         if (deadTimer == null) {
             deadTimer = new ElapsedTime();
@@ -84,6 +89,8 @@ public class PositionCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         drivetrain.set(new Pose());
+        Globals.USE_WHEEL_FEEDFORWARD = false;
+
     }
 
     public Pose goToPosition(Pose robotPose, Pose targetPose) {
