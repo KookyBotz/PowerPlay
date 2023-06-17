@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.commandbase.auto;
 
+import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.normalizeRadians;
 import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
 import static java.lang.Math.hypot;
@@ -15,6 +16,8 @@ import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.drive.localizer.Localizer;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
+
+import java.util.Locale;
 
 public class PositionCommand extends CommandBase {
     public final double ALLOWED_TRANSLATIONAL_ERROR = 1;
@@ -98,20 +101,26 @@ public class PositionCommand extends CommandBase {
     public Pose goToPosition(Pose robotPose, Pose targetPose) {
         Pose deltaPose = targetPose.subtract(robotPose);
 
-        double x_rotated = deltaPose.x * cos(robotPose.heading) - deltaPose.y * sin(robotPose.heading);
-        double y_rotated = deltaPose.x * sin(robotPose.heading) + deltaPose.y * cos(robotPose.heading);
+        deltaPose.x = MathUtils.clamp(deltaPose.x, -20, 20);
+        deltaPose.y = MathUtils.clamp(deltaPose.y, -20, 20);
 
-        double magnitude = hypot(y_rotated, x_rotated);
-        double dir = atan2(y_rotated, x_rotated);
+        double magnitude = hypot(deltaPose.y, deltaPose.x);
+        double dir = normalizeRadians(atan2(deltaPose.y, deltaPose.x) - robotPose.heading);
 
         double power = mController.calculate(0, magnitude);
 
+        // I hate my life
+        double correction = (0.055 * (v-12.4));
+        dir += (correction / 3.3 * 2 * Math.PI * MathUtils.clamp(power, 0, 1));
 
         if (Math.abs(power) < 0.01) power = 0;
 
         double y_component = cos(dir) * power;
         double x_component = sin(dir) * power;
         double heading_component = hController.calculate(0, deltaPose.heading);
+
+        System.out.printf(Locale.ENGLISH, "dir: %.3f, y: %.3f, x: %.3f", dir, y_component, x_component);
+
 
         if (Math.abs(heading_component) < 0.015) heading_component = 0;
 

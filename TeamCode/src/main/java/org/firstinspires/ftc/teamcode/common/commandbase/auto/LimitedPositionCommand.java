@@ -61,7 +61,7 @@ public class LimitedPositionCommand extends CommandBase {
     @Override
     public void initialize() {
         Globals.USE_WHEEL_FEEDFORWARD = true;
-        slewRateLimiter = new SlewRateLimiter(60, -999, initialPose.y);
+        slewRateLimiter = new SlewRateLimiter(45, -999, initialPose.y);
     }
 
     @Override

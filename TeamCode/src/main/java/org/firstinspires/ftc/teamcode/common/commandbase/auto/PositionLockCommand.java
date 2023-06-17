@@ -21,11 +21,11 @@ public class PositionLockCommand extends CommandBase {
     public final double ALLOWED_HEADING_ERROR = Math.toRadians(2);
 
     public final PIDFController hController = new PIDFController(0.5, 0, 0.25, 0);
-    public final PIDFController mController = new PIDFController(0.2, 0, 0.2, 0);
+    public final PIDFController mController = new PIDFController(0.3, 0, 0.2, 0);
 
-    SwerveDrivetrain drivetrain;
-    Localizer localizer;
-    Pose targetPose;
+    private final SwerveDrivetrain drivetrain;
+    private final Localizer localizer;
+    private static Pose targetPose;
 
     private final BooleanSupplier endSupplier;
 
@@ -34,12 +34,19 @@ public class PositionLockCommand extends CommandBase {
 
     private final double v;
 
-    public PositionLockCommand(SwerveDrivetrain drivetrain, Localizer localizer, Pose targetPose, BooleanSupplier end, double voltage) {
+    public PositionLockCommand(SwerveDrivetrain drivetrain, Localizer localizer, BooleanSupplier end, double voltage) {
         this.drivetrain = drivetrain;
         this.localizer = localizer;
-        this.targetPose = targetPose;
         this.v = voltage;
         this.endSupplier = end;
+    }
+
+    public static void setTargetPose(Pose target) {
+        PositionLockCommand.targetPose = target;
+    }
+
+    public static Pose getTargetPose() {
+        return targetPose;
     }
 
     @Override
@@ -50,6 +57,11 @@ public class PositionLockCommand extends CommandBase {
 
     @Override
     public void execute() {
+        if (targetPose.x == 0 && targetPose.y == 0 && targetPose.heading == 0) {
+            drivetrain.setLocked(false);
+            return;
+        }
+
         Pose powers = goToPosition(localizer.getPos(), targetPose);
 
         if (!reached) lockedTimer.reset();

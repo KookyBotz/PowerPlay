@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode.test;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
@@ -28,7 +29,7 @@ public class PositionCommandTest extends CommandOpMode {
     private final RobotHardware robot = RobotHardware.getInstance();
     private SwerveDrivetrain drivetrain;
 
-    Localizer localizer;
+    TwoWheelLocalizer localizer;
 
 
     @Override
@@ -59,6 +60,10 @@ public class PositionCommandTest extends CommandOpMode {
             drivetrain.read();
             drivetrain.updateModules();
             robot.clearBulkCache();
+
+            telemetry.addData("t", drivetrain.frontLeftModule.getTargetRotation());
+            telemetry.addData("c", drivetrain.frontLeftModule.getModuleRotation());
+            telemetry.update();
         }
     }
 
@@ -69,7 +74,8 @@ public class PositionCommandTest extends CommandOpMode {
             timer = new ElapsedTime();
             robot.reset();
             robot.startIMUThread(this);
-            schedule(new PositionCommand(drivetrain, localizer, new Pose(3.5, 64, 0), 500, 12.5));
+            localizer.setPoseEstimate(new Pose2d(0, 0, 0));
+            schedule(new PositionCommand(drivetrain, localizer, new Pose(0, 60, 0), 500, 12.5));
         }
 
 
@@ -83,6 +89,8 @@ public class PositionCommandTest extends CommandOpMode {
         telemetry.addData("x", localizer.getPos().x);
         telemetry.addData("y", localizer.getPos().y);
         telemetry.addData("h", localizer.getPos().heading);
+        telemetry.addData("t", drivetrain.frontLeftModule.getTargetRotation());
+        telemetry.addData("c", drivetrain.frontLeftModule.getModuleRotation());
         loopTime = loop;
         telemetry.update();
 

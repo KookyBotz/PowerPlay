@@ -17,12 +17,13 @@ public class CancelableDepositCommand extends SequentialCommandGroup {
     public CancelableDepositCommand(LiftSubsystem lift, LiftSubsystem.LiftState liftState, SixConeAutoCommand command) {
         super(
                 new LiftProfiledCommand(lift, liftState),
-                new InstantCommand(() -> command.canRetractDeposit = true),
                 new WaitCommand(75),
                 new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE),
+                new WaitCommand(50),
+                new InstantCommand(() -> command.canRetractDeposit = true),
                 new WaitUntilCommand(lift::isWithinTolerance),
-                new InstantCommand(() -> command.canRetractDeposit = false),
                 new WaitCommand(100),
+                new InstantCommand(() -> command.canRetractDeposit = false),
                 new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED)),
                 new WaitCommand(75),
                 new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED))

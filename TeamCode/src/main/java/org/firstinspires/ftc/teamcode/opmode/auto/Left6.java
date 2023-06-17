@@ -91,13 +91,14 @@ public class Left6 extends LinearOpMode {
         timer = new ElapsedTime();
 
         DoubleSupplier time_left = () -> 30 - timer.seconds();
-        SixConeAutoCommand sixConeAutoCommand = new SixConeAutoCommand(robot, drivetrain, intake, lift, time_left);
+        SixConeAutoCommand sixConeAutoCommand = new SixConeAutoCommand(robot, localizer, drivetrain, intake, lift, time_left);
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         new LimitedPositionCommand(drivetrain, localizer, new Pose(2, 64, 0), 500, 2500, robot.getVoltage()),
                         new PositionCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0.24), 0, 1000, robot.getVoltage()),
-                        new PositionLockCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0.26), sixConeAutoCommand::isFinished, robot.getVoltage())
+                        new InstantCommand(()->PositionLockCommand.setTargetPose(new Pose(3.5, 60.8, 0.26))),
+                        new PositionLockCommand(drivetrain, localizer, sixConeAutoCommand::isFinished, robot.getVoltage())
                                 .alongWith(new WaitCommand(1000).andThen(sixConeAutoCommand)),
                         new InstantCommand(() -> endtime = timer.seconds())
                 )

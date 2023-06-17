@@ -45,12 +45,6 @@ public class AbsoluteAnalogEncoder {
         return encoder;
     }
 
-    public static double reLinearize(double v){
-        double v2 = 3.3-v;
-        double alpha = v2 * ((3.3 * v2) - 16.335);
-        double beta = (v2 * v2) - (3.3 * v2) - 5.445;
-        return 3.3 - (alpha / beta);
-    }
 
     public double getVoltage(){
         return encoder.getVoltage();
