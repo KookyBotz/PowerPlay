@@ -18,7 +18,7 @@ import java.util.function.BooleanSupplier;
 
 public class PositionLockCommand extends CommandBase {
     public final double ALLOWED_TRANSLATIONAL_ERROR = 1.5;
-    public final double ALLOWED_HEADING_ERROR = Math.toRadians(1);
+    public final double ALLOWED_HEADING_ERROR = Math.toRadians(1.5);
 
     public final PIDFController hController = new PIDFController(0.5, 0, 0.25, 0);
     public final PIDFController mController = new PIDFController(0.2, 0, 0.2, 0);

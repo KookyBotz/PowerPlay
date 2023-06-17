@@ -5,6 +5,8 @@ import static java.lang.Math.cos;
 import static java.lang.Math.hypot;
 import static java.lang.Math.sin;
 
+import androidx.core.math.MathUtils;
+
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -18,7 +20,7 @@ public class PositionCommand extends CommandBase {
     public final double ALLOWED_TRANSLATIONAL_ERROR = 1;
     public final double ALLOWED_HEADING_ERROR = Math.toRadians(1);
 
-    public final PIDFController mController = new PIDFController(0.025, 0, 0.5, 0);
+    public final PIDFController mController = new PIDFController(0.03, 0, 0.5, 0);
     public final PIDFController hController = new PIDFController(0.4, 0, 0.2, 0);
 
     SwerveDrivetrain drivetrain;
@@ -51,7 +53,7 @@ public class PositionCommand extends CommandBase {
     }
 
     @Override
-    public void initialize(){
+    public void initialize() {
         Globals.USE_WHEEL_FEEDFORWARD = true;
     }
 
@@ -104,7 +106,6 @@ public class PositionCommand extends CommandBase {
 
         double power = mController.calculate(0, magnitude);
 
-//        if (Math.abs(magnitude) > 10) power = mLimiter.calculate(MathUtils.clamp(power, -1.414, 1.414));
 
         if (Math.abs(power) < 0.01) power = 0;
 
@@ -114,9 +115,10 @@ public class PositionCommand extends CommandBase {
 
         if (Math.abs(heading_component) < 0.015) heading_component = 0;
 
+        double max = 0.5;
         Pose powers = new Pose(
-                x_component / v * 12,
-                -y_component / v * 12,
+                MathUtils.clamp(x_component / v * 12, -max, max),
+                MathUtils.clamp(-y_component / v * 12, -max, max),
                 -heading_component / v * 12
         );
 

@@ -18,9 +18,9 @@ public class SixConeAutoCommand extends CommandBase {
     private final GrabPosition[] GRAB_POSITIONS = new GrabPosition[]{
             new GrabPosition(570, 0, 0.173, 0.37, 0),
             new GrabPosition(555, 0, 0.14, 0.37, 0),
-            new GrabPosition(550, 0, 0.105, 0.37, 0),
-            new GrabPosition(550, 0, 0.075, 0.37, 0),
-            new GrabPosition(560, 0, 0.04, 0.37, 0)
+            new GrabPosition(557, 0, 0.11, 0.37, 0),
+            new GrabPosition(557, 0, 0.08, 0.37, 0),
+            new GrabPosition(560, 0, 0.045, 0.37, 0)
     };
 
 

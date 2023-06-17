@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmode.auto;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
@@ -46,6 +48,8 @@ public class Left6 extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         CommandScheduler.getInstance().reset();
         Globals.AUTO = false;
         Globals.USING_IMU = true;
@@ -64,12 +68,15 @@ public class Left6 extends LinearOpMode {
 
         while (!isStarted()) {
             robot.read(drivetrain, intake, lift);
-            for (SwerveModule module : drivetrain.modules) {
-                module.setTargetRotation(Math.PI / 2);
-            }
+            drivetrain.frontLeftModule.setTargetRotation(Math.PI / 2);
+            drivetrain.frontRightModule.setTargetRotation(Math.PI / 2);
+            drivetrain.backLeftModule.setTargetRotation(-Math.PI / 2);
+            drivetrain.backRightModule.setTargetRotation(-Math.PI / 2);
             drivetrain.updateModules();
 
             telemetry.addLine("1+5 LEFT SIDE HIGH");
+            telemetry.addData("x", localizer.getPos().x);
+            telemetry.addData("y", localizer.getPos().y);
             telemetry.update();
 
             robot.clearBulkCache();
@@ -83,14 +90,14 @@ public class Left6 extends LinearOpMode {
         timer = new ElapsedTime();
 
         DoubleSupplier time_left = () -> 30 - timer.seconds();
-        SixConeAutoCommand auto = new SixConeAutoCommand(robot, drivetrain, intake, lift, time_left);
+        SixConeAutoCommand sixConeAutoCommand = new SixConeAutoCommand(robot, drivetrain, intake, lift, time_left);
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(2.5, 64, 0), 500, 2000, robot.getVoltage()),
-                        new PositionCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0), 0, 500, robot.getVoltage()),
-                        new PositionLockCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0.24), auto::isFinished, robot.getVoltage())
-                                .alongWith(new WaitCommand(1000).andThen(auto)),
+                        new PositionCommand(drivetrain, localizer, new Pose(2.75, 64, 0), 500, 2000, robot.getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0.24), 0, 1000, robot.getVoltage()),
+                        new PositionLockCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0.24), sixConeAutoCommand::isFinished, robot.getVoltage())
+                                .alongWith(new WaitCommand(1000).andThen(sixConeAutoCommand)),
                         new InstantCommand(() -> endtime = timer.seconds())
                 )
         );
@@ -105,8 +112,10 @@ public class Left6 extends LinearOpMode {
 
             double loop = System.nanoTime();
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-            telemetry.addLine(auto.getTelemetry());
+            telemetry.addLine(sixConeAutoCommand.getTelemetry());
             telemetry.addData("endtime", endtime);
+            telemetry.addData("x", localizer.getPos().x);
+            telemetry.addData("y", localizer.getPos().y);
             loopTime = loop;
             telemetry.update();
             robot.write(drivetrain, intake, lift);
