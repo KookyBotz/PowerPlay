@@ -115,7 +115,7 @@ public class PositionCommand extends CommandBase {
 
         if (Math.abs(heading_component) < 0.015) heading_component = 0;
 
-        double max = 0.5;
+        double max = 1;
         Pose powers = new Pose(
                 MathUtils.clamp(x_component / v * 12, -max, max),
                 MathUtils.clamp(-y_component / v * 12, -max, max),

@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -15,7 +14,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.common.commandbase.auto.HighPoleAutoCycleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.LimitedPositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionLockCommand;
@@ -23,8 +21,6 @@ import org.firstinspires.ftc.teamcode.common.commandbase.auto.SixConeAutoCommand
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveDrivetrain;
-import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SwerveModule;
-import org.firstinspires.ftc.teamcode.common.drive.geometry.GrabPosition;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.drive.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
@@ -32,9 +28,9 @@ import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 
 import java.util.function.DoubleSupplier;
 
-@Autonomous(name = "Left6")
+@Autonomous(name = "Right6")
 @Config
-public class Left6 extends LinearOpMode {
+public class Right6 extends LinearOpMode {
 
     private RobotHardware robot = RobotHardware.getInstance();
     private SwerveDrivetrain drivetrain;
@@ -95,11 +91,11 @@ public class Left6 extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new LimitedPositionCommand(drivetrain, localizer, new Pose(2, 64, 0), 500, 2500, robot.getVoltage()),
-                        new PositionCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0.24), 0, 1000, robot.getVoltage()),
-                        new PositionLockCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0.26), sixConeAutoCommand::isFinished, robot.getVoltage())
-                                .alongWith(new WaitCommand(1000).andThen(sixConeAutoCommand)),
-                        new InstantCommand(() -> endtime = timer.seconds())
+                        new PositionCommand(drivetrain, localizer, new Pose(0, -64, 0), 500, 5000, robot.getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(0, -60.8, -0.24), 0, 1000, robot.getVoltage())
+//                        new PositionLockCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0.26), sixConeAutoCommand::isFinished, robot.getVoltage())
+//                                .alongWith(new WaitCommand(1000).andThen(sixConeAutoCommand)),
+//                        new InstantCommand(() -> endtime = timer.seconds())
                 )
         );
 

@@ -61,7 +61,7 @@ public class LimitedPositionCommand extends CommandBase {
     @Override
     public void initialize() {
         Globals.USE_WHEEL_FEEDFORWARD = true;
-        slewRateLimiter = new SlewRateLimiter(50, -999, initialPose.y);
+        slewRateLimiter = new SlewRateLimiter(60, -999, initialPose.y);
     }
 
     @Override
@@ -111,7 +111,7 @@ public class LimitedPositionCommand extends CommandBase {
         double x_rotated = deltaPose.x * cos(robotPose.heading) - deltaPose.y * sin(robotPose.heading);
         double y_rotated = deltaPose.x * sin(robotPose.heading) + deltaPose.y * cos(robotPose.heading);
 
-        if (x_rotated > 0) x_rotated /= 2;
+        if (x_rotated > 0) x_rotated /= 2.5;
         if (x_rotated < 0) x_rotated *= 2;
 
         double magnitude = hypot(y_rotated, x_rotated);
