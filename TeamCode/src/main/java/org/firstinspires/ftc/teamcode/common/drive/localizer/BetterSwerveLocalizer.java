@@ -18,12 +18,14 @@ public class BetterSwerveLocalizer implements Localizer, com.acmerobotics.roadru
     public DoubleSupplier imu;
     public Pose2d poseEstimate;
     public Pose2d pastPoseEstimate;
+
     public BetterSwerveLocalizer(DoubleSupplier i, SwerveModule... mods){
         modules = Arrays.stream(mods).map(SwerveModule::asState).toArray(SwerveModule.SwerveModuleState[]::new);
         imu = i;
         poseEstimate = new Pose2d();
         pastPoseEstimate = new Pose2d();
     }
+
     @NonNull
     @Override
     public Pose2d getPoseEstimate() {

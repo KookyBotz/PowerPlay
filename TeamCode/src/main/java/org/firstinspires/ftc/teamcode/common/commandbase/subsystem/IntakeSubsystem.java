@@ -39,6 +39,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private PIDController controller;
 
     private double intakePosition = 0;
+    public int stackHeight = 4;
 
     public static double P = 0.0121;
     public static double I = 0.0;
@@ -48,6 +49,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public static double INTAKE_DELAY = 0.02;
 
     public final List<Boolean> coneDetected = new ArrayList<>();
+    public final double[] stackHeights = {0.045, 0.08, 0.115, 0.14, 0.173};
     private boolean hasCone = false;
     private boolean withinTolerance = false;
 
@@ -63,7 +65,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public boolean resetting = false;
     public boolean fallen = false;
-
+    public boolean stackGrabbing = false;
 
     public enum STATE {
         GOOD,
@@ -221,7 +223,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public void loop2 () {
         this.controller.setPID(P, I, D);
 
-
         fourbarMotionState = fourbarProfile.calculate(fourbarTimer.time());
         if (fourbarMotionState.v != 0) {
             setFourbar(fourbarMotionState.x);
@@ -327,6 +328,11 @@ public class IntakeSubsystem extends SubsystemBase {
         if (intakeMotionState.v == 0 && newPosition >= INTAKE_MIN - 5 && newPosition <= INTAKE_MAX) {
             targetPosition = newPosition;
         }
+    }
+
+    public void changeStackHeight(int input) {
+        stackHeight = Math.max(0, Math.min(4, stackHeight + input));
+        newProfile(stackHeights[stackHeight]);
     }
 
     public void newProfile(double targetPos, double max_v, double max_a, ProfileTarget target) {

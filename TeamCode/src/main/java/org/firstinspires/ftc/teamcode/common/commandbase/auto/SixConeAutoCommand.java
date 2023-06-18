@@ -48,14 +48,13 @@ public class SixConeAutoCommand extends CommandBase {
     public ElapsedTime stateTime;
 
     public int stackHeight = 5;
-    private final GrabPosition[] GRAB_POSITIONS = new GrabPosition[]{
+    private static final GrabPosition[] GRAB_POSITIONS = new GrabPosition[]{
             new GrabPosition(570, 0, 0.173, 0.37, 0),
             new GrabPosition(555, 0, 0.14, 0.37, 0),
             new GrabPosition(552, 0, 0.115, 0.37, 0),
             new GrabPosition(552, 0, 0.08, 0.37, 0),
             new GrabPosition(555, 0, 0.045, 0.37, 0)
     };
-
 
     private final DoubleSupplier TIME_LEFT;
 

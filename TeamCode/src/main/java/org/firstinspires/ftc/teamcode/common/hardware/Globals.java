@@ -11,11 +11,11 @@ public class Globals {
         RIGHT
     }
 
-    public static int LEFTSIDE_REGION_X = 220;
-    public static int LEFTSIDE_REGION_Y = 140;
+    public static int LEFTSIDE_REGION_X = 25;
+    public static int LEFTSIDE_REGION_Y = 170;
 
-    public static int RIGHTSIDE_REGION_X = 210;
-    public static int RIGHTSIDE_REGION_Y = 60;
+    public static int RIGHTSIDE_REGION_X = 200;
+    public static int RIGHTSIDE_REGION_Y = 165;
 
     public static int REGION_WIDTH = 75;
     public static int REGION_HEIGHT = 55;

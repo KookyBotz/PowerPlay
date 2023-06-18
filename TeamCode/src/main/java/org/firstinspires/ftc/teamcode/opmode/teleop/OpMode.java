@@ -18,6 +18,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.teleop_commands.TeleOpAutoDepositCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.newbot.teleop_commands.TeleOpAutoGrabCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.teleop_commands.TeleOpExtendCommand;
+import org.firstinspires.ftc.teamcode.common.commandbase.newbot.teleop_commands.TeleOpStackCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.common.drive.drive.swerve.SlewRateLimiter;
@@ -56,8 +58,10 @@ public class OpMode extends CommandOpMode {
     public static double str_r = 4;
     private boolean lock_robot_heading = false;
 
-    GamepadEx gamepadEx;
+    GamepadEx gamepadEx, gamepadEx2;
     Localizer localizer;
+
+    public static boolean autoGrabActive = false;
 
 
     @Override
@@ -74,6 +78,7 @@ public class OpMode extends CommandOpMode {
         intake = new IntakeSubsystem(robot);
         lift = new LiftSubsystem(robot);
         gamepadEx = new GamepadEx(gamepad1);
+        gamepadEx2 = new GamepadEx(gamepad2);
         localizer = new TwoWheelLocalizer(robot);
 
         robot.enabled = true;
@@ -95,9 +100,17 @@ public class OpMode extends CommandOpMode {
         gamepadEx.getGamepadButton(GamepadKeys.Button.START)
                 .whenPressed(() -> schedule(new TeleOpAutoDepositCommand(lift, intake, Junction.GROUND, depositSupplier)));
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenPressed(() -> schedule(new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.OPEN))));
+                .whenPressed(() -> schedule(new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.LATCHED))));
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(() -> schedule(new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.CLOSED))));
+                .whenPressed(() -> schedule(new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED))));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(() -> schedule(new InstantCommand(() -> intake.changeStackHeight(1))));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(() -> schedule(new InstantCommand(() -> intake.changeStackHeight(-1))));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
+                .whenPressed(() -> schedule(new TeleOpStackCommand(intake)));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
+                .whenPressed(() -> schedule(new TeleOpExtendCommand(lift, intake)));
     }
 
     @Override
@@ -159,15 +172,15 @@ public class OpMode extends CommandOpMode {
                 drive.heading
         );
 
+//        if (Math.abs(gamepad2.right_stick_y) )
+
         robot.loop(drive, drivetrain, intake, lift);
         robot.write(drivetrain, intake, lift);
         localizer.periodic();
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-        telemetry.addData("x", lift.getTargetPos());
-        telemetry.addData("c", lift.getPos());
-        telemetry.addData("p", localizer.getPos());
+        telemetry.addData("height", intake.stackHeight);
         loopTime = loop;
         telemetry.update();
 
