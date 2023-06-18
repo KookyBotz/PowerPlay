@@ -127,16 +127,16 @@ public class OpMode extends CommandOpMode {
         robot.read(drivetrain, intake, lift);
 
         if (gamepad1.right_stick_button && Globals.USING_IMU)
-            SwerveDrivetrain.imuOffset = robot.getAngle();
+            SwerveDrivetrain.imuOffset = robot.getAngle() + Math.PI;
 
 
         if (gamepad1.right_stick_y > 0.25) {
             lock_robot_heading = true;
-            targetHeading = 0;
+            targetHeading = Math.PI - SwerveDrivetrain.imuOffset;
         }
         if (gamepad1.right_stick_y < -0.25) {
             lock_robot_heading = true;
-            targetHeading = Math.PI;
+            targetHeading = 0 - SwerveDrivetrain.imuOffset;
         }
 
         double turn = gamepad1.right_trigger - gamepad1.left_trigger;
@@ -172,7 +172,11 @@ public class OpMode extends CommandOpMode {
                 drive.heading
         );
 
-//        if (Math.abs(gamepad2.right_stick_y) )
+
+        double leftY = gamepadEx2.getRightY();
+        if (Math.abs(leftY) > 0.1) {
+            intake.setSlideFactor(joystickScalar(leftY, 0.1));
+        }
 
         robot.loop(drive, drivetrain, intake, lift);
         robot.write(drivetrain, intake, lift);

@@ -325,7 +325,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setSlideFactor(double factor) {
         double slideAddition = INTAKE_MANUAL_FACTOR * factor;
         double newPosition = intakePosition + slideAddition;
-        if (intakeMotionState.v == 0 && newPosition >= INTAKE_MIN - 5 && newPosition <= INTAKE_MAX) {
+        if (intakeMotionState.v == 0 && newPosition >= INTAKE_MIN && newPosition <= INTAKE_MAX) {
             targetPosition = newPosition;
         }
     }
