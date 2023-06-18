@@ -16,14 +16,14 @@ public class PositionCommand extends CommandBase {
     public static double ALLOWED_HEADING_ERROR = Math.toRadians(1);
 
     public static double xP = 0.04;
-    public static double xD = 0.03;
+    public static double xD = 0.05;
     public static double xF = 0;
 
     public static double yP = 0.04;
-    public static double yD = 0.03;
+    public static double yD = 0.05;
     public static double yF = 0;
 
-    public static double hP = 0.7;
+    public static double hP = 0.6;
     public static double hD = 0.2;
     public static double hF = 0;
 
@@ -117,6 +117,9 @@ public class PositionCommand extends CommandBase {
         double y_power = -y_rotated < -max_power ? -max_power :
                 Math.min(-y_rotated, max_power);
         double heading_power = powers.heading;
+
+        if(Math.abs(x_power) < 0.01) x_power = 0;
+        if(Math.abs(y_power) < 0.01) y_power = 0;
 
         return new Pose(-y_power / v * 12, x_power / v * 12, -heading_power / v * 12);
     }

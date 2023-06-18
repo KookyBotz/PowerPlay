@@ -22,7 +22,7 @@ public class SixConeAutoCommand extends CommandBase {
 
     private final Pose RISKY_CYCLE_POS = new Pose(3.5, 60.8, 0.26);
     private final Pose RAM_POSE_START = new Pose(3.5, 40, 0);
-    private final Pose RAM_POSE_END = new Pose(3, 70, 0);
+    private final Pose RAM_POSE_END = new Pose(3, 68, 0);
 
     enum STATE {
         RISKY, RAM, RISKY2, RAM2, RISKY3, PARK;
@@ -50,7 +50,7 @@ public class SixConeAutoCommand extends CommandBase {
     private final GrabPosition[] GRAB_POSITIONS = new GrabPosition[]{
             new GrabPosition(570, 0, 0.173, 0.37, 0),
             new GrabPosition(555, 0, 0.14, 0.37, 0),
-            new GrabPosition(552, 0, 0.11, 0.37, 0),
+            new GrabPosition(552, 0, 0.115, 0.37, 0),
             new GrabPosition(552, 0, 0.08, 0.37, 0),
             new GrabPosition(555, 0, 0.045, 0.37, 0)
     };
@@ -117,8 +117,9 @@ public class SixConeAutoCommand extends CommandBase {
             CommandScheduler.getInstance().schedule(
                     new SequentialCommandGroup(
                             new InstantCommand(() -> PositionLockCommand.setTargetPose(new Pose())),
-                            new PositionCommand(drive, localizer, RAM_POSE_START, 0, 1500, robot.getVoltage()),
+                            new PositionCommand(drive, localizer, RAM_POSE_START, 0, 1000, robot.getVoltage()),
                             new PositionCommand(drive, localizer, RAM_POSE_END, 0, 1500, robot.getVoltage()),
+                            new PositionCommand(drive, localizer, RISKY_CYCLE_POS, 0, 1000, robot.getVoltage()),
                             new InstantCommand(() -> PositionLockCommand.setTargetPose(RISKY_CYCLE_POS)),
                             new InstantCommand(() -> state = state.next())
                     )

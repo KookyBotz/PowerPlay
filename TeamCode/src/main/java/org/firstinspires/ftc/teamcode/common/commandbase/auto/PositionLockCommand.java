@@ -13,23 +13,24 @@ import java.util.function.BooleanSupplier;
 
 public class PositionLockCommand extends CommandBase {
     public final double ALLOWED_TRANSLATIONAL_ERROR = 1;
-    public final double ALLOWED_HEADING_ERROR = Math.toRadians(2);
+    public final double ALLOWED_HEADING_ERROR = Math.toRadians(1);
 
-    public static double xP = 0.04;
+    public static double xP = 0.06;
     public static double xD = 0.03;
     public static double xF = 0;
 
-    public static double yP = 0.04;
+    public static double yP = 0.06;
     public static double yD = 0.03;
     public static double yF = 0;
 
-    public static double hP = 0.7;
+    public static double hP = 1;
     public static double hD = 0.2;
     public static double hF = 0;
 
     public static PIDFController xController = new PIDFController(xP, 0.0, xD, xF);
     public static PIDFController yController = new PIDFController(yP, 0.0, yD, yF);
     public static PIDFController hController = new PIDFController(hP, 0.0, hD, hF);
+    public static double max_power = 1;
 
     private final SwerveDrivetrain drivetrain;
     private final Localizer localizer;
@@ -70,7 +71,7 @@ public class PositionLockCommand extends CommandBase {
 
         if (!reached) lockedTimer.reset();
 
-        drivetrain.setLocked(lockedTimer.milliseconds() > 500);
+        drivetrain.setLocked(lockedTimer.milliseconds() > 1000);
         drivetrain.set(reached ? new Pose() : powers);
     }
 
@@ -101,7 +102,12 @@ public class PositionLockCommand extends CommandBase {
         );
         double x_rotated = powers.x * Math.cos(robotPose.heading) - powers.y * Math.sin(robotPose.heading);
         double y_rotated = powers.x * Math.sin(robotPose.heading) + powers.y * Math.cos(robotPose.heading);
+        double x_power = -x_rotated < -max_power ? -max_power :
+                Math.min(-x_rotated, max_power);
+        double y_power = -y_rotated < -max_power ? -max_power :
+                Math.min(-y_rotated, max_power);
+        double heading_power = powers.heading;
 
-        return new Pose(-y_rotated / v * 12, x_rotated / v * 12, -powers.heading / v * 12);
+        return new Pose(-y_power / v * 12, x_power / v * 12, -heading_power / v * 12);
     }
 }

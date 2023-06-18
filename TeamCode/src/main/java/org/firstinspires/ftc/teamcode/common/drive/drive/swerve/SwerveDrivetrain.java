@@ -32,7 +32,7 @@ public class SwerveDrivetrain implements Drivetrain {
     double[] wa = new double[4];
     double max = 0.0;
 
-    public final double minPow = 0.09;
+    public final double minPow = 0.1;
     public static double imuOffset = 0.0;
 
     private boolean locked = false;

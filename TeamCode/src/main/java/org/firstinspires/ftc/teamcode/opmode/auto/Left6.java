@@ -90,7 +90,7 @@ public class Left6 extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(3, 70, 0), 500, 2500, robot.getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(3, 68, 0), 500, 2500, robot.getVoltage()),
                         new PositionCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0.24), 0, 1000, robot.getVoltage()),
                         new InstantCommand(()->PositionLockCommand.setTargetPose(new Pose(3.5, 60.8, 0.26))),
                         new PositionLockCommand(drivetrain, localizer, sixConeAutoCommand::isFinished, robot.getVoltage())
