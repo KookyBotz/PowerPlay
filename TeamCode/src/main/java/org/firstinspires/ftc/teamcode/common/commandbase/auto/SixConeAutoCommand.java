@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsystem;
@@ -20,9 +21,9 @@ import java.util.function.DoubleSupplier;
 
 public class SixConeAutoCommand extends CommandBase {
 
-    private final Pose RISKY_CYCLE_POS = new Pose(-60.8, 3, 0.26 - Math.PI/2);
-    private final Pose RAM_POSE_START = new Pose(-40, 2, -Math.PI/2);
-    private final Pose RAM_POSE_END = new Pose(-68, 3, -Math.PI/2);
+    private final Pose RISKY_CYCLE_POS = new Pose(-60.8, 3, 0.26 - Math.PI / 2);
+    private final Pose RAM_POSE_START = new Pose(-40, 2, -Math.PI / 2);
+    private final Pose RAM_POSE_END = new Pose(-68, 3, -Math.PI / 2);
 
     enum STATE {
         RISKY, RAM, RISKY2, RAM2, RISKY3, PARK;
@@ -65,6 +66,7 @@ public class SixConeAutoCommand extends CommandBase {
     public boolean inPosition = false;
     public boolean intaking = false;
     public boolean ramming = false;
+    public boolean entered = false;
 
     private String log = "init";
 
@@ -101,29 +103,36 @@ public class SixConeAutoCommand extends CommandBase {
         if (inPosition) stateTime.reset();
         if (ramming) stateTime.reset();
 
-        if (inPosition && state != STATE.RAM && state != STATE.RAM2) ramming = false;
-
         // definitely not chilling
         if ((state == STATE.RISKY || state == STATE.RISKY2 || state == STATE.RISKY3) && stateTime.seconds() > 3) {
             log += "\n yikes, entering" + state.next().toString();
             state = state.next();
+            entered = true;
             stateTime.reset();
         }
 
         // haha auto go brr
-        if ((state == STATE.RAM || state == STATE.RAM2) && !ramming) {
+        if ((state == STATE.RAM || state == STATE.RAM2) && !ramming && (entered || stateTime.seconds() > 3) && TIME_LEFT.getAsDouble() > 6) {
+            stateTime.reset();
             log += "entering " + state;
             ramming = true;
+            entered = false;
             CommandScheduler.getInstance().schedule(
                     new SequentialCommandGroup(
                             new InstantCommand(() -> PositionLockCommand.setTargetPose(new Pose())),
                             new PositionCommand(drive, localizer, RAM_POSE_START, 0, 1500, robot.getVoltage()),
                             new PositionCommand(drive, localizer, RAM_POSE_END, 0, 1500, robot.getVoltage()),
                             new PositionCommand(drive, localizer, RISKY_CYCLE_POS, 0, 1000, robot.getVoltage()),
-                            new InstantCommand(() -> PositionLockCommand.setTargetPose(RISKY_CYCLE_POS)),
-                            new InstantCommand(() -> state = state.next())
+                            new InstantCommand(() -> ramming = false),
+                            new InstantCommand(() -> PositionLockCommand.setTargetPose(RISKY_CYCLE_POS))
                     )
             );
+        }
+
+        // we good again
+        if ((state == STATE.RAM || state == STATE.RAM2) && inPosition && PositionLockCommand.getTargetPose() == RISKY_CYCLE_POS) {
+            state = state.next();
+            stateTime.reset();
         }
 
         // chilling
@@ -164,24 +173,34 @@ public class SixConeAutoCommand extends CommandBase {
             }
 
             //deposit
-            if (inPosition && canDeposit && TIME_LEFT.getAsDouble() >= 2.5) {
+            if (inPosition && canDeposit && TIME_LEFT.getAsDouble() >= 3) {
                 log += "\n deposit";
                 DEPOSIT_COMMAND = new CancelableDepositCommand(lift, this);
-                CommandScheduler.getInstance().schedule(DEPOSIT_COMMAND);
                 canDeposit = false;
+                if (stackHeight == 0) {
+                    CommandScheduler.getInstance().schedule(
+                            new WaitUntilCommand(() -> TIME_LEFT.getAsDouble() <= 3)
+                                    .andThen(DEPOSIT_COMMAND)
+                    );
+                } else {
+                    CommandScheduler.getInstance().schedule(DEPOSIT_COMMAND);
+                }
             }
         }
     }
 
     @Override
     public boolean isFinished() {
-        return TIME_LEFT.getAsDouble() < 2;
+        return TIME_LEFT.getAsDouble() < 2 || state == STATE.PARK;
     }
 
     @Override
     public void end(boolean interrupted) {
+        log += "\n parking!";
         if (canRetractIntake) CommandScheduler.getInstance().schedule(new RetractIntakeCommand(intake));
         if (canRetractDeposit) CommandScheduler.getInstance().schedule(new RetractDepositCommand(lift));
+        PositionLockCommand.setTargetPose(new Pose());
+        CommandScheduler.getInstance().schedule(new PositionCommand(drive, localizer, new Pose(-52, 3, 0), 0, 2000, robot.getVoltage()));
     }
 
     public String getTelemetry() {

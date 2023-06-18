@@ -15,7 +15,10 @@ import java.util.function.BooleanSupplier;
 
 public class PositionLockCommand extends CommandBase {
     public final double ALLOWED_TRANSLATIONAL_ERROR = 1;
-    public final double ALLOWED_HEADING_ERROR = Math.toRadians(2);
+    public final double ALLOWED_HEADING_ERROR = Math.toRadians(1.5);
+
+    public final double PUSHED_TRANSLATIONAL_ERROR = 2;
+    public final double PUSHED_HEADING_ERROR = Math.toRadians(3);
 
     public static double xP = 0.06;
     public static double xD = 0.03;
@@ -57,6 +60,10 @@ public class PositionLockCommand extends CommandBase {
         PositionLockCommand.targetPose = target;
     }
 
+    public static Pose getTargetPose() {
+        return PositionLockCommand.targetPose;
+    }
+
     @Override
     public void initialize() {
         Globals.USE_WHEEL_FEEDFORWARD = true;
@@ -96,7 +103,13 @@ public class PositionLockCommand extends CommandBase {
     public Pose goToPosition(Pose robotPose, Pose targetPose) {
         Pose deltaPose = relDistanceToTarget(robotPose, targetPose);
 
-        reached = Math.hypot(deltaPose.x, deltaPose.y) < ALLOWED_TRANSLATIONAL_ERROR && Math.abs(deltaPose.heading) < ALLOWED_HEADING_ERROR;
+        if (Math.hypot(deltaPose.x, deltaPose.y) < ALLOWED_TRANSLATIONAL_ERROR && Math.abs(deltaPose.heading) < ALLOWED_HEADING_ERROR) {
+            reached = true;
+        }
+
+        if (Math.hypot(deltaPose.x, deltaPose.y) > PUSHED_TRANSLATIONAL_ERROR || Math.abs(deltaPose.heading) > PUSHED_HEADING_ERROR) {
+            reached = false;
+        }
 
         Pose powers = new Pose(
                 xController.calculate(0, deltaPose.x),
