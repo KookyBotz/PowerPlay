@@ -64,10 +64,10 @@ public class Left6 extends LinearOpMode {
 
         while (!isStarted()) {
             robot.read(drivetrain, intake, lift);
-            drivetrain.frontLeftModule.setTargetRotation(Math.PI / 2);
-            drivetrain.frontRightModule.setTargetRotation(Math.PI / 2);
-            drivetrain.backLeftModule.setTargetRotation(-Math.PI / 2);
-            drivetrain.backRightModule.setTargetRotation(-Math.PI / 2);
+            drivetrain.frontLeftModule.setTargetRotation(0);
+            drivetrain.frontRightModule.setTargetRotation(0);
+            drivetrain.backLeftModule.setTargetRotation(0);
+            drivetrain.backRightModule.setTargetRotation(0);
             drivetrain.updateModules();
 
             telemetry.addLine("1+5 LEFT SIDE HIGH");
@@ -90,9 +90,9 @@ public class Left6 extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(3, 68, 0), 500, 2500, robot.getVoltage()),
-                        new PositionCommand(drivetrain, localizer, new Pose(3.5, 60.8, 0.24), 0, 1000, robot.getVoltage()),
-                        new InstantCommand(()->PositionLockCommand.setTargetPose(new Pose(3.5, 60.8, 0.26))),
+                        new PositionCommand(drivetrain, localizer, new Pose(-68, 4, 0), 500, 2500, robot.getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(-60.8, 4, 0.24 - Math.PI / 2), 0, 2000, robot.getVoltage()),
+                        new InstantCommand(() -> PositionLockCommand.setTargetPose(new Pose(-60.8, 4, 0.26 - Math.PI / 2))),
                         new PositionLockCommand(drivetrain, localizer, sixConeAutoCommand::isFinished, robot.getVoltage())
                                 .alongWith(new WaitCommand(1000).andThen(sixConeAutoCommand)),
                         new InstantCommand(() -> endtime = timer.seconds())

@@ -21,7 +21,7 @@ public class CancelableDepositCommand extends SequentialCommandGroup {
                 new LatchCommand(lift, LiftSubsystem.LatchState.INTERMEDIATE),
                 new WaitCommand(50),
                 new InstantCommand(() -> command.canRetractDeposit = true),
-                new WaitUntilCommand(() -> lift.getPos() > 450),
+                new WaitUntilCommand(() -> lift.getPos() > 510),
                 new InstantCommand(() -> command.canRetractDeposit = false),
                 new WaitUntilCommand(lift::isWithinTolerance),
                 new WaitCommand(100),

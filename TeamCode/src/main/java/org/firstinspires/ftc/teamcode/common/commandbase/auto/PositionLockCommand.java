@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.common.commandbase.auto;
 
+import androidx.core.math.MathUtils;
+
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -13,7 +15,7 @@ import java.util.function.BooleanSupplier;
 
 public class PositionLockCommand extends CommandBase {
     public final double ALLOWED_TRANSLATIONAL_ERROR = 1;
-    public final double ALLOWED_HEADING_ERROR = Math.toRadians(1);
+    public final double ALLOWED_HEADING_ERROR = Math.toRadians(2);
 
     public static double xP = 0.06;
     public static double xD = 0.03;
@@ -23,14 +25,15 @@ public class PositionLockCommand extends CommandBase {
     public static double yD = 0.03;
     public static double yF = 0;
 
-    public static double hP = 1;
-    public static double hD = 0.2;
+    public static double hP = 0.6;
+    public static double hD = 0.3;
     public static double hF = 0;
 
     public static PIDFController xController = new PIDFController(xP, 0.0, xD, xF);
     public static PIDFController yController = new PIDFController(yP, 0.0, yD, yF);
     public static PIDFController hController = new PIDFController(hP, 0.0, hD, hF);
     public static double max_power = 1;
+    public static double max_heading = 0.5;
 
     private final SwerveDrivetrain drivetrain;
     private final Localizer localizer;
@@ -106,7 +109,7 @@ public class PositionLockCommand extends CommandBase {
                 Math.min(-x_rotated, max_power);
         double y_power = -y_rotated < -max_power ? -max_power :
                 Math.min(-y_rotated, max_power);
-        double heading_power = powers.heading;
+        double heading_power = MathUtils.clamp(powers.heading, -max_heading, max_heading);
 
         return new Pose(-y_power / v * 12, x_power / v * 12, -heading_power / v * 12);
     }

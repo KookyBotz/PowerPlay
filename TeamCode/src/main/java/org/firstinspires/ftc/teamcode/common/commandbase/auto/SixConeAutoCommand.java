@@ -20,9 +20,9 @@ import java.util.function.DoubleSupplier;
 
 public class SixConeAutoCommand extends CommandBase {
 
-    private final Pose RISKY_CYCLE_POS = new Pose(3.5, 60.8, 0.26);
-    private final Pose RAM_POSE_START = new Pose(3.5, 40, 0);
-    private final Pose RAM_POSE_END = new Pose(3, 68, 0);
+    private final Pose RISKY_CYCLE_POS = new Pose(-60.8, 3, 0.26 - Math.PI/2);
+    private final Pose RAM_POSE_START = new Pose(-40, 2, -Math.PI/2);
+    private final Pose RAM_POSE_END = new Pose(-68, 3, -Math.PI/2);
 
     enum STATE {
         RISKY, RAM, RISKY2, RAM2, RISKY3, PARK;
@@ -117,7 +117,7 @@ public class SixConeAutoCommand extends CommandBase {
             CommandScheduler.getInstance().schedule(
                     new SequentialCommandGroup(
                             new InstantCommand(() -> PositionLockCommand.setTargetPose(new Pose())),
-                            new PositionCommand(drive, localizer, RAM_POSE_START, 0, 1000, robot.getVoltage()),
+                            new PositionCommand(drive, localizer, RAM_POSE_START, 0, 1500, robot.getVoltage()),
                             new PositionCommand(drive, localizer, RAM_POSE_END, 0, 1500, robot.getVoltage()),
                             new PositionCommand(drive, localizer, RISKY_CYCLE_POS, 0, 1000, robot.getVoltage()),
                             new InstantCommand(() -> PositionLockCommand.setTargetPose(RISKY_CYCLE_POS)),

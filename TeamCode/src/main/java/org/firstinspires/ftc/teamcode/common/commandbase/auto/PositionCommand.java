@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.common.commandbase.auto;
 
+import androidx.core.math.MathUtils;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
@@ -24,13 +26,14 @@ public class PositionCommand extends CommandBase {
     public static double yF = 0;
 
     public static double hP = 0.6;
-    public static double hD = 0.2;
+    public static double hD = 0.3;
     public static double hF = 0;
 
     public static PIDFController xController = new PIDFController(xP, 0.0, xD, xF);
     public static PIDFController yController = new PIDFController(yP, 0.0, yD, yF);
     public static PIDFController hController = new PIDFController(hP, 0.0, hD, hF);
     public static double max_power = 0.7;
+    public static double max_heading = 0.5;
 
     Drivetrain drivetrain;
     Localizer localizer;
@@ -116,7 +119,7 @@ public class PositionCommand extends CommandBase {
                 Math.min(-x_rotated, max_power);
         double y_power = -y_rotated < -max_power ? -max_power :
                 Math.min(-y_rotated, max_power);
-        double heading_power = powers.heading;
+        double heading_power = MathUtils.clamp(powers.heading, -max_heading, max_heading);
 
         if(Math.abs(x_power) < 0.01) x_power = 0;
         if(Math.abs(y_power) < 0.01) y_power = 0;
