@@ -71,8 +71,7 @@ public class RobotHardware {
     private double voltage = 0.0;
     private ElapsedTime voltageTimer;
 
-    public OpenCvCamera cameraLeft;
-    public OpenCvCamera cameraRight;
+    public OpenCvCamera backCamera;
 
     public DigitalChannel clawSensor;
     public SleeveDetection sleeveDetection;
@@ -153,35 +152,18 @@ public class RobotHardware {
 
         if (Globals.AUTO) {
             sleeveDetection = new SleeveDetection();
+            backCamera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
+            backCamera.setPipeline(sleeveDetection);
+            backCamera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+                @Override
+                public void onOpened() {
+                    backCamera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                }
 
-            if (Globals.SIDE == Globals.Side.LEFT) {
-                cameraLeft = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"));
-                cameraLeft.setPipeline(sleeveDetection);
-                cameraLeft.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-                    @Override
-                    public void onOpened() {
-                        cameraLeft.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-                    }
-
-                    @Override
-                    public void onError(int errorCode) {
-                    }
-                });
-            } else {
-                int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-                cameraRight = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-                cameraRight.setPipeline(sleeveDetection);
-                cameraRight.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-                    @Override
-                    public void onOpened() {
-                        cameraRight.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-                    }
-
-                    @Override
-                    public void onError(int errorCode) {
-                    }
-                });
-            }
+                @Override
+                public void onError(int errorCode) {
+                }
+            });
         }
         voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
     }
@@ -274,12 +256,7 @@ public class RobotHardware {
     }
 
     public void stopCameraStream() {
-        if (Globals.SIDE == Globals.Side.LEFT) {
-            cameraLeft.closeCameraDeviceAsync(() -> System.out.println("Stopped Left Camera"));
-        } else {
-            cameraRight.closeCameraDeviceAsync(() -> System.out.println("Stopped Right Camera"));
-
-        }
+        backCamera.closeCameraDeviceAsync(() -> System.out.println("Stopped Back Camera"));
     }
 
     public double getVoltage() {

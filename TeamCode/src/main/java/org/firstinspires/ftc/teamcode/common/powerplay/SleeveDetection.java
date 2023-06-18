@@ -36,7 +36,7 @@ public class SleeveDetection extends OpenCvPipeline {
 
     // Running variable storing the parking position
     private volatile ParkingPosition position = ParkingPosition.LEFT;
-    private boolean isLeft = true;
+    private boolean isLeft;
 
     public SleeveDetection() {
         isLeft = (Side.LEFT == Globals.SIDE);
