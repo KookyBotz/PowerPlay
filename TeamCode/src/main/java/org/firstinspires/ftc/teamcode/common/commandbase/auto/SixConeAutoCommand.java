@@ -26,25 +26,25 @@ public class SixConeAutoCommand extends CommandBase {
     private final Pose RAM_POSE_END = new Pose(-68, 3, -Math.PI / 2);
 
     enum STATE {
-        RISKY, RAM, RISKY2, RAM2, RISKY3, PARK;
+        CYCLE, RAM, CYCLE2, RAM2, CYCLE3, PARK;
 
         public STATE next() {
             switch (this) {
-                case RISKY:
+                case CYCLE:
                     return RAM;
                 case RAM:
-                    return RISKY2;
-                case RISKY2:
+                    return CYCLE2;
+                case CYCLE2:
                     return RAM2;
                 case RAM2:
-                    return RISKY3;
+                    return CYCLE3;
                 default:
                     return PARK;
             }
         }
     }
 
-    public STATE state = STATE.RISKY;
+    public STATE state = STATE.CYCLE;
     public ElapsedTime stateTime;
 
     public int stackHeight = 5;
@@ -104,7 +104,7 @@ public class SixConeAutoCommand extends CommandBase {
         if (ramming) stateTime.reset();
 
         // definitely not chilling
-        if ((state == STATE.RISKY || state == STATE.RISKY2 || state == STATE.RISKY3) && stateTime.seconds() > 3) {
+        if ((state == STATE.CYCLE || state == STATE.CYCLE2 || state == STATE.CYCLE3) && stateTime.seconds() > 3) {
             log += "\n yikes, entering" + state.next().toString();
             state = state.next();
             entered = true;
@@ -136,7 +136,7 @@ public class SixConeAutoCommand extends CommandBase {
         }
 
         // chilling
-        if (state == STATE.RISKY || state == STATE.RISKY2 || state == STATE.RISKY3) {
+        if (state == STATE.CYCLE || state == STATE.CYCLE2 || state == STATE.CYCLE3) {
             // can we intake?
             if (inPosition && !canDeposit && !intaking && TIME_LEFT.getAsDouble() >= 4 && stackHeight > 0) canIntake = true;
 
