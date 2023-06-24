@@ -140,18 +140,18 @@ public class SixConeAutoCommand extends CommandBase {
         PositionLockCommand.setTargetPose(new Pose());
 
         if (sleevePosition == ParkingPosition.CENTER) {
-            CommandScheduler.getInstance().schedule(new PositionCommand(drive, localizer, new Pose(-52, 3 * getModifier(), 0), 0, 1000, robot.getVoltage()));
+            CommandScheduler.getInstance().schedule(new PositionCommand(drive, localizer, new Pose(-52, 3 * getModifier(), 0), 250, 1000, robot.getVoltage()));
         }
         if (sleevePosition == ParkingPosition.LEFT) {
             CommandScheduler.getInstance().schedule(
                     new PositionCommand(drive, localizer, new Pose(-52, 3 * getModifier(), 0), 0, 1000, robot.getVoltage())
-                            .andThen(new PositionCommand(drive, localizer, new Pose(-52, 27 * getModifier(), 0), 0, 1000, robot.getVoltage()))
+                            .andThen(new PositionCommand(drive, localizer, new Pose(-52, 27 * getModifier(), 0), 250, 1000, robot.getVoltage()))
             );
         }
         if (sleevePosition == ParkingPosition.RIGHT) {
             CommandScheduler.getInstance().schedule(
                     new PositionCommand(drive, localizer, new Pose(-52, 3 * getModifier(), 0), 0, 1000, robot.getVoltage())
-                            .andThen(new PositionCommand(drive, localizer, new Pose(-52, -21 * getModifier(), 0), 0, 1000, robot.getVoltage()))
+                            .andThen(new PositionCommand(drive, localizer, new Pose(-52, -21 * getModifier(), 0), 250, 1000, robot.getVoltage()))
             );
         }
     }

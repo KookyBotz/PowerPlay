@@ -32,7 +32,7 @@ public class PositionCommand extends CommandBase {
     public static PIDFController xController = new PIDFController(xP, 0.0, xD, xF);
     public static PIDFController yController = new PIDFController(yP, 0.0, yD, yF);
     public static PIDFController hController = new PIDFController(hP, 0.0, hD, hF);
-    public static double max_power = 0.7;
+    public static double max_power = 1;
     public static double max_heading = 0.5;
 
     Drivetrain drivetrain;

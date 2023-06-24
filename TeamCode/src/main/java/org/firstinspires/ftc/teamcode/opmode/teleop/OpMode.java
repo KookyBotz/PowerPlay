@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.normalizeRadians;
+import static org.firstinspires.ftc.teamcode.common.hardware.Globals.INTAKE_MANUAL_FACTOR;
+import static org.firstinspires.ftc.teamcode.common.hardware.Globals.INTAKE_MAX;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -106,7 +108,7 @@ public class OpMode extends CommandOpMode {
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(() -> schedule(new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED))));
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(() -> schedule(new InstantCommand(() -> robot.intakeEncoder.reset())));
+                .whenPressed(() -> schedule(new InstantCommand(() -> lift.setReady(true))));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenPressed(() -> schedule(new InstantCommand(() -> intake.changeStackHeight(1))));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
@@ -116,6 +118,37 @@ public class OpMode extends CommandOpMode {
                         new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.FALLEN)),
                         new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS)),
                         new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)))));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+                .whenPressed(() -> schedule(new SequentialCommandGroup(
+                        new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.FALLEN)),
+                        new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.INWARDS)),
+                        new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)))));
+
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+                .toggleWhenPressed(new SequentialCommandGroup(
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS)),
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.OPEN))),
+                        new SequentialCommandGroup(
+                                new SequentialCommandGroup(
+                                        new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.FALLEN)),
+                                        new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS)),
+                                        new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
+                                        new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.OPEN)))));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+                .toggleWhenPressed(new SequentialCommandGroup(
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS)),
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.OPEN))),
+                        new SequentialCommandGroup(
+                                new SequentialCommandGroup(
+                                        new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.FALLEN)),
+                                        new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.INWARDS)),
+                                        new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
+                                        new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.OPEN)))));
+
         gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(() -> schedule(new TeleOpStackCommand(intake)));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
@@ -183,10 +216,14 @@ public class OpMode extends CommandOpMode {
 
         double leftY = gamepadEx2.getRightY();
         if (Math.abs(leftY) > 0.1) {
-            intake.setSlideFactor(joystickScalar(leftY, 0.1));
+            double slideAddition = INTAKE_MANUAL_FACTOR * leftY;
+            double newPosition = intake.getPos() + slideAddition;
+            if (newPosition >= 0) {
+                intake.setSlideFactor(joystickScalar(leftY, 0.1));
+            }
         }
 
-        while (gamepad1.dpad_up) {
+        if (gamepad1.dpad_up) {
             schedule(new InstantCommand(() -> intake.retractReset()));
         }
 
@@ -204,7 +241,7 @@ public class OpMode extends CommandOpMode {
     }
 
     private double joystickScalar(double num, double min) {
-        return joystickScalar(num, min, 0.66, 3);
+        return joystickScalar(num, min, 0.66, 4);
     }
 
     private double joystickScalar(double n, double m, double l, double a) {

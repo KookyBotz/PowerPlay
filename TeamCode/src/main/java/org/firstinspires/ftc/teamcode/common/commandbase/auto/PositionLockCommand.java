@@ -81,7 +81,7 @@ public class PositionLockCommand extends CommandBase {
 
         if (!reached) lockedTimer.reset();
 
-        drivetrain.setLocked(lockedTimer.milliseconds() > 1000);
+        drivetrain.setLocked(lockedTimer.milliseconds() > 500);
         drivetrain.set(reached ? new Pose() : powers);
     }
 

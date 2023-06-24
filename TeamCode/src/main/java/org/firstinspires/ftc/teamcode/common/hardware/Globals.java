@@ -14,8 +14,8 @@ public class Globals {
     public static int LEFTSIDE_REGION_X = 25;
     public static int LEFTSIDE_REGION_Y = 170;
 
-    public static int RIGHTSIDE_REGION_X = 200;
-    public static int RIGHTSIDE_REGION_Y = 165;
+    public static int RIGHTSIDE_REGION_X = 25;
+    public static int RIGHTSIDE_REGION_Y = 175;
 
     public static int REGION_WIDTH = 75;
     public static int REGION_HEIGHT = 55;
@@ -58,13 +58,14 @@ public class Globals {
     public static double INTAKE_FOURBAR_MAX_D_UP = 7;
     public static double INTAKE_FOURBAR_MAX_D_DOWN = 7;
 
-    public static double INTAKE_CLAW_OPEN = 0.39;
+    public static double INTAKE_CLAW_OPEN = 0.4 ;
     public static double INTAKE_CLAW_CLOSED = 0.31;
     public static double INTAKE_CLAW_OPEN_AUTO = 0.43;
     public static double INTAKE_CLAW_CLEAR = 0.5;
 
     public static double INTAKE_PIVOT_LOW = 0.355;
     public static double INTAKE_PIVOT_FLAT = 0.5125;
+    public static double INTAKE_PIVOT_GRAB_OFFSET = 0.5175;
     public static double INTAKE_PIVOT_FLAT_AUTO = 0.5125;
     public static double INTAKE_PIVOT_PRE_TRANSFER = 0.63;
     public static double INTAKE_PIVOT_TRANSFER = 0.62;
@@ -78,10 +79,10 @@ public class Globals {
     public static double INTAKE_FOURBAR_TRANSFER = 0.472;
     public static double INTAKE_FOURBAR_INTERMEDIATE = 0.33;
     public static double INTAKE_FOURBAR_CLEAR_POS = 0.38;
-    public static double INTAKE_FOURBAR_INTAKE = 0.035;
+    public static double INTAKE_FOURBAR_INTAKE = 0.036;
     public static double INTAKE_FOURBAR_LOW = 0.359;
     public static double INTAKE_FOURBAR_GROUND = 0.06;
-    public static double INTAKE_FOURBAR_FALLEN = 0.085;
+    public static double INTAKE_FOURBAR_FALLEN = 0.1;
 
     public static double F_OFFSET = 0.0;
 

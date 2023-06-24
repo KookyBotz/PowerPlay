@@ -109,7 +109,8 @@ public class IntakeSubsystem extends SubsystemBase {
         LOW,
         FALLEN,
         TRANSFER,
-        PRE_TRANSFER
+        PRE_TRANSFER,
+        GRAB_OFFSET
     }
 
     // thanks aabhas <3
@@ -159,6 +160,8 @@ public class IntakeSubsystem extends SubsystemBase {
             case PRE_TRANSFER:
                 robot.pivot.setPosition(INTAKE_PIVOT_PRE_TRANSFER + pivotOffset);
                 break;
+            case GRAB_OFFSET:
+                robot.pivot.setPosition(INTAKE_PIVOT_GRAB_OFFSET + pivotOffset);
         }
     }
 
@@ -262,6 +265,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void write() {
         if(robot.enabled) {
             try {
+                if(!AUTO) power = Math.min(power, 0.7);
                 robot.extension.set(power);
             } catch (Exception e) {
             }
@@ -281,7 +285,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void retractReset() {
         robot.intakeEncoder.reset();
-        setSlideFactor(-0.5);
+        setSlideFactor(0.5);
     }
 
     public void setPivot(double pos){

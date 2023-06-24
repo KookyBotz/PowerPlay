@@ -31,11 +31,10 @@ public class TeleOpAutoGrabCommand extends SequentialCommandGroup {
                                     new WaitUntilCommand(intake::hasCone),
                                     new ConditionalCommand(
                                             new SequentialCommandGroup(
-                                                    new WaitCommand(5),
                                                     new ClawCommand(intake, IntakeSubsystem.ClawState.CLOSED),
                                                     new WaitCommand(35),
                                                     new InstantCommand(() -> OpMode.autoGrabActive = false),
-                                                    new InstantCommand(() -> intake.setTargetPosition(-5)),
+                                                    new InstantCommand(() -> intake.setTargetPosition(0)),
                                                     new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.INTERMEDIATE)),
                                                     new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
                                                     new WaitUntilCommand(() -> intake.getTargetPosition() <= Globals.INTAKE_EXTENDED_TOLERANCE)
@@ -50,7 +49,7 @@ public class TeleOpAutoGrabCommand extends SequentialCommandGroup {
             if (intake.getPos() >= Globals.INTAKE_ERROR_TOLERANCE) {
                 addCommands(
                         new InstantCommand(() -> OpMode.autoGrabActive = false),
-                        new InstantCommand(() -> intake.setTargetPosition(-5)),
+                        new InstantCommand(() -> intake.setTargetPosition(0)),
                         new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.INTERMEDIATE)),
                         new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
                         new WaitUntilCommand(() -> intake.getTargetPosition() <= Globals.INTAKE_EXTENDED_TOLERANCE)
