@@ -15,8 +15,10 @@ import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.IntakeSubsyst
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.opmode.teleop.OpMode;
 
+import java.util.function.BooleanSupplier;
+
 public class TeleOpAutoGrabCommand extends SequentialCommandGroup {
-    public TeleOpAutoGrabCommand(IntakeSubsystem intake) {
+    public TeleOpAutoGrabCommand(IntakeSubsystem intake, BooleanSupplier override) {
         if (intake.fourbarState != IntakeSubsystem.FourbarState.INTAKE) {
             addCommands(
                     new ParallelCommandGroup(
@@ -28,7 +30,7 @@ public class TeleOpAutoGrabCommand extends SequentialCommandGroup {
                                     new InstantCommand(() -> OpMode.autoGrabActive = true)
                             ),
                             new SequentialCommandGroup(
-                                    new WaitUntilCommand(intake::hasCone),
+                                    new WaitUntilCommand(()->intake.hasCone() || override.getAsBoolean()),
                                     new ConditionalCommand(
                                             new SequentialCommandGroup(
                                                     new ClawCommand(intake, IntakeSubsystem.ClawState.CLOSED),

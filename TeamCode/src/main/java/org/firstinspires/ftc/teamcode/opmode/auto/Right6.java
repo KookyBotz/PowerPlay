@@ -89,7 +89,7 @@ public class Right6 extends LinearOpMode {
         timer = new ElapsedTime();
 
         DoubleSupplier time_left = () -> 30 - timer.seconds();
-        SixConeAutoCommand sixConeAutoCommand = new SixConeAutoCommand(robot, localizer, drivetrain, intake, lift, time_left, parkingPosition);
+        SixConeAutoCommand sixConeAutoCommand = new SixConeAutoCommand(robot, localizer, drivetrain, intake, lift, time_left, parkingPosition, true,true);
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(

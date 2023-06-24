@@ -43,6 +43,9 @@ public class SixConeAutoCommand extends CommandBase {
     public boolean intaking = false;
     public boolean finished = false;
 
+    public static boolean parkLeft = true;
+
+
     private String log = "init";
 
     private final RobotHardware robot;
@@ -57,7 +60,12 @@ public class SixConeAutoCommand extends CommandBase {
     private Command RETRACT_INTAKE_COMMAND;
     private Command RETRACT_DEPOSIT_COMMAND;
 
-    public SixConeAutoCommand(RobotHardware robot, Localizer localizer, SwerveDrivetrain drivetrain, IntakeSubsystem intake, LiftSubsystem lift, DoubleSupplier time, ParkingPosition sleevePosition) {
+    private boolean sixcone;
+    private boolean park;
+
+    public SixConeAutoCommand(RobotHardware robot, Localizer localizer, SwerveDrivetrain drivetrain,
+                              IntakeSubsystem intake, LiftSubsystem lift, DoubleSupplier time,
+                              ParkingPosition sleevePosition, boolean sixcone, boolean park) {
         this.TIME_LEFT = time;
         this.robot = robot;
         this.localizer = localizer;
@@ -65,6 +73,8 @@ public class SixConeAutoCommand extends CommandBase {
         this.intake = intake;
         this.lift = lift;
         this.sleevePosition = sleevePosition;
+        this.sixcone = sixcone;
+        this.park = park;
     }
 
     @Override
@@ -112,13 +122,15 @@ public class SixConeAutoCommand extends CommandBase {
             log += "\n deposit";
             DEPOSIT_COMMAND = new CancelableDepositCommand(lift, this);
             canDeposit = false;
-            if (stackHeight == 0) {
+            if (stackHeight == 0 && sixcone && park) {
                 CommandScheduler.getInstance().schedule(
                         new WaitUntilCommand(() -> TIME_LEFT.getAsDouble() <= 4)
                                 .andThen(DEPOSIT_COMMAND)
                 );
-            } else {
+            } else if (!(!park && stackHeight == 0)) {
                 CommandScheduler.getInstance().schedule(DEPOSIT_COMMAND);
+            } else {
+                finished = true;
             }
         }
 
@@ -139,20 +151,40 @@ public class SixConeAutoCommand extends CommandBase {
             CommandScheduler.getInstance().schedule(new RetractDepositCommand(lift));
         PositionLockCommand.setTargetPose(new Pose());
 
-        if (sleevePosition == ParkingPosition.CENTER) {
-            CommandScheduler.getInstance().schedule(new PositionCommand(drive, localizer, new Pose(-52, 3 * getModifier(), 0), 250, 1000, robot.getVoltage()));
-        }
-        if (sleevePosition == ParkingPosition.LEFT) {
-            CommandScheduler.getInstance().schedule(
-                    new PositionCommand(drive, localizer, new Pose(-52, 3 * getModifier(), 0), 0, 1000, robot.getVoltage())
-                            .andThen(new PositionCommand(drive, localizer, new Pose(-52, 27 * getModifier(), 0), 250, 1000, robot.getVoltage()))
-            );
-        }
-        if (sleevePosition == ParkingPosition.RIGHT) {
-            CommandScheduler.getInstance().schedule(
-                    new PositionCommand(drive, localizer, new Pose(-52, 3 * getModifier(), 0), 0, 1000, robot.getVoltage())
-                            .andThen(new PositionCommand(drive, localizer, new Pose(-52, -21 * getModifier(), 0), 250, 1000, robot.getVoltage()))
-            );
+        if (park || TIME_LEFT.getAsDouble() < 2) {
+            if (sixcone) {
+                if (sleevePosition == ParkingPosition.CENTER) {
+                    CommandScheduler.getInstance().schedule(new PositionCommand(drive, localizer, new Pose(-52, 3 * getModifier(), 0), 250, 3000, robot.getVoltage()));
+                }
+                if (sleevePosition == ParkingPosition.LEFT) {
+                    CommandScheduler.getInstance().schedule(
+                            new PositionCommand(drive, localizer, new Pose(-52, 3 * getModifier(), 0), 0, 1000, robot.getVoltage())
+                                    .andThen(new PositionCommand(drive, localizer, new Pose(-52, 27 * getModifier(), 0), 250, 2000, robot.getVoltage()))
+                    );
+                }
+                if (sleevePosition == ParkingPosition.RIGHT) {
+                    CommandScheduler.getInstance().schedule(
+                            new PositionCommand(drive, localizer, new Pose(-52, 3 * getModifier(), 0), 0, 1000, robot.getVoltage())
+                                    .andThen(new PositionCommand(drive, localizer, new Pose(-52, -21 * getModifier(), 0), 250, 2000, robot.getVoltage()))
+                    );
+                }
+            }else{
+                if (sleevePosition == ParkingPosition.CENTER) {
+                    CommandScheduler.getInstance().schedule(new PositionCommand(drive, localizer, new Pose(-52, (parkLeft ? 3 : -66) * getModifier(), 0), 250, 3000, robot.getVoltage()));
+                }
+                if (sleevePosition == ParkingPosition.LEFT) {
+                    CommandScheduler.getInstance().schedule(
+                            new PositionCommand(drive, localizer, new Pose(-52, (parkLeft ? 3 : -66) * getModifier(), 0), 0, 1000, robot.getVoltage())
+                                    .andThen(new PositionCommand(drive, localizer, new Pose(-52, (parkLeft ? 27 : -42) * getModifier(), 0), 250, 2000, robot.getVoltage()))
+                    );
+                }
+                if (sleevePosition == ParkingPosition.RIGHT) {
+                    CommandScheduler.getInstance().schedule(
+                            new PositionCommand(drive, localizer, new Pose(-52, (parkLeft ? 3 : -66) * getModifier(), 0), 0, 1000, robot.getVoltage())
+                                    .andThen(new PositionCommand(drive, localizer, new Pose(-52, (parkLeft ? -21 : -90) * getModifier(), 0), 250, 2000, robot.getVoltage()))
+                    );
+                }
+            }
         }
     }
 

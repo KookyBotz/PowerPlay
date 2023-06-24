@@ -45,6 +45,7 @@ public class CancelableGrabCommand extends SequentialCommandGroup {
                 new ClawCommand(intake, IntakeSubsystem.ClawState.OPEN),
                 new InstantCommand(() -> intake.setFourbar(Globals.INTAKE_FOURBAR_INTERMEDIATE)),
                 new PivotCommand(intake, IntakeSubsystem.PivotState.FLAT),
+                new WaitCommand(25),
                 new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED),
                 new WaitCommand(65),
                 new TurretCommand(intake, IntakeSubsystem.TurretState.OUTWARDS),

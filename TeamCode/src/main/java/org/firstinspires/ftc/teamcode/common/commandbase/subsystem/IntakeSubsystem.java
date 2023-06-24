@@ -265,7 +265,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void write() {
         if(robot.enabled) {
             try {
-                if(!AUTO) power = Math.min(power, 0.7);
+//                if(!AUTO) power = Math.min(power, 0.5);
                 robot.extension.set(power);
             } catch (Exception e) {
             }
@@ -282,6 +282,9 @@ public class IntakeSubsystem extends SubsystemBase {
         robot.fourbarLeft.setPosition(pos - F_OFFSET);
         robot.fourbarRight.setPosition(1 - (pos + 0.005 - F_OFFSET));
     }
+
+
+
 
     public void retractReset() {
         robot.intakeEncoder.reset();

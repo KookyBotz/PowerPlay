@@ -94,7 +94,7 @@ public class OpMode extends CommandOpMode {
         BooleanSupplier depositSupplier = () -> gamepad1.right_bumper;
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(() -> schedule(new TeleOpAutoGrabCommand(intake)));
+                .whenPressed(() -> schedule(new TeleOpAutoGrabCommand(intake, () -> gamepad2.right_trigger > 0.5)));
         gamepadEx.getGamepadButton(GamepadKeys.Button.B)
                 .whenPressed(() -> schedule(new TeleOpAutoDepositCommand(lift, intake, Junction.HIGH, depositSupplier)));
         gamepadEx.getGamepadButton(GamepadKeys.Button.X)
@@ -113,17 +113,6 @@ public class OpMode extends CommandOpMode {
                 .whenPressed(() -> schedule(new InstantCommand(() -> intake.changeStackHeight(1))));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(() -> schedule(new InstantCommand(() -> intake.changeStackHeight(-1))));
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(() -> schedule(new SequentialCommandGroup(
-                        new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.FALLEN)),
-                        new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS)),
-                        new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)))));
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenPressed(() -> schedule(new SequentialCommandGroup(
-                        new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.FALLEN)),
-                        new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.INWARDS)),
-                        new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)))));
-
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .toggleWhenPressed(new SequentialCommandGroup(
                                 new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
@@ -148,7 +137,6 @@ public class OpMode extends CommandOpMode {
                                         new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.INWARDS)),
                                         new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
                                         new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.OPEN)))));
-
         gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(() -> schedule(new TeleOpStackCommand(intake)));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
@@ -160,7 +148,6 @@ public class OpMode extends CommandOpMode {
         super.run();
         if (timer == null) {
             timer = new ElapsedTime();
-            robot.reset();
             robot.startIMUThread(this);
             fw = new SlewRateLimiter(fw_r);
             str = new SlewRateLimiter(str_r);
@@ -225,6 +212,10 @@ public class OpMode extends CommandOpMode {
 
         if (gamepad1.dpad_up) {
             schedule(new InstantCommand(() -> intake.retractReset()));
+        }
+
+        if (gamepad2.y) {
+            schedule(new InstantCommand(() -> lift.retractReset()));
         }
 
         robot.loop(drive, drivetrain, intake, lift);

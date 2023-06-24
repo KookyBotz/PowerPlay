@@ -174,6 +174,11 @@ public class LiftSubsystem extends SubsystemBase {
         return 0;
     }
 
+    public void retractReset() {
+        robot.liftEncoder.reset();
+        setSlideFactor(0.5);
+    }
+
     public double getPower() {
         return power;
     }

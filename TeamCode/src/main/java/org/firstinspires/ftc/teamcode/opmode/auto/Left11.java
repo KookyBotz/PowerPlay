@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.common.commandbase.auto.CancelableDepositCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.PositionLockCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.auto.SixConeAutoCommand;
@@ -28,9 +29,9 @@ import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 
 import java.util.function.DoubleSupplier;
 
-@Autonomous(name = "Left6")
+@Autonomous(name = "11Baby (Left)")
 @Config
-public class Left6 extends LinearOpMode {
+public class Left11 extends LinearOpMode {
 
     private RobotHardware robot = RobotHardware.getInstance();
     private SwerveDrivetrain drivetrain;
@@ -41,7 +42,6 @@ public class Left6 extends LinearOpMode {
 
     private double loopTime;
     private double endtime;
-
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -71,7 +71,7 @@ public class Left6 extends LinearOpMode {
             drivetrain.backRightModule.setTargetRotation(0);
             drivetrain.updateModules();
 
-            telemetry.addLine("1+5 LEFT SIDE HIGH");
+            telemetry.addLine("f*ck it we ball");
             telemetry.addData("x", localizer.getPos().x);
             telemetry.addData("y", localizer.getPos().y);
             telemetry.addData("position", robot.sleeveDetection.getPosition());
@@ -89,15 +89,24 @@ public class Left6 extends LinearOpMode {
         timer = new ElapsedTime();
 
         DoubleSupplier time_left = () -> 30 - timer.seconds();
-        SixConeAutoCommand sixConeAutoCommand = new SixConeAutoCommand(robot, localizer, drivetrain, intake, lift, time_left, parkingPosition, true, true);
+        SixConeAutoCommand leftSixConeAutoCommand = new SixConeAutoCommand(robot, localizer, drivetrain, intake, lift, time_left, parkingPosition, false, false);
+        SixConeAutoCommand rightSixConeAutoCommand = new SixConeAutoCommand(robot, localizer, drivetrain, intake, lift, time_left, parkingPosition, false, true);
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(-66.5, 4.66 * getModifier(), 0), 500, 2500, robot.getVoltage()),
-                        new PositionCommand(drivetrain, localizer, new Pose(-60.8, 4.66 * getModifier(), (0.24 - Math.PI / 2) * getModifier()), 0, 2000, robot.getVoltage()),
-                        new InstantCommand(() -> PositionLockCommand.setTargetPose(new Pose(-60.8, 4.66 * getModifier(), (0.26 - Math.PI / 2) * getModifier()))),
-                        new PositionLockCommand(drivetrain, localizer, sixConeAutoCommand::isFinished, robot.getVoltage())
-                                .alongWith(new WaitCommand(1000).andThen(sixConeAutoCommand)),
+                        new PositionCommand(drivetrain, localizer, new Pose(-60.8, 5 * getModifier(), 0), 0, 2000, robot.getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(-60.8, 5 * getModifier(), (0.24 - Math.PI / 2) * getModifier()), 0, 1000, robot.getVoltage()),
+                        new InstantCommand(() -> PositionLockCommand.setTargetPose(new Pose(-60.8, 5 * getModifier(), (0.26 - Math.PI / 2) * getModifier()))),
+                        new PositionLockCommand(drivetrain, localizer, leftSixConeAutoCommand::isFinished, robot.getVoltage())
+                                .alongWith(new WaitCommand(500).andThen(leftSixConeAutoCommand)),
+                        new PositionCommand(drivetrain, localizer, new Pose(-52, 4.66 * getModifier(), 0), 0, 500, robot.getVoltage()),
+                        new InstantCommand(()->SixConeAutoCommand.parkLeft = false),
+                        new PositionCommand(drivetrain, localizer, new Pose(-52, -66 * getModifier(), 0), 0, 1250, robot.getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(-52, -66 * getModifier(), -(0.2 - Math.PI / 2) * getModifier()), 0, 1000, robot.getVoltage()),
+                        new InstantCommand(()->PositionLockCommand.setTargetPose( new Pose(-58, -66 * getModifier(), -(0.22 - Math.PI / 2) * getModifier()))),
+                        new PositionLockCommand(drivetrain, localizer, rightSixConeAutoCommand::isFinished, robot.getVoltage())
+                                .alongWith(new WaitCommand(500).andThen(rightSixConeAutoCommand)),
+                        new CancelableDepositCommand(lift, rightSixConeAutoCommand),
                         new InstantCommand(() -> endtime = timer.seconds()))
         );
 
@@ -111,7 +120,7 @@ public class Left6 extends LinearOpMode {
 
             double loop = System.nanoTime();
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-            telemetry.addLine(sixConeAutoCommand.getTelemetry());
+            telemetry.addLine(leftSixConeAutoCommand.getTelemetry());
             telemetry.addData("endtime", endtime);
             telemetry.addData("x", localizer.getPos().x);
             telemetry.addData("y", localizer.getPos().y);
