@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.AsymmetricMotionProfile;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Constraints;
 import org.firstinspires.ftc.teamcode.common.drive.geometry.State;
+import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 
 import static org.firstinspires.ftc.teamcode.common.hardware.Globals.*;
@@ -126,7 +127,11 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeTimer.reset();
         fourbarTimer.reset();
         setFourbar(INTAKE_FOURBAR_INTERMEDIATE);
-        update(TurretState.OUTWARDS);
+        if (AUTO) {
+            update(TurretState.INTERMEDIATE);
+        } else {
+            update(TurretState.OUTWARDS);
+        }
         update(ClawState.OPEN);
         update(PivotState.FLAT);
     }
@@ -276,6 +281,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void retractReset() {
         robot.intakeEncoder.reset();
+        setSlideFactor(-0.5);
     }
 
     public void setPivot(double pos){
@@ -325,7 +331,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setSlideFactor(double factor) {
         double slideAddition = INTAKE_MANUAL_FACTOR * factor;
         double newPosition = intakePosition + slideAddition;
-        if (intakeMotionState.v == 0 && newPosition >= INTAKE_MIN && newPosition <= INTAKE_MAX) {
+        if (intakeMotionState.v == 0 && newPosition <= INTAKE_MAX) {
             targetPosition = newPosition;
         }
     }

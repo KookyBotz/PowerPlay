@@ -96,8 +96,8 @@ public class Globals {
     public static double INTAKE_MIN = 0;
     public static double INTAKE_MAX = 577;
 
-    public static double INTAKE_EXTENDED_TOLERANCE = 5;
-    public static double INTAKE_ERROR_TOLERANCE = 20;
+    public static double INTAKE_EXTENDED_TOLERANCE = 10;
+    public static double INTAKE_ERROR_TOLERANCE = 35;
 
     public static Side SIDE = Side.LEFT;
     public static boolean AUTO = false;

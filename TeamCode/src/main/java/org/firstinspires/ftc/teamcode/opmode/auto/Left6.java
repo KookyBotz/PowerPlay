@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.drive.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
+import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 
 import java.util.function.DoubleSupplier;
 
@@ -41,15 +42,15 @@ public class Left6 extends LinearOpMode {
     private double loopTime;
     private double endtime;
 
-
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         CommandScheduler.getInstance().reset();
-        Globals.AUTO = false;
+        Globals.AUTO = true;
         Globals.USING_IMU = true;
-
+        Globals.SIDE = Globals.Side.LEFT;
+        
         robot.init(hardwareMap, telemetry);
         drivetrain = new SwerveDrivetrain(robot);
         intake = new IntakeSubsystem(robot);
@@ -73,12 +74,14 @@ public class Left6 extends LinearOpMode {
             telemetry.addLine("1+5 LEFT SIDE HIGH");
             telemetry.addData("x", localizer.getPos().x);
             telemetry.addData("y", localizer.getPos().y);
+            telemetry.addData("position", robot.sleeveDetection.getPosition());
             telemetry.update();
 
             robot.clearBulkCache();
             robot.write(drivetrain, intake, lift);
         }
 
+        SleeveDetection.ParkingPosition parkingPosition = robot.sleeveDetection.getPosition();
 
         robot.startIMUThread(this);
         localizer.setPoseEstimate(new Pose2d(0, 0, 0));
@@ -86,17 +89,16 @@ public class Left6 extends LinearOpMode {
         timer = new ElapsedTime();
 
         DoubleSupplier time_left = () -> 30 - timer.seconds();
-        SixConeAutoCommand sixConeAutoCommand = new SixConeAutoCommand(robot, localizer, drivetrain, intake, lift, time_left);
+        SixConeAutoCommand sixConeAutoCommand = new SixConeAutoCommand(robot, localizer, drivetrain, intake, lift, time_left, parkingPosition);
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(-68, 4.33, 0), 500, 2500, robot.getVoltage()),
-                        new PositionCommand(drivetrain, localizer, new Pose(-60.8, 4.33, 0.24 - Math.PI / 2), 0, 2000, robot.getVoltage()),
-                        new InstantCommand(() -> PositionLockCommand.setTargetPose(new Pose(-60.8, 4.33, 0.26 - Math.PI / 2))),
+                        new PositionCommand(drivetrain, localizer, new Pose(-68, 4.66 * getModifier(), 0), 500, 2500, robot.getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(-60.8, 4.66 * getModifier(), (0.24 - Math.PI / 2) * getModifier()), 0, 2000, robot.getVoltage()),
+                        new InstantCommand(() -> PositionLockCommand.setTargetPose(new Pose(-60.8, 4.66 * getModifier(), (0.26 - Math.PI / 2) * getModifier()))),
                         new PositionLockCommand(drivetrain, localizer, sixConeAutoCommand::isFinished, robot.getVoltage())
                                 .alongWith(new WaitCommand(1000).andThen(sixConeAutoCommand)),
-                        new InstantCommand(() -> endtime = timer.seconds())
-                )
+                        new InstantCommand(() -> endtime = timer.seconds()))
         );
 
 
@@ -119,5 +121,9 @@ public class Left6 extends LinearOpMode {
             robot.write(drivetrain, intake, lift);
             robot.clearBulkCache();
         }
+    }
+
+    public static int getModifier(){
+        return Globals.SIDE == Globals.Side.LEFT ? 1 : -1;
     }
 }

@@ -8,6 +8,8 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -103,10 +105,17 @@ public class OpMode extends CommandOpMode {
                 .whenPressed(() -> schedule(new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.LATCHED))));
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(() -> schedule(new InstantCommand(() -> lift.update(LiftSubsystem.LatchState.UNLATCHED))));
+        gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(() -> schedule(new InstantCommand(() -> robot.intakeEncoder.reset())));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenPressed(() -> schedule(new InstantCommand(() -> intake.changeStackHeight(1))));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(() -> schedule(new InstantCommand(() -> intake.changeStackHeight(-1))));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+                .whenPressed(() -> schedule(new SequentialCommandGroup(
+                        new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.FALLEN)),
+                        new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS)),
+                        new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)))));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(() -> schedule(new TeleOpStackCommand(intake)));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
@@ -132,11 +141,11 @@ public class OpMode extends CommandOpMode {
 
         if (gamepad1.right_stick_y > 0.25) {
             lock_robot_heading = true;
-            targetHeading = Math.PI - SwerveDrivetrain.imuOffset;
+            targetHeading = Math.PI + SwerveDrivetrain.imuOffset;
         }
         if (gamepad1.right_stick_y < -0.25) {
             lock_robot_heading = true;
-            targetHeading = 0 - SwerveDrivetrain.imuOffset;
+            targetHeading = 0 + SwerveDrivetrain.imuOffset;
         }
 
         double turn = gamepad1.right_trigger - gamepad1.left_trigger;
@@ -172,10 +181,13 @@ public class OpMode extends CommandOpMode {
                 drive.heading
         );
 
-
         double leftY = gamepadEx2.getRightY();
         if (Math.abs(leftY) > 0.1) {
             intake.setSlideFactor(joystickScalar(leftY, 0.1));
+        }
+
+        while (gamepad1.dpad_up) {
+            schedule(new InstantCommand(() -> intake.retractReset()));
         }
 
         robot.loop(drive, drivetrain, intake, lift);
