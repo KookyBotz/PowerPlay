@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.common.powerplay.SleeveDetection;
 
 import java.util.function.DoubleSupplier;
 
-@Autonomous(name = "Left6")
+@Autonomous(name = "6 Left ⬅")
 @Config
 public class Left6 extends LinearOpMode {
 

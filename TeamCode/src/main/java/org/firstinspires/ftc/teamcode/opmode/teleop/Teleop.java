@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.opmode.teleop;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.normalizeRadians;
 import static org.firstinspires.ftc.teamcode.common.hardware.Globals.INTAKE_MANUAL_FACTOR;
-import static org.firstinspires.ftc.teamcode.common.hardware.Globals.INTAKE_MAX;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -10,8 +9,8 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -39,8 +38,8 @@ import org.firstinspires.ftc.teamcode.common.powerplay.Junction;
 import java.util.function.BooleanSupplier;
 
 @Config
-@TeleOp(name = "OpMode")
-public class OpMode extends CommandOpMode {
+@TeleOp(name = "😈")
+public class Teleop extends CommandOpMode {
     private ElapsedTime timer;
     private double loopTime = 0;
 
@@ -115,28 +114,30 @@ public class OpMode extends CommandOpMode {
                 .whenPressed(() -> schedule(new InstantCommand(() -> intake.changeStackHeight(-1))));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .toggleWhenPressed(new SequentialCommandGroup(
-                                new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTAKE)),
                                 new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS)),
-                                new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.LOW)),
                                 new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.OPEN))),
                         new SequentialCommandGroup(
-                                new SequentialCommandGroup(
-                                        new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.FALLEN)),
-                                        new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS)),
-                                        new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
-                                        new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.OPEN)))));
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
+                                new WaitCommand(200),
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS)),
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.OPEN)))
+                );
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .toggleWhenPressed(new SequentialCommandGroup(
-                                new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
-                                new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS)),
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.FALLEN)),
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.INWARDS)),
                                 new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
                                 new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.OPEN))),
                         new SequentialCommandGroup(
-                                new SequentialCommandGroup(
-                                        new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.FALLEN)),
-                                        new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.INWARDS)),
-                                        new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
-                                        new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.OPEN)))));
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.FourbarState.INTERMEDIATE)),
+                                new WaitCommand(200),
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.TurretState.OUTWARDS)),
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.PivotState.FLAT)),
+                                new InstantCommand(() -> intake.update(IntakeSubsystem.ClawState.OPEN)))
+                );
         gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(() -> schedule(new TeleOpStackCommand(intake)));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
@@ -158,6 +159,7 @@ public class OpMode extends CommandOpMode {
         if (gamepad1.right_stick_button && Globals.USING_IMU)
             SwerveDrivetrain.imuOffset = robot.getAngle() + Math.PI;
 
+        if (gamepad1.touchpad) intake.setTargetPosition(0);
 
         if (gamepad1.right_stick_y > 0.25) {
             lock_robot_heading = true;

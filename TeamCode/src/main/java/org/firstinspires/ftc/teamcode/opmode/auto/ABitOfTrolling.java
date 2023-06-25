@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -23,6 +24,7 @@ import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 
 @Autonomous(name = "StraightBoi")
 @Config
+@Disabled
 public class ABitOfTrolling extends LinearOpMode {
     private RobotHardware robot = RobotHardware.getInstance();
     private SwerveDrivetrain drivetrain;

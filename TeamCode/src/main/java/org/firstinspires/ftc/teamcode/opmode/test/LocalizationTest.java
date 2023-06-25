@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.outoftheboxrobotics.photoncore.PhotonCore;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.common.drive.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 
+@Disabled
 @TeleOp(name = "LocalizationTest")
 public class LocalizationTest extends CommandOpMode {
     private ElapsedTime timer;

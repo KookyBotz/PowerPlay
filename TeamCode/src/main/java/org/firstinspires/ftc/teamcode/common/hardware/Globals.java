@@ -90,7 +90,7 @@ public class Globals {
 
     public static final double EXTENSION_TICKS_PER_INCH = 23.54;
 
-    public static double INTAKE_MANUAL_FACTOR = -250;
+    public static double INTAKE_MANUAL_FACTOR = -100  ;
     public static double INTAKE_TURRET_FACTOR = 0.007;
     public static double INTAKE_FOURBAR_FACTOR = -0.005;
     public static double INTAKE_PIVOT_FACTOR = 0.0025;
