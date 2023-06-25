@@ -129,6 +129,8 @@ public class SixConeAutoCommand extends CommandBase {
                 );
             } else if (!(!park && stackHeight == 0)) {
                 CommandScheduler.getInstance().schedule(DEPOSIT_COMMAND);
+                if (stackHeight == 0) finished = true;
+
             } else {
                 finished = true;
             }
@@ -168,7 +170,7 @@ public class SixConeAutoCommand extends CommandBase {
                                     .andThen(new PositionCommand(drive, localizer, new Pose(-52, -21 * getModifier(), 0), 250, 2000, robot.getVoltage()))
                     );
                 }
-            }else{
+            } else {
                 if (sleevePosition == ParkingPosition.CENTER) {
                     CommandScheduler.getInstance().schedule(new PositionCommand(drive, localizer, new Pose(-52, (parkLeft ? 3 : -66) * getModifier(), 0), 250, 3000, robot.getVoltage()));
                 }

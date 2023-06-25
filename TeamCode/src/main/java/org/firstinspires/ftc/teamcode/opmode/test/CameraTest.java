@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 @TeleOp(name = "CameraTest")
-@Disabled
+//@Disabled
 @Config
 public class CameraTest extends LinearOpMode {
     private final RobotHardware robot = RobotHardware.getInstance();

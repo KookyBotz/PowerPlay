@@ -80,7 +80,7 @@ public class LiftSubsystem extends SubsystemBase {
 
     public void update(LatchState state) {
         latchState = state;
-        switch(state) {
+        switch (state) {
             case LATCHED:
                 robot.latch.setPosition(LIFT_LATCHED);
                 break;
@@ -94,6 +94,10 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void update(LiftState state) {
+        update(state, false);
+    }
+
+    public void update(LiftState state, boolean retract) {
         liftState = state;
         switch (state) {
             case HIGH:
@@ -106,7 +110,7 @@ public class LiftSubsystem extends SubsystemBase {
                 break;
             case RETRACTED:
                 setTargetPos(LIFT_RETRACT_POS);
-                newProfile(LIFT_RETRACT_POS, new Constraints(LIFT_MAX_V, LIFT_MAX_A, LIFT_MAX_D));
+                newProfile(LIFT_RETRACT_POS, new Constraints(LIFT_MAX_V, retract ? LIFT_MAX_A_RETRACT : LIFT_MAX_A, LIFT_MAX_D));
                 break;
         }
     }
@@ -139,13 +143,13 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void write() {
-        if(robot.enabled) {
+        if (robot.enabled) {
             try {
                 robot.liftLeft.set(power);
                 robot.liftRight.set(-power);
             } catch (Exception e) {
             }
-        }else{
+        } else {
             robot.extension.set(0);
         }
     }
@@ -163,7 +167,7 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public int getStatePos(LiftState state) {
-        switch(state) {
+        switch (state) {
             case HIGH:
                 return LIFT_HIGH_POS;
             case MID:
@@ -183,17 +187,21 @@ public class LiftSubsystem extends SubsystemBase {
         return power;
     }
 
-    public boolean hasCone() { return hasCone; }
+    public boolean hasCone() {
+        return hasCone;
+    }
 
-    public void setReady(boolean ready){
+    public void setReady(boolean ready) {
         isReady = ready;
     }
 
-    public boolean isReady(){
+    public boolean isReady() {
         return isReady;
     }
 
-    public boolean isWithinTolerance() { return withinTolerance; }
+    public boolean isWithinTolerance() {
+        return withinTolerance;
+    }
 
     public void setSlideFactor(double factor) {
         double slideAddition = LIFT_MANUAL_FACTOR * factor;

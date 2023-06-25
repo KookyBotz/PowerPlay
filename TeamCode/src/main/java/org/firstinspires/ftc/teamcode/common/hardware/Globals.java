@@ -33,6 +33,7 @@ public class Globals {
     // in/s and in/s^2
     public static double LIFT_MAX_V = 100;
     public static double LIFT_MAX_A = 99999;
+    public static double LIFT_MAX_A_RETRACT = 250;
     public static double LIFT_MAX_D = 250;
 
     public static double LIFT_LATCHED = 0.78;

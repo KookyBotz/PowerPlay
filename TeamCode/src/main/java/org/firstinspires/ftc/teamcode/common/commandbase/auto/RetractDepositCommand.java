@@ -13,7 +13,7 @@ public class RetractDepositCommand extends SequentialCommandGroup {
     public RetractDepositCommand(LiftSubsystem lift) {
         super(
                 new LatchCommand(lift, LiftSubsystem.LatchState.LATCHED),
-                new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED))
+                new InstantCommand(() -> lift.update(LiftSubsystem.LiftState.RETRACTED, true))
         );
     }
 }
