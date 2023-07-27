@@ -17,7 +17,7 @@ public class CameraTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         Globals.AUTO = true;
-        Globals.SIDE = Globals.Side.RIGHT;
+        Globals.SIDE = Globals.Side.LEFT;
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         robot.init(hardwareMap, telemetry);
         FtcDashboard.getInstance().startCameraStream(robot.backCamera, 30);

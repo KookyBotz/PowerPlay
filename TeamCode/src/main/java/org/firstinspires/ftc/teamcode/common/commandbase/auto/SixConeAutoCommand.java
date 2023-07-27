@@ -129,7 +129,6 @@ public class SixConeAutoCommand extends CommandBase {
                 );
             } else if (!(!park && stackHeight == 0)) {
                 CommandScheduler.getInstance().schedule(DEPOSIT_COMMAND);
-                if (stackHeight == 0) finished = true;
 
             } else {
                 finished = true;

@@ -93,9 +93,9 @@ public class Right6 extends LinearOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new PositionCommand(drivetrain, localizer, new Pose(-66.5, 5.2, 0), 500, 2500, robot.getVoltage()),
-                        new PositionCommand(drivetrain, localizer, new Pose(-60.8, 5.2, -(0.24 - Math.PI / 2)), 0, 2000, robot.getVoltage()),
-                        new InstantCommand(() -> PositionLockCommand.setTargetPose(new Pose(-60.8, 5.2, -(0.26 - Math.PI / 2)))),
+                        new PositionCommand(drivetrain, localizer, new Pose(-66.5, 5.5, 0), 500, 2500, robot.getVoltage()),
+                        new PositionCommand(drivetrain, localizer, new Pose(-60.8, 5.5, -(0.24 - Math.PI / 2)), 0, 2000, robot.getVoltage()),
+                        new InstantCommand(() -> PositionLockCommand.setTargetPose(new Pose(-60.8, 5.5, -(0.26 - Math.PI / 2)))),
                         new PositionLockCommand(drivetrain, localizer, sixConeAutoCommand::isFinished, robot.getVoltage())
                                 .alongWith(new WaitCommand(1000).andThen(sixConeAutoCommand)),
                         new InstantCommand(() -> endtime = timer.seconds()))

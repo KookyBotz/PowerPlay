@@ -103,7 +103,7 @@ public class Left11 extends LinearOpMode {
                         new InstantCommand(()->SixConeAutoCommand.parkLeft = false),
                         new PositionCommand(drivetrain, localizer, new Pose(-52, -66.5 * getModifier(), 0), 0, 1250, robot.getVoltage()),
                         new PositionCommand(drivetrain, localizer, new Pose(-52, -66.5 * getModifier(), -(0.21 - Math.PI / 2) * getModifier()), 0, 1000, robot.getVoltage()),
-                        new InstantCommand(()->PositionLockCommand.setTargetPose( new Pose(-59, -66.5 * getModifier(), -(0.22 - Math.PI / 2) * getModifier()))),
+                        new InstantCommand(()->PositionLockCommand.setTargetPose( new Pose(-58, -66.5 * getModifier(), -(0.22 - Math.PI / 2) * getModifier()))),
                         new PositionLockCommand(drivetrain, localizer, rightSixConeAutoCommand::isFinished, robot.getVoltage())
                                 .alongWith(new WaitCommand(500).andThen(rightSixConeAutoCommand)),
                         new CancelableDepositCommand(lift, rightSixConeAutoCommand),

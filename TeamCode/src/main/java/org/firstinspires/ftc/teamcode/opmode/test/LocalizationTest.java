@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.common.drive.localizer.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 
-@Disabled
+//@Disabled
 @TeleOp(name = "LocalizationTest")
 public class LocalizationTest extends CommandOpMode {
     private ElapsedTime timer;
