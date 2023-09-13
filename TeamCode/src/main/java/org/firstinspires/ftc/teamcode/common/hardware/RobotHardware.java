@@ -83,6 +83,8 @@ public class RobotHardware {
 
     private HardwareMap hardwareMap;
 
+    private final double startingIMUOffset = Math.PI / 2;
+
     public static RobotHardware getInstance() {
         if (instance == null) {
             instance = new RobotHardware();
@@ -248,7 +250,7 @@ public class RobotHardware {
             imuThread = new Thread(() -> {
                 while (!opMode.isStopRequested() && opMode.opModeIsActive()) {
                     synchronized (imuLock) {
-                        imuAngle = imu.getAngularOrientation().firstAngle;
+                        imuAngle = imu.getAngularOrientation().firstAngle + startingIMUOffset;
                     }
                 }
             });

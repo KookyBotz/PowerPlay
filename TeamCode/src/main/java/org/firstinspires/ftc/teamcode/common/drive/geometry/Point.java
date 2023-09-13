@@ -36,6 +36,10 @@ public class Point {
         return new Point(x + other.x, y + other.y);
     }
 
+    public Point add(double scalar) {
+        return new Point(x + scalar, y + scalar);
+    }
+
     Point subt(Point other) {
         return new Point(getX() - other.getX(), getY() - other.getY());
     }

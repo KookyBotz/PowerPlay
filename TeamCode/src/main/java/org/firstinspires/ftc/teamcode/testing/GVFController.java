@@ -1,22 +1,27 @@
 package org.firstinspires.ftc.teamcode.testing;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.firstinspires.ftc.teamcode.common.drive.geometry.Pose;
 
+@Config
 public class GVFController {
     private HermitePath path;
 
-    private final double MAX_VELOCITY = 90; /* Inches per second */
-    private final double MAX_ACCEL = 480; /* Inches per second squared */
-    private final double MAX_DECEL = 160; /* Inches per second squared */
-    private final double FINISH_TOLERANCE = 0.25;
+    public static double MAX_VELOCITY = 90; /* Inches per second */
+    public static double MAX_ACCEL = 480; /* Inches per second squared */
+    public static double MAX_DECEL = 160; /* Inches per second squared */
+    public static double FINISH_TOLERANCE = 0.25;
     private double lastVelocity = 0.0;
 
     private final double ACCEL_PERIOD_DIST = (Math.pow(MAX_VELOCITY, 2)) / (2 * MAX_ACCEL);
     private final double DECEL_PERIOD_DIST = (Math.pow(MAX_VELOCITY, 2)) / (2 * MAX_DECEL);
 
-    private double kN = 0.1;
-    private double kS = 0.1;
+    public static double kN = 0.1;
+    public static double kS = 0.1;
     private Pose currentPose;
+
+    public static Pose powers = new Pose(0.0, 0.0, 0.0);
 
     public GVFController(HermitePath path, final Pose initialPose, double kN, double kS) {
         this.path = path;
@@ -111,8 +116,4 @@ public class GVFController {
     public boolean isFinished() {
         return lastVelocity < FINISH_TOLERANCE;
     }
-
-    // private double clamp(double num, double min, double max) {
-    //     return Math.max(min, Math.min(num, max));
-    // }
 }

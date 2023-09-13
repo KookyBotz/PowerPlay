@@ -11,6 +11,8 @@ public class HermiteInterpolator {
     private ArrayList<Spline> splines = new ArrayList<>();
     private ArrayList<HermitePose> controlPoses = new ArrayList<>();
 
+    private final double EPSILON = 1e-5;
+
     private final double[][] hermiteConstants = {
             {1.0, 0.0, 0.0, 0.0},
             {1.0, 1.0, 1.0, 1.0},
@@ -28,28 +30,16 @@ public class HermiteInterpolator {
         double[][] inputs = {
                 {start.x, start.y},
                 {end.x, end.y},
-                {(1 / end.subt(start).x) * start.tangent.x, (1 / end.subt(start).y) * start.tangent.y},
-                {(1 / end.subt(start).x) * end.tangent.x, (1 / end.subt(start).y) * end.tangent.y}
+                {(1 / end.subt(start).add(EPSILON).x) * start.tangent.x, (1 / end.subt(start).add(EPSILON).y) * start.tangent.y},
+                {(1 / end.subt(start).add(EPSILON).x) * end.tangent.x, (1 / end.subt(start).add(EPSILON).y) * end.tangent.y}
         };
 
-        for (int i = 0; i < inputs.length; i++) {
-            for (int j = 0; j < inputs[i].length; j++) {
-                if (Double.isNaN(inputs[i][j])) {
-                    inputs[i][j] = 0d;
-                }
-            }
-        }
+        SimpleMatrix O = CUBIC_HERMITE_MATRIX.solve(new SimpleMatrix(inputs));
 
-        try {
-            SimpleMatrix O = CUBIC_HERMITE_MATRIX.solve(new SimpleMatrix(inputs));
+        SimpleMatrix x = O.extractVector(false, 0);
+        SimpleMatrix y = O.extractVector(false, 1);
 
-            SimpleMatrix x = O.extractVector(false, 0);
-            SimpleMatrix y = O.extractVector(false, 1);
-
-            return new Spline(new Polynomial(x), new Polynomial(y));
-        } catch(SingularMatrixException e) {
-            return new Spline(null, null);
-        }
+        return new Spline(new Polynomial(x), new Polynomial(y));
     }
 
     private void interpolate() {
