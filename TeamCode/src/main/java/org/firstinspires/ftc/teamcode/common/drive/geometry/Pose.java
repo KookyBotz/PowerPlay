@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.common.drive.geometry;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.testing.Vector2D;
 
 import java.util.Locale;
 
@@ -15,8 +16,17 @@ public class Pose extends Point {
     public Pose(Point p, double heading) {
         this(p.x, p.y, heading);
     }
+
+    public Pose(Vector2D vec, double heading) {
+        this(vec.x, vec.y, heading);
+    }
+
     public Pose(){
         this(0, 0, 0);
+    }
+
+    public Pose add(Pose other) {
+        return new Pose(x + other.x, y + other.y, heading + other.heading);
     }
 
     public Pose subtract(Pose other) {
@@ -25,6 +35,14 @@ public class Pose extends Point {
 
     public Pose divide(Pose other) {
         return new Pose(this.x / other.x, this.y / other.y, this.heading / other.heading);
+    }
+
+    public Pose subt(Pose other) {
+        return new Pose(x - other.x, y - other.y, heading - other.heading);
+    }
+
+    public Vector2D toVec2D() {
+        return new Vector2D(x, y);
     }
 
     @Override

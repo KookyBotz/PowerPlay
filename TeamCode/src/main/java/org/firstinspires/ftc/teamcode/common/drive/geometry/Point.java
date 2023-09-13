@@ -7,6 +7,23 @@ public class Point {
         this.x = x;
         this.y = y;
     }
+
+    public double getX() {
+        return this.x;
+    }
+
+    public double getY() {
+        return this.y;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
     public Point(){
         this(0, 0);
     }
@@ -17,6 +34,10 @@ public class Point {
 
     public Point add(Point other) {
         return new Point(x + other.x, y + other.y);
+    }
+
+    Point subt(Point other) {
+        return new Point(getX() - other.getX(), getY() - other.getY());
     }
 
     public Point divide(double div){
@@ -42,6 +63,8 @@ public class Point {
     public Point rotate(double amount){
         return Point.polar(radius(), atan()+amount);
     }
-    
-    
+
+    public String toString() {
+        return getX() + ", " + getY();
+    }
 }
