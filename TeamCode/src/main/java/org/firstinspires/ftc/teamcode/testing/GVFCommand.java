@@ -19,20 +19,15 @@ public class GVFCommand extends CommandBase {
     HermitePath path;
     Drivetrain drivetrain;
 
-    public static double xP = 0.0;
-    public static double xD = 0.0;
-    public static double xF = 0;
-
-    public static double yP = 0.0;
-    public static double yD = 0.0;
-    public static double yF = 0;
+    public static double mP = 0.0;
+    public static double mD = 0.0;
+    public static double mF = 0;
 
     public static double hP = 0.6;
     public static double hD = 0.3;
     public static double hF = 0;
 
-    public static PIDFController xController = new PIDFController(xP, 0.0, xD, xF);
-    public static PIDFController yController = new PIDFController(yP, 0.0, yD, yF);
+    public static PIDFController mController = new PIDFController(mP, 0.0, mD, mF);
     public static PIDFController hController = new PIDFController(hP, 0.0, hD, hF);
     public static double max_power = 1;
     public static double max_heading = 0.5;
@@ -57,6 +52,7 @@ public class GVFCommand extends CommandBase {
         Pose robotPose = localizer.getPos();
         controller.setCurrentPose(robotPose);
         Pose gvf = controller.calculateGVF();
+        controller.gvf22 = gvf;
         Pose powers = getPowerS(gvf, robotPose);
         controller.powers = powers;
         drivetrain.set(powers);
@@ -73,22 +69,41 @@ public class GVFCommand extends CommandBase {
     }
 
     public Pose getPowerS(Pose gvf, Pose robotPose) {
-        Pose powers = new Pose(
-                xController.calculate(0, gvf.x),
-                yController.calculate(0, gvf.y),
-                hController.calculate(0, gvf.heading)
-        );
-        double x_rotated = powers.x * Math.cos(robotPose.heading) - powers.y * Math.sin(robotPose.heading);
-        double y_rotated = powers.x * Math.sin(robotPose.heading) + powers.y * Math.cos(robotPose.heading);
-        double x_power = -x_rotated < -max_power ? -max_power :
-                Math.min(-x_rotated, max_power);
-        double y_power = -y_rotated < -max_power ? -max_power :
-                Math.min(-y_rotated, max_power);
-        double heading_power = MathUtils.clamp(powers.heading, -max_heading, max_heading);
 
-        if(Math.abs(x_power) < 0.01) x_power = 0;
-        if(Math.abs(y_power) < 0.01) y_power = 0;
+//        double heading_component = hController.calculate(robotPose.heading, gvf.heading);
+//        double heading_power = MathUtils.clamp(heading_component, -max_heading, max_heading);
 
-        return new Pose(-y_power / voltage * 12, x_power / voltage * 12, -heading_power / voltage * 12);
+        Vector2D gvf2D = gvf.toVec2D();
+
+        double magnitude = gvf2D.magnitude();
+        double dir = Math.atan2(gvf2D.y, gvf2D.x);
+
+        double power = mController.calculate(0, magnitude);
+
+        double y_component = Math.cos(dir) * power;
+        double x_component = Math.sin(dir) * power;
+
+        double x_power = Math.signum(x_component) * Math.min(Math.abs(x_component), max_power);
+        double y_power = Math.signum(y_component) * Math.min(Math.abs(y_component), max_power);
+//        -heading_power / voltage * 12
+        return new Pose(-y_power, x_power, 0.0);
+
+//        Pose powers = new Pose(
+//                xController.calculate(0, gvf.x),
+//                yController.calculate(0, gvf.y),
+//                hController.calculate(0, gvf.heading)
+//        );
+//        double x_rotated = powers.x * Math.cos(robotPose.heading) - powers.y * Math.sin(robotPose.heading);
+//        double y_rotated = powers.x * Math.sin(robotPose.heading) + powers.y * Math.cos(robotPose.heading);
+//        double x_power = -x_rotated < -max_power ? -max_power :
+//                Math.min(-x_rotated, max_power);
+//        double y_power = -y_rotated < -max_power ? -max_power :
+//                Math.min(-y_rotated, max_power);
+//        double heading_power = MathUtils.clamp(powers.heading, -max_heading, max_heading);
+//
+//        if(Math.abs(x_power) < 0.01) x_power = 0;
+//        if(Math.abs(y_power) < 0.01) y_power = 0;
+//
+//        return new Pose(-y_power / voltage * 12, x_power / voltage * 12, -heading_power / voltage * 12);
     }
 }

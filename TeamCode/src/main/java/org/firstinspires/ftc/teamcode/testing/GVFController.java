@@ -22,6 +22,7 @@ public class GVFController {
     private Pose currentPose;
 
     public static Pose powers = new Pose(0.0, 0.0, 0.0);
+    public static Pose gvf22 = new Pose(0.0, 0.0, 0.0);
 
     public GVFController(HermitePath path, final Pose initialPose, double kN, double kS) {
         this.path = path;

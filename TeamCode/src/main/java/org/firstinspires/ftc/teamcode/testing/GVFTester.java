@@ -72,9 +72,9 @@ public class GVFTester extends CommandOpMode {
         PhotonCore.enable();
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(() -> schedule(new GVFCommand(drivetrain, localizer, path1, robot.getVoltage())));
+                .whenPressed(() -> schedule(new GVFCommand(drivetrain, localizer, path1, 12)));
         gamepadEx.getGamepadButton(GamepadKeys.Button.Y)
-                .whenPressed(() -> schedule(new GVFCommand(drivetrain, localizer, path2, robot.getVoltage())));
+                .whenPressed(() -> schedule(new GVFCommand(drivetrain, localizer, path2, 12)));
 
     }
 
@@ -95,7 +95,8 @@ public class GVFTester extends CommandOpMode {
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-        telemetry.addData("GVF:", GVFController.powers);
+        telemetry.addData("GVF :", GVFController.gvf22);
+        telemetry.addData("GVF pow:", GVFController.powers);
         loopTime = loop;
         telemetry.update();
         robot.write(drivetrain, intake, lift);
